@@ -1,0 +1,17 @@
+@import '../../common';
+
+.header-container {
+  margin-top: 70px;
+
+  .depMap-name {
+    font-weight: bold;
+  }
+
+  .genes-subname {
+    font-weight: 100;
+  }
+
+  .col-genes {
+    color: $color-gene;
+  }
+}
