@@ -4,13 +4,14 @@ import {Row, Col} from 'reactstrap';
 import HomeSectionDescription from '../HomeSectionDescription';
 import FadeIn from '../FadeInAfterVisible';
 import DonutChart from '../DonutChart';
+import TissuesSummaryDescription from '../TissuesSummaryDescription';
 
 // TODO: Avoid duplication of code for each Col in the Row
 function TissuesSummary() {
   return (
     <Fragment>
       <h2 className="display-4 text-center">Explore the data</h2>
-      <Row>
+      <Row style={{marginTop: '50px'}}>
         <Col
           md={{size: 12}}
           lg={{size: 6}}
@@ -50,7 +51,7 @@ const DeferredTissuesDescription = ({visibilityClasses, visibilityStyles}) => (
     style={visibilityStyles}
   >
     <HomeSectionDescription>
-      Hello on right
+      <TissuesSummaryDescription />
     </HomeSectionDescription>
   </div>
 );
