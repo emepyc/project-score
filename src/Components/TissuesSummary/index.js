@@ -1,8 +1,11 @@
 import React, {Fragment} from 'react';
 import {Row, Col} from 'reactstrap';
+
 import HomeSectionDescription from '../HomeSectionDescription';
 import FadeIn from '../FadeInAfterVisible';
+import DonutChart from '../DonutChart';
 
+// TODO: Avoid duplication of code for each Col in the Row
 function TissuesSummary() {
   return (
     <Fragment>
@@ -37,7 +40,7 @@ const DeferredDonutChart = ({visibilityClasses, visibilityStyles}) => (
     className={visibilityClasses}
     style={visibilityStyles}
   >
-    Hello on left
+    <DonutChart />
   </div>
 );
 
