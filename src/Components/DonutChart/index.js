@@ -78,7 +78,7 @@ function DonutChart() {
 
     explanationElement.innerHTML = `${tissueData.tissue}<br /><strong>${
       tissueData.counts
-    }</strong> cell lines`;
+    }</strong> cell line${tissueData.counts === 1 ? '' : 's'}`;
 
     // style of slices
     const slices = d3.select(containerElement).selectAll('path');
