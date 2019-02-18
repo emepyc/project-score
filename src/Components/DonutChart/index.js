@@ -70,6 +70,8 @@ function DonutChart() {
     }, []
   );
 
+  useEffect(() => setContainerWidth(containerRef.current.offsetWidth));
+
   const handleMouseOverBar = (event, tissueData) => {
     const explanationElement = explanationMessageRef.current;
     const containerElement = containerRef.current;
