@@ -4,6 +4,8 @@ import {Container} from 'reactstrap';
 import HomeSection from '../../Components/HomeSection';
 import HomeHeader from '../../Components/HomeHeader';
 import TissuesSummary from '../../Components/TissuesSummary';
+import HomeProjectDescription from '../../Components/HomeProjectDescription';
+import HomeProgrammeDescription from '../../Components/HomeProgrammeDescription';
 
 const Home = () => (
   <Container>
@@ -14,6 +16,15 @@ const Home = () => (
     <HomeSection>
       <TissuesSummary />
     </HomeSection>
+
+    <HomeSection>
+      <HomeProjectDescription />
+    </HomeSection>
+
+    <HomeSection>
+      <HomeProgrammeDescription />
+    </HomeSection>
+
   </Container>
 );
 
