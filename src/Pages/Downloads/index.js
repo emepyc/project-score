@@ -1,6 +1,8 @@
 import React from 'react';
 import { Table, Tooltip } from 'reactstrap';
 
+import './downloads.scss';
+
 class Downloads extends React.Component {
   constructor(props) {
     super(props);
@@ -43,25 +45,25 @@ class Downloads extends React.Component {
                 <th>
                   sgRNA Read Count
                   <sup>
-                    <a href="#" id="RawDataFilesTooltip">
+                    <span className='tooltipAnchor' id='RawDataFilesTooltip'>
                       ?
-                    </a>
+                    </span>
                   </sup>
                 </th>
                 <th>
                   Copy Number Bias Corrected Log Fold Change Values
                   <sup>
-                    <a href="#" id="CorrectedDataFilesTooltip">
+                    <span className='tooltipAnchor' id='CorrectedDataFilesTooltip'>
                       ?
-                    </a>
+                    </span>
                   </sup>
                 </th>
                 <th>
                   Fitness/Non-fitness Binary Matrix
                   <sup>
-                    <a href="#" id="ScaledDataFilesTooltip">
+                    <span className='tooltipAnchor' id='ScaledDataFilesTooltip'>
                       ?
-                    </a>
+                    </span>
                   </sup>
                 </th>
               </tr>
@@ -76,27 +78,27 @@ class Downloads extends React.Component {
             </tbody>
           </Table>
           <Tooltip
-            placement="right"
+            placement='right'
             isOpen={this.state.RawTooltipOpen}
-            target="RawDataFilesTooltip"
+            target='RawDataFilesTooltip'
             toggle={() => this.toggle('RawTooltipOpen')}
           >
             Unprocessed sgRNA read count files; each file includes plasmid read
             counts.
           </Tooltip>
           <Tooltip
-            placement="right"
+            placement='right'
             isOpen={this.state.CorrectedTooltipOpen}
-            target="CorrectedDataFilesTooltip"
+            target='CorrectedDataFilesTooltip'
             toggle={() => this.toggle('CorrectedTooltipOpen')}
           >
             Gene level log fold changes; gene independent bias corrected using
             CRISPRcleanR default settings.
           </Tooltip>
           <Tooltip
-            placement="right"
+            placement='right'
             isOpen={this.state.ScaledTooltipOpen}
-            target="ScaledDataFilesTooltip"
+            target='ScaledDataFilesTooltip'
             toggle={() => this.toggle('ScaledTooltipOpen')}
           >
             Binary matrix defining each gene in each cell line as a fitness gene
