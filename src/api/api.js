@@ -1,11 +1,9 @@
 import axios from 'axios';
 // import Deserialiser from 'deserialise-jsonapi';
 // import pickBy from 'lodash.pickby';
-// import isEmpty from 'lodash.isempty';
 import qs from 'query-string';
 // import { Promise } from 'es6-promise';
 
-// const deserialiser = new Deserialiser();
 
 const API_BASEURL = process.env.REACT_APP_API_BASEURL;
 const USERNAME = process.env.REACT_APP_API_USERNAME;
@@ -100,15 +98,6 @@ export function get(endpoint, params = {}) {
 //     });
 // }
 
-// function tissuesFromModels(models) {
-//   return models.reduce((acc, curr) => {
-//     const tissue = curr.sample.tissue.name;
-//     return {
-//       ...acc,
-//       [tissue]: true
-//     };
-//   }, {});
-// }
 
 // function search(query) {
 //   const genesPromise = get('genes', {
