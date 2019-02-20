@@ -1,6 +1,6 @@
-import pickBy from "lodash.pickby";
-import {get} from "./index";
-import {id2name} from "./utils";
+import pickBy from 'lodash.pickby';
+import {get} from './index';
+import {id2name} from './utils';
 
 export default function tissues() {
   return get('models', {
