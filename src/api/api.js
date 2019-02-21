@@ -172,29 +172,6 @@ export function get(endpoint, params = {}) {
 //     });
 // }
 
-// function modelsInTissue(tissue) {
-//   return get('/models', {
-//     filter: [{name: 'tissue', op: 'eq', val: tissue}],
-//     'page[size]': 0
-//   });
-// }
-//
-// function expandParams(params) {
-//   if (params.tissue) {
-//     // TODO: this is the reverse of the process happened when fetching the tissues data. There may be better alternatives to just substituting back and forth
-//     const tissueClean = params.tissue.split('_').join(' ');
-//     return modelsInTissue(tissueClean)
-//       .then(resp => ({
-//           ...params,
-//           model: [
-//             ...(params.model || []),
-//             ...resp.data.data.map(rec => rec.attributes.model_name)
-//           ],
-//         })
-//       )
-//   }
-//   return Promise.resolve(params);
-// }
 
 // export const apiFetch = {
 //   tissues: tissues,

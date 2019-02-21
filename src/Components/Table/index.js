@@ -1,9 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import TableDisplay from '../TableDisplay';
+import {withRouter} from 'react-router-dom';
 import classnames from 'classnames';
+import qs from 'query-string';
 import {
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
   Nav,
-  NavLink
+  NavLink,
 } from 'reactstrap';
 import {fetchCrisprData} from '../../api';
 
@@ -15,15 +21,25 @@ function parseData(raw) {
   });
 }
 
-export default function Table(props) {
+function Table(props) {
+  const [urlTissue, setUrlTissue] = useState("");
   const [data, setData] = useState([]);
   const [sort, setSort] = useState('fc_clean');
-  const [filter, setFilter] = useState(null);
-  const [search, setSearch] = useState(null);
+  const [filter, setFilter] = useState([]);
+  const [search, setSearch] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [sortDirection, setSortDirection] = useState(1);
   const [totalHits, setTotalHits] = useState(null);
+
+  const {tissue} = qs.parse(props.location.search);
+
+  props.history.listen(() => {
+    console.log('changes in the url, we get this tissue now...');
+    const {tissue} = qs.parse(props.location.search);
+    console.log(tissue);
+    setUrlTissue(tissue);
+  });
 
   const goPrev = () => setPageNumber(pageNumber - 1);
   const goNext = () => setPageNumber(pageNumber + 1);
@@ -31,14 +47,16 @@ export default function Table(props) {
   useEffect(() => {
     const params = {
       sort,
-      'page[number]': pageNumber,
+      pageNumber,
+      search,
+      tissue,
     };
     fetchCrisprData(params)
       .then(resp => {
         setData(parseData(resp.data));
         setTotalHits(resp.count)
       })
-  }, [sort, pageNumber]);
+  }, [sort, pageNumber, search, urlTissue]);
 
   const isFirstPage = pageNumber === 1;
   const isLastPage = pageNumber >= totalHits / pageSize;
@@ -49,6 +67,13 @@ export default function Table(props) {
   const navNextClass = classnames({
     disabled: isLastPage,
   });
+
+  // TODO: debounce
+  const doSearch = (ev) => {
+    const {value} = ev.target;
+    console.log(`search for string: ${value}`);
+    setSearch(value);
+  };
 
   return (
     <div className='essentialities-table'>
@@ -64,6 +89,14 @@ export default function Table(props) {
           &gt;
         </NavLink>
       </Nav>
+
+      <InputGroup style={{width: '300px'}}>
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>Search</InputGroupText>
+        </InputGroupAddon>
+        <Input value={search} onChange={doSearch} />
+      </InputGroup>
+
       <TableDisplay
         {...props}
         data={data}
@@ -71,3 +104,5 @@ export default function Table(props) {
     </div>
   )
 }
+
+export default withRouter(Table);

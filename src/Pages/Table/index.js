@@ -1,11 +1,12 @@
 import React from 'react';
 import _Table from '../../Components/Table';
+import TissueFilter from '../../Components/TissueFilter';
 
 
-function Table() {
+function Table(props) {
   return (
     <div>
-      Table Page here
+      <TissueFilter />
       <_Table />
     </div>
   )

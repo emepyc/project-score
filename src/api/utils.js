@@ -1,7 +1,7 @@
-export function id2name(id) {
+export function name2id(id) {
   return id.split(' ').join('_');
 }
 
-export function name2id(name) {
+export function id2name(name) {
   return name.split('_').join(' ');
 }
