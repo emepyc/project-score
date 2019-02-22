@@ -18,7 +18,8 @@ const App = (props) => (
           <Route exact path='/' component={Home} />
           <Route exact path='/downloads' component={Downloads} />
           <Route path='/table' component={Table} />
-          <Route path='/gene/:id' component={Gene} />
+          <Route path='/gene/:geneId' component={Gene} />
+          <Route path='/model/:modelId' component={Gene} />
         </main>
 
         <Footer />

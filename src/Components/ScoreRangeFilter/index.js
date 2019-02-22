@@ -22,12 +22,6 @@ function ScoreRangeFilter(props) {
 
   const [scoreRange, setScoreRange] = useState(initialScoreRange);
   const [scoreExtent, setScoreExtent] = useState(null);
-  const [urlTissue, setUrlTissue] = useState(tissue);
-
-  props.history.listen(() => {
-    const {tissue} = qs.parse(props.location.search);
-    setUrlTissue(tissue);
-  });
 
   const onChange = (range) => {
     setScoreRange(range);

@@ -21,12 +21,22 @@ function parseData(raw) {
   });
 }
 
-function Table(props) {
+function getUrlParams(props) {
   const {tissue, score: scoreRaw} = qs.parse(props.location.search);
   const score = scoreRaw ? JSON.parse(scoreRaw) : null;
+  const {geneId, modelId} = props.match.params;
 
-  const [urlTissue, setUrlTissue] = useState(tissue);
-  const [urlScoreRange, setUrlScoreRange] = useState(score);
+  return {
+    tissue,
+    score,
+    geneId,
+    modelId,
+  }
+}
+
+function Table(props) {
+  const {tissue, score, geneId, modelId} = getUrlParams(props);
+
   const [data, setData] = useState([]);
   const [sort, setSort] = useState('fc_clean');
   const [search, setSearch] = useState("");
@@ -35,29 +45,26 @@ function Table(props) {
   const [sortDirection, setSortDirection] = useState(1);
   const [totalHits, setTotalHits] = useState(null);
 
-  props.history.listen(() => {
-    const {tissue, score} = qs.parse(props.location.search);
-    setUrlTissue(tissue);
-    setUrlScoreRange(score);
-  });
-
   const goPrev = () => setPageNumber(pageNumber - 1);
   const goNext = () => setPageNumber(pageNumber + 1);
 
   useEffect(() => {
     const params = {
+      geneId,
+      modelId,
       sort,
       pageNumber,
       search,
       tissue,
       scoreRange: score,
     };
+
     fetchCrisprData(params)
       .then(resp => {
         setData(parseData(resp.data));
         setTotalHits(resp.count)
       })
-  }, [sort, pageNumber, search, tissue, JSON.stringify(score)]);
+  }, [geneId, modelId, sort, pageNumber, search, tissue, JSON.stringify(score)]);
 
   const isFirstPage = pageNumber === 1;
   const isLastPage = pageNumber >= totalHits / pageSize;

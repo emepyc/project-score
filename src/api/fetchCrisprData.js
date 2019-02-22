@@ -9,6 +9,27 @@ const deserialiser = new Deserialiser();
 const combineFilters = filters => filters.filter(identity);
 
 function normaliseParams(params) {
+  const geneFilter = params.geneId ? {
+    name: 'gene',
+    op: 'has',
+    val: {
+      name: 'id',
+      op: 'eq',
+      val: params.geneId,
+    },
+  } : null;
+
+  // {"name":"model","op":"has","val":{"name":"id","op":"eq","val":"SIDM00455"}}
+  const modelFilter = params.modelId ? {
+    name: 'model',
+    op: 'has',
+    val: {
+      name: 'id',
+      op: 'eq',
+      val: params.modelId,
+    },
+  } : null;
+
   const searchFilter = params.search.length > 2 ? {
     or: [
       {
@@ -22,13 +43,23 @@ function normaliseParams(params) {
         val: params.search,
       },
     ]
-  } : "";
+  } : null;
 
-  const scoreRangeFilter = params.scoreRange ? expandScoreRangeFilter(params.scoreRange) : null;
+  const scoreRangeFilter = params.scoreRange ?
+    expandScoreRangeFilter(params.scoreRange) :
+    null;
 
-  const tissueFilter = params.tissue ? expandTissueFilter(params.tissue) : null;
+  const tissueFilter = params.tissue ?
+    expandTissueFilter(params.tissue) :
+    null;
 
-  const combinedFilters = combineFilters([searchFilter, tissueFilter, scoreRangeFilter]);
+  const combinedFilters = combineFilters([
+    geneFilter,
+    modelFilter,
+    searchFilter,
+    tissueFilter,
+    scoreRangeFilter,
+  ]);
   const normalisedParams = {
     "page[number]": params.pageNumber,
     include: "gene,model,model.sample.tissue",
