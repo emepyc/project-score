@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
+import Gene from './Pages/Gene';
 import Home from './Pages/Home';
 import Downloads from './Pages/Downloads';
 import Masthead from './Components/Masthead';
@@ -14,9 +15,10 @@ const App = (props) => (
         <Masthead/>
 
         <main>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/downloads" component={Downloads} />
-          <Route path="/table" component={Table} />
+          <Route exact path='/' component={Home} />
+          <Route exact path='/downloads' component={Downloads} />
+          <Route path='/table' component={Table} />
+          <Route path='/gene/:id' component={Gene} />
         </main>
 
         <Footer />
