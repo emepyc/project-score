@@ -19,7 +19,6 @@ function normaliseParams(params) {
     },
   } : null;
 
-  // {"name":"model","op":"has","val":{"name":"id","op":"eq","val":"SIDM00455"}}
   const modelFilter = params.modelId ? {
     name: 'model',
     op: 'has',
