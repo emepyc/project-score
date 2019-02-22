@@ -24,6 +24,7 @@
     "lodash.pickby": "^4.6.0",
     "node-sass": "^4.11.0",
     "query-string": "^6.2.0",
+    "rc-slider": "^8.6.5",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-on-screen": "^2.1.1",

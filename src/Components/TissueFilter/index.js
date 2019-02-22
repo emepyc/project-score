@@ -10,11 +10,10 @@ function TissueFilter(props) {
   const [tissues, setTissues] = useState([]);
   const {tissue: tissueFromUrl, ...urlParams} = qs.parse(props.location.search);
 
-  console.log(`tissue from url: ${tissueFromUrl}`);
-  const tissueFromUrlObject = {
+  const tissueFromUrlObject = tissueFromUrl ? {
     tissue: tissueFromUrl,
     id: name2id(tissueFromUrl),
-  };
+  } : null;
 
   useEffect(() => {
       fetchTissues()

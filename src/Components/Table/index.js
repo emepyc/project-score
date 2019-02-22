@@ -22,23 +22,23 @@ function parseData(raw) {
 }
 
 function Table(props) {
-  const [urlTissue, setUrlTissue] = useState("");
+  const {tissue, score: scoreRaw} = qs.parse(props.location.search);
+  const score = scoreRaw ? JSON.parse(scoreRaw) : null;
+
+  const [urlTissue, setUrlTissue] = useState(tissue);
+  const [urlScoreRange, setUrlScoreRange] = useState(score);
   const [data, setData] = useState([]);
   const [sort, setSort] = useState('fc_clean');
-  const [filter, setFilter] = useState([]);
   const [search, setSearch] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [sortDirection, setSortDirection] = useState(1);
   const [totalHits, setTotalHits] = useState(null);
 
-  const {tissue} = qs.parse(props.location.search);
-
   props.history.listen(() => {
-    console.log('changes in the url, we get this tissue now...');
-    const {tissue} = qs.parse(props.location.search);
-    console.log(tissue);
+    const {tissue, score} = qs.parse(props.location.search);
     setUrlTissue(tissue);
+    setUrlScoreRange(score);
   });
 
   const goPrev = () => setPageNumber(pageNumber - 1);
@@ -50,13 +50,14 @@ function Table(props) {
       pageNumber,
       search,
       tissue,
+      scoreRange: score,
     };
     fetchCrisprData(params)
       .then(resp => {
         setData(parseData(resp.data));
         setTotalHits(resp.count)
       })
-  }, [sort, pageNumber, search, urlTissue]);
+  }, [sort, pageNumber, search, tissue, JSON.stringify(score)]);
 
   const isFirstPage = pageNumber === 1;
   const isLastPage = pageNumber >= totalHits / pageSize;
@@ -71,7 +72,6 @@ function Table(props) {
   // TODO: debounce
   const doSearch = (ev) => {
     const {value} = ev.target;
-    console.log(`search for string: ${value}`);
     setSearch(value);
   };
 
