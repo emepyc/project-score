@@ -2,45 +2,32 @@ import React, {useState, useEffect, Fragment} from 'react';
 import {withRouter} from 'react-router-dom';
 import { Range } from 'rc-slider';
 import {fetchScoreExtent} from '../../api';
-import qs from "query-string";
-import debounce from 'lodash.debounce';
+import useUrlParams from '../useUrlParams';
 import 'rc-slider/assets/index.css';
 import './scoreRangeSlider.scss';
 
-function setRangeInUrl(history, params) {
-  history.push({
-    search: `?${qs.stringify(params)}`,
-  })
-}
-
-const deferredSetRangeInUrl = debounce(setRangeInUrl, 500);
-
 function ScoreRangeFilter(props) {
-  const urlParams = qs.parse(props.location.search);
-  const {tissue, score: scoreRaw} = urlParams;
-  const initialScoreRange = scoreRaw ? JSON.parse(scoreRaw) : null;
+  const [urlParams, , setUrlParams] = useUrlParams(props, 500);
 
-  const [scoreRange, setScoreRange] = useState(initialScoreRange);
+  const [scoreRange, setScoreRange] = useState(urlParams.score);
   const [scoreExtent, setScoreExtent] = useState(null);
 
   const onChange = (range) => {
     setScoreRange(range);
-    deferredSetRangeInUrl(props.history, {
-        ...urlParams,
-        score: JSON.stringify(range),
-      }
-    )
+    setUrlParams({
+      score: range,
+    })
   };
 
   useEffect(() => {
     const params = {
-      tissue,
+      tissue: urlParams.tissue,
     };
     fetchScoreExtent(params)
       .then(newScoreExtent => {
         setScoreExtent([newScoreExtent.min, newScoreExtent.max]);
       });
-  }, [tissue]);
+  }, [urlParams.tissue]);
 
   if (!scoreExtent) {
     return (

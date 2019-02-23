@@ -29,7 +29,7 @@ function normaliseParams(params) {
     },
   } : null;
 
-  const searchFilter = params.search.length > 2 ? {
+  const searchFilter = params.search && params.search.length > 2 ? {
     or: [
       {
         name: 'model_name',
@@ -59,14 +59,14 @@ function normaliseParams(params) {
     tissueFilter,
     scoreRangeFilter,
   ]);
-  const normalisedParams = {
-    "page[number]": params.pageNumber,
+  return {
+    'page[number]': params.pageNumber,
+    'page[size]': params.pageSize,
     include: "gene,model,model.sample.tissue",
+    // include: "gene,model",
     filter: combinedFilters,
     sort: params.sort,
   };
-
-  return pickBy(normalisedParams, identity);
 }
 
 export default function fetchCrisprData(params) {

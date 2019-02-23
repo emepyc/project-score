@@ -1,18 +1,18 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import Select from 'react-select';
-import qs from 'query-string';
 import {withRouter} from 'react-router';
+import useUrlParams from '../useUrlParams';
 import {fetchTissues} from '../../api';
 import {name2id} from '../../api';
 
 function TissueFilter(props) {
   const [tissue, setTissue] = useState({});
   const [tissues, setTissues] = useState([]);
-  const {tissue: tissueFromUrl, ...urlParams} = qs.parse(props.location.search);
+  const [urlParams, setUrlParams] = useUrlParams(props);
 
-  const tissueFromUrlObject = tissueFromUrl ? {
-    tissue: tissueFromUrl,
-    id: name2id(tissueFromUrl),
+  const tissueFromUrlObject = urlParams.tissue ? {
+    tissue: urlParams.tissue,
+    id: name2id(urlParams.tissue),
   } : null;
 
   useEffect(() => {
@@ -28,12 +28,9 @@ function TissueFilter(props) {
   }, [tissue]);
 
   const onChange = value => {
-    props.history.push({
-      search: `?${qs.stringify({
-        ...urlParams,
-        tissue: value ? value.id : "",
-      })}`,
-    })
+    setUrlParams({
+      tissue: value ? value.id: "",
+    });
   };
 
   const getOptionLabel = option => option.tissue;

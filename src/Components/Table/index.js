@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import TableDisplay from '../TableDisplay';
 import {withRouter} from 'react-router-dom';
 import classnames from 'classnames';
-import qs from 'query-string';
+import useUrlParams from '../useUrlParams';
 import {
   Input,
   InputGroup,
@@ -21,21 +21,21 @@ function parseData(raw) {
   });
 }
 
-function getUrlParams(props) {
-  const {tissue, score: scoreRaw} = qs.parse(props.location.search);
-  const score = scoreRaw ? JSON.parse(scoreRaw) : null;
-  const {geneId, modelId} = props.match.params;
-
-  return {
-    tissue,
-    score,
-    geneId,
-    modelId,
-  }
-}
-
+// function getUrlParams(props) {
+//   const {tissue, score: scoreRaw} = qs.parse(props.location.search);
+//   const score = scoreRaw ? JSON.parse(scoreRaw) : null;
+//   const {geneId, modelId} = props.match.params;
+//
+//   return {
+//     tissue,
+//     score,
+//     geneId,
+//     modelId,
+//   }
+// }
+//
 function Table(props) {
-  const {tissue, score, geneId, modelId} = getUrlParams(props);
+  // const {tissue, score, geneId, modelId} = getUrlParams(props);
 
   const [data, setData] = useState([]);
   const [sort, setSort] = useState('fc_clean');
@@ -45,18 +45,21 @@ function Table(props) {
   const [sortDirection, setSortDirection] = useState(1);
   const [totalHits, setTotalHits] = useState(null);
 
+  const [urlParams] = useUrlParams(props);
+
   const goPrev = () => setPageNumber(pageNumber - 1);
   const goNext = () => setPageNumber(pageNumber + 1);
 
   useEffect(() => {
     const params = {
-      geneId,
-      modelId,
+      geneId: urlParams.geneId,
+      modelId: urlParams.modelId,
       sort,
+      pageSize,
       pageNumber,
       search,
-      tissue,
-      scoreRange: score,
+      tissue: urlParams.tissue,
+      scoreRange: urlParams.score,
     };
 
     fetchCrisprData(params)
@@ -64,7 +67,16 @@ function Table(props) {
         setData(parseData(resp.data));
         setTotalHits(resp.count)
       })
-  }, [geneId, modelId, sort, pageNumber, search, tissue, JSON.stringify(score)]);
+  }, [
+    urlParams.geneId,
+    urlParams.modelId,
+    sort,
+    pageSize,
+    pageNumber,
+    search,
+    urlParams.tissue,
+    JSON.stringify(urlParams.score)
+  ]);
 
   const isFirstPage = pageNumber === 1;
   const isLastPage = pageNumber >= totalHits / pageSize;
