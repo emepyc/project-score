@@ -1,20 +1,38 @@
 import {get} from './index';
-import {expandTissueFilter} from './utils';
-import pickBy from 'lodash.pickby';
-import identity from 'lodash.identity';
+import {
+  expandTissueFilter,
+  expandGeneFilter,
+  expandModelFilter,
+  combineFilters,
+} from './filters';
 
 function normaliseParams(params) {
-  const tissueFilter = params.tissue ? expandTissueFilter(params.tissue) : null;
-  const normalisedParameters = {
+  const tissueFilter = params.tissue ?
+    expandTissueFilter(params.tissue) :
+    null;
+
+  const geneFilter = params.geneId ?
+    expandGeneFilter(params.geneId) :
+    null;
+
+  const modelFilter = params.modelId ?
+    expandModelFilter(params.modelId) :
+    null;
+
+  const filters = combineFilters([
+    tissueFilter,
+    geneFilter,
+    modelFilter,
+  ]);
+
+  return {
     "page[number]": 1,
     "page[size]": 1,
     agg: {
       fc_clean: ['min', 'max'],
     },
-    filter: tissueFilter ? [tissueFilter]: [],
+    filter: filters,
   };
-
-  return pickBy(normalisedParameters, identity);
 }
 
 export default function fetchScoreExtent(params) {

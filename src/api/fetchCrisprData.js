@@ -1,48 +1,28 @@
 import {get} from './index';
-import identity from 'lodash.identity';
-import pickBy from 'lodash.pickby';
 import Deserialiser from 'deserialise-jsonapi';
-import {expandTissueFilter, expandScoreRangeFilter} from "./utils";
+import {
+  expandTissueFilter,
+  expandScoreRangeFilter,
+  expandGeneFilter,
+  expandModelFilter,
+  expandSearchFilter,
+  combineFilters,
+} from "./filters";
 
 const deserialiser = new Deserialiser();
 
-const combineFilters = filters => filters.filter(identity);
-
 function normaliseParams(params) {
-  const geneFilter = params.geneId ? {
-    name: 'gene',
-    op: 'has',
-    val: {
-      name: 'id',
-      op: 'eq',
-      val: params.geneId,
-    },
-  } : null;
+  const geneFilter = params.geneId ?
+    expandGeneFilter(params.geneId) :
+    null;
 
-  const modelFilter = params.modelId ? {
-    name: 'model',
-    op: 'has',
-    val: {
-      name: 'id',
-      op: 'eq',
-      val: params.modelId,
-    },
-  } : null;
+  const modelFilter = params.modelId ?
+    expandModelFilter(params.modelId) :
+    null;
 
-  const searchFilter = params.search && params.search.length > 2 ? {
-    or: [
-      {
-        name: 'model_name',
-        op: 'contains',
-        val: params.search,
-      },
-      {
-        name: 'gene_symbol',
-        op: 'contains',
-        val: params.search,
-      },
-    ]
-  } : null;
+  const searchFilter = params.search && params.search.length > 2 ?
+    expandSearchFilter(params.search) :
+    null;
 
   const scoreRangeFilter = params.scoreRange ?
     expandScoreRangeFilter(params.scoreRange) :

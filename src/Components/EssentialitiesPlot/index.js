@@ -56,9 +56,90 @@ function plotOnCanvas(containerWidth, attributeToPlot, config, refs, xScale, ySc
   axisBottom.call(xAxis);
 }
 
+
 function plotEssentialities(refs, attributeToPlot, data, config, containerWidth) {
   const dataSorted = sortBy(data, rec => rec[attributeToPlot]);
   const dataSortedWithIndex = dataSorted.map((d, i) => ({...d, index: i}));
+
+  const quadTree = d3.quadtree(
+    dataSortedWithIndex,
+    d => d.index,
+    d => d[attributeToPlot]
+  );
+
+  const showTooltip = (x, y, el, msg) => {
+    d3.select(el)
+      .html(msg)
+      .style('left', `${x}px`)
+      .style(`top`, `${y}px`)
+      .style(`display`, 'block')
+      .style('background-color', 'white');
+  };
+
+  const hideTooltip = el => {
+    d3.select(el).style('display', 'none');
+  };
+
+  const highlightNode = nodeData => {
+    const [
+      gene,
+      model,
+      fc_clean,
+      bf_scaled,
+      pos,
+    ] = nodeData;
+    const essentialityValue =
+      attributeToPlot === 'fc_clean' ?
+        fc_clean :
+        bf_scaled;
+
+    const guideX = refs.plotXguide.current;
+    const guideY = refs.plotYguide.current;
+
+    const guideXpos = xScale(pos) + config.marginLeft;
+    const guideYpos = yScale(essentialityValue);
+
+    guideX.setAttribute('x1', guideXpos);
+    guideX.setAttribute('x2', guideXpos);
+    guideX.style.display = 'block';
+    guideY.setAttribute('y1', guideYpos);
+    guideY.setAttribute('y2', guideYpos);
+    guideY.style.display = 'block';
+
+    const msgTooltip = `Gene: <b>${gene}</b><br/>Model: <b>${model}</b><br/>Corrected log fold change:<b>${fc_clean}</b><br/>Loss of fitness score:<b>${bf_scaled}</b>`;
+    showTooltip(guideXpos, guideYpos, refs.tooltip.current, msgTooltip);
+  };
+
+  const mouseMoveOnCanvas = () => {
+    const ev = d3.event;
+    const xClicked = xScale.invert(ev.offsetX - config.marginLeft);
+    const yClicked = yScale.invert(ev.offsetY);
+
+    const closest = quadTree.find(xClicked, yClicked);
+    const closestData = [
+      closest.bf_scaled,
+      closest.model.names[0],
+      closest.fc_clean,
+      closest.bf_scaled,
+      closest.index,
+    ];
+
+    highlightNode(closestData);
+  };
+
+  const mouseOutOnCanvas = () => {
+    const guideX = refs.plotXguide.current;
+    const guideY = refs.plotYguide.current;
+    guideX.style.display = 'none';
+    guideY.style.display = 'none';
+
+    hideTooltip(refs.tooltip.current);
+  };
+
+  d3
+    .select(refs.plotEventsContainer.current)
+    .on('mousemove', mouseMoveOnCanvas)
+    .on('mouseout', mouseOutOnCanvas);
 
   // Scales
   const yExtent = d3.extent(
@@ -92,6 +173,11 @@ function plotEssentialities(refs, attributeToPlot, data, config, containerWidth)
     .curve(d3.curveMonotoneX)
     .x(d => xScaleBrush(d.index))
     .y(d => yScaleBrush(d[attributeToPlot]));
+
+  d3
+    .select(refs.plotBrushContainer.current)
+    .selectAll('.handle--custom')
+    .remove();
 
   const handle = d3
     .select(refs.plotBrushContainer.current)
@@ -168,11 +254,40 @@ function essentialitiesPlot(props) {
     xAxis: null,
   };
 
+  const refs = {
+    plotContainer: useRef(null),
+    plotBrush: useRef(null),
+    plotBrushLine: useRef(null),
+    plotBrushContainer: useRef(null),
+    plotCanvas: useRef(null),
+    plotSvg: useRef(null),
+    plotEventsContainer: useRef(null),
+    plotXguide: useRef(null),
+    plotYguide: useRef(null),
+    plotAxisBottom: useRef(null),
+    plotAxisLeft: useRef(null),
+    xAxisLabel: useRef(null),
+    yAxisLabel: useRef(null),
+    tooltip: useRef(null),
+  };
+
+
+  const resize = () => {
+    const container = refs.plotContainer.current;
+    setContainerWidth(container.offsetWidth)
+  };
+
   const [attributeToPlot, setAttributeToPlot] = useState('fc_clean');
   const [data, setData] = useState([]);
-  const [containerWidth, setContainerWidth] = useState(700);
-
+  const [containerWidth, setContainerWidth] = useState(800);
   const [urlParams] = useUrlParams(props);
+
+  useEffect(() => {
+    window.addEventListener('resize', resize);
+    resize();
+
+    return () => window.removeEventListener('resize', resize);
+  }, []);
 
   useEffect(() => {
     const params = {
@@ -187,21 +302,6 @@ function essentialitiesPlot(props) {
       .then(resp => setData(resp.data))
   }, [urlParams.geneId, urlParams.modelId, urlParams.tissue, JSON.stringify(urlParams.score)]);
 
-  const refs = {
-    plotBrush: useRef(null),
-    plotBrushLine: useRef(null),
-    plotBrushContainer: useRef(null),
-    plotCanvas: useRef(null),
-    plotSvg: useRef(null),
-    plotEventsContainer: useRef(null),
-    plotXline: useRef(null),
-    plotYline: useRef(null),
-    plotAxisBottom: useRef(null),
-    plotAxisLeft: useRef(null),
-    xAxisLabel: useRef(null),
-    yAxisLabel: useRef(null),
-  };
-
   const yAxisLabel = attributeToPlot === 'fc_clean' ?
     FC_CLEAN_LABEL :
     LOSS_OF_FITNESS_SCORE_LABEL;
@@ -213,14 +313,6 @@ function essentialitiesPlot(props) {
       plotEssentialities(refs, attributeToPlot, data, config, containerWidth);
     }
   });
-
-  if (!data.length) {
-    return (
-      <div>
-        No data
-      </div>
-    );
-  }
 
   return (
     <Fragment>
@@ -234,7 +326,10 @@ function essentialitiesPlot(props) {
       >
       </div>
 
-      <div>
+      <div
+        ref={refs.plotContainer}
+        id='plot-container'
+      >
         {/* Brush */}
         <svg
           className='brush-plot'
@@ -273,7 +368,7 @@ function essentialitiesPlot(props) {
 
           <svg
             ref={refs.plotSvg}
-            className='toplevel-container top'
+            className='toplevel-container'
             height={config.height}
             width={containerWidth}
           >
@@ -287,7 +382,7 @@ function essentialitiesPlot(props) {
             />
 
             <line
-              ref={refs.plotXline}
+              ref={refs.plotXguide}
               className='cross'
               x1={0}
               x2={0}
@@ -302,7 +397,7 @@ function essentialitiesPlot(props) {
             />
 
             <line
-              ref={refs.plotYline}
+              ref={refs.plotYguide}
               className='cross'
               x1={config.marginLeft}
               x2={containerWidth}
@@ -345,6 +440,21 @@ function essentialitiesPlot(props) {
               {yAxisLabel}
             </text>
           </svg>
+
+          <div
+            ref={refs.tooltip}
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '3px',
+              boxShadow: 'gray 0px 1px 2px',
+              display: 'none',
+              padding: '0.3rem 0.5rem',
+              pointerEvents: 'none',
+              position: 'absolute',
+              whiteSpace: 'nowrap',
+              zIndex: 100
+            }}
+          />
 
         </div>
       </div>

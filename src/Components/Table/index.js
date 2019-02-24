@@ -20,22 +20,7 @@ function parseData(raw) {
     return [d.gene.symbol, d.model.names[0], d.model.sample.tissue.name, d.fc_clean, d.bf_scaled];
   });
 }
-
-// function getUrlParams(props) {
-//   const {tissue, score: scoreRaw} = qs.parse(props.location.search);
-//   const score = scoreRaw ? JSON.parse(scoreRaw) : null;
-//   const {geneId, modelId} = props.match.params;
-//
-//   return {
-//     tissue,
-//     score,
-//     geneId,
-//     modelId,
-//   }
-// }
-//
 function Table(props) {
-  // const {tissue, score, geneId, modelId} = getUrlParams(props);
 
   const [data, setData] = useState([]);
   const [sort, setSort] = useState('fc_clean');

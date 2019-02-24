@@ -22,12 +22,14 @@ function ScoreRangeFilter(props) {
   useEffect(() => {
     const params = {
       tissue: urlParams.tissue,
+      geneId: urlParams.geneId,
+      modelId: urlParams.modelId,
     };
     fetchScoreExtent(params)
       .then(newScoreExtent => {
         setScoreExtent([newScoreExtent.min, newScoreExtent.max]);
       });
-  }, [urlParams.tissue]);
+  }, [urlParams.tissue, urlParams.geneId, urlParams.modelId]);
 
   if (!scoreExtent) {
     return (
