@@ -63,7 +63,6 @@ function normaliseParams(params) {
     'page[number]': params.pageNumber,
     'page[size]': params.pageSize,
     include: "gene,model,model.sample.tissue",
-    // include: "gene,model",
     filter: combinedFilters,
     sort: params.sort,
   };

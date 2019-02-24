@@ -1,8 +1,14 @@
+.brush-plot {
+  .selection {
+    fill: #CCC;
+  }
+}
+
 .essentialities-plot-container {
   position: relative;
   height: 350px;
 
-  .star-plot-toplevel-container {
+  .toplevel-container {
     position: absolute;
     left: 0;
     top: 0;
