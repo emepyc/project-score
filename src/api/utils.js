@@ -7,3 +7,7 @@ export function name2id(id) {
 export function id2name(name) {
   return name.split('_').join(' ');
 }
+
+export function essentialityIsSignificant(essentiality) {
+  return essentiality.bf_scaled < 0;
+}
