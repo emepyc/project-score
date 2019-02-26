@@ -7,16 +7,16 @@ import TissuesSummary from '../../Components/TissuesSummary';
 import HomeProjectDescription from '../../Components/HomeProjectDescription';
 import HomeProgrammeDescription from '../../Components/HomeProgrammeDescription';
 import Searchbox from '../../Components/Searchbox';
+import SearchExamples from '../../Components/SearchExamples';
 
 const Home = () => (
   <Container>
     <HomeSection>
       <HomeHeader className="text-center" />
+      <Searchbox />
+      <SearchExamples />
     </HomeSection>
 
-    <HomeSection>
-      <Searchbox />
-    </HomeSection>
 
     <HomeSection>
       <TissuesSummary />

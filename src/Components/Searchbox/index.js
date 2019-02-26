@@ -1,28 +1,29 @@
 import React, {useCallback, useState} from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 import debounce from 'lodash.debounce';
+import {withRouter} from 'react-router-dom';
 
 import {search} from '../../api';
 
 const groupStyles = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
 };
 const groupBadgeStyles = {
-    backgroundColor: "#EBECF0",
-    borderRadius: "2em",
-    color: "#172B4D",
-    display: "inline-block",
+    backgroundColor: '#EBECF0',
+    borderRadius: '2em',
+    color: '#172B4D',
+    display: 'inline-block',
     fontSize: 12,
-    fontWeight: "normal",
-    lineHeight: "1",
+    fontWeight: 'normal',
+    lineHeight: 1,
     minWidth: 1,
-    padding: "0.16666666666667em 0.5em",
-    textAlign: "center",
+    padding: '0.16666666666667em 0.5em',
+    textAlign: 'center',
 };
 
-function Searchbox() {
+function Searchbox({history}) {
   const [inputValue, setInputValue] = useState("");
 
   const onInputChange = useCallback(newValue => {
@@ -35,8 +36,14 @@ function Searchbox() {
   const loadSuggestions = debounce(_loadSuggestions, 500);
 
   const onChange = value => {
-    console.log('value here...');
     console.log(value);
+    if (value.type === 'gene') {
+      history.push(`/gene/${value.id}`);
+    } else if (value.type === 'model') {
+      history.push(`/model/${value.id}`);
+    } else {
+      history.push(`/table?tissue=${value.name}`);
+    }
   };
 
   const formatGroupLabel = data => (
@@ -49,7 +56,9 @@ function Searchbox() {
   const formatOptionLabel = option => (
     <div style={groupStyles}>
       <span>{option.label}</span>
-      <span style={groupBadgeStyles}>{option.tissue}</span>
+      {option.tissue && (
+        <span style={groupBadgeStyles}>{option.tissue}</span>
+      )}
     </div>
   );
 
@@ -67,4 +76,4 @@ function Searchbox() {
   );
 }
 
-export default Searchbox;
+export default withRouter(Searchbox);
