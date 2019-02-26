@@ -1,8 +1,12 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import {Table} from 'reactstrap';
 
 function TableDisplay(props) {
   const data = props.data;
+
+  const [selectedRow, setSelectedRow] = useState("");
+
+  const getKeyForRow = (row) => `${row[0]}-${row[1]}`;
 
   return (
     <Fragment>
@@ -32,27 +36,32 @@ function TableDisplay(props) {
         </thead>
 
         <tbody>
-          {data.map(row => (
-            <tr
-              key={`${row[0]}-${row[1]}`}
-            >
-              <td>
-                {row[0]}
-              </td>
-              <td>
-                {row[1]}
-              </td>
-              <td>
-                {row[2]}
-              </td>
-              <td>
-                {row[3]}
-              </td>
-              <td>
-                {row[4]}
-              </td>
-            </tr>
-          ))}
+          {data.map(row => {
+            const key = getKeyForRow(row);
+            return (
+              <tr
+                style={{backgroundColor: (selectedRow === key ? '#eeeeee' : '#ffffff')}}
+                key={key}
+                onMouseOver={() => {setSelectedRow(key)}}
+              >
+                <td>
+                  {row[0]}
+                </td>
+                <td>
+                  {row[1]}
+                </td>
+                <td>
+                  {row[2]}
+                </td>
+                <td>
+                  {row[3]}
+                </td>
+                <td>
+                  {row[4]}
+                </td>
+              </tr>
+            )
+          })}
         </tbody>
       </Table>
     </Fragment>

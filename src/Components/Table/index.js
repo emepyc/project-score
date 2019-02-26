@@ -23,11 +23,11 @@ function parseData(raw) {
 function Table(props) {
 
   const [data, setData] = useState([]);
-  const [sort, setSort] = useState('fc_clean');
+  const [sort] = useState('fc_clean');
   const [search, setSearch] = useState("");
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
-  const [sortDirection, setSortDirection] = useState(1);
+  // const [sortDirection, setSortDirection] = useState(1);
   const [totalHits, setTotalHits] = useState(null);
 
   const [urlParams] = useUrlParams(props);
