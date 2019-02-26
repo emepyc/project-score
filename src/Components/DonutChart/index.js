@@ -103,7 +103,7 @@ function DonutChart() {
         id="explanation"
         className="my-auto"
         style={{
-          top: `${radius + radius * 0.5}px`,
+          top: `${radius + radius * 0.25}px`,
           left: `${radius + donutChartSideOffset - radius * 1.5 / 2}px`,
           borderRadius: `${radius * 1.5 / 2}`,
           width: `${radius * 1.5}px`
