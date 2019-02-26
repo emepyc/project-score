@@ -16,14 +16,6 @@ $ cd crispr-app
 $ yarn install
 ```
 
-- Build the SCSS source files
-
-```
-$ yarn run build-css
-# To watch for changes in SCSS files, run...
-$ yarn run watch-css 
-```
-
 - Start the application
 
 ```
