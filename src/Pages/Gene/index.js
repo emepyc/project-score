@@ -12,6 +12,7 @@ function Gene() {
 
   const [tissues, setTissues] = useState([]);
   const [colorBy, setColorBy] = useState("score");
+  const [attributeToPlot, setAttributeToPlot] = useState("fc_clean");
   const onTissuesLoaded = (tissues) => setTissues(tissues);
 
   return (
@@ -19,9 +20,26 @@ function Gene() {
       <GeneInfoSummary/>
       <TissueFilter />
       <ScoreRangeFilter />
+      <ButtonGroup>
+        <Button
+          active={attributeToPlot === "fc_clean"}
+          outline={attributeToPlot !== "fc_clean"}
+          onClick={() => setAttributeToPlot("fc_clean")}
+        >
+          Corrected log fold change
+        </Button>
+        <Button
+          active={attributeToPlot === "bf_scaled"}
+          outline={attributeToPlot !== "bf_scaled"}
+          onClick={() => setAttributeToPlot("bf_scaled")}
+        >
+          Loss of fitness score
+        </Button>
+      </ButtonGroup>
       <EssentialitiesPlot
         onTissuesLoaded={onTissuesLoaded}
         colorBy={colorBy}
+        attributeToPlot={attributeToPlot}
         xAxisLabel="Cell lines"
       />
       Color by:

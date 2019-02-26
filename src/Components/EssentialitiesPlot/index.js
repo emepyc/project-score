@@ -245,14 +245,13 @@ function essentialitiesPlot(props) {
     tooltip: useRef(null),
   };
 
-  const {onTissuesLoaded, colorBy, xAxisLabel} = props;
+  const {onTissuesLoaded, colorBy, attributeToPlot, xAxisLabel} = props;
 
   const resize = () => {
     const container = refs.plotContainer.current;
     setContainerWidth(container.offsetWidth)
   };
 
-  const [attributeToPlot, setAttributeToPlot] = useState('fc_clean');
   const [data, setData] = useState([]);
   const [containerWidth, setContainerWidth] = useState(800);
   const [urlParams] = useUrlParams(props);
@@ -326,10 +325,7 @@ function essentialitiesPlot(props) {
       plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy);
       plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy);
     }
-  }, [data.length, colorBy]);
-
-  // useEffect(() => {
-  // }, [data.length, attributeToPlot, containerWidth, colorBy]);
+  }, [data.length, colorBy, attributeToPlot]);
 
   return (
     <Fragment>
