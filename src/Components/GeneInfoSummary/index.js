@@ -36,8 +36,6 @@ function GeneInfoSummary(props) {
   useEffect(() => {
     fetchGeneInfo(urlParams.geneId)
       .then(geneInfo => {
-        console.log('geneInfo');
-        console.log(geneInfo);
         setIsPanCancer(some(geneInfo.essentiality_profiles, profile => profile.core_fitness_pancan));
         const cancerTypes = getCancerTypesCounts(geneInfo.essentiality_profiles[0]);
         setTotalCancerTypes(cancerTypes.total);
