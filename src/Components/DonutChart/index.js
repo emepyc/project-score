@@ -5,7 +5,7 @@ import {Pie, Line} from '@vx/shape'
 import { Point } from '@vx/point';
 
 import {fetchTissues} from '../../api';
-import colors from './colors';
+import colors from '../../colors';
 import './donutChart.scss';
 
 

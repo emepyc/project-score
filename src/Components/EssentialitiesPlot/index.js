@@ -1,9 +1,12 @@
 import React, {Fragment, useState, useEffect, useRef} from 'react';
 import {withRouter} from 'react-router-dom';
 import sortBy from 'lodash.sortby';
+import uniq from 'lodash.uniq';
+import * as d3 from 'd3';
 import {fetchCrisprData} from '../../api';
 import useUrlParams from '../useUrlParams';
-import * as d3 from 'd3';
+import colors from '../../colors';
+
 
 import './essentialitiesPlot.scss';
 
@@ -12,13 +15,18 @@ const FC_CLEAN_LABEL = 'Corrected log fold change';
 const significantField = 'bf_scaled';
 
 
-function plotOnCanvas(containerWidth, attributeToPlot, config, refs, xScale, yScale, data) {
+function plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, data, colorBy) {
   const ctx = refs.plotCanvas.current.getContext('2d');
+
+  const {xScale, yScale} = scales;
 
   ctx.clearRect(0, 0, containerWidth - config.marginLeft, config.height - config.marginTop);
   ctx.save();
   for (let i = 0; i < data.length; i++) {
     const dataPoint = data[i];
+    const dataPointColor = colorBy === "tissue" ? colors[dataPoint.model.sample.tissue.name] : (
+      dataPoint[significantField] < 0 ? config.significantNodeColor : config.insignificantNodeColor
+    );
     ctx.beginPath();
     ctx.arc(
       xScale(dataPoint.index),
@@ -28,16 +36,10 @@ function plotOnCanvas(containerWidth, attributeToPlot, config, refs, xScale, ySc
       2 * Math.PI,
       false
     );
-    ctx.fillStyle =
-      dataPoint[significantField] < 0
-        ? config.significantNodeColor
-        : config.insignificantNodeColor;
+    ctx.fillStyle = dataPointColor;
     ctx.fill();
     ctx.lineWidth = 1;
-    ctx.strokeStyle =
-      dataPoint[significantField] <= 0
-        ? config.significantNodeColor
-        : config.insignificantNodeColor;
+    ctx.strokeStyle = dataPointColor;
     ctx.stroke();
   }
 
@@ -57,9 +59,8 @@ function plotOnCanvas(containerWidth, attributeToPlot, config, refs, xScale, ySc
 }
 
 
-function plotEssentialities(refs, attributeToPlot, data, config, containerWidth) {
-  const dataSorted = sortBy(data, rec => rec[attributeToPlot]);
-  const dataSortedWithIndex = dataSorted.map((d, i) => ({...d, index: i}));
+function plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy) {
+  const {xScale, yScale, xScaleBrush, yScaleBrush} = scales;
 
   const quadTree = d3.quadtree(
     dataSortedWithIndex,
@@ -84,6 +85,7 @@ function plotEssentialities(refs, attributeToPlot, data, config, containerWidth)
     const [
       gene,
       model,
+      tissue,
       fc_clean,
       bf_scaled,
       pos,
@@ -106,7 +108,7 @@ function plotEssentialities(refs, attributeToPlot, data, config, containerWidth)
     guideY.setAttribute('y2', guideYpos);
     guideY.style.display = 'block';
 
-    const msgTooltip = `Gene: <b>${gene}</b><br/>Model: <b>${model}</b><br/>Corrected log fold change:<b>${fc_clean}</b><br/>Loss of fitness score:<b>${bf_scaled}</b>`;
+    const msgTooltip = `Gene: <b>${gene}</b><br/>Model: <b>${model}</b> (${tissue})<br/>Corrected log fold change:<b>${fc_clean}</b><br/>Loss of fitness score:<b>${bf_scaled}</b>`;
     showTooltip(guideXpos, guideYpos, refs.tooltip.current, msgTooltip);
   };
 
@@ -119,6 +121,7 @@ function plotEssentialities(refs, attributeToPlot, data, config, containerWidth)
     const closestData = [
       closest.bf_scaled,
       closest.model.names[0],
+      closest.model.sample.tissue.name,
       closest.fc_clean,
       closest.bf_scaled,
       closest.index,
@@ -140,32 +143,6 @@ function plotEssentialities(refs, attributeToPlot, data, config, containerWidth)
     .select(refs.plotEventsContainer.current)
     .on('mousemove', mouseMoveOnCanvas)
     .on('mouseout', mouseOutOnCanvas);
-
-  // Scales
-  const yExtent = d3.extent(
-    dataSortedWithIndex,
-    d => d[attributeToPlot]
-  );
-
-  const xScale = d3
-    .scaleLinear()
-    .range([0, containerWidth - config.marginLeft])
-    .domain([0, dataSortedWithIndex.length]);
-
-  const yScale = d3
-    .scaleLinear()
-    .range([0, config.height - config.marginTop])
-    .domain([yExtent[1], yExtent[0]]);
-
-  const xScaleBrush = d3
-    .scaleLinear()
-    .range([0, containerWidth - config.marginLeft])
-    .domain([0, dataSortedWithIndex.length]);
-
-  const yScaleBrush = d3
-    .scaleLinear()
-    .range([0, config.brushHeight])
-    .domain([yExtent[1], yExtent[0]]);
 
   // Brush
   const brushLine = d3
@@ -212,7 +189,7 @@ function plotEssentialities(refs, attributeToPlot, data, config, containerWidth)
         'translate(' + selection[i] + ',' + config.brushHeight / 2 + ')'
     );
     // this.props.selectRow(null);
-    plotOnCanvas(containerWidth, attributeToPlot, config, refs, xScale, yScale, dataSortedWithIndex);
+    plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy);
   };
 
   const brush = d3
@@ -232,13 +209,10 @@ function plotEssentialities(refs, attributeToPlot, data, config, containerWidth)
     .call(brush.move, xScale.range());
 
   handle.raise();
-
-  plotOnCanvas(containerWidth, attributeToPlot, config, refs, xScale, yScale, dataSortedWithIndex);
 }
 
 
 function essentialitiesPlot(props) {
-  const contextPage = props.match.params.geneId ? 'gene' : 'model';
   const config = {
     height: 300,
     marginTop: 50,
@@ -271,6 +245,7 @@ function essentialitiesPlot(props) {
     tooltip: useRef(null),
   };
 
+  const {onTissuesLoaded, colorBy, xAxisLabel} = props;
 
   const resize = () => {
     const container = refs.plotContainer.current;
@@ -299,20 +274,62 @@ function essentialitiesPlot(props) {
     };
 
     fetchCrisprData(params)
-      .then(resp => setData(resp.data))
+      .then(resp => {
+        const allTissues = uniq(resp.data.map(essentiality => essentiality.model.sample.tissue.name));
+        onTissuesLoaded(allTissues);
+        setData(resp.data)
+      })
   }, [urlParams.geneId, urlParams.modelId, urlParams.tissue, JSON.stringify(urlParams.score)]);
 
   const yAxisLabel = attributeToPlot === 'fc_clean' ?
     FC_CLEAN_LABEL :
     LOSS_OF_FITNESS_SCORE_LABEL;
 
-  const xAxisLabel = contextPage === 'gene' ? 'Cell lines' : 'Genes';
+  // Scales
+  const yExtent = d3.extent(
+    data,
+    d => d[attributeToPlot]
+  );
+
+  const xScale = d3
+    .scaleLinear()
+    .range([0, containerWidth - config.marginLeft])
+    .domain([0, data.length]);
+
+  const yScale = d3
+    .scaleLinear()
+    .range([0, config.height - config.marginTop])
+    .domain([yExtent[1], yExtent[0]]);
+
+  const xScaleBrush = d3
+    .scaleLinear()
+    .range([0, containerWidth - config.marginLeft])
+    .domain([0, data.length]);
+
+  const yScaleBrush = d3
+    .scaleLinear()
+    .range([0, config.brushHeight])
+    .domain([yExtent[1], yExtent[0]]);
+
+  const scales = {
+    xScale,
+    yScale,
+    xScaleBrush,
+    yScaleBrush,
+  };
+
+  const dataSorted = sortBy(data, rec => rec[attributeToPlot]);
+  const dataSortedWithIndex = dataSorted.map((d, i) => ({...d, index: i}));
 
   useEffect(() => {
     if (data.length) {
-      plotEssentialities(refs, attributeToPlot, data, config, containerWidth);
+      plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy);
+      plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy);
     }
-  });
+  }, [data.length, colorBy]);
+
+  // useEffect(() => {
+  // }, [data.length, attributeToPlot, containerWidth, colorBy]);
 
   return (
     <Fragment>
