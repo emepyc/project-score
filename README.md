@@ -21,3 +21,9 @@ $ yarn install
 ```
 $ yarn start
 ```
+
+- To build the project
+
+```
+$ yarn build
+```
