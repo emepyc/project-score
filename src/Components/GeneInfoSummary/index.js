@@ -7,8 +7,9 @@ import {
   essentialityIsSignificant,
 } from '../../api';
 import useUrlParams from '../useUrlParams';
-import IsPanCancerEssential from "../IsPanCancerEssential";
-import SignificantSummaryPlot from "../SignificantSummaryPlot";
+import IsPanCancerEssential from '../IsPanCancerEssential';
+import SignificantSummaryPlot from '../SignificantSummaryPlot';
+import GeneInfoHeader from '../GeneInfoHeader';
 
 function getCancerTypesCounts(attributes) {
   const allCancerTypes =  Object.keys(attributes).filter(
@@ -26,16 +27,24 @@ function GeneInfoSummary(props) {
   const [significantEssentialities, setSignificantEssentialities] = useState(0);
   const [totalCancerTypes, setTotalCancerTypes] = useState(0);
   const [significantCancerTypes, setSignificantCancerTypes] = useState(0);
+  const [geneNames, setGeneNames] = useState([]);
+  const [geneIdentifiers, setGeneIdentifiers] = useState([]);
+  const [geneSymbol, setGeneSymbol] = useState("");
   const [isPanCancer, setIsPanCancer] = useState(false);
   const [urlParams] = useUrlParams(props);
 
   useEffect(() => {
     fetchGeneInfo(urlParams.geneId)
       .then(geneInfo => {
+        console.log('geneInfo');
+        console.log(geneInfo);
         setIsPanCancer(some(geneInfo.essentiality_profiles, profile => profile.core_fitness_pancan));
         const cancerTypes = getCancerTypesCounts(geneInfo.essentiality_profiles[0]);
         setTotalCancerTypes(cancerTypes.total);
         setSignificantCancerTypes(cancerTypes.significant);
+        setGeneIdentifiers(geneInfo.identifiers);
+        setGeneNames(geneInfo.names);
+        setGeneSymbol(geneInfo.symbol);
       });
 
     const params = {
@@ -56,6 +65,11 @@ function GeneInfoSummary(props) {
 
   return (
     <div>
+      <GeneInfoHeader
+        identifiers={geneIdentifiers}
+        names={geneNames}
+        symbol={geneSymbol}
+      />
       <SignificantSummaryPlot
         total={totalEssentialities}
         significant={significantEssentialities}
