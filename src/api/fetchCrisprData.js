@@ -46,17 +46,21 @@ function normaliseParams(params) {
     include: "gene,model,model.sample.tissue",
     filter: combinedFilters,
     sort: params.sort,
+    'fields[crispr_ko]': 'bf_scaled,fc_clean,gene,model',
+    'fields[gene]': 'symbol',
+    'fields[model]': 'sample,names',
+    'fields[sample]': 'tissue',
+    'fields[tissue]': 'name',
   };
 }
 
 export default function fetchCrisprData(params) {
   const paramsNormalised = normaliseParams(params);
   return get('/datasets/crispr_ko', paramsNormalised)
-    .then(resp => {
-      return deserialiser.deserialise(resp.data)
+    .then(resp => deserialiser.deserialise(resp.data)
         .then(deserialisedData => ({
           count: resp.data.meta.count,
           data: deserialisedData,
-        }));
-    });
+        }))
+    );
 }
