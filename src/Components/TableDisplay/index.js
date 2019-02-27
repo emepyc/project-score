@@ -1,12 +1,23 @@
 import React, {Fragment, useState} from 'react';
 import {Table} from 'reactstrap';
+import {Link, withRouter} from 'react-router-dom';
+import qs from 'query-string';
+import pickBy from 'lodash.pickby';
+import identity from 'lodash.identity';
+import useUrlParams, {sanitiseParams} from '../useUrlParams';
 
 function TableDisplay(props) {
   const data = props.data;
 
   const [selectedRow, setSelectedRow] = useState("");
 
-  const getKeyForRow = (row) => `${row[0]}-${row[1]}`;
+  const getKeyForRow = (row) => `${row.geneId}-${row.modelName}`;
+
+  const [urlParams] = useUrlParams(props);
+
+  const {score, tissue} = urlParams;
+  const paramsForGeneLink = qs.stringify(sanitiseParams(pickBy({tissue, score}, identity)));
+  const paramsForModelLink = qs.stringify(sanitiseParams(pickBy({score}, identity)));
 
   return (
     <Fragment>
@@ -45,19 +56,19 @@ function TableDisplay(props) {
                 onMouseOver={() => {setSelectedRow(key)}}
               >
                 <td>
-                  {row[0]}
+                  <Link to={`/gene/${row.geneId}?${paramsForGeneLink}`}>{row.geneSymbol}</Link>
                 </td>
                 <td>
-                  {row[1]}
+                  <Link to={`/gene/${row.geneId}?${paramsForModelLink}`}>{row.modelName}</Link>
                 </td>
                 <td>
-                  {row[2]}
+                  {row.tissue}
                 </td>
                 <td>
-                  {row[3]}
+                  {row.fc_clean}
                 </td>
                 <td>
-                  {row[4]}
+                  {row.bf_scaled}
                 </td>
               </tr>
             )
@@ -68,4 +79,4 @@ function TableDisplay(props) {
   );
 }
 
-export default TableDisplay;
+export default withRouter(TableDisplay);

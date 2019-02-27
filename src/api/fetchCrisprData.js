@@ -39,6 +39,7 @@ function normaliseParams(params) {
     tissueFilter,
     scoreRangeFilter,
   ]);
+
   return {
     'page[number]': params.pageNumber,
     'page[size]': params.pageSize,

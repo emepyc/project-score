@@ -2,7 +2,7 @@ import qs from 'query-string';
 import debounce from 'lodash.debounce';
 import isObject from 'lodash.isobject';
 
-function sanitiseParams(params) {
+export function sanitiseParams(params) {
   return Object.keys(params).reduce((acc, curr) => {
     return isObject(params[curr]) ? {
       ...acc,

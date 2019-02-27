@@ -17,7 +17,15 @@ import './customTable.scss';
 
 function parseData(raw) {
   return raw.map(d => {
-    return [d.gene.symbol, d.model.names[0], d.model.sample.tissue.name, d.fc_clean, d.bf_scaled];
+    return {
+      geneSymbol: d.gene.symbol,
+      modelName: d.model.names[0],
+      tissue: d.model.sample.tissue.name,
+      fc_clean: d.fc_clean,
+      bf_scaled: d.bf_scaled,
+      modelId: d.model.id,
+      geneId: d.gene.id,
+    }
   });
 }
 function Table(props) {
