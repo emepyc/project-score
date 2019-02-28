@@ -40,7 +40,11 @@ function RenderSpinner({size, loading}) {
     >
       <div
         className='text-center align-middle'
-        style={{position: 'absolute', top: `${(size.height / 2) - 8}px`, left: `${(size.width / 2) - 25}px`}}
+        style={{
+          position: 'absolute',
+          top: `${(size.height / 2) - 8}px`,
+          left: `${(size.width / 2) - 25}px`
+        }}
       >
         <PulseLoader
           // css={{override}}

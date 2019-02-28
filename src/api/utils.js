@@ -1,5 +1,3 @@
-import identity from "lodash.identity";
-
 export function name2id(id) {
   return id.split(' ').join('_');
 }

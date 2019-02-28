@@ -4,28 +4,41 @@ import UniprotLogo from './UniprotLogo.gif';
 import EnsemblLogo from './EnsemblLogo.jpg';
 import OpenTargetsLogo from './OpenTargetsLogo.png';
 import CosmicLogo from './cosmicLogo.png';
+import Card from '../Card';
+import {Row, Col, Badge} from 'reactstrap';
 
 export default function GeneInfoHeader({symbol, names, identifiers}) {
   const geneName = names.filter(name => name.current)[0];
   return (
     <Fragment>
-      <ExternalLinks
-        identifiers={identifiers}
-      />
-      <h2>{symbol}</h2>
-      <div>{geneName && geneName.name}</div>
+      <Row>
+        <Col>
+          <Card>
+            <h2>{symbol}</h2>
+            <div>{geneName && geneName.name}</div>
+          </Card>
+        </Col>
+        <Col xs='2'>
+          <Card>
+            <ExternalLinks
+              style={{paddingRight: '20px'}}
+              identifiers={identifiers}
+            />
+          </Card>
+        </Col>
+      </Row>
     </Fragment>
   );
 }
 
 function LogoExternalLink(props) {
-  const { src, link, width } = props;
+  const {link, resource} = props;
   return (
-    <span style={{ marginRight: '15px' }}>
-      <a target="_blank" href={link}>
-        <img src={src} width={width} />
+    <Badge color='light' outline>
+      <a target="_blank" rel="noopener noreferrer" href={link}>
+        {resource}
       </a>
-    </span>
+    </Badge>
   );
 }
 
@@ -37,26 +50,30 @@ function ExternalLinks({identifiers}) {
     const uniprotId = identifiersDict.uniprot_id.identifier;
 
     return (
-      <div style={{ float: 'right' }}>
-        <span style={{ marginRight: '10px', verticalAlign: 'middle' }}>
-          Link to:{' '}
+      <div>
+        <span>
+          <div>External links:</div>
         </span>
         <LogoExternalLink
+          resource='Uniprot'
           src={UniprotLogo}
           link={`http://www.uniprot.org/uniprot/${uniprotId}`}
           width="80"
         />
         <LogoExternalLink
+          resource='Ensembl'
           src={EnsemblLogo}
           link={`http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${ensemblId}`}
           width="40"
         />
         <LogoExternalLink
+          resource='OpenTargets'
           src={OpenTargetsLogo}
           link={`https://www.targetvalidation.org/target/${ensemblId}/associations`}
           width="50"
         />
         <LogoExternalLink
+          resource='Cosmic'
           src={CosmicLogo}
           link={`https://cancer.sanger.ac.uk/cosmic/gene/analysis?ln=${cosmicGeneSymbol}`}
           width="40"
@@ -64,6 +81,7 @@ function ExternalLinks({identifiers}) {
       </div>
     );
   }
-  return <div />;
+
+  return <div/>;
 }
 

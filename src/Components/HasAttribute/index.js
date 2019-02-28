@@ -1,20 +1,20 @@
 import React, {Fragment} from 'react';
 
-export default function IsPanCancerEssential({isPanCancer}) {
-  const fontSize = isPanCancer ? '1.2rem' : '1rem';
-  const color = isPanCancer ? 'white' : 'grey';
-  const backgroundColor = isPanCancer ? '#5ba633' : 'white';
-  const panCancerLabel = isPanCancer ? 'Yes' : 'No';
-  const panCancerElement = isPanCancer ? (
-    <b>{panCancerLabel}</b>
+export default function HasAttribute({attribute, title}) {
+  const fontSize = attribute ? '1.2rem' : '1rem';
+  const color = attribute ? 'white' : 'grey';
+  const backgroundColor = attribute ? '#5ba633' : 'white';
+  const attributeLabel = attribute ? 'Yes' : 'No';
+  const attributeElement = attribute ? (
+    <b>{attributeLabel}</b>
   ) : (
-    panCancerLabel
+    attributeLabel
   );
 
   return (
     <Fragment>
       <div className='text-center'>
-        Pan-cancer core fitness
+        {title}
       </div>
       <div
         className='container d-flex'
@@ -34,7 +34,7 @@ export default function IsPanCancerEssential({isPanCancer}) {
             fontSize
           }}
         >
-          {panCancerElement}
+          {attributeElement}
         </div>
       </div>
     </Fragment>

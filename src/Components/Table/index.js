@@ -92,6 +92,19 @@ function Table(props) {
 
   return (
     <div className='essentialities-table'>
+
+      <div
+        style={{float: 'right'}}
+      >
+        <InputGroup style={{width: '300px'}}>
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>Search</InputGroupText>
+          </InputGroupAddon>
+          <Input value={search} onChange={doSearch}/>
+        </InputGroup>
+      </div>
+
+
       <Nav style={{float: 'left'}}>
         <NavLink className={navPrevClass} href='#' onClick={goPrev}>
           &lt;
@@ -105,12 +118,6 @@ function Table(props) {
         </NavLink>
       </Nav>
 
-      <InputGroup style={{width: '300px'}}>
-        <InputGroupAddon addonType="prepend">
-          <InputGroupText>Search</InputGroupText>
-        </InputGroupAddon>
-        <Input value={search} onChange={doSearch} />
-      </InputGroup>
 
       <Spinner
         loading={loading}

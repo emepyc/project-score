@@ -7,7 +7,7 @@ import 'animate.css';
 
 const header = () => {
   return (
-    <Jumbotron style={{backgroundColor: "white"}} className="text-center mb-1">
+    <Jumbotron style={{backgroundColor: "#FAFAFA"}} className="text-center mb-1">
       <div
         className="animated fadeInUp text-center"
         style={{ marginTop: '60px', marginBottom: '80px' }}

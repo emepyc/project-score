@@ -6,6 +6,8 @@ import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import EssentialitiesPlot from '../../Components/EssentialitiesPlot';
 import GeneInfoSummary from '../../Components/GeneInfoSummary';
 import TissueHighlight from '../../Components/TissueHighlight';
+import {Row, Col} from 'reactstrap';
+import Card from '../../Components/Card';
 
 
 function Gene() {
@@ -18,8 +20,16 @@ function Gene() {
   return (
     <div>
       <GeneInfoSummary/>
-      <TissueFilter/>
-      <ScoreRangeFilter/>
+      <Card>
+        <Row>
+          <Col>
+            <TissueFilter/>
+          </Col>
+          <Col>
+            <ScoreRangeFilter/>
+          </Col>
+        </Row>
+      </Card>
       <ButtonGroup>
         <Button
           active={attributeToPlot === "fc_clean"}

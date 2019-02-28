@@ -9,12 +9,14 @@ import Footer from './Components/Footer';
 import Table from './Pages/Table';
 
 const App = (props) => (
-  <div>
+  <div style={{backgroundColor: '#FAFAFA', color: '#5A5F5F'}}>
     <Router {...props}>
       <div>
         <Masthead/>
 
-        <div style={{marginLeft: '50px', marginRight: '50px'}}>
+        <div
+          style={{marginLeft: '50px', marginRight: '50px'}}
+        >
           <main>
             <Route exact path='/' component={Home}/>
             <Route exact path='/downloads' component={Downloads}/>
