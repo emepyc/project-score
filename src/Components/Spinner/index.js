@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import {PulseLoader} from 'react-spinners';
 import {SizeMe} from 'react-sizeme';
 
-function Spinner({loading, children}) {
+function Spinner({loading, style, children}) {
   return (
     <div style={{position: 'relative'}}>
       <SizeMe
@@ -14,6 +14,7 @@ function Spinner({loading, children}) {
               {children}
             </div>
             <RenderSpinner
+              style={style}
               size={size}
               loading={loading}
             />
@@ -24,7 +25,7 @@ function Spinner({loading, children}) {
   );
 }
 
-function RenderSpinner({size, loading}) {
+function RenderSpinner({size, style, loading}) {
   return (
     <div
       style={{
@@ -36,6 +37,7 @@ function RenderSpinner({size, loading}) {
         backgroundColor: 'white',
         opacity: 0.9,
         display: loading ? 'block': 'none',
+        ...style
       }}
     >
       <div

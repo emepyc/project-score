@@ -1,5 +1,5 @@
 export default {
-  Skin: '#a6cee3',
+  Stomach: '#a6cee3',
   Ovary: '#1f78b4',
   Bone: '#b2df8a',
   Breast: '#33a02c',
@@ -11,5 +11,10 @@ export default {
   'Peripheral Nervous System': '#6a3d9a',
   'Biliary Tract': '#ffff99',
   Endometrium: '#b15928',
-  'Soft Tissue': '#fda4dd'
+  'Soft Tissue': '#fda4dd',
+  Esophagus: '#fdea5f',
+  'Head and Neck': '#668cfd',
+  Skin: '#DDDDDD',
+  Kidney: '#FE3000',
+  Prostate: '#504ADF',
 };
