@@ -25,66 +25,73 @@ function TissuesSummaryDescription() {
 
   return (
     <div style={{martinTop: '30px'}}>
-      <div style={{marginLeft: '5px'}}>
-        <span style={{marginRight: '18px'}}>
-          <img
-            height={'50px'}
-            width={'50px'}
-            src={PetriDiagram}
-            alt="Cell line"
-          />
-        </span>
-        {numberOfCellLines} cell lines
-      </div>
 
-      <div style={{marginTop: '12px', marginLeft: '6px'}}>
-        <span style={{marginRight: '18px'}}>
+      <div className="sectionDescription" style={{marginLeft: '5px'}}>
           <img
             height={'48px'}
             width={'48px'}
-            src={Organ9}
-            alt='Organs'
+            src={PetriDiagram}
+            alt="Cell line"
           />
+        <span style={{marginLeft: '20px'}}>
+          {numberOfCellLines} cell lines
         </span>
-        {numberOfTissues} tissues
       </div>
 
-      <div style={{marginLeft: '7px', marginTop: '16px'}}>
+      <div className="sectionDescription" style={{marginLeft: '6px'}}>
         <img
-          height={'46px'}
-          width={'46px'}
+          height={'47px'}
+          width={'47px'}
+          src={Organ9}
+          alt='Organs'
+          style={{verticalAlign: 'middle'}}
+        />
+        <span style={{marginLeft: '20px'}}>
+          {numberOfTissues} tissues
+        </span>
+      </div>
+
+      <div className="sectionDescription" style={{marginLeft: '7px'}}>
+        <img
+          height={'45px'}
+          width={'45px'}
           src={Gene}
           alt='Fitness genes'
+          style={{verticalAlign: 'middle'}}
         />
-        <span style={{marginLeft: '20px'}}>6,830 fitness genes</span>
+        <span style={{marginLeft: '21px'}}>
+          6,830 fitness genes
+        </span>
       </div>
 
-      <div style={{marginTop: '15px'}}>
+      <div className="sectionDescription">
         <FontAwesomeIcon
           icon={faBullseye}
           fixedWidth
           style={{
             fontSize: '2.7em',
             color: '#0061a5',
-            marginRight: '15px'
+            marginRight: '15px',
+            verticalAlign: 'middle',
           }}
         />
-        <span style={{verticalAlign: 'super'}}>
+        <span>
           497 unique priority targets
         </span>
       </div>
 
-      <div style={{marginTop: '15px'}}>
+      <div className="sectionDescription">
         <FontAwesomeIcon
           icon={faClock}
           fixedWidth
           style={{
             fontSize: '2.7em',
             color: '#0061a5',
-            marginRight: '15px'
+            marginRight: '15px',
+            verticalAlign: 'middle',
           }}
         />
-        <span style={{verticalAlign: 'super'}}>
+        <span>
           Last update: February 2019
         </span>
       </div>
