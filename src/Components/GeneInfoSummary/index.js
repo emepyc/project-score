@@ -10,6 +10,7 @@ import useUrlParams from '../useUrlParams';
 import IsPanCancerEssential from '../IsPanCancerEssential';
 import SignificantSummaryPlot from '../SignificantSummaryPlot';
 import GeneInfoHeader from '../GeneInfoHeader';
+import Spinner from "../Spinner";
 
 function getCancerTypesCounts(attributes) {
   const allCancerTypes =  Object.keys(attributes).filter(
@@ -32,6 +33,7 @@ function GeneInfoSummary(props) {
   const [geneSymbol, setGeneSymbol] = useState("");
   const [isPanCancer, setIsPanCancer] = useState(false);
   const [urlParams] = useUrlParams(props);
+  const [loadingEssentialities, setLoadingEssentialities] = useState(false);
 
   useEffect(() => {
     fetchGeneInfo(urlParams.geneId)
@@ -49,8 +51,10 @@ function GeneInfoSummary(props) {
       geneId: urlParams.geneId,
       pageSize: 0,
     };
+    setLoadingEssentialities(true);
     fetchCrisprData(params)
       .then(resp => {
+        setLoadingEssentialities(false);
         const total = resp.count;
         const significant = resp.data.filter(essentialityIsSignificant).length;
         setTotalEssentialities(total);
@@ -68,18 +72,25 @@ function GeneInfoSummary(props) {
         names={geneNames}
         symbol={geneSymbol}
       />
-      <SignificantSummaryPlot
-        total={totalEssentialities}
-        significant={significantEssentialities}
+
+      <Spinner
+        loading={loadingEssentialities}
       >
-        Loss of fitness in <b>{significantEssentialities}</b> cell line{significantEssentialitiesNumberSuffix}
-      </SignificantSummaryPlot>
+        <SignificantSummaryPlot
+          total={totalEssentialities}
+          significant={significantEssentialities}
+        >
+          Loss of fitness in <b>{significantEssentialities}</b> cell line{significantEssentialitiesNumberSuffix}
+        </SignificantSummaryPlot>
+      </Spinner>
+
       <SignificantSummaryPlot
         total={totalCancerTypes}
         significant={significantCancerTypes}
       >
         Loss of fitness in <b>{significantCancerTypes}</b> cancer type{significantCancerTypesNumberSuffix}
       </SignificantSummaryPlot>
+
       <IsPanCancerEssential
         isPanCancer={isPanCancer}
       />

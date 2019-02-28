@@ -3,6 +3,7 @@ import {withRouter} from 'react-router-dom';
 import sortBy from 'lodash.sortby';
 import uniq from 'lodash.uniq';
 import * as d3 from 'd3';
+import Spinner from '../Spinner';
 import {fetchCrisprData} from '../../api';
 import useUrlParams from '../useUrlParams';
 import colors from '../../colors';
@@ -249,16 +250,16 @@ function essentialitiesPlot(props) {
 
   const resize = () => {
     const container = refs.plotContainer.current;
-    setContainerWidth(container.offsetWidth)
+      setContainerWidth(container.offsetWidth)
   };
 
   const [data, setData] = useState([]);
   const [containerWidth, setContainerWidth] = useState(800);
   const [urlParams] = useUrlParams(props);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     window.addEventListener('resize', resize);
-    resize();
 
     return () => window.removeEventListener('resize', resize);
   }, []);
@@ -272,8 +273,12 @@ function essentialitiesPlot(props) {
       pageSize: 0,
     };
 
+    setLoading(true);
+
     fetchCrisprData(params)
       .then(resp => {
+        setLoading(false);
+        resize();
         const allTissues = uniq(resp.data.map(essentiality => essentiality.model.sample.tissue.name));
         onTissuesLoaded(allTissues);
         setData(resp.data)
@@ -325,152 +330,156 @@ function essentialitiesPlot(props) {
       plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy);
       plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy);
     }
-  }, [data.length, colorBy, attributeToPlot]);
+  }, [data.length, colorBy, attributeToPlot, containerWidth]);
 
   return (
     <Fragment>
-      <div
-        style={{
-          display: 'inline-block',
-          float: 'right',
-          marginLeft: '10px',
-          marginBottom: '10px'
-        }}
+      <Spinner
+        loading={loading}
       >
-      </div>
-
-      <div
-        ref={refs.plotContainer}
-        id='plot-container'
-      >
-        {/* Brush */}
-        <svg
-          className='brush-plot'
-          ref={refs.plotBrush}
-          style={{paddingLeft: '25px'}}
-          height={config.brushHeight}
-          width={containerWidth + config.brushOffset * 2 + 1}
+        <div
+          style={{
+            display: 'inline-block',
+            float: 'right',
+            marginLeft: '10px',
+            marginBottom: '10px'
+          }}
         >
-          <path
-            transform="translate(25, 0)"
-            ref={refs.plotBrushLine}
-            className="line"
-            style={{
-              fill: 'none',
-              stroke: '#003F83',
-              strokeWidth: '2px'
-            }}
-          />
-          <g
-            transform="translate(25, 0)"
-            ref={refs.plotBrushContainer}
-            className="brush"
-          />
-        </svg>
-
+        </div>
 
         <div
-          className='essentialities-plot-container'
+          ref={refs.plotContainer}
+          id='plot-container'
         >
-          <canvas
-            ref={refs.plotCanvas}
-            className='toplevel-container leave-space'
-            height={config.height - config.marginTop}
-            width={containerWidth - config.marginLeft}
-          />
-
+          {/* Brush */}
           <svg
-            ref={refs.plotSvg}
-            className='toplevel-container'
-            height={config.height}
-            width={containerWidth}
+            className='brush-plot'
+            ref={refs.plotBrush}
+            style={{paddingLeft: '25px'}}
+            height={config.brushHeight}
+            width={containerWidth + config.brushOffset * 2 + 1}
           >
-
-            <rect
-              ref={refs.plotEventsContainer}
-              x={config.marginLeft}
-              y={0}
-              width={containerWidth - config.marginLeft}
-              height={config.height - config.marginTop}
-            />
-
-            <line
-              ref={refs.plotXguide}
-              className='cross'
-              x1={0}
-              x2={0}
-              y1={0}
-              y2={config.height - config.marginTop}
+            <path
+              transform="translate(25, 0)"
+              ref={refs.plotBrushLine}
+              className="line"
               style={{
-                display: 'none',
-                stroke: '#eeeeee',
-                strokeWidth: '2px',
-                pointerEvents: 'none'
+                fill: 'none',
+                stroke: '#003F83',
+                strokeWidth: '2px'
               }}
             />
-
-            <line
-              ref={refs.plotYguide}
-              className='cross'
-              x1={config.marginLeft}
-              x2={containerWidth}
-              y1={0}
-              y2={0}
-              style={{
-                display: 'none',
-                stroke: '#eeeeee',
-                strokeWidth: '2px',
-                pointerEvents: 'none'
-              }}
-            />
-
             <g
-              ref={refs.plotAxisBottom}
+              transform="translate(25, 0)"
+              ref={refs.plotBrushContainer}
+              className="brush"
             />
-
-            <g
-              ref={refs.plotAxisLeft}
-              transform={`translate(${config.marginLeft}, 0)`}
-            />
-
-            <text
-              ref={refs.xAxisLabel}
-              x={0}
-              y={0}
-              textAnchor='middle'
-              transform={`translate(${containerWidth / 2}, ${config.height - 10})`}
-            >
-              {xAxisLabel}
-            </text>
-
-            <text
-              ref={refs.yAxisLabel}
-              x={0}
-              y={0}
-              textAnchor='middle'
-              transform={`translate(15, ${config.height / 2}) rotate(-90)`}
-            >
-              {yAxisLabel}
-            </text>
           </svg>
 
-          <div
-            ref={refs.tooltip}
-            style={{
-              backgroundColor: '#FFFFFF',
-              borderRadius: '3px',
-              boxShadow: 'gray 0px 1px 2px',
-              display: 'none',
-              padding: '0.3rem 0.5rem',
-              pointerEvents: 'none',
-              position: 'absolute',
-              whiteSpace: 'nowrap',
-              zIndex: 100
-            }}
-          />
 
+          <div
+            className='essentialities-plot-container'
+          >
+            <canvas
+              ref={refs.plotCanvas}
+              className='toplevel-container leave-space'
+              height={config.height - config.marginTop}
+              width={containerWidth - config.marginLeft}
+            />
+
+            <svg
+              ref={refs.plotSvg}
+              className='toplevel-container'
+              height={config.height}
+              width={containerWidth}
+            >
+
+              <rect
+                ref={refs.plotEventsContainer}
+                x={config.marginLeft}
+                y={0}
+                width={containerWidth - config.marginLeft}
+                height={config.height - config.marginTop}
+              />
+
+              <line
+                ref={refs.plotXguide}
+                className='cross'
+                x1={0}
+                x2={0}
+                y1={0}
+                y2={config.height - config.marginTop}
+                style={{
+                  display: 'none',
+                  stroke: '#eeeeee',
+                  strokeWidth: '2px',
+                  pointerEvents: 'none'
+                }}
+              />
+
+              <line
+                ref={refs.plotYguide}
+                className='cross'
+                x1={config.marginLeft}
+                x2={containerWidth}
+                y1={0}
+                y2={0}
+                style={{
+                  display: 'none',
+                  stroke: '#eeeeee',
+                  strokeWidth: '2px',
+                  pointerEvents: 'none'
+                }}
+              />
+
+              <g
+                ref={refs.plotAxisBottom}
+              />
+
+              <g
+                ref={refs.plotAxisLeft}
+                transform={`translate(${config.marginLeft}, 0)`}
+              />
+
+              <text
+                ref={refs.xAxisLabel}
+                x={0}
+                y={0}
+                textAnchor='middle'
+                transform={`translate(${containerWidth / 2}, ${config.height - 10})`}
+              >
+                {xAxisLabel}
+              </text>
+
+              <text
+                ref={refs.yAxisLabel}
+                x={0}
+                y={0}
+                textAnchor='middle'
+                transform={`translate(15, ${config.height / 2}) rotate(-90)`}
+              >
+                {yAxisLabel}
+              </text>
+            </svg>
+
+            <div
+              ref={refs.tooltip}
+              style={{
+                backgroundColor: '#FFFFFF',
+                borderRadius: '3px',
+                boxShadow: 'gray 0px 1px 2px',
+                display: 'none',
+                padding: '0.3rem 0.5rem',
+                pointerEvents: 'none',
+                position: 'absolute',
+                whiteSpace: 'nowrap',
+                zIndex: 100
+              }}
+            />
+
+          </div>
         </div>
-      </div>
+      </Spinner>
     </Fragment>
   )
 }

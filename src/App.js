@@ -14,15 +14,16 @@ const App = (props) => (
       <div>
         <Masthead/>
 
-        <main>
-          <Route exact path='/' component={Home} />
-          <Route exact path='/downloads' component={Downloads} />
-          <Route path='/table' component={Table} />
-          <Route path='/gene/:geneId' component={Gene} />
-          <Route path='/model/:modelId' component={Gene} />
-        </main>
-
-        <Footer />
+        <div style={{marginLeft: '50px', marginRight: '50px'}}>
+          <main>
+            <Route exact path='/' component={Home}/>
+            <Route exact path='/downloads' component={Downloads}/>
+            <Route path='/table' component={Table}/>
+            <Route path='/gene/:geneId' component={Gene}/>
+            <Route path='/model/:modelId' component={Gene}/>
+          </main>
+        </div>
+        <Footer/>
       </div>
     </Router>
   </div>

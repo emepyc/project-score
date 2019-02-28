@@ -18,8 +18,8 @@ function Gene() {
   return (
     <div>
       <GeneInfoSummary/>
-      <TissueFilter />
-      <ScoreRangeFilter />
+      <TissueFilter/>
+      <ScoreRangeFilter/>
       <ButtonGroup>
         <Button
           active={attributeToPlot === "fc_clean"}
@@ -42,28 +42,29 @@ function Gene() {
         attributeToPlot={attributeToPlot}
         xAxisLabel="Cell lines"
       />
-      Color by:
       <ButtonGroup>
         <Button
           active={colorBy === "score"}
           outline={colorBy !== "score"}
           onClick={() => setColorBy("score")}
         >
-          Score
+          Color by score
         </Button>
         <Button
           active={colorBy === "tissue"}
           outline={colorBy !== "tissue"}
           onClick={() => setColorBy("tissue")}
         >
-          Tissue
+          Color by tissue
         </Button>
       </ButtonGroup>
-      <TissueHighlight
-        tissues={tissues}
-        blocks={4}
-      />
-      <Table />
+      {colorBy === "tissue" && (
+        <TissueHighlight
+          tissues={tissues}
+          blocks={4}
+        />
+      )}
+      <Table/>
     </div>
   );
 }

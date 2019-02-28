@@ -3,6 +3,7 @@ import TableDisplay from '../TableDisplay';
 import {withRouter} from 'react-router-dom';
 import classnames from 'classnames';
 import useUrlParams from '../useUrlParams';
+import Spinner from '../Spinner';
 import {
   Input,
   InputGroup,
@@ -29,7 +30,7 @@ function parseData(raw) {
   });
 }
 function Table(props) {
-
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [sort] = useState('fc_clean');
   const [search, setSearch] = useState("");
@@ -55,8 +56,10 @@ function Table(props) {
       scoreRange: urlParams.score,
     };
 
+    setLoading(true);
     fetchCrisprData(params)
       .then(resp => {
+        setLoading(false);
         setData(parseData(resp.data));
         setTotalHits(resp.count)
       })
@@ -109,10 +112,14 @@ function Table(props) {
         <Input value={search} onChange={doSearch} />
       </InputGroup>
 
-      <TableDisplay
-        {...props}
-        data={data}
-      />
+      <Spinner
+        loading={loading}
+      >
+        <TableDisplay
+          {...props}
+          data={data}
+        />
+      </Spinner>
     </div>
   )
 }

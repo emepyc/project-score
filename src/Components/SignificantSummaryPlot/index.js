@@ -2,9 +2,17 @@ import React, {Fragment} from 'react';
 import {Pie} from '@vx/shape';
 import {Group} from '@vx/group';
 
+const width = 100;
+const height = 100;
+
+
 export default function SignificantEssentialitiesSummaryPlot({total, significant, children}) {
   if (!total) {
-    return <div/>;
+    return (
+      <div
+        style={{width: `${width}px`, height: `${height}px`}}
+      />
+    );
   }
 
   return (
@@ -30,9 +38,6 @@ function SignificantCountPlot({total, significant}) {
     right: 1,
     bottom: 1
   };
-
-  const width = 100;
-  const height = 100;
 
   const radius = 50;
 
