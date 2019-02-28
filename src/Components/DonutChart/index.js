@@ -3,6 +3,7 @@ import React, {useEffect, useState, useRef} from 'react';
 import {Group} from '@vx/group';
 import {Pie, Line} from '@vx/shape'
 import { Point } from '@vx/point';
+import {withRouter} from 'react-router-dom';
 
 import {fetchTissues} from '../../api';
 import colors from '../../colors';
@@ -55,7 +56,7 @@ function Label({ radius, arc, x, y, maxX, center, children }) {
 }
 
 
-function DonutChart() {
+function DonutChart({history}) {
   const [tissues, setTissues] = useState([]);
   const [containerWidth, setContainerWidth] = useState(500);
 
@@ -97,6 +98,8 @@ function DonutChart() {
 
   const radius = (containerWidth - (margins.left + margins.right)) / 2;
 
+  const gotoTable = (data) => history.push(`/table?tissue=${data.id}`);
+
   return (
     <div ref={containerRef} style={{position: 'relative'}}>
       <div
@@ -136,10 +139,12 @@ function DonutChart() {
                 return (
                   <g key={`tissue-${arc.data.id}-${i}`}>
                     <path
+                      style={{cursor: 'pointer'}}
                       d={pie.path(arc)}
                       fill={color}
                       onMouseOver={event =>  handleMouseOverBar(event, arc.data)}
                       onMouseOut={handleMouseOut}
+                      onClick={() => gotoTable(arc.data)}
                     />
                     <Label
                       radius={radius}
@@ -162,4 +167,4 @@ function DonutChart() {
   )
 }
 
-export default DonutChart;
+export default withRouter(DonutChart);
