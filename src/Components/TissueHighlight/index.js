@@ -33,7 +33,9 @@ function TissuesHighlight({tissues, blocks}) {
   }
 
   return (
-    <Row>
+    <Row
+      style={{marginTop: '20px'}}
+    >
       {[...Array(blocks).keys()].map(block => {
         return (
           <Col xs={12 / blocks} key={block}>

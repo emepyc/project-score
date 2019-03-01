@@ -9,7 +9,7 @@ import Footer from './Components/Footer';
 import Table from './Pages/Table';
 
 const App = (props) => (
-  <div style={{backgroundColor: '#FAFAFA', color: '#5A5F5F'}}>
+  <div style={{backgroundColor: '#FAFAFA', color: '#5A5F5F', fontSize: '0.85em'}}>
     <Router {...props}>
       <div>
         <Masthead/>
