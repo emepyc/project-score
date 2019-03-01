@@ -13,10 +13,8 @@ import {CardBody, CardTitle} from 'reactstrap';
 
 function Gene() {
 
-  const [tissues, setTissues] = useState([]);
   const [colorBy, setColorBy] = useState("score");
   const [attributeToPlot, setAttributeToPlot] = useState("fc_clean");
-  const onTissuesLoaded = (tissues) => setTissues(tissues);
 
   return (
     <div>
@@ -60,7 +58,6 @@ function Gene() {
                 </Col>
               </Row>
               <EssentialitiesPlot
-                onTissuesLoaded={onTissuesLoaded}
                 colorBy={colorBy}
                 attributeToPlot={attributeToPlot}
                 xAxisLabel="Cell lines"
@@ -85,7 +82,6 @@ function Gene() {
                   </ButtonGroup>
                   {colorBy === "tissue" && (
                     <TissueHighlight
-                      tissues={tissues}
                       blocks={4}
                     />
                   )}

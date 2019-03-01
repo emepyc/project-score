@@ -1,7 +1,6 @@
 import React, {Fragment, useState, useEffect, useRef} from 'react';
 import {withRouter} from 'react-router-dom';
 import sortBy from 'lodash.sortby';
-import uniq from 'lodash.uniq';
 import * as d3 from 'd3';
 import Spinner from '../Spinner';
 import {fetchCrisprData} from '../../api';
@@ -246,7 +245,7 @@ function essentialitiesPlot(props) {
     tooltip: useRef(null),
   };
 
-  const {onTissuesLoaded, colorBy, attributeToPlot, xAxisLabel} = props;
+  const {colorBy, attributeToPlot, xAxisLabel} = props;
 
   const resize = () => {
     const container = refs.plotContainer.current;
@@ -279,8 +278,6 @@ function essentialitiesPlot(props) {
       .then(resp => {
         setLoading(false);
         resize();
-        const allTissues = uniq(resp.data.map(essentiality => essentiality.model.sample.tissue.name));
-        onTissuesLoaded(allTissues);
         setData(resp.data)
       })
   }, [urlParams.geneId, urlParams.modelId, urlParams.tissue, JSON.stringify(urlParams.score)]);

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Row, Col} from 'reactstrap';
 import colors from '../../colors';
+import {fetchTissues} from '../../api';
+import Spinner from '../Spinner';
 
 function tissueFilterElement(tissue, key) {
   return (
@@ -26,28 +28,42 @@ function tissueFilterElement(tissue, key) {
 }
 
 
-function TissuesHighlight({tissues, blocks}) {
+function TissuesHighlight({blocks}) {
+  const [tissues, setTissues] = useState([]);
+  const [loadingTissues, setLoadingTissues] = useState(false);
+
   const tissuesPerBlock = Math.round(tissues.length / blocks);
-  if (tissues.length === 0) {
-    return <div/>;
-  }
+
+  useEffect(() => {
+    setLoadingTissues(true);
+    fetchTissues()
+      .then(resp => {
+        setLoadingTissues(false);
+        console.log(resp);
+        setTissues(resp.map(tissue => tissue.tissue));
+      })
+  }, []);
 
   return (
-    <Row
-      style={{marginTop: '20px'}}
+    <Spinner
+      loading={loadingTissues}
     >
-      {[...Array(blocks).keys()].map(block => {
-        return (
-          <Col xs={12 / blocks} key={block}>
-            {[...Array(tissuesPerBlock).keys()].map(pos => tissueFilterElement(
-              tissues[block * tissuesPerBlock + pos],
-              `${block}${tissuesPerBlock}${pos}`
-              )
-            )}
-          </Col>
-        );
-      })}
-    </Row>
+      <Row
+        style={{marginTop: '20px'}}
+      >
+        {[...Array(blocks).keys()].map(block => {
+          return (
+            <Col xs={12 / blocks} key={block}>
+              {[...Array(tissuesPerBlock).keys()].map(pos => tissueFilterElement(
+                tissues[block * tissuesPerBlock + pos],
+                `${block}${tissuesPerBlock}${pos}`
+                )
+              )}
+            </Col>
+          );
+        })}
+      </Row>
+    </Spinner>
   );
 }
 
