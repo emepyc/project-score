@@ -2,8 +2,7 @@ import React, {Fragment} from 'react';
 import keyBy from 'lodash.keyby';
 import {Card, CardHeader, CardBody, CardTitle} from '../Card';
 import {Row, Col, Badge} from 'reactstrap';
-
-import style from './geneInfoHeader.module.scss';
+import PageHeader from '../../Components/PageHeader';
 
 export default function GeneInfoHeader({symbol, names, identifiers}) {
   const geneName = names.filter(name => name.current)[0];
@@ -11,10 +10,10 @@ export default function GeneInfoHeader({symbol, names, identifiers}) {
     <Fragment>
       <Row>
         <Col>
-          <div className={style.geneHeader}>
-            <h2>{symbol}</h2>
-            <div>{geneName && geneName.name}</div>
-          </div>
+          <PageHeader
+            header={symbol}
+            subheader={geneName && geneName.name}
+          />
         </Col>
         <Col xs={{size: 4}} lg={{size: 2}}>
           <Card>

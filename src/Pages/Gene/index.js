@@ -16,7 +16,7 @@ function Gene() {
   return (
     <div>
       <GeneInfoSummary/>
-      <Row className="equal">
+      <Row>
         <Col lg={{size: 8}} xs={{size: 12}}>
           <GeneSummaryPlots/>
         </Col>
