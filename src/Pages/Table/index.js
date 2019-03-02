@@ -3,23 +3,37 @@ import TableComponent from '../../Components/Table';
 import TissueFilter from '../../Components/TissueFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import {Row, Col} from 'reactstrap';
-import Card from '../../Components/Card';
+import {Card, CardHeader, CardTitle, CardBody} from '../../Components/Card';
 
 function Table() {
   return (
     <div>
       <Card>
-        <Row>
-          <Col>
-            <TissueFilter/>
-          </Col>
-          <Col>
-            <ScoreRangeFilter/>
-          </Col>
-        </Row>
+        <CardHeader>
+          <CardTitle>
+            Filters
+          </CardTitle>
+        </CardHeader>
+        <CardBody>
+          <Row>
+            <Col>
+              <TissueFilter/>
+            </Col>
+            <Col>
+              <ScoreRangeFilter/>
+            </Col>
+          </Row>
+        </CardBody>
       </Card>
       <Card>
-        <TableComponent/>
+        <CardHeader>
+          <CardTitle>
+            Essentialities
+          </CardTitle>
+        </CardHeader>
+        <CardBody>
+          <TableComponent/>
+        </CardBody>
       </Card>
     </div>
   )

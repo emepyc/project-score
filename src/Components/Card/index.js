@@ -1,9 +1,13 @@
 import React from 'react';
-import {Card as BootstrapCard} from 'reactstrap';
+import {
+  Card as BCard,
+  CardHeader as BCardHeader,
+  CardTitle as BCardTitle,
+} from 'reactstrap';
 
-function Card({children}) {
+export function Card({children}) {
   return (
-    <BootstrapCard
+    <BCard
       style={{
         padding: '20px',
         paddingBottom: '20px',
@@ -15,8 +19,44 @@ function Card({children}) {
       }}
     >
       {children}
-    </BootstrapCard>
+    </BCard>
   );
 }
 
-export default Card;
+export function CardHeader({children}) {
+  return (
+    <BCardHeader
+      style={{
+        padding: '.3rem .5rem',
+        backgroundColor: '#FFFFFF',
+      }}
+    >
+      {children}
+    </BCardHeader>
+  );
+}
+
+export function CardBody({children}) {
+  return (
+    <div
+      style={{
+        marginTop: '20px',
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function CardTitle({children}) {
+  return (
+    <BCardTitle
+      style={{
+        fontSize: '1.2rem',
+        fontWeight: '400',
+      }}
+    >
+      {children}
+    </BCardTitle>
+  );
+}

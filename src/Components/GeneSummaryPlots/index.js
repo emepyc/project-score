@@ -4,7 +4,7 @@ import useUrlParams from '../useUrlParams';
 import {fetchSignificantModels, totalModels} from '../../api';
 import Spinner from '../Spinner';
 import SignificantCountPlot from '../SignificantCountPlot';
-import Card from "../Card";
+import {Card, CardHeader, CardBody, CardTitle} from "../Card";
 import {Col, Row} from "reactstrap";
 import HasAttribute from '../HasAttribute';
 
@@ -36,53 +36,59 @@ function GeneSummaryPlots(props) {
   return (
     <Fragment>
 
-      <Card>
-        <Spinner
-          loading={loading}
-        >
-          <Row>
-            <Col>
-              <div className="text-center">Loss of fitness in <b>{numberOfEssentialModels}</b> cell
-                line{essentialModelsSuffix}</div>
-            </Col>
-            <Col>
-              <div className="text-center">Loss of fitness in <b>{numberOfEssentialTissues}</b> cancer
-                type{essentialTissuesSuffix}</div>
-            </Col>
-            <Col>
-              <div className="text-center">Pan-cancer core fitness</div>
-            </Col>
-            <Col>
-              <div className="text-center">Tumour suppressor</div>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <SignificantCountPlot
-                total={totalModels}
-                significant={numberOfEssentialModels}
-              />
-            </Col>
-            <Col>
-              <SignificantCountPlot
-                total={totalNumberOfTissues}
-                significant={numberOfEssentialTissues}
-              />
-            </Col>
-            <Col>
-              <HasAttribute
-                attribute={isPanCancer}
-              />
-            </Col>
-            <Col>
-              <HasAttribute
-                attribute={isTumourSuppressor}
-              />
-            </Col>
-          </Row>
-
-        </Spinner>
-      </Card>
+      <Spinner
+        loading={loading}
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              Gene summary
+            </CardTitle>
+          </CardHeader>
+          <CardBody>
+            <Row>
+              <Col>
+                <div className="text-center">Loss of fitness in <b>{numberOfEssentialModels}</b> cell
+                  line{essentialModelsSuffix}</div>
+              </Col>
+              <Col>
+                <div className="text-center">Loss of fitness in <b>{numberOfEssentialTissues}</b> cancer
+                  type{essentialTissuesSuffix}</div>
+              </Col>
+              <Col>
+                <div className="text-center">Pan-cancer core fitness</div>
+              </Col>
+              <Col>
+                <div className="text-center">Tumour suppressor</div>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <SignificantCountPlot
+                  total={totalModels}
+                  significant={numberOfEssentialModels}
+                />
+              </Col>
+              <Col>
+                <SignificantCountPlot
+                  total={totalNumberOfTissues}
+                  significant={numberOfEssentialTissues}
+                />
+              </Col>
+              <Col>
+                <HasAttribute
+                  attribute={isPanCancer}
+                />
+              </Col>
+              <Col>
+                <HasAttribute
+                  attribute={isTumourSuppressor}
+                />
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
+      </Spinner>
 
     </Fragment>
   );

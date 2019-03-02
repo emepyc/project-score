@@ -1,10 +1,6 @@
 import React, {Fragment} from 'react';
 import keyBy from 'lodash.keyby';
-import UniprotLogo from './UniprotLogo.gif';
-import EnsemblLogo from './EnsemblLogo.jpg';
-import OpenTargetsLogo from './OpenTargetsLogo.png';
-import CosmicLogo from './cosmicLogo.png';
-import Card from '../Card';
+import {Card, CardHeader, CardBody, CardTitle} from '../Card';
 import {Row, Col, Badge} from 'reactstrap';
 
 import style from './geneInfoHeader.module.scss';
@@ -15,17 +11,24 @@ export default function GeneInfoHeader({symbol, names, identifiers}) {
     <Fragment>
       <Row>
         <Col>
-            <div className={style.geneHeader}>
-              <h2>{symbol}</h2>
-              <div>{geneName && geneName.name}</div>
-            </div>
+          <div className={style.geneHeader}>
+            <h2>{symbol}</h2>
+            <div>{geneName && geneName.name}</div>
+          </div>
         </Col>
         <Col xs={{size: 4}} lg={{size: 2}}>
           <Card>
-            <ExternalLinks
-              style={{paddingRight: '20px'}}
-              identifiers={identifiers}
-            />
+            <CardHeader>
+              <CardTitle>
+                External links
+              </CardTitle>
+            </CardHeader>
+            <CardBody>
+              <ExternalLinks
+                style={{paddingRight: '20px'}}
+                identifiers={identifiers}
+              />
+            </CardBody>
           </Card>
         </Col>
       </Row>
@@ -53,32 +56,21 @@ function ExternalLinks({identifiers}) {
 
     return (
       <div>
-        <span>
-          <div>External links:</div>
-        </span>
         <LogoExternalLink
           resource='Uniprot'
-          src={UniprotLogo}
           link={`http://www.uniprot.org/uniprot/${uniprotId}`}
-          width="80"
         />
         <LogoExternalLink
           resource='Ensembl'
-          src={EnsemblLogo}
           link={`http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${ensemblId}`}
-          width="40"
         />
         <LogoExternalLink
           resource='OpenTargets'
-          src={OpenTargetsLogo}
           link={`https://www.targetvalidation.org/target/${ensemblId}/associations`}
-          width="50"
         />
         <LogoExternalLink
           resource='Cosmic'
-          src={CosmicLogo}
           link={`https://cancer.sanger.ac.uk/cosmic/gene/analysis?ln=${cosmicGeneSymbol}`}
-          width="40"
         />
       </div>
     );

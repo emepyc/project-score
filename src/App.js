@@ -22,7 +22,6 @@ const App = (props) => (
             <Route exact path='/' component={Home}/>
             <Route exact path='/downloads' component={Downloads}/>
             <Route path='/table' component={Table}/>
-            <Route path='/table' component={Table}/>
             <Route path='/gene/:geneId' component={Gene}/>
             <Route path='/model/:modelId' component={Model}/>
           </main>

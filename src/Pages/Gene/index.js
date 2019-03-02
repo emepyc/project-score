@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ButtonGroup, Button} from 'reactstrap';
+import {ButtonGroup} from 'reactstrap';
 import Table from '../../Components/Table';
 import TissueFilter from '../../Components/TissueFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
@@ -7,8 +7,8 @@ import EssentialitiesPlot from '../../Components/EssentialitiesPlot';
 import GeneInfoSummary from '../../Components/GeneInfoSummary';
 import TissueHighlight from '../../Components/TissueHighlight';
 import {Row, Col} from 'reactstrap';
-import Card from '../../Components/Card';
-import {CardBody, CardTitle} from 'reactstrap';
+import {Card, CardHeader, CardBody, CardTitle} from '../../Components/Card';
+import {Button} from '../../Components/Buttom';
 import GeneSummaryPlots from '../../Components/GeneSummaryPlots';
 
 function Gene() {
@@ -42,14 +42,21 @@ export default Gene;
 function Filters() {
   return (
     <Card>
-      <Row>
-        <Col>
-          <TissueFilter/>
-        </Col>
-        <Col>
-          <ScoreRangeFilter/>
-        </Col>
-      </Row>
+      <CardHeader>
+        <CardTitle>
+          Filters
+        </CardTitle>
+      </CardHeader>
+      <CardBody>
+        <Row>
+          <Col>
+            <TissueFilter/>
+          </Col>
+          <Col>
+            <ScoreRangeFilter/>
+          </Col>
+        </Row>
+      </CardBody>
     </Card>
   );
 }
@@ -62,28 +69,37 @@ function EssentialitiesSection() {
 
   return (
     <Card>
-      <CardTitle>
-        Essentiality plot
-      </CardTitle>
+      <CardHeader>
+        <CardTitle>
+          Essentiality plot
+        </CardTitle>
+      </CardHeader>
       <CardBody>
         <Row>
           <Col>
-            <ButtonGroup>
-              <Button
-                active={attributeToPlot === "fc_clean"}
-                outline={attributeToPlot !== "fc_clean"}
-                onClick={() => setAttributeToPlot("fc_clean")}
+            <div
+              style={{marginBottom: '15px'}}
+              className='d-flex'
+            >
+              <ButtonGroup
+                className="ml-auto"
               >
-                Corrected log fold change
-              </Button>
-              <Button
-                active={attributeToPlot === "bf_scaled"}
-                outline={attributeToPlot !== "bf_scaled"}
-                onClick={() => setAttributeToPlot("bf_scaled")}
-              >
-                Loss of fitness score
-              </Button>
-            </ButtonGroup>
+                <Button
+                  active={attributeToPlot === "fc_clean"}
+                  outline={attributeToPlot !== "fc_clean"}
+                  onClick={() => setAttributeToPlot("fc_clean")}
+                >
+                  Corrected log fold change
+                </Button>
+                <Button
+                  active={attributeToPlot === "bf_scaled"}
+                  outline={attributeToPlot !== "bf_scaled"}
+                  onClick={() => setAttributeToPlot("bf_scaled")}
+                >
+                  Loss of fitness score
+                </Button>
+              </ButtonGroup>
+            </div>
           </Col>
         </Row>
         <EssentialitiesPlot
@@ -93,22 +109,29 @@ function EssentialitiesSection() {
         />
         <Row>
           <Col>
-            <ButtonGroup>
-              <Button
-                active={colorBy === "score"}
-                outline={colorBy !== "score"}
-                onClick={() => setColorBy("score")}
+            <div
+              style={{marginBottom: '25px'}}
+              className='d-flex'
+            >
+              <ButtonGroup
+                className='ml-auto'
               >
-                Color by score
-              </Button>
-              <Button
-                active={colorBy === "tissue"}
-                outline={colorBy !== "tissue"}
-                onClick={() => setColorBy("tissue")}
-              >
-                Color by tissue
-              </Button>
-            </ButtonGroup>
+                <Button
+                  active={colorBy === "score"}
+                  outline={colorBy !== "score"}
+                  onClick={() => setColorBy("score")}
+                >
+                  Color by score
+                </Button>
+                <Button
+                  active={colorBy === "tissue"}
+                  outline={colorBy !== "tissue"}
+                  onClick={() => setColorBy("tissue")}
+                >
+                  Color by tissue
+                </Button>
+              </ButtonGroup>
+            </div>
             {colorBy === "tissue" && (
               <TissueHighlight
                 blocks={4}
@@ -124,9 +147,11 @@ function EssentialitiesSection() {
 function EssentialitiesTable() {
   return (
     <Card>
-      <CardTitle>
-        Essentiality Table
-      </CardTitle>
+      <CardHeader>
+        <CardTitle>
+          Essentiality Table
+        </CardTitle>
+      </CardHeader>
       <CardBody>
         <Row>
           <Col xs={{size: 12}}>
