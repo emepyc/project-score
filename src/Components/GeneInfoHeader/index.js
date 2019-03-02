@@ -1,37 +1,36 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import keyBy from 'lodash.keyby';
 import {Card, CardHeader, CardBody, CardTitle} from '../Card';
 import {Row, Col, Badge} from 'reactstrap';
-import PageHeader from '../../Components/PageHeader';
+import PageHeader from '../PageHeader';
 
-export default function GeneInfoHeader({symbol, names, identifiers}) {
+export default function GeneInfoHeader({symbol, names, identifiers, features}) {
   const geneName = names.filter(name => name.current)[0];
   return (
-    <Fragment>
-      <Row>
-        <Col>
-          <PageHeader
-            header={symbol}
-            subheader={geneName && geneName.name}
-          />
-        </Col>
-        <Col xs={{size: 4}} lg={{size: 2}}>
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                External links
-              </CardTitle>
-            </CardHeader>
-            <CardBody>
-              <ExternalLinks
-                style={{paddingRight: '20px'}}
-                identifiers={identifiers}
-              />
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-    </Fragment>
+    <Row>
+      <Col xs={{size: 12}} md={{size: 6}} lg={{size: 10}}>
+        <PageHeader
+          header={symbol}
+          subheader={geneName && geneName.name}
+          features={features}
+        />
+      </Col>
+      <Col xs={{size: 12}} md={{size: 6}} lg={{size: 2}}>
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              External links
+            </CardTitle>
+          </CardHeader>
+          <CardBody>
+            <ExternalLinks
+              style={{paddingRight: '20px'}}
+              identifiers={identifiers}
+            />
+          </CardBody>
+        </Card>
+      </Col>
+    </Row>
   );
 }
 

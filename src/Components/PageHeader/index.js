@@ -1,14 +1,30 @@
 import React from 'react';
+import {Row, Col} from 'reactstrap';
+import KnownFeatures from "../KnownFeatures";
 import style from './pageHeader.module.scss';
 
-function PageHeader({header, subheader}) {
+function PageHeader({header, subheader, features}) {
   return (
     <div className={style.header}>
-      <h2>{header}</h2>
-      <div>{subheader}</div>
+      <Row>
+        <Col xs={{size: 12}}>
+          <div className={style.description}>
+            <h2>{header}</h2>
+          </div>
+          <div className={style.features}>
+            <KnownFeatures
+              features={features}
+            />
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={{size: 12}}>
+            <div className={style.description}>{subheader}</div>
+        </Col>
+      </Row>
     </div>
-  )
-
+  );
 }
 
 export default PageHeader;

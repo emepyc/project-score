@@ -1,0 +1,25 @@
+@import '../../common.scss';
+
+@mixin badge {
+  margin: 3px 5px;
+  border-radius: 0.25rem;
+  padding: 0.6em 1em;
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: baseline;
+  font-size: 75%;
+
+  border: 1px solid $font-color-light;
+  color: $font-color-light;
+}
+
+.feature {
+  @include badge;
+}
+
+.featureActive {
+  @include badge;
+  border: 1px solid $background-main;
+  background-color: $background-main;
+  color: white;
+}
