@@ -1,35 +1,6 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import {Pie} from '@vx/shape';
 import {Group} from '@vx/group';
-
-const width = 100;
-const height = 100;
-
-
-export default function SignificantEssentialitiesSummaryPlot({total, significant, children}) {
-  if (!total) {
-    return (
-      <div
-        style={{width: `${width}px`, height: `${height}px`}}
-      />
-    );
-  }
-
-  return (
-    <Fragment>
-      <div className='text-center'>
-        {children}
-      </div>
-
-      <SignificantCountPlot
-        total={total}
-        significant={significant}
-      />
-
-    </Fragment>
-  );
-}
-
 
 function SignificantCountPlot({total, significant}) {
   const margin = {
@@ -39,8 +10,10 @@ function SignificantCountPlot({total, significant}) {
     bottom: 1
   };
 
-  const radius = 50;
+  const width = 100;
+  const height = 100;
 
+  const radius = 50;
 
   return (
         <div className='text-center'>
@@ -80,3 +53,5 @@ function SignificantCountPlot({total, significant}) {
       </div>
   )
 }
+
+export default SignificantCountPlot;

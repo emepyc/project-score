@@ -39,7 +39,6 @@ function TissuesHighlight({blocks}) {
     fetchTissues()
       .then(resp => {
         setLoadingTissues(false);
-        console.log(resp);
         setTissues(resp.map(tissue => tissue.tissue));
       })
   }, []);

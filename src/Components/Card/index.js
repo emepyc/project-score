@@ -5,8 +5,7 @@ function Card({children}) {
   return (
     <BootstrapCard
       style={{
-        paddingLeft: '20px',
-        paddingTop: '20px',
+        padding: '20px',
         paddingBottom: '20px',
         backgroundColor: '#FFFFFF',
         borderRadius: '10px',

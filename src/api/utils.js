@@ -9,3 +9,5 @@ export function id2name(name) {
 export function essentialityIsSignificant(essentiality) {
   return essentiality.bf_scaled < 0;
 }
+
+export const totalModels = 325;

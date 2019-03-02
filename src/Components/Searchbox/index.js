@@ -36,7 +36,6 @@ function Searchbox({history}) {
   const loadSuggestions = debounce(_loadSuggestions, 500);
 
   const onChange = value => {
-    console.log(value);
     if (value.type === 'gene') {
       history.push(`/gene/${value.id}`);
     } else if (value.type === 'model') {

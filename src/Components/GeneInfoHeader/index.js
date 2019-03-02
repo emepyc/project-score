@@ -7,18 +7,20 @@ import CosmicLogo from './cosmicLogo.png';
 import Card from '../Card';
 import {Row, Col, Badge} from 'reactstrap';
 
+import style from './geneInfoHeader.module.scss';
+
 export default function GeneInfoHeader({symbol, names, identifiers}) {
   const geneName = names.filter(name => name.current)[0];
   return (
     <Fragment>
       <Row>
         <Col>
-          <Card>
-            <h2>{symbol}</h2>
-            <div>{geneName && geneName.name}</div>
-          </Card>
+            <div className={style.geneHeader}>
+              <h2>{symbol}</h2>
+              <div>{geneName && geneName.name}</div>
+            </div>
         </Col>
-        <Col xs='2'>
+        <Col xs={{size: 4}} lg={{size: 2}}>
           <Card>
             <ExternalLinks
               style={{paddingRight: '20px'}}
@@ -34,7 +36,7 @@ export default function GeneInfoHeader({symbol, names, identifiers}) {
 function LogoExternalLink(props) {
   const {link, resource} = props;
   return (
-    <Badge color='light' outline>
+    <Badge color='light'>
       <a target="_blank" rel="noopener noreferrer" href={link}>
         {resource}
       </a>
