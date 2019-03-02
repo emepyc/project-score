@@ -10,12 +10,12 @@ function Table() {
   return (
     <div>
       <Row>
-        <Col xs={{size: 12}} lg={{size: 2}}>
+        <Col xs={{size: 12}} lg={{size: 4}}>
           <PageHeader
             header='Explore all essentialities'
           />
         </Col>
-        <Col xs={{size: 12}} lg={{size: 4, offset: 6}}>
+        <Col xs={{size: 12}} lg={{size: 4, offset: 4}}>
           <Filters />
         </Col>
       </Row>
