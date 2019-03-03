@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 import {PulseLoader} from 'react-spinners';
 import {SizeMe} from 'react-sizeme';
 
-function Spinner({loading, style, children}) {
+function Spinner({loading, style, children, ...spinnerParams}) {
   if (!loading) {
     return (
       <div>
@@ -16,15 +16,16 @@ function Spinner({loading, style, children}) {
       <SizeMe
         monitorHeight
       >
-        {({size}) => (
+        {({size: containerSize}) => (
           <Fragment>
             <div>
               {children}
             </div>
             <RenderSpinner
               style={style}
-              size={size}
+              containerSize={containerSize}
               loading={loading}
+              {...spinnerParams}
             />
           </Fragment>
         )}
@@ -33,7 +34,7 @@ function Spinner({loading, style, children}) {
   );
 }
 
-function RenderSpinner({size, style, loading}) {
+function RenderSpinner({containerSize, style, loading, ...spinnerParams}) {
   return (
     <div
       style={{
@@ -52,16 +53,16 @@ function RenderSpinner({size, style, loading}) {
         className='text-center align-middle'
         style={{
           position: 'absolute',
-          top: `${(size.height / 2) - 8}px`,
-          left: `${(size.width / 2) - 25}px`
+          top: `${(containerSize.height / 2) - 8}px`,
+          left: `${(containerSize.width / 2) - 25}px`
         }}
       >
         <PulseLoader
-          // css={{override}}
           sizeUnit={'px'}
           size={15}
           color={'#469D32'}
           loading={loading}
+          {...spinnerParams}
         />
       </div>
     </div>

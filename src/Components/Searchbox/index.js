@@ -2,6 +2,7 @@ import React, {useCallback, useState} from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 import debounce from 'lodash.debounce';
 import {withRouter} from 'react-router-dom';
+import Spinner from '../Spinner';
 
 import {search} from '../../api';
 
@@ -10,6 +11,7 @@ const groupStyles = {
     alignItems: 'center',
     justifyContent: 'space-between',
 };
+
 const groupBadgeStyles = {
     backgroundColor: '#EBECF0',
     borderRadius: '2em',
@@ -21,6 +23,21 @@ const groupBadgeStyles = {
     minWidth: 1,
     padding: '0.16666666666667em 0.5em',
     textAlign: 'center',
+};
+
+const LoadingMessage = (props) => {
+  return (
+    <div content={'Custom Loading Message'}>
+      <div {...props.innerProps} style={props.getStyles('loadingMessage', props)}>
+        <Spinner
+        loading={true}
+        size={10}
+        >
+          {props.children}
+        </Spinner>
+      </div>
+    </div>
+  );
 };
 
 function Searchbox({history}) {
@@ -70,6 +87,7 @@ function Searchbox({history}) {
       isClearable
       formatOptionLabel={formatOptionLabel}
       formatGroupLabel={formatGroupLabel}
+      components={{LoadingMessage}}
     >
     </AsyncSelect>
   );

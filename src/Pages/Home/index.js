@@ -13,7 +13,9 @@ const Home = () => (
   <Container>
     <HomeSection>
       <HomeHeader className="text-center" />
-      <Searchbox />
+      <div className='mt-5'>
+        <Searchbox />
+      </div>
       <SearchExamples />
     </HomeSection>
 
