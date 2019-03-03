@@ -3,6 +3,14 @@ import {PulseLoader} from 'react-spinners';
 import {SizeMe} from 'react-sizeme';
 
 function Spinner({loading, style, children}) {
+  if (!loading) {
+    return (
+      <div>
+        {children}
+      </div>
+    )
+  }
+
   return (
     <div style={{position: 'relative'}}>
       <SizeMe
