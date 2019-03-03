@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import TableDisplay from '../TableDisplay';
 import {withRouter} from 'react-router-dom';
-import classnames from 'classnames';
+import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
+import TableDisplay from '../TableDisplay';
 import useUrlParams from '../useUrlParams';
 import Spinner from '../Spinner';
 import {
@@ -9,8 +9,6 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  Nav,
-  NavLink,
 } from 'reactstrap';
 import {fetchCrisprData} from '../../api';
 
@@ -78,13 +76,6 @@ function Table(props) {
   const isFirstPage = pageNumber === 1;
   const isLastPage = pageNumber >= totalHits / pageSize;
 
-  const navPrevClass = classnames({
-    disabled: isFirstPage,
-  });
-  const navNextClass = classnames({
-    disabled: isLastPage,
-  });
-
   // TODO: debounce
   const doSearch = (ev) => {
     const {value} = ev.target;
@@ -94,30 +85,28 @@ function Table(props) {
   return (
     <div className='essentialities-table'>
 
-      <div
-        style={{float: 'right'}}
-      >
-        <InputGroup style={{width: '300px'}}>
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>Search</InputGroupText>
-          </InputGroupAddon>
-          <Input value={search} onChange={doSearch}/>
-        </InputGroup>
+      <div className='d-flex h-100'>
+
+        <div className='my-auto mr-auto p-1'>
+          <div>
+            Showing {' '}
+            <span className='font-weight-bold'>{pageSize * (pageNumber - 1) + 1}</span> - {' '}
+            <span className='font-weight-bold'>{pageSize * (pageNumber - 1) + pageSize}</span> out of {' '}
+            <span className='font-weight-bold'>{totalHits}</span> essentialities
+          </div>
+        </div>
+
+        <div className='p-1'>
+          <InputGroup style={{width: '300px'}}>
+            <InputGroupAddon addonType="prepend">
+              <InputGroupText>Search</InputGroupText>
+            </InputGroupAddon>
+            <Input value={search} onChange={doSearch}/>
+          </InputGroup>
+        </div>
+
+
       </div>
-
-
-      <Nav style={{float: 'left'}}>
-        <NavLink className={navPrevClass} href='#' onClick={goPrev}>
-          &lt;
-        </NavLink>
-        <small style={{padding: '0.75rem 0.25rem'}}>
-          Page <b>{pageNumber}</b> of {1 + ~~(totalHits / pageSize)}{' '}
-          <small style={{color: '#999999'}}>({totalHits} total rows)</small>
-        </small>
-        <NavLink className={navNextClass} href="#" onClick={goNext}>
-          &gt;
-        </NavLink>
-      </Nav>
 
       <Spinner
         loading={loading}
@@ -128,6 +117,18 @@ function Table(props) {
           data={data}
         />
       </Spinner>
+
+      <Pagination>
+        <PaginationItem disabled={isFirstPage}>
+          <PaginationLink previous href='#' onClick={goPrev}/>
+        </PaginationItem>
+        <small style={{padding: '0.75rem 0.25rem'}}>
+        </small>
+        <PaginationItem disabled={isLastPage}>
+          <PaginationLink next href='#' onClick={goNext}/>
+        </PaginationItem>
+      </Pagination>
+      Page <b>{pageNumber}</b> of {1 + ~~(totalHits / pageSize)}
     </div>
   )
 }
