@@ -13,7 +13,7 @@ function processResponse(geneInfo) {
     names: geneInfo.names,
     symbol: geneInfo.symbol,
     isTumourSuppressor: geneInfo.tumour_suppressor,
-    isProteosome: geneInfo.essentiality_profiles[0].known_proteosome,
+    isProteasome: geneInfo.essentiality_profiles[0].known_proteasome,
     isRnaPolymerase: geneInfo.essentiality_profiles[0].known_rna_polymerase,
     isRibosomal: geneInfo.essentiality_profiles[0].known_ribosomal,
     isSpliceosome: geneInfo.essentiality_profiles[0].known_spliceosome,

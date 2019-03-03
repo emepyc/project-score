@@ -11,7 +11,7 @@ function GeneInfoSummary(props) {
   const [geneIdentifiers, setGeneIdentifiers] = useState([]);
   const [isTumourSuppressor, setIsTumourSuppressor] = useState(false);
   const [isRibosomal, setIsRibosomal] = useState(false);
-  const [isProteosome, setIsProteosome] = useState(false);
+  const [isProteasome, setIsProteasome] = useState(false);
   const [isRnaPolymerase, setIsRnaPolymerase] = useState(false);
   const [isSpliceosome, setIsSpliceosome] = useState(false);
   const [geneSymbol, setGeneSymbol] = useState("");
@@ -27,7 +27,7 @@ function GeneInfoSummary(props) {
         setGeneNames(geneInfo.names);
         setGeneSymbol(geneInfo.symbol);
         setIsTumourSuppressor(geneInfo.isTumourSuppressor);
-        setIsProteosome(geneInfo.isProteosome);
+        setIsProteasome(geneInfo.isProteasome);
         setIsRnaPolymerase(geneInfo.isRnaPolymerase);
         setIsRibosomal(geneInfo.isRibosomal);
         setIsSpliceosome(geneInfo.isSpliceosome);
@@ -55,8 +55,8 @@ function GeneInfoSummary(props) {
               value: isRibosomal,
             },
             {
-              label: 'Proteosome',
-              value: isProteosome,
+              label: 'Proteasome',
+              value: isProteasome,
             },
             {
               label: 'Spliceosome',
