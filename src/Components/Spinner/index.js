@@ -4,7 +4,7 @@ import {SizeMe} from 'react-sizeme';
 
 function Spinner({loading, style, children}) {
   return (
-    <div style={{pointerEvents: 'none', position: 'relative'}}>
+    <div style={{position: 'relative'}}>
       <SizeMe
         monitorHeight
       >

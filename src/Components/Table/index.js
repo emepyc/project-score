@@ -29,6 +29,7 @@ function parseData(raw) {
     }
   });
 }
+
 function Table(props) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -91,43 +92,42 @@ function Table(props) {
   };
 
   return (
-    <div className='essentialities-table'>
+    <Spinner
+      loading={loading}
+    >
+      <div className='essentialities-table'>
 
-      <div
-        style={{float: 'right'}}
-      >
-        <InputGroup style={{width: '300px'}}>
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>Search</InputGroupText>
-          </InputGroupAddon>
-          <Input value={search} onChange={doSearch}/>
-        </InputGroup>
-      </div>
-
-
-      <Nav style={{float: 'left'}}>
-        <NavLink className={navPrevClass} href='#' onClick={goPrev}>
-          &lt;
-        </NavLink>
-        <small style={{padding: '0.75rem 0.25rem'}}>
-          Page <b>{pageNumber}</b> of {1 + ~~(totalHits / pageSize)}{' '}
-          <small style={{color: '#999999'}}>({totalHits} total rows)</small>
-        </small>
-        <NavLink className={navNextClass} href="#" onClick={goNext}>
-          &gt;
-        </NavLink>
-      </Nav>
+        <div
+          style={{float: 'right'}}
+        >
+          <InputGroup style={{width: '300px'}}>
+            <InputGroupAddon addonType="prepend">
+              <InputGroupText>Search</InputGroupText>
+            </InputGroupAddon>
+            <Input value={search} onChange={doSearch}/>
+          </InputGroup>
+        </div>
 
 
-      <Spinner
-        loading={loading}
-      >
+        <Nav style={{float: 'left'}}>
+          <NavLink className={navPrevClass} href='#' onClick={goPrev}>
+            &lt;
+          </NavLink>
+          <small style={{padding: '0.75rem 0.25rem'}}>
+            Page <b>{pageNumber}</b> of {1 + ~~(totalHits / pageSize)}{' '}
+            <small style={{color: '#999999'}}>({totalHits} total rows)</small>
+          </small>
+          <NavLink className={navNextClass} href="#" onClick={goNext}>
+            &gt;
+          </NavLink>
+        </Nav>
+
         <TableDisplay
           {...props}
           data={data}
         />
-      </Spinner>
-    </div>
+      </div>
+    </Spinner>
   )
 }
 
