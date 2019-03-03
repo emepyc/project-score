@@ -1,34 +1,28 @@
 import React from 'react';
 import keyBy from 'lodash.keyby';
-import {Card, CardHeader, CardBody, CardTitle} from '../Card';
-import {Row, Col, Badge} from 'reactstrap';
+import {Row, Col} from 'reactstrap';
 import PageHeader from '../PageHeader';
 
 export default function GeneInfoHeader({symbol, names, identifiers, features}) {
   const geneName = names.filter(name => name.current)[0];
+
+  const externalLinks = (
+    <span>External links: <ExternalLinks
+      identifiers={identifiers}
+    /></span>
+  );
+
+  const subheaders = geneName && geneName.name ? [geneName.name, externalLinks]: [externalLinks];
+
   return (
     <Row>
-      <Col xs={{size: 12}} md={{size: 6}} lg={{size: 10}}>
+      <Col>
         <PageHeader
           header={symbol}
-          subheader={geneName && geneName.name}
+          entity='gene'
+          subheaders={subheaders}
           features={features}
         />
-      </Col>
-      <Col xs={{size: 12}} md={{size: 6}} lg={{size: 2}}>
-        <Card>
-          <CardHeader>
-            <CardTitle>
-              External links
-            </CardTitle>
-          </CardHeader>
-          <CardBody>
-            <ExternalLinks
-              style={{paddingRight: '20px'}}
-              identifiers={identifiers}
-            />
-          </CardBody>
-        </Card>
       </Col>
     </Row>
   );
@@ -37,11 +31,11 @@ export default function GeneInfoHeader({symbol, names, identifiers, features}) {
 function LogoExternalLink(props) {
   const {link, resource} = props;
   return (
-    <Badge color='light'>
+    <span className='mr-2'>
       <a target="_blank" rel="noopener noreferrer" href={link}>
         {resource}
       </a>
-    </Badge>
+    </span>
   );
 }
 

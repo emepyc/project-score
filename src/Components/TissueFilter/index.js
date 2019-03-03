@@ -29,7 +29,7 @@ function TissueFilter(props) {
 
   const onChange = value => {
     setUrlParams({
-      tissue: value ? value.id: "",
+      tissue: value ? value.id : "",
     });
   };
 
@@ -37,16 +37,18 @@ function TissueFilter(props) {
   const getOptionValue = option => option.tissue;
 
   return (
-    <Select
-      defaultValue={tissueFromUrlObject}
-      options={tissues}
-      onChange={onChange}
-      placeholder="Select a tissue"
-      isClearable
-      getOptionValue={getOptionValue}
-      getOptionLabel={getOptionLabel}
-      onInputChange={onInputChange}
-    />
+    <div>
+      <Select
+        defaultValue={tissueFromUrlObject}
+        options={tissues}
+        onChange={onChange}
+        placeholder="Select a tissue"
+        isClearable
+        getOptionValue={getOptionValue}
+        getOptionLabel={getOptionLabel}
+        onInputChange={onInputChange}
+      />
+    </div>
   );
 }
 

@@ -1,3 +1,5 @@
+@import '../../common.scss';
+
 .rc-slider {
   .rc-slider-rail {
     background-color: #c8ebc7;
@@ -8,4 +10,11 @@
   .rc-slider-handle {
     border-color: #5ba633;
   }
+}
+
+.rangeNumber {
+  background-color: $bg-light;
+  padding: 0.4em 0.2em;
+  border-radius: 5px;
+  margin: 0.4em 0.2em;
 }

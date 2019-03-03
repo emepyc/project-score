@@ -54,12 +54,11 @@ function ScoreRangeFilter(props) {
         defaultValue={scoreExtent}
         onChange={onChange}
       />
-      <div>
-        Extent ranging from {scoreExtent[0]} to {scoreExtent[1]}
+      <div className='my-2'>
+        Score range:
       </div>
-      <div>
-        Score ranging
-        from {scoreRange ? scoreRange[0] : scoreExtent[1]} to {scoreRange ? scoreRange[1] : scoreExtent[1]}
+      <div className='my-2'>
+        From <span className='rangeNumber'>{scoreRange ? scoreRange[0] : scoreExtent[0]}</span> to <span className='rangeNumber'>{scoreRange ? scoreRange[1] : scoreExtent[1]}</span>
       </div>
     </Spinner>
   );

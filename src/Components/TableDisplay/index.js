@@ -58,7 +58,7 @@ function TableDisplay(props) {
                 <td>
                   <Link to={`/gene/${row.geneId}?${paramsForGeneLink}`}>{row.geneSymbol}</Link>
                 </td>
-                <td>
+                <td style={{whiteSpace: 'nowrap'}}>
                   <Link to={`/model/${row.modelId}?${paramsForModelLink}`}>{row.modelName}</Link>
                 </td>
                 <td>

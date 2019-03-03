@@ -10,14 +10,12 @@ import Footer from './Components/Footer';
 import Table from './Pages/Table';
 
 const App = (props) => (
-  <div style={{backgroundColor: '#FAFAFA', color: '#5A5F5F', fontSize: '0.85em'}}>
+  <div>
     <Router {...props}>
       <div>
         <Masthead/>
 
-        <div
-          style={{marginLeft: '50px', marginRight: '50px'}}
-        >
+        <div className="container-fluid pt-2 pb-5" style={{backgroundColor: '#fdfffd', color: '#5A5F5F', fontSize: '0.9em', fontWeight: 300}}>
           <main>
             <Route exact path='/' component={Home}/>
             <Route exact path='/downloads' component={Downloads}/>
@@ -28,6 +26,7 @@ const App = (props) => (
         </div>
         <Footer/>
       </div>
+
     </Router>
   </div>
 );

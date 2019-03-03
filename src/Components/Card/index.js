@@ -27,7 +27,7 @@ export function CardHeader({children}) {
   return (
     <BCardHeader
       style={{
-        padding: '.3rem .5rem',
+        padding: 0,
         backgroundColor: '#FFFFFF',
       }}
     >

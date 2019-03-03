@@ -4,7 +4,7 @@ import useUrlParams from '../useUrlParams';
 import {fetchSignificantModels, totalModels} from '../../api';
 import Spinner from '../Spinner';
 import SignificantCountPlot from '../SignificantCountPlot';
-import {Card, CardHeader, CardBody, CardTitle} from "../Card";
+import {Card, CardHeader, CardBody} from 'reactstrap';
 import {Col, Row} from "reactstrap";
 import HasAttribute from '../HasAttribute';
 
@@ -15,14 +15,12 @@ function GeneSummaryPlots(props) {
   const [urlParams] = useUrlParams(props);
   const [loading, setLoading] = useState(false);
   const [isPanCancer, setIsPanCancer] = useState(false);
-  const [isTumourSuppressor, setIsTumourSuppressor] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     fetchSignificantModels(urlParams.geneId)
       .then(gene => {
         setNumberOfEssentialModels(gene.numberOfSignificantModels);
-        setIsTumourSuppressor(gene.isTumourSuppressor);
         setIsPanCancer(gene.isPanCancer);
         setNumberOfEssentialTissues(gene.numberOfSignificantTissues);
         setTotalNumberOfTissues(gene.numberOfTotalTissues);
@@ -41,9 +39,7 @@ function GeneSummaryPlots(props) {
       >
         <Card>
           <CardHeader>
-            <CardTitle>
               Essentialities summary
-            </CardTitle>
           </CardHeader>
           <CardBody>
             <Row>
@@ -57,9 +53,6 @@ function GeneSummaryPlots(props) {
               </Col>
               <Col>
                 <div className="text-center">Pan-cancer core fitness</div>
-              </Col>
-              <Col>
-                <div className="text-center">Tumour suppressor</div>
               </Col>
             </Row>
             <Row>
@@ -78,11 +71,6 @@ function GeneSummaryPlots(props) {
               <Col>
                 <HasAttribute
                   attribute={isPanCancer}
-                />
-              </Col>
-              <Col>
-                <HasAttribute
-                  attribute={isTumourSuppressor}
                 />
               </Col>
             </Row>

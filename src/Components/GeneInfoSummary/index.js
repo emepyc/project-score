@@ -22,23 +22,20 @@ function GeneInfoSummary(props) {
     setLoading(true);
     fetchGeneInfo(urlParams.geneId)
       .then(geneInfo => {
-        console.log(geneInfo);
         setLoading(false);
         setGeneIdentifiers(geneInfo.identifiers);
         setGeneNames(geneInfo.names);
         setGeneSymbol(geneInfo.symbol);
-        setIsTumourSuppressor(geneInfo.tomour_suppressor);
-        setIsProteosome(geneInfo.essentiality_profiles[0].known_proteasome);
-        setIsRnaPolymerase(geneInfo.essentiality_profiles[0].known_rna_polymerase);
-        setIsRibosomal(geneInfo.essentiality_profiles[0].known_ribosomal);
-        setIsSpliceosome(geneInfo.essentiality_profiles[0].known_spliceosome);
+        setIsTumourSuppressor(geneInfo.isTumourSuppressor);
+        setIsProteosome(geneInfo.isProteosome);
+        setIsRnaPolymerase(geneInfo.isRnaPolymerase);
+        setIsRibosomal(geneInfo.isRibosomal);
+        setIsSpliceosome(geneInfo.isSpliceosome);
       });
   }, []);
 
   return (
-    <Spinner
-      loading={loading}
-    >
+    <Spinner loading={loading}>
       <GeneInfoHeader
         identifiers={geneIdentifiers}
         names={geneNames}

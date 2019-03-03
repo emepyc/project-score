@@ -3,25 +3,25 @@ import TableComponent from '../../Components/Table';
 import TissueFilter from '../../Components/TissueFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import {Row, Col} from 'reactstrap';
-import {Card, CardHeader, CardTitle, CardBody} from '../../Components/Card';
+import {Card, CardHeader, CardBody} from 'reactstrap';
 import PageHeader from '../../Components/PageHeader';
 
 function Table() {
   return (
     <div>
-      <Row>
+      <Row className='my-3'>
         <Col xs={{size: 12}} md={{size: 6}} lg={{size: 4}}>
           <PageHeader
             header='Explore all essentialities'
           />
         </Col>
         <Col xs={{size: 12}} md={{size: 6}} lg={{size: 4, offset: 4}}>
-          <Filters />
+          <Filters/>
         </Col>
       </Row>
       <Row>
         <Col>
-          <EssentialitiesTable />
+          <EssentialitiesTable/>
         </Col>
       </Row>
     </div>
@@ -34,9 +34,7 @@ function Filters() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          Filters
-        </CardTitle>
+        Filters
       </CardHeader>
       <CardBody>
         <Row>
@@ -56,9 +54,7 @@ function EssentialitiesTable() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          Essentiality Table
-        </CardTitle>
+        Essentiality Table
       </CardHeader>
       <CardBody>
         <Row>

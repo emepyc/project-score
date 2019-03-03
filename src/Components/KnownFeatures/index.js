@@ -7,7 +7,7 @@ function KnownFeatures(props) {
       {props.features.map(({label, value}) => {
         const className = value ? style.featureActive : style.feature;
         return (
-          <span className={className}>
+          <span key={label} className={className}>
             {label}
           </span>
         );

@@ -5,6 +5,7 @@ import {id2name, name2id, essentialityIsSignificant, totalModels} from "./utils"
 import fetchCrisprData from './fetchCrisprData';
 import fetchScoreExtent from './fetchScoreExtent';
 import fetchGeneInfo from './fetchGeneInfo';
+import fetchModelInfo from './fetchModelInfo';
 import fetchSignificantModels from './fetchSignificantModels';
 
 export {
@@ -14,6 +15,7 @@ export {
   fetchCrisprData,
   fetchScoreExtent,
   fetchGeneInfo,
+  fetchModelInfo,
   fetchSignificantModels,
   id2name,
   name2id,
