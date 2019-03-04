@@ -120,12 +120,16 @@ function Table(props) {
 
       <Pagination>
         <PaginationItem disabled={isFirstPage}>
-          <PaginationLink previous href='#' onClick={goPrev}/>
+          <PaginationLink href='#' onClick={goPrev}>
+            Previous
+          </PaginationLink>
         </PaginationItem>
         <small style={{padding: '0.75rem 0.25rem'}}>
         </small>
         <PaginationItem disabled={isLastPage}>
-          <PaginationLink next href='#' onClick={goNext}/>
+          <PaginationLink href='#' onClick={goNext}>
+            Next
+          </PaginationLink>
         </PaginationItem>
       </Pagination>
       Page <b>{pageNumber}</b> of {1 + ~~(totalHits / pageSize)}
