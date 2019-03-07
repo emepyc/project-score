@@ -19,6 +19,7 @@
     "deserialise-jsonapi": "^0.0.6",
     "es6-promise": "^4.2.5",
     "lodash.debounce": "^4.0.8",
+    "lodash.findindex": "^4.6.0",
     "lodash.identity": "^3.0.0",
     "lodash.isempty": "^4.4.0",
     "lodash.isobject": "^3.0.2",

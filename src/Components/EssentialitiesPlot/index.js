@@ -1,6 +1,7 @@
 import React, {Fragment, useState, useEffect, useRef} from 'react';
 import {withRouter} from 'react-router-dom';
 import sortBy from 'lodash.sortby';
+import findIndex from 'lodash.findindex';
 import * as d3 from 'd3';
 import Spinner from '../Spinner';
 import {fetchCrisprData} from '../../api';
@@ -59,7 +60,7 @@ function plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dat
 }
 
 
-function plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy) {
+function plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy, onHighlight) {
   const {xScale, yScale, xScaleBrush, yScaleBrush} = scales;
 
   const quadTree = d3.quadtree(
@@ -68,66 +69,22 @@ function plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, 
     d => d[attributeToPlot]
   );
 
-  const showTooltip = (x, y, el, msg) => {
-    d3.select(el)
-      .html(msg)
-      .style('left', `${x}px`)
-      .style(`top`, `${y}px`)
-      .style(`display`, 'block')
-      .style('background-color', 'white');
-  };
-
-  const hideTooltip = el => {
-    d3.select(el).style('display', 'none');
-  };
-
-  const highlightNode = nodeData => {
-    const [
-      gene,
-      model,
-      tissue,
-      fc_clean,
-      bf_scaled,
-      pos,
-    ] = nodeData;
-    const essentialityValue =
-      attributeToPlot === 'fc_clean' ?
-        fc_clean :
-        bf_scaled;
-
-    const guideX = refs.plotXguide.current;
-    const guideY = refs.plotYguide.current;
-
-    const guideXpos = xScale(pos) + config.marginLeft;
-    const guideYpos = yScale(essentialityValue);
-
-    guideX.setAttribute('x1', guideXpos);
-    guideX.setAttribute('x2', guideXpos);
-    guideX.style.display = 'block';
-    guideY.setAttribute('y1', guideYpos);
-    guideY.setAttribute('y2', guideYpos);
-    guideY.style.display = 'block';
-
-    const msgTooltip = `Gene: <b>${gene}</b><br/>Model: <b>${model}</b> (${tissue})<br/>Corrected log fold change:<b>${fc_clean}</b><br/>Loss of fitness score:<b>${bf_scaled}</b>`;
-    showTooltip(guideXpos, guideYpos, refs.tooltip.current, msgTooltip);
-  };
-
   const mouseMoveOnCanvas = () => {
     const ev = d3.event;
     const xClicked = xScale.invert(ev.offsetX - config.marginLeft);
     const yClicked = yScale.invert(ev.offsetY);
 
     const closest = quadTree.find(xClicked, yClicked);
-    const closestData = [
-      closest.bf_scaled,
-      closest.model.names[0],
-      closest.model.sample.tissue.name,
-      closest.fc_clean,
-      closest.bf_scaled,
-      closest.index,
-    ];
 
-    highlightNode(closestData);
+    onHighlight({
+      geneId: closest.gene.id,
+      modelName: closest.model.names[0],
+      bf_scaled: closest.bf_scaled,
+      fc_clean: closest.fc_clean,
+      geneSymbol: closest.gene.symbol,
+      tissue: closest.model.sample.tissue.name,
+      index: closest.index,
+    });
   };
 
   const mouseOutOnCanvas = () => {
@@ -136,7 +93,7 @@ function plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, 
     guideX.style.display = 'none';
     guideY.style.display = 'none';
 
-    hideTooltip(refs.tooltip.current);
+    onHighlight(null);
   };
 
   d3
@@ -188,7 +145,6 @@ function plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, 
       'transform', (d, i) =>
         'translate(' + selection[i] + ',' + config.brushHeight / 2 + ')'
     );
-    // this.props.selectRow(null);
     plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy);
   };
 
@@ -245,11 +201,11 @@ function essentialitiesPlot(props) {
     tooltip: useRef(null),
   };
 
-  const {colorBy, attributeToPlot, xAxisLabel} = props;
+  const {colorBy, attributeToPlot, xAxisLabel, highlight, onHighlight} = props;
 
   const resize = () => {
     const container = refs.plotContainer.current;
-      setContainerWidth(container.offsetWidth)
+    setContainerWidth(container.offsetWidth);
   };
 
   const [data, setData] = useState([]);
@@ -324,10 +280,65 @@ function essentialitiesPlot(props) {
 
   useEffect(() => {
     if (data.length) {
-      plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy);
+      plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy, onHighlight);
       plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy);
     }
   }, [data.length, colorBy, attributeToPlot, containerWidth]);
+
+    const showTooltip = (x, y, el, msg) => {
+    d3.select(el)
+      .html(msg)
+      .style('left', `${x}px`)
+      .style(`top`, `${y}px`)
+      .style(`display`, 'block')
+      .style('background-color', 'white');
+  };
+
+  const rowToNode = row => {
+    return findIndex(
+      dataSortedWithIndex,
+      d => {
+        return d.model.id === row.modelId &&
+          d.gene.id === row.geneId;
+      }
+    );
+  };
+
+  if (highlight && data.length) {
+    const nodeData = highlight;
+
+    const index = nodeData.index || rowToNode(nodeData);
+    const {
+      geneSymbol,
+      modelName,
+      tissue,
+      fc_clean,
+      bf_scaled,
+    } = nodeData;
+    const essentialityValue =
+      attributeToPlot === 'fc_clean' ?
+        fc_clean :
+        bf_scaled;
+
+    const guideX = refs.plotXguide.current;
+    const guideY = refs.plotYguide.current;
+
+    const guideXpos = xScale(index) + config.marginLeft;
+    const guideYpos = yScale(essentialityValue);
+
+    guideX.setAttribute('x1', guideXpos);
+    guideX.setAttribute('x2', guideXpos);
+    guideX.style.display = 'block';
+    guideY.setAttribute('y1', guideYpos);
+    guideY.setAttribute('y2', guideYpos);
+    guideY.style.display = 'block';
+
+    const msgTooltip = `Gene: <b>${geneSymbol}</b><br/>Model: <b>${modelName}</b> (${tissue})<br/>Corrected log fold change:<b>${fc_clean}</b><br/>Loss of fitness score:<b>${bf_scaled}</b>`;
+    showTooltip(guideXpos, guideYpos, refs.tooltip.current, msgTooltip);
+  } else {
+    d3.select(refs.tooltip.current)
+      .style('display', 'none');
+  }
 
   return (
     <Fragment>

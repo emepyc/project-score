@@ -7,7 +7,7 @@ import {Card, CardBody, CardHeader} from 'reactstrap';
 import {Button} from "../../Components/Buttom";
 import EssentialitiesPlot from "../../Components/EssentialitiesPlot";
 
-function Gene() {
+function Model() {
   return (
     <div>
       <ModelInfoSummary/>
@@ -17,19 +17,12 @@ function Gene() {
           <Filters />
         </Col>
       </Row>
-      <Row className='my-3'>
-        <Col xl={{size: 6}} xs={{size: 12}}>
-          <EssentialitiesSection/>
-        </Col>
-        <Col xl={{size: 6}} xs={{size: 12}}>
-          <EssentialitiesTable/>
-        </Col>
-      </Row>
+      <EssentialitiesSection />
     </div>
   );
 }
 
-export default Gene;
+export default Model;
 
 function Filters() {
   return (
@@ -49,7 +42,26 @@ function Filters() {
 }
 
 function EssentialitiesSection() {
+  const [highlightEssentiality, setHighlightEssentiality] = useState(null);
+  return (
+      <Row>
+        <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
+          <EssentialitiesPlotSection
+            highlight={highlightEssentiality}
+            onHighlight={setHighlightEssentiality}
+          />
+        </Col>
+        <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
+          <EssentialitiesTable
+            highlight={highlightEssentiality}
+            onHighlight={setHighlightEssentiality}
+          />
+        </Col>
+      </Row>
+  );
+}
 
+function EssentialitiesPlotSection(props) {
   const [attributeToPlot, setAttributeToPlot] = useState("fc_clean");
 
   return (
@@ -89,13 +101,14 @@ function EssentialitiesSection() {
           colorBy='score'
           attributeToPlot={attributeToPlot}
           xAxisLabel="Cell lines"
+          {...props}
         />
       </CardBody>
     </Card>
   );
 }
 
-function EssentialitiesTable() {
+function EssentialitiesTable({highlight, onHighlight}) {
   return (
     <Card>
       <CardHeader>
@@ -104,7 +117,10 @@ function EssentialitiesTable() {
       <CardBody>
         <Row>
           <Col xs={{size: 12}}>
-            <Table/>
+            <Table
+              highlight={highlight}
+              onHighlight={onHighlight}
+            />
           </Col>
         </Row>
       </CardBody>

@@ -24,15 +24,7 @@ function Gene() {
           <Filters/>
         </Col>
       </Row>
-
-      <Row>
-        <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
-          <EssentialitiesSection/>
-        </Col>
-        <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
-          <EssentialitiesTable/>
-        </Col>
-      </Row>
+      <EssentialitiesSection />
     </div>
   );
 }
@@ -61,7 +53,26 @@ function Filters() {
 
 
 function EssentialitiesSection() {
+  const [highlightEssentiality, setHighlightEssentiality] = useState(null);
+  return (
+      <Row>
+        <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
+          <EssentialitiesPlotSection
+            highlight={highlightEssentiality}
+            onHighlight={setHighlightEssentiality}
+          />
+        </Col>
+        <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
+          <EssentialitiesTable
+            highlight={highlightEssentiality}
+            onHighlight={setHighlightEssentiality}
+          />
+        </Col>
+      </Row>
+  );
+}
 
+function EssentialitiesPlotSection(props) {
   const [colorBy, setColorBy] = useState("score");
   const [attributeToPlot, setAttributeToPlot] = useState("fc_clean");
 
@@ -100,6 +111,7 @@ function EssentialitiesSection() {
               colorBy={colorBy}
               attributeToPlot={attributeToPlot}
               xAxisLabel="Cell lines"
+              {...props}
             />
             <Row>
               <Col>
@@ -140,7 +152,7 @@ function EssentialitiesSection() {
   );
 }
 
-function EssentialitiesTable() {
+function EssentialitiesTable({highlight, onHighlight}) {
   return (
     <Row>
       <Col className="my-3" xs={{size: 12}}>
@@ -149,7 +161,10 @@ function EssentialitiesTable() {
             Essentiality Table
           </CardHeader>
           <CardBody>
-            <Table/>
+            <Table
+              highlight={highlight}
+              onHighlight={onHighlight}
+            />
           </CardBody>
         </Card>
       </Col>

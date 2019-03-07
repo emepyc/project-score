@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TableComponent from '../../Components/Table';
 import TissueFilter from '../../Components/TissueFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
@@ -51,6 +51,7 @@ function Filters() {
 }
 
 function EssentialitiesTable() {
+  const [highlight, onHighlight] = useState(null);
   return (
     <Card>
       <CardHeader>
@@ -59,7 +60,10 @@ function EssentialitiesTable() {
       <CardBody>
         <Row>
           <Col xs={{size: 12}}>
-            <TableComponent/>
+            <TableComponent
+              highlight={highlight}
+              onHighlight={onHighlight}
+            />
           </Col>
         </Row>
       </CardBody>
