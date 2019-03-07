@@ -3,6 +3,11 @@ import keyBy from 'lodash.keyby';
 import {Row, Col} from 'reactstrap';
 import PageHeader from '../PageHeader';
 
+const maybeIdentifier = (identifiers, resource) =>
+  identifiers[resource] ?
+    identifiers[resource].identifier :
+    null;
+
 export default function GeneInfoHeader({symbol, names, identifiers, features}) {
   const geneName = names.filter(name => name.current)[0];
 
@@ -42,28 +47,36 @@ function LogoExternalLink(props) {
 function ExternalLinks({identifiers}) {
   if (identifiers.length) {
     const identifiersDict = keyBy(identifiers, identifier => identifier.source.name);
-    const cosmicGeneSymbol = identifiersDict.cosmic_gene_symbol.identifier;
-    const ensemblId = identifiersDict.ensembl_gene_id.identifier;
-    const uniprotId = identifiersDict.uniprot_id.identifier;
+    const cosmicGeneSymbol = maybeIdentifier(identifiersDict, 'cosmic_gene_symbol');
+    const ensemblId = maybeIdentifier(identifiersDict, 'ensembl_gene_id');
+    const uniprotId = maybeIdentifier(identifiersDict, 'uniprot_id');
 
     return (
       <div>
-        <LogoExternalLink
-          resource='Uniprot'
-          link={`http://www.uniprot.org/uniprot/${uniprotId}`}
-        />
-        <LogoExternalLink
-          resource='Ensembl'
-          link={`http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${ensemblId}`}
-        />
-        <LogoExternalLink
-          resource='OpenTargets'
-          link={`https://www.targetvalidation.org/target/${ensemblId}/associations`}
-        />
-        <LogoExternalLink
-          resource='Cosmic'
-          link={`https://cancer.sanger.ac.uk/cosmic/gene/analysis?ln=${cosmicGeneSymbol}`}
-        />
+        {uniprotId && (
+          <LogoExternalLink
+            resource='Uniprot'
+            link={`http://www.uniprot.org/uniprot/${uniprotId}`}
+          />
+        )}
+        {ensemblId && (
+          <LogoExternalLink
+            resource='Ensembl'
+            link={`http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${ensemblId}`}
+          />
+        )}
+        {ensemblId && (
+          <LogoExternalLink
+            resource='OpenTargets'
+            link={`https://www.targetvalidation.org/target/${ensemblId}/associations`}
+          />
+        )}
+        {cosmicGeneSymbol && (
+          <LogoExternalLink
+            resource='Cosmic'
+            link={`https://cancer.sanger.ac.uk/cosmic/gene/analysis?ln=${cosmicGeneSymbol}`}
+          />
+        )}
       </div>
     );
   }
