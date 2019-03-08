@@ -16,7 +16,7 @@ const FC_CLEAN_LABEL = 'Corrected log fold change';
 const significantField = 'bf_scaled';
 
 
-function plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, data, colorBy) {
+function plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, data, colorBy, highlightTissue) {
   const ctx = refs.plotCanvas.current.getContext('2d');
 
   const {xScale, yScale} = scales;
@@ -25,6 +25,9 @@ function plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dat
   ctx.save();
   for (let i = 0; i < data.length; i++) {
     const dataPoint = data[i];
+    if(highlightTissue && dataPoint.model.sample.tissue.name !== highlightTissue) {
+      continue;
+    }
     const dataPointColor = colorBy === "tissue" ? colors[dataPoint.model.sample.tissue.name] : (
       dataPoint[significantField] < 0 ? config.significantNodeColor : config.insignificantNodeColor
     );
@@ -60,7 +63,7 @@ function plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dat
 }
 
 
-function plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy, onHighlight) {
+function plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy, onHighlight, highlightTissue) {
   const {xScale, yScale, xScaleBrush, yScaleBrush} = scales;
 
   const quadTree = d3.quadtree(
@@ -145,7 +148,7 @@ function plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, 
       'transform', (d, i) =>
         'translate(' + selection[i] + ',' + config.brushHeight / 2 + ')'
     );
-    plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy);
+    plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy, highlightTissue);
   };
 
   const brush = d3
@@ -201,7 +204,14 @@ function essentialitiesPlot(props) {
     tooltip: useRef(null),
   };
 
-  const {colorBy, attributeToPlot, xAxisLabel, highlight, onHighlight} = props;
+  const {
+    colorBy,
+    attributeToPlot,
+    xAxisLabel,
+    highlight,
+    onHighlight,
+    highlightTissue,
+  } = props;
 
   const resize = () => {
     const container = refs.plotContainer.current;
@@ -280,10 +290,10 @@ function essentialitiesPlot(props) {
 
   useEffect(() => {
     if (data.length) {
-      plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy, onHighlight);
-      plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy);
+      plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy, onHighlight, highlightTissue);
+      plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy, highlightTissue);
     }
-  }, [data.length, colorBy, attributeToPlot, containerWidth]);
+  }, [data.length, colorBy, attributeToPlot, containerWidth, highlightTissue]);
 
     const showTooltip = (x, y, el, msg) => {
     d3.select(el)

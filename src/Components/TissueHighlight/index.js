@@ -4,7 +4,7 @@ import colors from '../../colors';
 import {fetchTissues} from '../../api';
 import Spinner from '../Spinner';
 
-function tissueFilterElement(tissue, key) {
+function tissueFilterElement(tissue, key, onSelectTissue) {
   return (
     <div key={key}>
       <div
@@ -17,9 +17,9 @@ function tissueFilterElement(tissue, key) {
         }}
       />
       <span
-        style={{paddingLeft: '5px'}}
-        // key={key}
-        // onMouseOver={() => this.mouseOverTissue(tissue)}
+        style={{paddingLeft: '5px', cursor: 'pointer'}}
+        onMouseOver={() => onSelectTissue(tissue)}
+        onMouseOut={() => onSelectTissue(null)}
       >
           {tissue}
       </span>
@@ -28,7 +28,7 @@ function tissueFilterElement(tissue, key) {
 }
 
 
-function TissuesHighlight({blocks}) {
+function TissuesHighlight({blocks, onSelectTissue}) {
   const [tissues, setTissues] = useState([]);
   const [loadingTissues, setLoadingTissues] = useState(false);
 
@@ -55,7 +55,8 @@ function TissuesHighlight({blocks}) {
             <Col xs={12 / blocks} key={block}>
               {[...Array(tissuesPerBlock).keys()].map(pos => tissueFilterElement(
                 tissues[block * tissuesPerBlock + pos],
-                `${block}${tissuesPerBlock}${pos}`
+                `${block}${tissuesPerBlock}${pos}`,
+                onSelectTissue,
                 )
               )}
             </Col>

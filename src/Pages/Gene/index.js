@@ -75,6 +75,7 @@ function EssentialitiesSection() {
 function EssentialitiesPlotSection(props) {
   const [colorBy, setColorBy] = useState("score");
   const [attributeToPlot, setAttributeToPlot] = useState("fc_clean");
+  const [highlightTissue, setHighlightTissue] = useState(null);
 
   return (
     <Row className="my-3">
@@ -111,6 +112,7 @@ function EssentialitiesPlotSection(props) {
               colorBy={colorBy}
               attributeToPlot={attributeToPlot}
               xAxisLabel="Cell lines"
+              highlightTissue={highlightTissue}
               {...props}
             />
             <Row>
@@ -141,6 +143,7 @@ function EssentialitiesPlotSection(props) {
                 {colorBy === "tissue" && (
                   <TissueHighlight
                     blocks={4}
+                    onSelectTissue={setHighlightTissue}
                   />
                 )}
               </Col>
