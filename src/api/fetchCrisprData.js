@@ -40,12 +40,15 @@ function normaliseParams(params) {
     scoreRangeFilter,
   ]);
 
+  const sort = params.sort || 'fc_clean';
+  const sortDirection = params.sortDirection || 1;
+
   return {
     'page[number]': params.pageNumber,
     'page[size]': params.pageSize,
     include: "gene,model,model.sample.tissue",
     filter: combinedFilters,
-    sort: `${params.sortDirection === -1 ? '-' : ''}${params.sort}`,
+    sort: `${sortDirection === -1 ? '-' : ''}${sort}`,
     'fields[crispr_ko]': 'bf_scaled,fc_clean,gene,model',
     'fields[gene]': 'symbol',
     'fields[model]': 'sample,names',

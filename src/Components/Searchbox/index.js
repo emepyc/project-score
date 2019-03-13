@@ -46,13 +46,6 @@ const _loadSuggestions = (inputValue, callback) => search(inputValue)
 const loadSuggestions = debounce(_loadSuggestions, 500, {leading: true});
 
 function Searchbox({history}) {
-  // const [inputValue, setInputValue] = useState("");
-
-  // const onInputChange = useCallback(newValue => {
-  //   setInputValue(newValue);
-  // }, [inputValue]);
-
-
   const onChange = value => {
     if (!value.type) {
       return;
