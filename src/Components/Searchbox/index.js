@@ -1,28 +1,28 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import AsyncSelect from 'react-select/lib/Async';
-import debounce from 'lodash.debounce';
+import debounce from 'debounce-promise';
 import {withRouter} from 'react-router-dom';
 import Spinner from '../Spinner';
 
 import {search} from '../../api';
 
 const groupStyles = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
 };
 
 const groupBadgeStyles = {
-    backgroundColor: '#EBECF0',
-    borderRadius: '2em',
-    color: '#172B4D',
-    display: 'inline-block',
-    fontSize: 12,
-    fontWeight: 'normal',
-    lineHeight: 1,
-    minWidth: 1,
-    padding: '0.16666666666667em 0.5em',
-    textAlign: 'center',
+  backgroundColor: '#EBECF0',
+  borderRadius: '2em',
+  color: '#172B4D',
+  display: 'inline-block',
+  fontSize: 12,
+  fontWeight: 'normal',
+  lineHeight: 1,
+  minWidth: 1,
+  padding: '0.16666666666667em 0.5em',
+  textAlign: 'center',
 };
 
 const LoadingMessage = (props) => {
@@ -30,8 +30,8 @@ const LoadingMessage = (props) => {
     <div content={'Custom Loading Message'}>
       <div {...props.innerProps} style={props.getStyles('loadingMessage', props)}>
         <Spinner
-        loading={true}
-        size={10}
+          loading={true}
+          size={10}
         >
           {props.children}
         </Spinner>
@@ -40,31 +40,35 @@ const LoadingMessage = (props) => {
   );
 };
 
+const _loadSuggestions = (inputValue, callback) => search(inputValue)
+  .then(resp => callback(resp));
+
+const loadSuggestions = debounce(_loadSuggestions, 500, {leading: true});
+
 function Searchbox({history}) {
-  const [inputValue, setInputValue] = useState("");
+  // const [inputValue, setInputValue] = useState("");
 
-  const onInputChange = useCallback(newValue => {
-    setInputValue(newValue);
-  }, [inputValue]);
+  // const onInputChange = useCallback(newValue => {
+  //   setInputValue(newValue);
+  // }, [inputValue]);
 
-  const _loadSuggestions = (inputValue, callback) => search(inputValue)
-    .then(resp => callback(resp));
-
-  const loadSuggestions = debounce(_loadSuggestions, 500);
 
   const onChange = value => {
-    if (value.type === 'gene') {
+    if (!value.type) {
+      return;
+    }
+    if (value.type === 'genes') {
       history.push(`/gene/${value.id}`);
-    } else if (value.type === 'model') {
+    } else if (value.type === 'models') {
       history.push(`/model/${value.id}`);
     } else {
-      history.push(`/table?tissue=${value.name}`);
+      history.push(`/table?tissue=${value.value}`);
     }
   };
 
   const formatGroupLabel = data => (
     <div style={groupStyles}>
-      <span>{data.title}</span>
+      <span>{data.label}</span>
       <span style={groupBadgeStyles}>{data.options.length}</span>
     </div>
   );
@@ -81,7 +85,6 @@ function Searchbox({history}) {
   return (
     <AsyncSelect
       loadOptions={loadSuggestions}
-      onInputChange={onInputChange}
       placeholder="Search for a gene, cell line or tissue"
       onChange={onChange}
       isClearable

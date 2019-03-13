@@ -19,7 +19,6 @@ const Home = () => (
       <SearchExamples />
     </HomeSection>
 
-
     <HomeSection>
       <TissuesSummary />
     </HomeSection>
