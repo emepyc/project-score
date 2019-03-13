@@ -45,7 +45,7 @@ function normaliseParams(params) {
     'page[size]': params.pageSize,
     include: "gene,model,model.sample.tissue",
     filter: combinedFilters,
-    sort: params.sort,
+    sort: `${params.sortDirection === -1 ? '-' : ''}${params.sort}`,
     'fields[crispr_ko]': 'bf_scaled,fc_clean,gene,model',
     'fields[gene]': 'symbol',
     'fields[model]': 'sample,names',

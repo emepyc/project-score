@@ -31,11 +31,11 @@ function parseData(raw) {
 function Table(props) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [sort] = useState('fc_clean');
+  const [sort, setSort] = useState('fc_clean');
   const [search, setSearch] = useState("");
   const [pageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
-  // const [sortDirection, setSortDirection] = useState(1);
+  const [sortDirection, setSortDirection] = useState(1);
   const [totalHits, setTotalHits] = useState(null);
 
   const [urlParams] = useUrlParams(props);
@@ -48,6 +48,7 @@ function Table(props) {
       geneId: urlParams.geneId,
       modelId: urlParams.modelId,
       sort,
+      sortDirection,
       pageSize,
       pageNumber,
       search,
@@ -66,11 +67,12 @@ function Table(props) {
     urlParams.geneId,
     urlParams.modelId,
     sort,
+    sortDirection,
     pageSize,
     pageNumber,
     search,
     urlParams.tissue,
-    JSON.stringify(urlParams.score)
+    JSON.stringify(urlParams.score),
   ]);
 
   const isFirstPage = pageNumber === 1;
@@ -115,6 +117,16 @@ function Table(props) {
         <TableDisplay
           {...props}
           data={data}
+          sortDirection={sortDirection}
+          sort={sort}
+          onSortChange={(sortField) => {
+            if (sortField !== sort) {
+              setSortDirection(1);
+              setSort(sortField);
+            } else {
+              setSortDirection(sortDirection * -1);
+            }
+          }}
         />
       </Spinner>
 
