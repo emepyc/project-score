@@ -31,10 +31,10 @@ function TableDisplay(props) {
         <thead>
         <tr>
           <th>
-            Gene/>
+            Gene
           </th>
           <th>
-            Model/>
+            Model
           </th>
           <th>
             Tissue
