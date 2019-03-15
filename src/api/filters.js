@@ -47,7 +47,7 @@ export function expandModelFilter(modelId) {
 
 export function expandSearchFilter(search) {
   return {
-        or: [
+    or: [
       {
         name: 'model_name',
         op: 'contains',
@@ -62,21 +62,35 @@ export function expandSearchFilter(search) {
   }
 }
 
-export function expandScoreRangeFilter(scoreRange) {
-  return {
-    and: [
-      {
-        name: 'fc_clean',
-        op: 'ge',
-        val: scoreRange[0],
-      },
-      {
-        name: 'fc_clean',
-        op: 'le',
-        val: scoreRange[1],
-      }
-    ],
+export function expandScoreRangeFilter({scoreMin, scoreMax}) {
+  const scoreMinFilter = {
+    name: 'fc_clean',
+    op: 'ge',
+    val: scoreMin,
   };
+
+  const scoreMaxFilter = {
+    name: 'fc_clean',
+    op: 'le',
+    val: scoreMax,
+  };
+
+  if (scoreMin && scoreMax) {
+    return {
+      and: [
+        scoreMinFilter,
+        scoreMaxFilter,
+      ]
+    }
+  }
+
+  if (scoreMin) {
+    return scoreMinFilter;
+  }
+
+  if (scoreMax) {
+    return scoreMaxFilter;
+  }
 }
 
 export function combineFilters(filters) {

@@ -68,7 +68,7 @@ function TableDisplay(props) {
                 <Link to={`/gene/${row.geneId}?${paramsForGeneLink}`}>{row.geneSymbol}</Link>
               </td>
               <td style={{whiteSpace: 'nowrap'}}>
-                <Link to={`/model/${row.modelId}?${paramsForModelLink}`}>{row.modelName}</Link>
+                <Link to={`/model/${row.modelId}?${paramsForModelLink}&scoreMax=0`}>{row.modelName}</Link>
               </td>
               <td>
                 {row.tissue}

@@ -234,7 +234,8 @@ function essentialitiesPlot(props) {
       geneId: urlParams.geneId,
       modelId: urlParams.modelId,
       tissue: urlParams.tissue,
-      scoreRange: urlParams.score,
+      scoreMin: urlParams.scoreMin,
+      scoreMax: urlParams.scoreMax,
       pageSize: 0,
     };
 
@@ -246,7 +247,7 @@ function essentialitiesPlot(props) {
         resize();
         setData(resp.data)
       })
-  }, [urlParams.geneId, urlParams.modelId, urlParams.tissue, JSON.stringify(urlParams.score)]);
+  }, [urlParams.geneId, urlParams.modelId, urlParams.tissue, urlParams.scoreMin, urlParams.scoreMax]);
 
   const yAxisLabel = attributeToPlot === 'fc_clean' ?
     FC_CLEAN_LABEL :

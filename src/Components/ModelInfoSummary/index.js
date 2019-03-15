@@ -16,7 +16,6 @@ function ModelInfoSummary(props) {
     setLoading(true);
     fetchModelInfo(urlParams.modelId)
       .then(modelInfo => {
-        console.log(modelInfo);
         setLoading(false);
         setModelName(modelInfo.names[0]);
         setGrowProperties(modelInfo.growthProperties);

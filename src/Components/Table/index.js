@@ -53,7 +53,8 @@ function Table(props) {
       pageNumber,
       search,
       tissue: urlParams.tissue,
-      scoreRange: urlParams.score,
+      scoreMin: urlParams.scoreMin,
+      scoreMax: urlParams.scoreMax,
     };
 
     setLoading(true);
@@ -72,7 +73,8 @@ function Table(props) {
     pageNumber,
     search,
     urlParams.tissue,
-    JSON.stringify(urlParams.score),
+    urlParams.scoreMin,
+    urlParams.scoreMax,
   ]);
 
   const isFirstPage = pageNumber === 1;

@@ -24,8 +24,11 @@ function normaliseParams(params) {
     expandSearchFilter(params.search) :
     null;
 
-  const scoreRangeFilter = params.scoreRange ?
-    expandScoreRangeFilter(params.scoreRange) :
+  const scoreRangeFilter = params.scoreMin || params.scoreMax ?
+    expandScoreRangeFilter({
+      scoreMin: params.scoreMin,
+      scoreMax: params.scoreMax
+    }) :
     null;
 
   const tissueFilter = params.tissue ?
