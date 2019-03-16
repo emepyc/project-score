@@ -12,7 +12,7 @@ const TrackedComponent = ({ visibilityClasses, visibilityStyles }) => (
       <div className="text-center col">
         <h2 className="display-4">DepMap Programmes at Sanger</h2>
         <p className="lead">
-          The Cell Model Passports is an integral part of the{' '}
+          The Project Score is an integral part of the{' '}
           <a href="http://depmap.sanger.ac.uk">
             Cancer Dependency Map at Sanger
           </a>
