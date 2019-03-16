@@ -100,7 +100,7 @@ function EssentialitiesPlotSection(props) {
         <EssentialitiesPlot
           colorBy='score'
           attributeToPlot={attributeToPlot}
-          xAxisLabel="Cell lines"
+          xAxisLabel="Genes"
           {...props}
         />
       </CardBody>
