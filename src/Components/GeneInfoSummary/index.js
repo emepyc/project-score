@@ -45,22 +45,32 @@ function GeneInfoSummary(props) {
             {
               label: 'Tumour suppressor',
               value: isTumourSuppressor,
+              id: 'isTumourSuppressor',
+              text: `${geneSymbol} is ${isTumourSuppressor ? '' : 'not'} a tumour suppressor gene`,
             },
             {
               label: 'Rna polymerase',
               value: isRnaPolymerase,
+              id: 'isRnaPolymerase',
+              text: `${geneSymbol} does ${isRnaPolymerase ? '' : 'not'} encode for a RNA polymerase protein`,
             },
             {
               label: 'Ribosomal',
               value: isRibosomal,
+              id: 'isRibosomal',
+              text: `${geneSymbol} does ${isRibosomal ? '' : 'not'} encode for a ribosomal protein`
             },
             {
               label: 'Proteasome',
               value: isProteasome,
+              id: 'isProteasome',
+              text: `${geneSymbol} does ${isProteasome ? '' : 'not'} encode for a proteasomal protein`
             },
             {
               label: 'Spliceosome',
               value: isSpliceosome,
+              id: 'isSpliceosome',
+              text: `${geneSymbol} does ${isSpliceosome ? '' : 'not'} encode for a spliceosomal protein`
             },
           ]
         }

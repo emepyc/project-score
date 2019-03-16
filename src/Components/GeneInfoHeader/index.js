@@ -8,7 +8,8 @@ const maybeIdentifier = (identifiers, resource) =>
     identifiers[resource].identifier :
     null;
 
-export default function GeneInfoHeader({symbol, names, identifiers, features}) {
+export default function GeneInfoHeader(props) {
+  const {symbol, names, identifiers} = props;
   const geneName = names.filter(name => name.current)[0];
 
   const externalLinks = (
@@ -23,10 +24,10 @@ export default function GeneInfoHeader({symbol, names, identifiers, features}) {
     <Row>
       <Col>
         <PageHeader
+          {...props}
           header={symbol}
           entity='gene'
           subheaders={subheaders}
-          features={features}
         />
       </Col>
     </Row>
