@@ -10,14 +10,17 @@ import Spinner from '../Spinner';
 function ScoreRangeFilter(props) {
   const [urlParams, , setUrlParams] = useUrlParams(props, 500);
 
-  const [scoreRange, setScoreRange] = useState(urlParams.score);
+  const [scoreMin, setScoreMin] = useState(urlParams.scoreMin);
+  const [scoreMax, setScoreMax] = useState(urlParams.scoreMax);
   const [scoreExtent, setScoreExtent] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const onChange = (range) => {
-    setScoreRange(range);
+    setScoreMin(range[0]);
+    setScoreMax(range[1]);
     setUrlParams({
-      score: range,
+      scoreMin: range[0],
+      scoreMax: range[1],
     })
   };
 
@@ -43,13 +46,19 @@ function ScoreRangeFilter(props) {
     );
   }
 
+  console.log(`scoreMin: ${scoreMin} - scoreMax: ${scoreMax}`);
+  const scoreRange = [
+    scoreMin === undefined ? scoreExtent[0] : +scoreMin,
+    scoreMax === undefined ? scoreExtent[1] : +scoreMax,
+  ];
+
   return (
     <Spinner loading={loading}>
       <Range
         allowCross={false}
         min={scoreExtent[0]}
         max={scoreExtent[1]}
-        value={scoreRange || scoreExtent}
+        value={scoreRange}
         step={0.00001}
         defaultValue={scoreExtent}
         onChange={onChange}
