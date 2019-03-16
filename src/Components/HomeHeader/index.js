@@ -9,14 +9,14 @@ const header = () => {
     <div className="bg-faded text-center mb-1">
       <div
         className="animated fadeInUp text-center"
-        style={{ marginTop: '60px', marginBottom: '80px' }}
+        style={{marginTop: '60px', marginBottom: '80px'}}
       >
-        <img alt="Project Score logo" src={Logo} />
+        <img alt="Project Score logo" src={Logo}/>
       </div>
       <p className="lead">Genetic screens to identify cancer dependencies</p>
-      <p className="my-2" style={{ textAlign: 'center' }}>
-        Project Score uses CRISPR-Cas9 whole genome drop out screening
-        technology to identify novel oncology drug targets.
+      <p className="my-2" style={{textAlign: 'center'}}>
+        Project Score uses CRISPR-Cas9 whole-genome drop out screens to identify dependencies in cancer cells to help
+        guide development of precision cancer medicines.
       </p>
     </div>
   );

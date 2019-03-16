@@ -46,7 +46,6 @@ function ScoreRangeFilter(props) {
     );
   }
 
-  console.log(`scoreMin: ${scoreMin} - scoreMax: ${scoreMax}`);
   const scoreRange = [
     scoreMin === undefined ? scoreExtent[0] : +scoreMin,
     scoreMax === undefined ? scoreExtent[1] : +scoreMax,
