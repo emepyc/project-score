@@ -23,7 +23,7 @@ const TrackedComponent = ({ visibilityClasses, visibilityStyles }) => (
       <div className="mt-5 mb-5 row">
         <div className="animated fadeInUp">
           <div className="p-2 p-md-0 card-deck">
-            <div className="mb-2 mb-md-0 genes z1 card">
+            <div className="mb-2 mb-md-0 models z1 card">
               <img
                 width="100%"
                 src={ModelsProgrammeLogo}
@@ -33,7 +33,7 @@ const TrackedComponent = ({ visibilityClasses, visibilityStyles }) => (
               <div className="card-body card-body">
                 <h5 className="card-title">
                   DepMap <span className="col-mb-2 mb-md-0 models"> | </span>{' '}
-                  Genes
+                  Models
                 </h5>
                 <p className="secondary card-text">
                   Cell models and linked datasets
