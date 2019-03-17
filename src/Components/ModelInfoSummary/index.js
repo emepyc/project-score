@@ -33,7 +33,9 @@ function ModelInfoSummary(props) {
           [
             {
               label: growthProperties,
-              value: growthProperties !== 'Unknown'
+              value: growthProperties !== 'Unknown',
+              id: growthProperties,
+              text: 'Cell model growth type'
             }
           ]
         }
