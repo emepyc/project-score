@@ -19,11 +19,11 @@ function TableDisplay(props) {
   const paramsForGeneLink = qs.stringify(sanitiseParams(pickBy({tissue, score}, identity)));
   const paramsForModelLink = qs.stringify(sanitiseParams(pickBy({score}, identity)));
 
-  const mouseOver = (row) => {
-    props.onHighlight(row);
-  };
+  const mouseOver = (row) => props.onHighlight(row);
 
   const mouseOut = () => props.onHighlight(null);
+
+  const keyForHighlightedNode = getKeyForRow(props.highlight);
 
   return (
     <Fragment>
@@ -57,9 +57,12 @@ function TableDisplay(props) {
         <tbody>
         {data.map(row => {
           const key = getKeyForRow(row);
+          const backgroundColor = keyForHighlightedNode === key ? '#eeeeee' : (
+            row.bf_scaled < 0 ? '#FDEFEF' : '#FFFFFF'
+          );
           return (
             <tr
-              style={{backgroundColor: (getKeyForRow(props.highlight) === key ? '#eeeeee' : '#ffffff')}}
+              style={{backgroundColor: backgroundColor}}
               key={key}
               onMouseOver={() => mouseOver(row)}
               onMouseOut={mouseOut}

@@ -24,8 +24,4 @@ export default function fetchModelInfo(modelId) {
   return get(`/models/${modelId}`, params)
     .then(resp => deserialiser.deserialise(resp.data))
     .then(processResponse)
-    .then(modelInfo => {
-      console.log(modelInfo);
-      return modelInfo;
-    });
 }

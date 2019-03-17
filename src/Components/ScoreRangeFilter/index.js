@@ -6,6 +6,7 @@ import useUrlParams from '../useUrlParams';
 import 'rc-slider/assets/index.css';
 import './scoreRangeSlider.scss';
 import Spinner from '../Spinner';
+import classNames from 'classnames';
 
 function ScoreRangeFilter(props) {
   const [urlParams, , setUrlParams] = useUrlParams(props, 500);
@@ -51,6 +52,16 @@ function ScoreRangeFilter(props) {
     scoreMax === undefined ? scoreExtent[1] : +scoreMax,
   ];
 
+  const fromClasses = classNames({
+    rangeNumber: true,
+    significantScore: scoreRange[0] < 0,
+  });
+
+  const toClasses = classNames({
+    rangeNumber: true,
+    significantScore: scoreRange[1] < 0,
+  });
+
   return (
     <Spinner loading={loading}>
       <Range
@@ -66,7 +77,7 @@ function ScoreRangeFilter(props) {
         Score range:
       </div>
       <div className='my-2'>
-        From <span className='rangeNumber'>{scoreRange ? scoreRange[0] : scoreExtent[0]}</span> to <span className='rangeNumber'>{scoreRange ? scoreRange[1] : scoreExtent[1]}</span>
+        From <span className={fromClasses}>{scoreRange[0]}</span> to <span className={toClasses}>{scoreRange[1]}</span>
       </div>
     </Spinner>
   );

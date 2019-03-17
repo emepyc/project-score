@@ -17,4 +17,7 @@
   padding: 0.4em 0.2em;
   border-radius: 5px;
   margin: 0.4em 0.2em;
+  &.significantScore {
+    background-color: $color-significant-bg;
+  }
 }

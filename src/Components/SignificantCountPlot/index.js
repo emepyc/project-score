@@ -21,8 +21,8 @@ function SignificantCountPlot({total, significant}) {
           <Group top={height / 2 - margin.top} left={width / 2}>
             <Pie
               data={[
-                {pos: 0, opacity: 0.7, number: significant},
-                {pos: 1, opacity: 0.1, number: total - significant}
+                {pos: 0, opacity: 1, number: significant, color: '#EA5156'},
+                {pos: 1, opacity: 0.1, number: total - significant, color: '#5ba633'}
               ]}
               pieValue={d => d.number}
               pieSort={d => d.pos}
@@ -34,7 +34,11 @@ function SignificantCountPlot({total, significant}) {
                 return pie.arcs.map((arc, i) => {
                   return (
                     <g key={`browser-${arc.data.label}-${i}`}>
-                      <path d={pie.path(arc)} fill={'green'} fillOpacity={arc.data.opacity}/>
+                      <path
+                        d={pie.path(arc)}
+                        fill={arc.data.color}
+                        fillOpacity={arc.data.opacity}
+                      />
                     </g>
                   );
                 })
