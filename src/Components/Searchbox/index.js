@@ -47,7 +47,7 @@ const loadSuggestions = debounce(_loadSuggestions, 500, {leading: true});
 
 function Searchbox({history}) {
   const onChange = value => {
-    if (!value.type) {
+    if (!value) {
       return;
     }
     if (value.type === 'genes') {
