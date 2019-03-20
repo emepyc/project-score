@@ -52,7 +52,6 @@ function EssentialitiesPlot(props) {
     <Spinner loading={loading}>
       {data.length && (
         <Fragment>
-          <EssentialitiesBrush/>
           <EssentialitiesCanvasPlot
             data={data}
             width={containerWidth - config.marginLeft}
