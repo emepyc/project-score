@@ -1,0 +1,13 @@
+.essentialitiesPlotContainer {
+  position: relative;
+  height: 350px;
+
+  .topLevelContainer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    &.leaveSpace {
+      margin-left: 50px;
+    }
+  }
+}
