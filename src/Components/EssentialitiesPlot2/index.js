@@ -1,5 +1,6 @@
 import React, {useCallback, useState, useEffect, useRef, Fragment} from 'react';
 import {withRouter} from 'react-router-dom';
+import findIndex from 'lodash.findindex';
 import {Range} from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import Spinner from '../Spinner';
@@ -25,7 +26,7 @@ function EssentialitiesPlot(props) {
   const [containerWidth] = useState(750);
   const [xDomain, setXDomain] = useState(null);
 
-  const {attributeToPlot} = props;
+  const {attributeToPlot, highlight} = props;
 
   useEffect(() => {
     const params = {
@@ -50,12 +51,6 @@ function EssentialitiesPlot(props) {
       });
   }, [urlParams.geneId, urlParams.modelId, urlParams.tissue, urlParams.scoreMin, urlParams.scoreMax]);
 
-  const onRangeChanged = newRange => {
-    console.log('new Range in parent component...');
-    console.log(newRange);
-    setXDomain(newRange);
-  };
-
   return (
     <Spinner loading={loading}>
       {data.length && (
@@ -64,17 +59,28 @@ function EssentialitiesPlot(props) {
             data={data}
             width={containerWidth - config.marginLeft}
             attributeToPlot={attributeToPlot}
-            onRangeChanged={onRangeChanged}
+            onRangeChanged={setXDomain}
           />
-          <EssentialitiesCanvasPlot
-            data={data}
-            width={containerWidth - config.marginLeft}
-            height={config.height - config.marginTop}
-            significantField={config.significantField}
-            attributeToPlot={attributeToPlot}
-            xDomain={xDomain}
-            {...props}
-          />
+          <div style={{position: 'relative'}}>
+            {highlight && (<EssentialitiesTooltip
+                highlight={highlight}
+                attributeToPlot={attributeToPlot}
+                xDomain={xDomain}
+                data={data}
+                width={containerWidth - config.marginLeft}
+                height={config.height - config.marginTop}
+              />
+            )}
+            <EssentialitiesCanvasPlot
+              data={data}
+              width={containerWidth - config.marginLeft}
+              height={config.height - config.marginTop}
+              significantField={config.significantField}
+              attributeToPlot={attributeToPlot}
+              xDomain={xDomain}
+              {...props}
+            />
+          </div>
         </Fragment>
       )}
     </Spinner>
@@ -155,6 +161,100 @@ function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged}) {
   );
 }
 
+
+function EssentialitiesTooltip(props) {
+  const {
+    highlight: nodeData,
+    data,
+    xDomain,
+    attributeToPlot,
+    width,
+    height
+  } = props;
+
+  const rowToNode = row => findIndex(
+    data,
+    d => (d.model.id === row.modelId) && (d.gene.id === row.geneId),
+  );
+
+  const index = nodeData.index || rowToNode(nodeData);
+
+  const {
+    geneSymbol,
+    modelName,
+    tissue,
+    fc_clean,
+    bf_scaled,
+  } = nodeData;
+
+  const yExtent = d3.extent(
+    data,
+    d => d[attributeToPlot],
+  );
+  const xScale = d3.scaleLinear()
+    .range([0, width])
+    .domain(xDomain || [0, data.length]);
+
+  const yScale = d3.scaleLinear()
+    .range([0, height])
+    .domain([yExtent[1], yExtent[0]]);
+
+
+  const essentialityValue =
+    attributeToPlot === 'fc_clean' ?
+      fc_clean :
+      bf_scaled;
+
+  const x = xScale(index);
+  const y = yScale(essentialityValue);
+
+  return (
+    <Fragment>
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: '3px',
+          boxShadow: 'gray 0px 1px 2px',
+          padding: '0.3rem 0.5rem',
+          pointerEvents: 'none',
+          position: 'absolute',
+          whiteSpace: 'nowrap',
+          zIndex: 100,
+          left: `${x}px`,
+          top: `${y}px`,
+          display: 'block',
+        }}
+      >
+        Gene: <b>{geneSymbol}</b><br/>
+        Model: <b>{modelName}</b> ({tissue})<br/>
+        Corrected log fold change:<b>{fc_clean}</b><br/>
+        Loss of fitness score:<b>{bf_scaled}</b>
+      </div>
+      <div
+        style={{
+          border: '1px solid #EEEEEE',
+          width: '0.5px',
+          height: height,
+          position: 'absolute',
+          top: 0,
+          left: x,
+        }}
+      />
+      <div
+        style={{
+          border: '1px solid #EEEEEE',
+          width: width,
+          height: '0.5px',
+          position: 'absolute',
+          top: y,
+          left: 0,
+        }}
+      />
+    </Fragment>
+
+  );
+}
+
 function EssentialitiesCanvasPlot(props) {
   const {
     data,
@@ -164,6 +264,7 @@ function EssentialitiesCanvasPlot(props) {
     attributeToPlot,
     significantField,
     xDomain,
+    onHighlight,
   } = props;
 
   const insignificantNodeColor = '#758E4F';
@@ -171,21 +272,28 @@ function EssentialitiesCanvasPlot(props) {
   const nodeRadius = 3;
 
   const canvasPlot = useRef(null);
+  const eventsContainer = useRef(null);
+
+  const yExtent = d3.extent(
+    data,
+    d => d[attributeToPlot],
+  );
+  const xScale = d3.scaleLinear()
+    .range([0, width])
+    .domain(xDomain || [0, data.length]);
+
+  const yScale = d3.scaleLinear()
+    .range([0, height])
+    .domain([yExtent[1], yExtent[0]]);
+
+  const quadTree = d3.quadtree(
+    data,
+    d => d.index,
+    d => d[attributeToPlot]
+  );
+
 
   useEffect(() => {
-    const yExtent = d3.extent(
-      data,
-      d => d[attributeToPlot],
-    );
-    const xScale = d3.scaleLinear()
-      .range([0, width])
-      // .domain([0, data.length]);
-      .domain(xDomain || [0, data.length]);
-
-    const yScale = d3.scaleLinear()
-      .range([0, height])
-      .domain([yExtent[1], yExtent[0]]);
-
     const ctx = canvasPlot.current.getContext('2d');
     ctx.clearRect(0, 0, width, height);
 
@@ -214,14 +322,53 @@ function EssentialitiesCanvasPlot(props) {
 
   }, [data.length, attributeToPlot, xDomain]);
 
+  const onMouseMove = useCallback(() => {
+    const ev = d3.event;
+      if (ev) {
+      const xMouse = xScale.invert(ev.offsetX);
+      const yMouse = yScale.invert(ev.offsetY);
+
+      const closest = quadTree.find(xMouse, yMouse);
+
+      onHighlight({
+        geneId: closest.gene.id,
+        modelName: closest.model.names[0],
+        bf_scaled: closest.bf_scaled,
+        fc_clean: closest.fc_clean,
+        geneSymbol: closest.gene.symbol,
+        tissue: closest.model.sample.tissue.name,
+        index: closest.index,
+      });
+    }
+  });
+
+  useEffect(() => {
+    d3.select(eventsContainer.current)
+      .on('mousemove', onMouseMove);
+  });
+
   return (
-    <div className='essentialitiesPlotContainer'>
+    <div>
       <canvas
         ref={canvasPlot}
         className='topLevelContainer leaveSpace'
         height={height}
         width={width}
       />
+      <div
+        ref={eventsContainer}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          opacity: 0.2,
+          backgroundColor: 'cyan',
+          width: width,
+          height: height,
+        }}
+        onMouseMove={onMouseMove}
+      />
+
     </div>
   );
 }

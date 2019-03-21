@@ -296,7 +296,7 @@ function essentialitiesPlot(props) {
     }
   }, [data.length, colorBy, attributeToPlot, containerWidth, highlightTissue]);
 
-    const showTooltip = (x, y, el, msg) => {
+  const showTooltip = (x, y, el, msg) => {
     d3.select(el)
       .html(msg)
       .style('left', `${x}px`)
