@@ -26,7 +26,7 @@ function EssentialitiesPlot(props) {
   const [containerWidth] = useState(750);
   const [xDomain, setXDomain] = useState(null);
 
-  const {attributeToPlot, highlight} = props;
+  const {attributeToPlot, highlight, highlightTissue} = props;
 
   useEffect(() => {
     const params = {
@@ -58,17 +58,16 @@ function EssentialitiesPlot(props) {
           <EssentialitiesBrush
             data={data}
             width={containerWidth - config.marginLeft}
-            attributeToPlot={attributeToPlot}
             onRangeChanged={setXDomain}
+            {...props}
           />
           <div style={{position: 'relative'}}>
             {highlight && (<EssentialitiesTooltip
-                highlight={highlight}
-                attributeToPlot={attributeToPlot}
                 xDomain={xDomain}
                 data={data}
                 width={containerWidth - config.marginLeft}
                 height={config.height - config.marginTop}
+                {...props}
               />
             )}
             <EssentialitiesCanvasPlot
@@ -76,7 +75,6 @@ function EssentialitiesPlot(props) {
               width={containerWidth - config.marginLeft}
               height={config.height - config.marginTop}
               significantField={config.significantField}
-              attributeToPlot={attributeToPlot}
               xDomain={xDomain}
               {...props}
             />
@@ -265,6 +263,7 @@ function EssentialitiesCanvasPlot(props) {
     significantField,
     xDomain,
     onHighlight,
+    highlightTissue,
   } = props;
 
   const insignificantNodeColor = '#758E4F';
@@ -273,6 +272,8 @@ function EssentialitiesCanvasPlot(props) {
 
   const canvasPlot = useRef(null);
   const eventsContainer = useRef(null);
+  const xAxisElement = useRef(null);
+  const yAxisElement = useRef(null);
 
   const yExtent = d3.extent(
     data,
@@ -300,6 +301,10 @@ function EssentialitiesCanvasPlot(props) {
     ctx.save();
 
     data.forEach(dataPoint => {
+      if (highlightTissue && dataPoint.model.sample.tissue.name !== highlightTissue) {
+        return;
+      }
+
       const dataPointColor = colorBy === 'tissue' ?
         colors[dataPoint.model.sample.tissue.name] : (
           dataPoint[significantField] < 0 ? significantNodeColor : insignificantNodeColor
@@ -320,7 +325,7 @@ function EssentialitiesCanvasPlot(props) {
       ctx.stroke();
     });
 
-  }, [data.length, attributeToPlot, xDomain]);
+  }, [data.length, attributeToPlot, xDomain, highlightTissue, colorBy]);
 
   const onMouseMove = useCallback(() => {
     const ev = d3.event;
@@ -342,9 +347,27 @@ function EssentialitiesCanvasPlot(props) {
     }
   });
 
+  const onMouseOut = useCallback(() => {
+    onHighlight(null);
+  });
+
   useEffect(() => {
     d3.select(eventsContainer.current)
-      .on('mousemove', onMouseMove);
+      .on('mousemove', onMouseMove)
+      .on('mouseout', onMouseOut);
+  });
+
+  useEffect(() => {
+    const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('.0f'));
+    const yAxis = d3.axisLeft(yScale);
+    const axisLeft = d3
+      .select(yAxisElement.current);
+    axisLeft.call(yAxis);
+
+    const axisBottom = d3
+      .select(xAxisElement.current);
+      // .attr('transform', `translate(${config.marginLeft},${config.height - config.marginTop})`);
+    axisBottom.call(xAxis);
   });
 
   return (
@@ -355,20 +378,33 @@ function EssentialitiesCanvasPlot(props) {
         height={height}
         width={width}
       />
+      <svg
+        width={width}
+        height={height}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        }}
+      >
+        <g
+          ref={xAxisElement}
+        />
+        <g
+          ref={yAxisElement}
+        />
+      </svg>
       <div
         ref={eventsContainer}
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
-          opacity: 0.2,
-          backgroundColor: 'cyan',
           width: width,
           height: height,
         }}
         onMouseMove={onMouseMove}
       />
-
     </div>
   );
 }
