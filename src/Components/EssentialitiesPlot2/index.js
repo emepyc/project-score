@@ -12,6 +12,9 @@ import './essentialitiesPlot.scss';
 import * as d3 from "d3";
 import sortBy from "lodash.sortby";
 
+const LOSS_OF_FITNESS_SCORE_LABEL = 'Loss of fitness score';
+const FC_CLEAN_LABEL = 'Corrected log fold change';
+
 function EssentialitiesPlot(props) {
   const config = {
     height: 300,
@@ -20,13 +23,24 @@ function EssentialitiesPlot(props) {
     significantField: 'bf_scaled',
   };
 
+  const container = useRef(null);
+
   const [data, setData] = useState([]);
   const [urlParams] = useUrlParams(props);
   const [loading, setLoading] = useState(false);
-  const [containerWidth] = useState(750);
+  const [containerWidth, setContainerWidth] = useState(750);
   const [xDomain, setXDomain] = useState(null);
 
   const {attributeToPlot, highlight} = props;
+
+  const resize = () => setContainerWidth(container.current.offsetWidth);
+
+  useEffect(() => {
+    window.addEventListener('resize', resize);
+
+    return () => window.removeEventListener('resize', resize);
+  }, []);
+
 
   useEffect(() => {
     const params = {
@@ -54,7 +68,7 @@ function EssentialitiesPlot(props) {
   return (
     <Spinner loading={loading}>
       {data.length && (
-        <Fragment>
+        <div ref={container}>
           <EssentialitiesBrush
             data={data}
             width={containerWidth - config.marginLeft}
@@ -84,7 +98,7 @@ function EssentialitiesPlot(props) {
               {...props}
             />
           </div>
-        </Fragment>
+        </div>
       )}
     </Spinner>
   );
@@ -279,6 +293,7 @@ function EssentialitiesCanvasPlot(props) {
     highlightTissue,
     marginLeft,
     marginTop,
+    xAxisLabel,
   } = props;
 
   const insignificantNodeColor = '#758E4F';
@@ -346,7 +361,7 @@ function EssentialitiesCanvasPlot(props) {
       }
     });
 
-  }, [data.length, attributeToPlot, xDomain, highlightTissue, colorBy]);
+  }, [data.length, attributeToPlot, xDomain, highlightTissue, colorBy, width]);
 
   const onMouseMove = useCallback(() => {
     const ev = d3.event;
@@ -391,6 +406,11 @@ function EssentialitiesCanvasPlot(props) {
     axisBottom.call(xAxis);
   });
 
+  const yAxisLabel = attributeToPlot === 'fc_clean' ?
+    FC_CLEAN_LABEL :
+    LOSS_OF_FITNESS_SCORE_LABEL;
+
+
   return (
     <div>
       <canvas
@@ -416,6 +436,25 @@ function EssentialitiesCanvasPlot(props) {
           ref={yAxisElement}
           transform={`translate(${marginLeft}, 0)`}
         />
+
+        <text
+          x={0}
+          y={0}
+          textAnchor='middle'
+          transform={`translate(${(width / 2) + (marginLeft / 2)}, ${height - 10})`}
+        >
+          {xAxisLabel}
+        </text>
+
+        <text
+          x={0}
+          y={0}
+          textAnchor='middle'
+          transform={`translate(15, ${(height / 2) - (marginTop / 2)}) rotate(-90)`}
+        >
+          {yAxisLabel}
+        </text>
+
       </svg>
       <div
         ref={eventsContainer}
