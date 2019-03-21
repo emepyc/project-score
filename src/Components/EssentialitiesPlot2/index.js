@@ -26,7 +26,7 @@ function EssentialitiesPlot(props) {
   const [containerWidth] = useState(750);
   const [xDomain, setXDomain] = useState(null);
 
-  const {attributeToPlot, highlight, highlightTissue} = props;
+  const {attributeToPlot, highlight} = props;
 
   useEffect(() => {
     const params = {
@@ -59,23 +59,28 @@ function EssentialitiesPlot(props) {
             data={data}
             width={containerWidth - config.marginLeft}
             onRangeChanged={setXDomain}
+            marginLeft={config.marginLeft}
             {...props}
           />
           <div style={{position: 'relative'}}>
             {highlight && (<EssentialitiesTooltip
                 xDomain={xDomain}
                 data={data}
-                width={containerWidth - config.marginLeft}
-                height={config.height - config.marginTop}
+                width={containerWidth}
+                height={config.height}
+                marginLeft={config.marginLeft}
+                marginTop={config.marginTop}
                 {...props}
               />
             )}
             <EssentialitiesCanvasPlot
               data={data}
-              width={containerWidth - config.marginLeft}
-              height={config.height - config.marginTop}
+              width={containerWidth}
+              height={config.height}
               significantField={config.significantField}
               xDomain={xDomain}
+              marginLeft={config.marginLeft}
+              marginTop={config.marginTop}
               {...props}
             />
           </div>
@@ -88,7 +93,7 @@ function EssentialitiesPlot(props) {
 export default withRouter(EssentialitiesPlot);
 
 
-function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged}) {
+function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged, marginLeft}) {
   const height = 50;
 
   const brushLineElement = useRef(null);
@@ -126,7 +131,9 @@ function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged}) {
   });
 
   return (
-    <Fragment>
+    <div
+      style={{marginLeft: `${marginLeft}px`}}
+    >
       <svg
         height={height}
         width={width}
@@ -148,6 +155,9 @@ function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged}) {
         />
       </svg>
       <Range
+        style={{
+          width,
+        }}
         allowCross={false}
         min={0}
         max={data.length}
@@ -155,7 +165,7 @@ function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged}) {
         defaultValue={[0, data.length]}
         onChange={onChange}
       />
-    </Fragment>
+    </div>
   );
 }
 
@@ -167,12 +177,16 @@ function EssentialitiesTooltip(props) {
     xDomain,
     attributeToPlot,
     width,
-    height
+    height,
+    marginLeft,
+    marginTop,
   } = props;
 
   const rowToNode = row => findIndex(
     data,
-    d => (d.model.id === row.modelId) && (d.gene.id === row.geneId),
+    d => {
+      return (d.model.names[0] === row.modelName) && (d.gene.id === row.geneId);
+    },
   );
 
   const index = nodeData.index || rowToNode(nodeData);
@@ -190,13 +204,12 @@ function EssentialitiesTooltip(props) {
     d => d[attributeToPlot],
   );
   const xScale = d3.scaleLinear()
-    .range([0, width])
+    .range([marginLeft, width])
     .domain(xDomain || [0, data.length]);
 
   const yScale = d3.scaleLinear()
-    .range([0, height])
+    .range([0, height - marginTop])
     .domain([yExtent[1], yExtent[0]]);
-
 
   const essentialityValue =
     attributeToPlot === 'fc_clean' ?
@@ -264,6 +277,8 @@ function EssentialitiesCanvasPlot(props) {
     xDomain,
     onHighlight,
     highlightTissue,
+    marginLeft,
+    marginTop,
   } = props;
 
   const insignificantNodeColor = '#758E4F';
@@ -280,11 +295,11 @@ function EssentialitiesCanvasPlot(props) {
     d => d[attributeToPlot],
   );
   const xScale = d3.scaleLinear()
-    .range([0, width])
+    .range([marginLeft, width])
     .domain(xDomain || [0, data.length]);
 
   const yScale = d3.scaleLinear()
-    .range([0, height])
+    .range([0, height - marginTop])
     .domain([yExtent[1], yExtent[0]]);
 
   const quadTree = d3.quadtree(
@@ -309,28 +324,34 @@ function EssentialitiesCanvasPlot(props) {
         colors[dataPoint.model.sample.tissue.name] : (
           dataPoint[significantField] < 0 ? significantNodeColor : insignificantNodeColor
         );
-      ctx.beginPath();
-      ctx.arc(
-        xScale(dataPoint.index),
-        yScale(dataPoint[attributeToPlot]),
-        nodeRadius,
-        0,
-        2 * Math.PI,
-        false,
-      );
-      ctx.fillStyle = dataPointColor;
-      ctx.fill();
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = dataPointColor;
-      ctx.stroke();
+
+      const x = xScale(dataPoint.index);
+      const y = yScale(dataPoint[attributeToPlot]);
+
+      if (x >= marginLeft) {
+        ctx.beginPath();
+        ctx.arc(
+          x,
+          y,
+          nodeRadius,
+          0,
+          2 * Math.PI,
+          false,
+        );
+        ctx.fillStyle = dataPointColor;
+        ctx.fill();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = dataPointColor;
+        ctx.stroke();
+      }
     });
 
   }, [data.length, attributeToPlot, xDomain, highlightTissue, colorBy]);
 
   const onMouseMove = useCallback(() => {
     const ev = d3.event;
-      if (ev) {
-      const xMouse = xScale.invert(ev.offsetX);
+    if (ev) {
+      const xMouse = xScale.invert(ev.offsetX + marginLeft);
       const yMouse = yScale.invert(ev.offsetY);
 
       const closest = quadTree.find(xMouse, yMouse);
@@ -366,7 +387,7 @@ function EssentialitiesCanvasPlot(props) {
 
     const axisBottom = d3
       .select(xAxisElement.current);
-      // .attr('transform', `translate(${config.marginLeft},${config.height - config.marginTop})`);
+    // .attr('transform', `translate(${config.marginLeft},${config.height - config.marginTop})`);
     axisBottom.call(xAxis);
   });
 
@@ -389,9 +410,11 @@ function EssentialitiesCanvasPlot(props) {
       >
         <g
           ref={xAxisElement}
+          transform={`translate(0, ${height - marginTop})`}
         />
         <g
           ref={yAxisElement}
+          transform={`translate(${marginLeft}, 0)`}
         />
       </svg>
       <div
@@ -399,9 +422,9 @@ function EssentialitiesCanvasPlot(props) {
         style={{
           position: 'absolute',
           top: 0,
-          left: 0,
-          width: width,
-          height: height,
+          left: marginLeft,
+          width: width - marginLeft,
+          height: height - marginTop,
         }}
         onMouseMove={onMouseMove}
       />
