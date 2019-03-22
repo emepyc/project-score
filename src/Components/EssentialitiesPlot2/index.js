@@ -37,7 +37,7 @@ function EssentialitiesPlot(props) {
 
   useEffect(() => {
     window.addEventListener('resize', resize);
-
+    resize();
     return () => window.removeEventListener('resize', resize);
   }, []);
 
@@ -66,41 +66,43 @@ function EssentialitiesPlot(props) {
   }, [urlParams.geneId, urlParams.modelId, urlParams.tissue, urlParams.scoreMin, urlParams.scoreMax]);
 
   return (
-    <Spinner loading={loading}>
-      {data.length && (
-        <div ref={container}>
-          <EssentialitiesBrush
-            data={data}
-            width={containerWidth - config.marginLeft}
-            onRangeChanged={setXDomain}
-            marginLeft={config.marginLeft}
-            {...props}
-          />
-          <div style={{position: 'relative'}}>
-            {highlight && (<EssentialitiesTooltip
-                xDomain={xDomain}
+    <div ref={container}>
+      <Spinner loading={loading}>
+        {data.length && (
+          <div>
+            <EssentialitiesBrush
+              data={data}
+              width={containerWidth - config.marginLeft}
+              onRangeChanged={setXDomain}
+              marginLeft={config.marginLeft}
+              {...props}
+            />
+            <div style={{position: 'relative'}}>
+              {highlight && (<EssentialitiesTooltip
+                  xDomain={xDomain}
+                  data={data}
+                  width={containerWidth}
+                  height={config.height}
+                  marginLeft={config.marginLeft}
+                  marginTop={config.marginTop}
+                  {...props}
+                />
+              )}
+              <EssentialitiesCanvasPlot
                 data={data}
                 width={containerWidth}
                 height={config.height}
+                significantField={config.significantField}
+                xDomain={xDomain}
                 marginLeft={config.marginLeft}
                 marginTop={config.marginTop}
                 {...props}
               />
-            )}
-            <EssentialitiesCanvasPlot
-              data={data}
-              width={containerWidth}
-              height={config.height}
-              significantField={config.significantField}
-              xDomain={xDomain}
-              marginLeft={config.marginLeft}
-              marginTop={config.marginTop}
-              {...props}
-            />
+            </div>
           </div>
-        </div>
-      )}
-    </Spinner>
+        )}
+      </Spinner>
+    </div>
   );
 }
 
