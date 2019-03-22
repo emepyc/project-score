@@ -57,13 +57,19 @@ function EssentialitiesPlot(props) {
     fetchCrisprData(params)
       .then(resp => {
         setLoading(false);
-        const data = resp.data;
-        const dataSorted = sortBy(data, rec => rec[attributeToPlot]);
-        const dataSortedWithIndex = dataSorted.map((d, i) => ({...d, index: i}));
-
-        setData(dataSortedWithIndex);
+        setData(sortData(resp.data));
       });
   }, [urlParams.geneId, urlParams.modelId, urlParams.tissue, urlParams.scoreMin, urlParams.scoreMax]);
+
+
+  const sortData = data => {
+    const dataSorted = sortBy(data, rec => rec[attributeToPlot]);
+    return dataSorted.map((d, i) => ({...d, index: i}));
+  };
+
+  useEffect(() => {
+    setData(sortData(data));
+  }, [attributeToPlot]);
 
   return (
     <div ref={container}>
@@ -140,6 +146,15 @@ function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged, marg
       .attr('d', brushLine);
   });
 
+  // With this code commented out, the brush does not reset the range after the data has changed (for example when filtering by tissue or score range)
+  // This may result in a bit weird behaviour when filtering by tissue and then removing the filtering.
+  // Uncomment this block to reset the brushing range with every data change (although that may come with other weirdness)
+  // useEffect(() => {
+  //   setMinRange(0);
+  //   setMaxRange(data.length);
+  //   onRangeChanged([0, data.length]);
+  // }, [data.length]);
+
   const onChange = useCallback(newRange => {
     setMinRange(newRange[0]);
     setMaxRange(newRange[1]);
@@ -179,6 +194,7 @@ function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged, marg
         max={data.length}
         step={1}
         defaultValue={[0, data.length]}
+        value={[minRange, maxRange]}
         onChange={onChange}
       />
     </div>
@@ -363,7 +379,7 @@ function EssentialitiesCanvasPlot(props) {
       }
     });
 
-  }, [data.length, attributeToPlot, xDomain, highlightTissue, colorBy, width]);
+  }, [data, attributeToPlot, xDomain, highlightTissue, colorBy, width]);
 
   const onMouseMove = useCallback(() => {
     const ev = d3.event;
