@@ -10,7 +10,6 @@ function ModelInfoSummary(props) {
   const [urlParams] = useUrlParams(props);
   const [modelName, setModelName] = useState('');
   const [growthProperties, setGrowProperties] = useState('Unknown');
-  const [tissue, setTissue] = useState('');
 
   useEffect(() => {
     setLoading(true);
@@ -19,7 +18,6 @@ function ModelInfoSummary(props) {
         setLoading(false);
         setModelName(modelInfo.names[0]);
         setGrowProperties(modelInfo.growthProperties);
-        setTissue(modelInfo.tissue);
       });
   }, []);
 
@@ -27,7 +25,6 @@ function ModelInfoSummary(props) {
     <Spinner loading={loading}>
       <ModelInfoHeader
         name={modelName}
-        tissue={tissue}
         symbol={urlParams.modelId}
         features={
           [

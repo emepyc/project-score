@@ -3,6 +3,7 @@ import {Row, Col, ButtonGroup} from 'reactstrap';
 import Table from '../../Components/Table';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import ModelInfoSummary from '../../Components/ModelInfoSummary';
+import ModelInfoDetails from '../../Components/ModelInfoDetails';
 import {Card, CardBody, CardHeader} from 'reactstrap';
 import {Button} from "../../Components/Buttom";
 import EssentialitiesPlot from "../../Components/EssentialitiesPlot";
@@ -13,7 +14,10 @@ function Model() {
       <ModelInfoSummary/>
 
       <Row className='my-3'>
-        <Col xs={{size: 6, offset: 3}} lg={{size: 3, offset: 9}}>
+        <Col className="my-3" lg={{size: 8}} xs={{size: 12}}>
+          <ModelInfoDetails/>
+        </Col>
+        <Col className="my-3" lg={{size: 4}} xs={{size: 12}}>
           <Filters />
         </Col>
       </Row>

@@ -6,6 +6,7 @@ import fetchCrisprData from './fetchCrisprData';
 import fetchScoreExtent from './fetchScoreExtent';
 import fetchGeneInfo from './fetchGeneInfo';
 import fetchModelInfo from './fetchModelInfo';
+import fetchModelDetails from './fetchModelDetails';
 import fetchSignificantModels from './fetchSignificantModels';
 
 export {
@@ -15,6 +16,7 @@ export {
   fetchCrisprData,
   fetchScoreExtent,
   fetchGeneInfo,
+  fetchModelDetails,
   fetchModelInfo,
   fetchSignificantModels,
   id2name,

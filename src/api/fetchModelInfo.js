@@ -4,8 +4,8 @@ import Desearialiser from 'deserialise-jsonapi';
 const deserialiser = new Desearialiser();
 
 const params = {
-  include: 'identifiers,sample,sample.tissue,sample.patient',
-  'fields[sample]': 'tissue,patient',
+  include: 'identifiers,sample,sample.tissue,sample.patient,sample.cancer_type',
+  'fields[sample]': 'tissue,patient,cancer_type',
   'fields[tissue]': 'name',
 };
 
@@ -17,6 +17,7 @@ function processResponse(modelInfo) {
     names: modelInfo.names,
     identifiers: modelInfo.identifiers,
     growthProperties: modelInfo.growth_properties,
+    cancerType: modelInfo.sample.cancer_type.name,
   }
 }
 

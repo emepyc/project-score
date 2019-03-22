@@ -17,7 +17,7 @@ export default function ModelInfoHeader({name, symbol, tissue, features}) {
         <PageHeader
           header={name}
           entity='model'
-          subheaders={[tissue, linkToCellModelPassport]}
+          subheaders={[linkToCellModelPassport]}
           features={features}
         />
       </Col>
