@@ -1,233 +1,46 @@
-import React, {Fragment, useState, useEffect, useRef} from 'react';
+import React, {useCallback, useState, useEffect, useRef, Fragment} from 'react';
 import {withRouter} from 'react-router-dom';
-import sortBy from 'lodash.sortby';
 import findIndex from 'lodash.findindex';
-import * as d3 from 'd3';
+import {Range} from 'rc-slider';
+import 'rc-slider/assets/index.css';
 import Spinner from '../Spinner';
-import {fetchCrisprData} from '../../api';
 import useUrlParams from '../useUrlParams';
+import {fetchCrisprData} from '../../api';
 import colors from '../../colors';
 
-
 import './essentialitiesPlot.scss';
+import * as d3 from "d3";
+import sortBy from "lodash.sortby";
 
 const LOSS_OF_FITNESS_SCORE_LABEL = 'Loss of fitness score';
 const FC_CLEAN_LABEL = 'Corrected log fold change';
-const significantField = 'bf_scaled';
 
-
-function plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, data, colorBy, highlightTissue) {
-  const ctx = refs.plotCanvas.current.getContext('2d');
-
-  const {xScale, yScale} = scales;
-
-  ctx.clearRect(0, 0, containerWidth - config.marginLeft, config.height - config.marginTop);
-  ctx.save();
-  for (let i = 0; i < data.length; i++) {
-    const dataPoint = data[i];
-    if(highlightTissue && dataPoint.model.sample.tissue.name !== highlightTissue) {
-      continue;
-    }
-    const dataPointColor = colorBy === "tissue" ? colors[dataPoint.model.sample.tissue.name] : (
-      dataPoint[significantField] < 0 ? config.significantNodeColor : config.insignificantNodeColor
-    );
-    ctx.beginPath();
-    ctx.arc(
-      xScale(dataPoint.index),
-      yScale(dataPoint[attributeToPlot]),
-      config.nodeRadius,
-      0,
-      2 * Math.PI,
-      false
-    );
-    ctx.fillStyle = dataPointColor;
-    ctx.fill();
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = dataPointColor;
-    ctx.stroke();
-  }
-
-
-  // Axis
-  const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('.0f'));
-  const yAxis = d3.axisLeft(yScale);
-
-  const axisLeft = d3
-    .select(refs.plotAxisLeft.current);
-  axisLeft.call(yAxis);
-
-  const axisBottom = d3
-    .select(refs.plotAxisBottom.current)
-    .attr('transform', `translate(${config.marginLeft},${config.height - config.marginTop})`);
-  axisBottom.call(xAxis);
-}
-
-
-function plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy, onHighlight, highlightTissue) {
-  const {xScale, yScale, xScaleBrush, yScaleBrush} = scales;
-
-  const quadTree = d3.quadtree(
-    dataSortedWithIndex,
-    d => d.index,
-    d => d[attributeToPlot]
-  );
-
-  const mouseMoveOnCanvas = () => {
-    const ev = d3.event;
-    const xClicked = xScale.invert(ev.offsetX - config.marginLeft);
-    const yClicked = yScale.invert(ev.offsetY);
-
-    const closest = quadTree.find(xClicked, yClicked);
-
-    onHighlight({
-      geneId: closest.gene.id,
-      modelName: closest.model.names[0],
-      bf_scaled: closest.bf_scaled,
-      fc_clean: closest.fc_clean,
-      geneSymbol: closest.gene.symbol,
-      tissue: closest.model.sample.tissue.name,
-      index: closest.index,
-    });
-  };
-
-  const mouseOutOnCanvas = () => {
-    const guideX = refs.plotXguide.current;
-    const guideY = refs.plotYguide.current;
-    guideX.style.display = 'none';
-    guideY.style.display = 'none';
-
-    onHighlight(null);
-  };
-
-  d3
-    .select(refs.plotEventsContainer.current)
-    .on('mousemove', mouseMoveOnCanvas)
-    .on('mouseout', mouseOutOnCanvas);
-
-  // Brush
-  const brushLine = d3
-    .line()
-    .curve(d3.curveMonotoneX)
-    .x(d => xScaleBrush(d.index))
-    .y(d => yScaleBrush(d[attributeToPlot]));
-
-  d3
-    .select(refs.plotBrushContainer.current)
-    .selectAll('.handle--custom')
-    .remove();
-
-  const handle = d3
-    .select(refs.plotBrushContainer.current)
-    .selectAll('.handle--custom')
-    .data([{type: 'w'}, {type: 'e'}])
-    .enter()
-    .append('path')
-    .attr('class', 'handle--custom')
-    .attr('fill', '#AAAAAA')
-    .attr('fill-opacity', 0.8)
-    .attr('stroke', '#000000')
-    .attr('stroke-width', 1.5)
-    .attr('cursor', 'ew-resize')
-    .attr('d', d3.arc()
-      .innerRadius(0)
-      .outerRadius(config.brushOffset)
-      .startAngle(0)
-      .endAngle((d, i) => i ? Math.PI : -Math.PI)
-    );
-
-  d3
-    .select(refs.plotBrushContainer.current)
-    .select('rect.selection')
-    .attr('fill', '#AAAAAA');
-
-  // create brush function redraw scatterplot with selection
-  const brushed = () => {
-    const selection = d3.event.selection;
-    xScale.domain(selection.map(xScaleBrush.invert, xScaleBrush));
-    handle.attr(
-      'transform', (d, i) =>
-        'translate(' + selection[i] + ',' + config.brushHeight / 2 + ')'
-    );
-    plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy, highlightTissue);
-  };
-
-  const brush = d3
-    .brushX()
-    .extent([[0, 0], [containerWidth - config.marginLeft, config.brushHeight]])
-    .on('brush', brushed);
-
-  d3
-    .select(refs.plotBrushLine.current)
-    .datum(dataSortedWithIndex)
-    .attr('class', 'line')
-    .attr('d', brushLine);
-
-  d3
-    .select(refs.plotBrushContainer.current)
-    .call(brush)
-    .call(brush.move, xScale.range());
-
-  handle.raise();
-}
-
-
-function essentialitiesPlot(props) {
+function EssentialitiesPlot(props) {
   const config = {
     height: 300,
     marginTop: 50,
     marginLeft: 50,
-    brushHeight: 40,
-    brushOffset: 10,
-    insignificantNodeColor: '#758E4F',
-    significantNodeColor: '#EA5156',
-    nodeRadius: 3,
-    ctx: null,
-    xScale: null,
-    yScale: null,
-    xAxis: null,
+    significantField: 'bf_scaled',
   };
 
-  const refs = {
-    plotContainer: useRef(null),
-    plotBrush: useRef(null),
-    plotBrushLine: useRef(null),
-    plotBrushContainer: useRef(null),
-    plotCanvas: useRef(null),
-    plotSvg: useRef(null),
-    plotEventsContainer: useRef(null),
-    plotXguide: useRef(null),
-    plotYguide: useRef(null),
-    plotAxisBottom: useRef(null),
-    plotAxisLeft: useRef(null),
-    xAxisLabel: useRef(null),
-    yAxisLabel: useRef(null),
-    tooltip: useRef(null),
-  };
-
-  const {
-    colorBy,
-    attributeToPlot,
-    xAxisLabel,
-    highlight,
-    onHighlight,
-    highlightTissue,
-  } = props;
-
-  const resize = () => {
-    const container = refs.plotContainer.current;
-    setContainerWidth(container.offsetWidth);
-  };
+  const container = useRef(null);
 
   const [data, setData] = useState([]);
-  const [containerWidth, setContainerWidth] = useState(800);
   const [urlParams] = useUrlParams(props);
   const [loading, setLoading] = useState(false);
+  const [containerWidth, setContainerWidth] = useState(750);
+  const [xDomain, setXDomain] = useState(null);
+
+  const {attributeToPlot, highlight} = props;
+
+  const resize = () => setContainerWidth(container.current.offsetWidth);
 
   useEffect(() => {
     window.addEventListener('resize', resize);
-
+    resize();
     return () => window.removeEventListener('resize', resize);
   }, []);
+
 
   useEffect(() => {
     const params = {
@@ -244,263 +57,434 @@ function essentialitiesPlot(props) {
     fetchCrisprData(params)
       .then(resp => {
         setLoading(false);
-        resize();
-        setData(resp.data)
-      })
+        setData(sortData(resp.data));
+      });
   }, [urlParams.geneId, urlParams.modelId, urlParams.tissue, urlParams.scoreMin, urlParams.scoreMax]);
+
+
+  const sortData = data => {
+    const dataSorted = sortBy(data, rec => rec[attributeToPlot]);
+    return dataSorted.map((d, i) => ({...d, index: i}));
+  };
+
+  useEffect(() => {
+    setData(sortData(data));
+  }, [attributeToPlot]);
+
+  return (
+    <div ref={container}>
+      <Spinner loading={loading}>
+        {data.length && (
+          <div>
+            <EssentialitiesBrush
+              data={data}
+              width={containerWidth - config.marginLeft}
+              onRangeChanged={setXDomain}
+              marginLeft={config.marginLeft}
+              {...props}
+            />
+            <div style={{position: 'relative'}}>
+              {highlight && (<EssentialitiesTooltip
+                  xDomain={xDomain}
+                  data={data}
+                  width={containerWidth}
+                  height={config.height}
+                  marginLeft={config.marginLeft}
+                  marginTop={config.marginTop}
+                  {...props}
+                />
+              )}
+              <EssentialitiesCanvasPlot
+                data={data}
+                width={containerWidth}
+                height={config.height}
+                significantField={config.significantField}
+                xDomain={xDomain}
+                marginLeft={config.marginLeft}
+                marginTop={config.marginTop}
+                {...props}
+              />
+            </div>
+          </div>
+        )}
+      </Spinner>
+    </div>
+  );
+}
+
+export default withRouter(EssentialitiesPlot);
+
+
+function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged, marginLeft}) {
+  const height = 50;
+
+  const brushLineElement = useRef(null);
+  const [minRange, setMinRange] = useState(0);
+  const [maxRange, setMaxRange] = useState(data.length);
+
+  const yExtent = d3.extent(
+    data,
+    d => d[attributeToPlot],
+  );
+  const xScaleBrush = d3.scaleLinear()
+    .range([0, width])
+    .domain([0, data.length]);
+
+  const yScaleBrush = d3.scaleLinear()
+    .range([0, height])
+    .domain([yExtent[1], yExtent[0]]);
+
+  const brushLine = d3
+    .line()
+    .curve(d3.curveMonotoneX)
+    .x(d => xScaleBrush(d.index))
+    .y(d => yScaleBrush(d[attributeToPlot]));
+
+  useEffect(() => {
+    d3.select(brushLineElement.current)
+      .datum(data)
+      .attr('d', brushLine);
+  });
+
+  // With this code commented out, the brush does not reset the range after the data has changed (for example when filtering by tissue or score range)
+  // This may result in a bit weird behaviour when filtering by tissue and then removing the filtering.
+  // Uncomment this block to reset the brushing range with every data change (although that may come with other weirdness)
+  // useEffect(() => {
+  //   setMinRange(0);
+  //   setMaxRange(data.length);
+  //   onRangeChanged([0, data.length]);
+  // }, [data.length]);
+
+  const onChange = useCallback(newRange => {
+    setMinRange(newRange[0]);
+    setMaxRange(newRange[1]);
+    onRangeChanged(newRange)
+  });
+
+  return (
+    <div
+      style={{marginLeft: `${marginLeft}px`}}
+    >
+      <svg
+        height={height}
+        width={width}
+      >
+        <rect
+          x={xScaleBrush(minRange)}
+          y={0}
+          width={xScaleBrush(maxRange) - xScaleBrush(minRange)}
+          height={height}
+          fill='#EEEEEE'
+        />
+        <path
+          ref={brushLineElement}
+          style={{
+            fill: 'none',
+            stroke: '#003F83',
+            strokeWidth: '2px',
+          }}
+        />
+      </svg>
+      <Range
+        style={{
+          width,
+        }}
+        allowCross={false}
+        min={0}
+        max={data.length}
+        step={1}
+        defaultValue={[0, data.length]}
+        value={[minRange, maxRange]}
+        onChange={onChange}
+      />
+    </div>
+  );
+}
+
+
+function EssentialitiesTooltip(props) {
+  const {
+    highlight: nodeData,
+    data,
+    xDomain,
+    attributeToPlot,
+    width,
+    height,
+    marginLeft,
+    marginTop,
+  } = props;
+
+  const rowToNode = row => findIndex(
+    data,
+    d => {
+      return (d.model.names[0] === row.modelName) && (d.gene.id === row.geneId);
+    },
+  );
+
+  const index = nodeData.index || rowToNode(nodeData);
+
+  const {
+    geneSymbol,
+    modelName,
+    tissue,
+    fc_clean,
+    bf_scaled,
+  } = nodeData;
+
+  const yExtent = d3.extent(
+    data,
+    d => d[attributeToPlot],
+  );
+  const xScale = d3.scaleLinear()
+    .range([marginLeft, width])
+    .domain(xDomain || [0, data.length]);
+
+  const yScale = d3.scaleLinear()
+    .range([0, height - marginTop])
+    .domain([yExtent[1], yExtent[0]]);
+
+  const essentialityValue =
+    attributeToPlot === 'fc_clean' ?
+      fc_clean :
+      bf_scaled;
+
+  const x = xScale(index);
+  const y = yScale(essentialityValue);
+
+  return (
+    <Fragment>
+      <div
+        style={{
+          backgroundColor: '#FFFFFF',
+          borderRadius: '3px',
+          boxShadow: 'gray 0px 1px 2px',
+          padding: '0.3rem 0.5rem',
+          pointerEvents: 'none',
+          position: 'absolute',
+          whiteSpace: 'nowrap',
+          zIndex: 100,
+          left: `${x}px`,
+          top: `${y}px`,
+          display: 'block',
+        }}
+      >
+        Gene: <b>{geneSymbol}</b><br/>
+        Model: <b>{modelName}</b> ({tissue})<br/>
+        Corrected log fold change:<b>{fc_clean}</b><br/>
+        Loss of fitness score:<b>{bf_scaled}</b>
+      </div>
+      <div
+        style={{
+          border: '1px solid #EEEEEE',
+          width: '0.5px',
+          height: height,
+          position: 'absolute',
+          top: 0,
+          left: x,
+        }}
+      />
+      <div
+        style={{
+          border: '1px solid #EEEEEE',
+          width: width,
+          height: '0.5px',
+          position: 'absolute',
+          top: y,
+          left: 0,
+        }}
+      />
+    </Fragment>
+
+  );
+}
+
+function EssentialitiesCanvasPlot(props) {
+  const {
+    data,
+    width,
+    height,
+    colorBy,
+    attributeToPlot,
+    significantField,
+    xDomain,
+    onHighlight,
+    highlightTissue,
+    marginLeft,
+    marginTop,
+    xAxisLabel,
+  } = props;
+
+  const insignificantNodeColor = '#758E4F';
+  const significantNodeColor = '#EA5156';
+  const nodeRadius = 3;
+
+  const canvasPlot = useRef(null);
+  const eventsContainer = useRef(null);
+  const xAxisElement = useRef(null);
+  const yAxisElement = useRef(null);
+
+  const yExtent = d3.extent(
+    data,
+    d => d[attributeToPlot],
+  );
+  const xScale = d3.scaleLinear()
+    .range([marginLeft, width])
+    .domain(xDomain || [0, data.length]);
+
+  const yScale = d3.scaleLinear()
+    .range([0, height - marginTop])
+    .domain([yExtent[1], yExtent[0]]);
+
+  const quadTree = d3.quadtree(
+    data,
+    d => d.index,
+    d => d[attributeToPlot]
+  );
+
+
+  useEffect(() => {
+    const ctx = canvasPlot.current.getContext('2d');
+    ctx.clearRect(0, 0, width, height);
+
+    ctx.save();
+
+    data.forEach(dataPoint => {
+      if (highlightTissue && dataPoint.model.sample.tissue.name !== highlightTissue) {
+        return;
+      }
+
+      const dataPointColor = colorBy === 'tissue' ?
+        colors[dataPoint.model.sample.tissue.name] : (
+          dataPoint[significantField] < 0 ? significantNodeColor : insignificantNodeColor
+        );
+
+      const x = xScale(dataPoint.index);
+      const y = yScale(dataPoint[attributeToPlot]);
+
+      if (x >= marginLeft) {
+        ctx.beginPath();
+        ctx.arc(
+          x,
+          y,
+          nodeRadius,
+          0,
+          2 * Math.PI,
+          false,
+        );
+        ctx.fillStyle = dataPointColor;
+        ctx.fill();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = dataPointColor;
+        ctx.stroke();
+      }
+    });
+
+  }, [data, attributeToPlot, xDomain, highlightTissue, colorBy, width]);
+
+  const onMouseMove = useCallback(() => {
+    const ev = d3.event;
+    if (ev) {
+      const xMouse = xScale.invert(ev.offsetX + marginLeft);
+      const yMouse = yScale.invert(ev.offsetY);
+
+      const closest = quadTree.find(xMouse, yMouse);
+
+      onHighlight({
+        geneId: closest.gene.id,
+        modelName: closest.model.names[0],
+        bf_scaled: closest.bf_scaled,
+        fc_clean: closest.fc_clean,
+        geneSymbol: closest.gene.symbol,
+        tissue: closest.model.sample.tissue.name,
+        index: closest.index,
+      });
+    }
+  });
+
+  const onMouseOut = useCallback(() => {
+    onHighlight(null);
+  });
+
+  useEffect(() => {
+    d3.select(eventsContainer.current)
+      .on('mousemove', onMouseMove)
+      .on('mouseout', onMouseOut);
+  });
+
+  useEffect(() => {
+    const xAxis = d3.axisBottom(xScale).tickFormat(d3.format('.0f'));
+    const yAxis = d3.axisLeft(yScale);
+    const axisLeft = d3
+      .select(yAxisElement.current);
+    axisLeft.call(yAxis);
+
+    const axisBottom = d3
+      .select(xAxisElement.current);
+    // .attr('transform', `translate(${config.marginLeft},${config.height - config.marginTop})`);
+    axisBottom.call(xAxis);
+  });
 
   const yAxisLabel = attributeToPlot === 'fc_clean' ?
     FC_CLEAN_LABEL :
     LOSS_OF_FITNESS_SCORE_LABEL;
 
-  // Scales
-  const yExtent = d3.extent(
-    data,
-    d => d[attributeToPlot]
-  );
-
-  const xScale = d3
-    .scaleLinear()
-    .range([0, containerWidth - config.marginLeft])
-    .domain([0, data.length]);
-
-  const yScale = d3
-    .scaleLinear()
-    .range([0, config.height - config.marginTop])
-    .domain([yExtent[1], yExtent[0]]);
-
-  const xScaleBrush = d3
-    .scaleLinear()
-    .range([0, containerWidth - config.marginLeft])
-    .domain([0, data.length]);
-
-  const yScaleBrush = d3
-    .scaleLinear()
-    .range([0, config.brushHeight])
-    .domain([yExtent[1], yExtent[0]]);
-
-  const scales = {
-    xScale,
-    yScale,
-    xScaleBrush,
-    yScaleBrush,
-  };
-
-  const dataSorted = sortBy(data, rec => rec[attributeToPlot]);
-  const dataSortedWithIndex = dataSorted.map((d, i) => ({...d, index: i}));
-
-  useEffect(() => {
-    if (data.length) {
-      plotEssentialities(refs, attributeToPlot, dataSortedWithIndex, config, containerWidth, scales, colorBy, onHighlight, highlightTissue);
-      plotOnCanvas(containerWidth, attributeToPlot, config, refs, scales, dataSortedWithIndex, colorBy, highlightTissue);
-    }
-  }, [data.length, colorBy, attributeToPlot, containerWidth, highlightTissue]);
-
-    const showTooltip = (x, y, el, msg) => {
-    d3.select(el)
-      .html(msg)
-      .style('left', `${x}px`)
-      .style(`top`, `${y}px`)
-      .style(`display`, 'block')
-      .style('background-color', 'white');
-  };
-
-  const rowToNode = row => {
-    return findIndex(
-      dataSortedWithIndex,
-      d => {
-        return d.model.id === row.modelId &&
-          d.gene.id === row.geneId;
-      }
-    );
-  };
-
-  if (highlight && data.length) {
-    const nodeData = highlight;
-
-    const index = nodeData.index || rowToNode(nodeData);
-    const {
-      geneSymbol,
-      modelName,
-      tissue,
-      fc_clean,
-      bf_scaled,
-    } = nodeData;
-    const essentialityValue =
-      attributeToPlot === 'fc_clean' ?
-        fc_clean :
-        bf_scaled;
-
-    const guideX = refs.plotXguide.current;
-    const guideY = refs.plotYguide.current;
-
-    const guideXpos = xScale(index) + config.marginLeft;
-    const guideYpos = yScale(essentialityValue);
-
-    guideX.setAttribute('x1', guideXpos);
-    guideX.setAttribute('x2', guideXpos);
-    guideX.style.display = 'block';
-    guideY.setAttribute('y1', guideYpos);
-    guideY.setAttribute('y2', guideYpos);
-    guideY.style.display = 'block';
-
-    const msgTooltip = `Gene: <b>${geneSymbol}</b><br/>Model: <b>${modelName}</b> (${tissue})<br/>Corrected log fold change:<b>${fc_clean}</b><br/>Loss of fitness score:<b>${bf_scaled}</b>`;
-    showTooltip(guideXpos, guideYpos, refs.tooltip.current, msgTooltip);
-  } else {
-    d3.select(refs.tooltip.current)
-      .style('display', 'none');
-  }
 
   return (
-    <Fragment>
-      <Spinner
-        loading={loading}
+    <div>
+      <canvas
+        ref={canvasPlot}
+        className='topLevelContainer leaveSpace'
+        height={height}
+        width={width}
+      />
+      <svg
+        width={width}
+        height={height}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        }}
       >
-        <div
-          style={{
-            display: 'inline-block',
-            float: 'right',
-            marginLeft: '10px',
-            marginBottom: '10px'
-          }}
+        <g
+          ref={xAxisElement}
+          transform={`translate(0, ${height - marginTop})`}
+        />
+        <g
+          ref={yAxisElement}
+          transform={`translate(${marginLeft}, 0)`}
+        />
+
+        <text
+          x={0}
+          y={0}
+          textAnchor='middle'
+          transform={`translate(${(width / 2) + (marginLeft / 2)}, ${height - 10})`}
         >
-        </div>
+          {xAxisLabel}
+        </text>
 
-        <div
-          ref={refs.plotContainer}
-          id='plot-container'
+        <text
+          x={0}
+          y={0}
+          textAnchor='middle'
+          transform={`translate(15, ${(height / 2) - (marginTop / 2)}) rotate(-90)`}
         >
-          {/* Brush */}
-          <svg
-            className='brush-plot'
-            ref={refs.plotBrush}
-            style={{paddingLeft: '25px'}}
-            height={config.brushHeight}
-            width={containerWidth + config.brushOffset * 2 + 1}
-          >
-            <path
-              transform="translate(25, 0)"
-              ref={refs.plotBrushLine}
-              className="line"
-              style={{
-                fill: 'none',
-                stroke: '#003F83',
-                strokeWidth: '2px'
-              }}
-            />
-            <g
-              transform="translate(25, 0)"
-              ref={refs.plotBrushContainer}
-              className="brush"
-            />
-          </svg>
+          {yAxisLabel}
+        </text>
 
-
-          <div
-            className='essentialities-plot-container'
-          >
-            <canvas
-              ref={refs.plotCanvas}
-              className='toplevel-container leave-space'
-              height={config.height - config.marginTop}
-              width={containerWidth - config.marginLeft}
-            />
-
-            <svg
-              ref={refs.plotSvg}
-              className='toplevel-container'
-              height={config.height}
-              width={containerWidth}
-            >
-
-              <rect
-                ref={refs.plotEventsContainer}
-                x={config.marginLeft}
-                y={0}
-                width={containerWidth - config.marginLeft}
-                height={config.height - config.marginTop}
-              />
-
-              <line
-                ref={refs.plotXguide}
-                className='cross'
-                x1={0}
-                x2={0}
-                y1={0}
-                y2={config.height - config.marginTop}
-                style={{
-                  display: 'none',
-                  stroke: '#eeeeee',
-                  strokeWidth: '2px',
-                  pointerEvents: 'none'
-                }}
-              />
-
-              <line
-                ref={refs.plotYguide}
-                className='cross'
-                x1={config.marginLeft}
-                x2={containerWidth}
-                y1={0}
-                y2={0}
-                style={{
-                  display: 'none',
-                  stroke: '#eeeeee',
-                  strokeWidth: '2px',
-                  pointerEvents: 'none'
-                }}
-              />
-
-              <g
-                ref={refs.plotAxisBottom}
-              />
-
-              <g
-                ref={refs.plotAxisLeft}
-                transform={`translate(${config.marginLeft}, 0)`}
-              />
-
-              <text
-                ref={refs.xAxisLabel}
-                x={0}
-                y={0}
-                textAnchor='middle'
-                transform={`translate(${containerWidth / 2}, ${config.height - 10})`}
-              >
-                {xAxisLabel}
-              </text>
-
-              <text
-                ref={refs.yAxisLabel}
-                x={0}
-                y={0}
-                textAnchor='middle'
-                transform={`translate(15, ${config.height / 2}) rotate(-90)`}
-              >
-                {yAxisLabel}
-              </text>
-            </svg>
-
-            <div
-              ref={refs.tooltip}
-              style={{
-                backgroundColor: '#FFFFFF',
-                borderRadius: '3px',
-                boxShadow: 'gray 0px 1px 2px',
-                display: 'none',
-                padding: '0.3rem 0.5rem',
-                pointerEvents: 'none',
-                position: 'absolute',
-                whiteSpace: 'nowrap',
-                zIndex: 100
-              }}
-            />
-
-          </div>
-        </div>
-      </Spinner>
-    </Fragment>
-  )
+      </svg>
+      <div
+        ref={eventsContainer}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: marginLeft,
+          width: width - marginLeft,
+          height: height - marginTop,
+        }}
+        onMouseMove={onMouseMove}
+      />
+    </div>
+  );
 }
-
-export default withRouter(essentialitiesPlot);
