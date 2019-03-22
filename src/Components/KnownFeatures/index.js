@@ -28,19 +28,17 @@ function KnownFeatures({features}) {
           );
         })}
       </div>
-      {features.map(({label, id, text}) => {
-        return (
-          <Tooltip
-            key={id}
-            placement='top'
-            isOpen={tooltipsOpenState[id]}
-            target={id}
-            toggle={() => toggleTooltipForFeature(id)}
-          >
-            {text}
-          </Tooltip>
-        )
-      })}
+      {features.map(({label, id, text}) => (
+        <Tooltip
+          key={id}
+          placement='top'
+          isOpen={tooltipsOpenState[id]}
+          target={id}
+          toggle={() => toggleTooltipForFeature(id)}
+        >
+          {text}
+        </Tooltip>
+      ))}
     </Fragment>
   );
 }

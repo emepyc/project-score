@@ -1,17 +1,51 @@
 import {get} from './api';
 import axios from 'axios';
+import groupBy from 'lodash/groupBy';
+import uniqBy from 'lodash/uniqBy';
+import sortBy from 'lodash/sortBy';
 import Desearialiser from 'deserialise-jsonapi';
 
 const deserialiser = new Desearialiser();
 
 const modelInfoParams = {
-  include: 'identifiers,sample,sample.tissue,sample.cancer_type',
+  include: 'identifiers,sample,sample.tissue,sample.cancer_type,files',
   'fields[sample]': 'tissue,cancer_type',
 };
 
 const cancerDriverParams = {
   include: 'gene',
 };
+
+function parseDatasets(files) {
+  const availableDatasets = groupBy(files, file => file.meta.data_type_abbr);
+  return [
+    {
+      label: "Copy Number Variation",
+      modelHasDataset: availableDatasets.CNV !== undefined,
+      abbreviation: "CNV",
+    },
+    {
+      label: "DNA Methylation",
+      modelHasDataset: availableDatasets.MET !== undefined,
+      abbreviation: "MET",
+    },
+    {
+      label: "Microarray Gene Expression",
+      modelHasDataset: availableDatasets.MGE !== undefined,
+      abbreviation: "MGE",
+    },
+    {
+      label: "RNAseq",
+      modelHasDataset: availableDatasets.RNA !== undefined,
+      abbreviation: "RNA",
+    },
+    {
+      label: "Whole Exome Sequencing",
+      modelHasDataset: availableDatasets.WES !== undefined,
+      abbreviation: "WES",
+    }
+  ];
+}
 
 function processResponses(modelInfo, cancerDrivers) {
   return {
@@ -20,11 +54,17 @@ function processResponses(modelInfo, cancerDrivers) {
     msiStatus: modelInfo.msi_status,
     ploidy: modelInfo.ploidy,
     mutationsPerMb: modelInfo.mutations_per_mb,
-    drivers: cancerDrivers.map(driver => ({
-      symbol: driver.gene.symbol,
-      id: driver.gene.id,
-      hasEssentialityProfiles: driver.gene.essentiality_profiles.length > 0,
-    })),
+    drivers: sortBy(
+      uniqBy(
+        cancerDrivers.map(driver => ({
+          symbol: driver.gene.symbol,
+          id: driver.gene.id,
+          hasEssentialityProfiles: driver.gene.essentiality_profiles.length > 0,
+        })), cancerDriver => cancerDriver.symbol
+      ), ['symbol'], ['asc']
+    ),
+    datasets: parseDatasets(modelInfo.files),
+    id: modelInfo.id,
   }
 }
 

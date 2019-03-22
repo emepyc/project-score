@@ -14,10 +14,10 @@ function Model() {
       <ModelInfoSummary/>
 
       <Row className='my-3'>
-        <Col className="my-3" lg={{size: 8}} xs={{size: 12}}>
+        <Col className="my-3" lg={{size: 10}} md={{size: 8}}  xs={{size: 12}}>
           <ModelInfoDetails/>
         </Col>
-        <Col className="my-3" lg={{size: 4}} xs={{size: 12}}>
+        <Col className="my-3" lg={{size: 2}} md={{size: 4}} xs={{size: 12}}>
           <Filters />
         </Col>
       </Row>
