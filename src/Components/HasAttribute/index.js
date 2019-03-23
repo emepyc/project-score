@@ -3,8 +3,8 @@ import React from 'react';
 export default function HasAttribute({attribute}) {
   const fontSize = attribute ? '1.2rem' : '1rem';
   const color = attribute ? 'white' : 'grey';
-  const backgroundColor = attribute ? '#EA5156' : 'white';
-  const borderColor = attribute ? '#EA5156' : '#5ba633';
+  const backgroundColor = attribute ? '#5ba633' : 'white';
+  const borderColor = '#5ba633';
   const attributeLabel = attribute ? 'Yes' : 'No';
   const attributeElement = attribute ? (
     <b>{attributeLabel}</b>
