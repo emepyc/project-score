@@ -180,7 +180,7 @@ function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged, marg
           ref={brushLineElement}
           style={{
             fill: 'none',
-            stroke: '#003F83',
+            stroke: '#5ba633',
             strokeWidth: '2px',
           }}
         />
@@ -314,8 +314,8 @@ function EssentialitiesCanvasPlot(props) {
     xAxisLabel,
   } = props;
 
-  const insignificantNodeColor = '#758E4F';
-  const significantNodeColor = '#EA5156';
+  const insignificantNodeColor = '#CCCCCC';
+  const significantNodeColor = '#5ba633';
   const nodeRadius = 3;
 
   const canvasPlot = useRef(null);
@@ -420,7 +420,6 @@ function EssentialitiesCanvasPlot(props) {
 
     const axisBottom = d3
       .select(xAxisElement.current);
-    // .attr('transform', `translate(${config.marginLeft},${config.height - config.marginTop})`);
     axisBottom.call(xAxis);
   });
 

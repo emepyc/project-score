@@ -2,13 +2,13 @@
 
 .rc-slider {
   .rc-slider-rail {
-    background-color: #c8ebc7;
+    background-color: $green-2;
   }
   .rc-slider-track {
-    background-color: #5ba633;
+    background-color: $green-1;
   }
   .rc-slider-handle {
-    border-color: #5ba633;
+    border-color: $green-1;
   }
 }
 
@@ -18,6 +18,6 @@
   border-radius: 5px;
   margin: 0.4em 0.2em;
   &.significantScore {
-    background-color: $color-significant-bg;
+    background-color: $green-3;
   }
 }

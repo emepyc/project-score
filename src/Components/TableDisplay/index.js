@@ -58,7 +58,7 @@ function TableDisplay(props) {
         {data.map(row => {
           const key = getKeyForRow(row);
           const backgroundColor = keyForHighlightedNode === key ? '#eeeeee' : (
-            row.bf_scaled < 0 ? '#FDEFEF' : '#FFFFFF'
+            row.bf_scaled < 0 ? '#EFF6EB' : '#FFFFFF'
           );
           return (
             <tr
