@@ -26,7 +26,7 @@ function GeneSummaryPlots(props) {
         setTotalNumberOfTissues(gene.numberOfTotalTissues);
         setLoading(false);
       });
-  }, []);
+  }, [urlParams.geneId]);
 
   const essentialModelsSuffix = numberOfEssentialModels === 1 ? '' : 's';
   const essentialTissuesSuffix = totalNumberOfTissues === 1 ? '' : 's';

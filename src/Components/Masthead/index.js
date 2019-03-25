@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import cancer_dep_map from './DependencyMapLogo.png';
-// import Searchbox from '../Searchbox';
+import Searchbox from '../Searchbox';
 import './masthead.scss';
 import sangerLogo from './SangerLogo.png';
 
@@ -56,9 +56,9 @@ const Masthead = () => {
             </NavLink>
           </header>
         </div>
-        {/*<div className="d-none d-lg-inline-block my-auto" style={{width: '250px'}}>*/}
-          {/*{window.location.pathname !== '/' && <Searchbox placeholder='Search...'/>}*/}
-        {/*</div>*/}
+        <div className="d-none d-lg-inline-block my-auto" style={{width: '250px'}}>
+          {window.location.pathname !== '/' && <Searchbox placeholder='Search...'/>}
+        </div>
       </div>
     </nav>
   );

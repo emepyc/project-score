@@ -32,7 +32,7 @@ function GeneInfoSummary(props) {
         setIsRibosomal(geneInfo.isRibosomal);
         setIsSpliceosome(geneInfo.isSpliceosome);
       });
-  }, []);
+  }, [urlParams.geneId]);
 
   return (
     <Spinner loading={loading}>

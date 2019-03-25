@@ -19,7 +19,7 @@ function ModelInfoSummary(props) {
         setModelName(modelInfo.names[0]);
         setGrowProperties(modelInfo.growthProperties);
       });
-  }, []);
+  }, [urlParams.modelId]);
 
   return (
     <Spinner loading={loading}>

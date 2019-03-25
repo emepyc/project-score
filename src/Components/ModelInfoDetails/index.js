@@ -35,7 +35,7 @@ function ModelInfoSummary(props) {
         setDatasets(modelInfo.datasets);
         setModelId(modelInfo.modelId);
       });
-  }, []);
+  }, [urlParams.modelId]);
 
   return (
     <Spinner loading={loading}>
