@@ -3,7 +3,6 @@ import AsyncSelect from 'react-select/lib/Async';
 import debounce from 'debounce-promise';
 import {withRouter} from 'react-router-dom';
 import Spinner from '../Spinner';
-
 import {search} from '../../api';
 
 const groupStyles = {
@@ -45,7 +44,7 @@ const _loadSuggestions = (inputValue, callback) => search(inputValue)
 
 const loadSuggestions = debounce(_loadSuggestions, 500, {leading: true});
 
-function Searchbox({history}) {
+function Searchbox({placeholder="Search for a gene, cell line or tissue", history}) {
   const onChange = value => {
     if (!value) {
       return;
@@ -78,7 +77,7 @@ function Searchbox({history}) {
   return (
     <AsyncSelect
       loadOptions={loadSuggestions}
-      placeholder="Search for a gene, cell line or tissue"
+      placeholder={placeholder}
       onChange={onChange}
       isClearable
       formatOptionLabel={formatOptionLabel}
