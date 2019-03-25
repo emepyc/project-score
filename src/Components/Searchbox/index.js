@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 import debounce from 'debounce-promise';
 import {withRouter} from 'react-router-dom';
@@ -45,7 +45,11 @@ const _loadSuggestions = (inputValue, callback) => search(inputValue)
 const loadSuggestions = debounce(_loadSuggestions, 500, {leading: true});
 
 function Searchbox({placeholder="Search for a gene, cell line or tissue", history}) {
+  // const [inputValue, setInputValue] = useState("");
+
   const onChange = value => {
+    console.log('changed value...');
+    console.log(value);
     if (!value) {
       return;
     }
@@ -74,8 +78,14 @@ function Searchbox({placeholder="Search for a gene, cell line or tissue", histor
     </div>
   );
 
+  // const onInputChange = value => {
+  //   console.log(value);
+  //   setInputValue(value);
+  // };
+
   return (
     <AsyncSelect
+      // value={inputValue}
       loadOptions={loadSuggestions}
       placeholder={placeholder}
       onChange={onChange}
@@ -83,6 +93,7 @@ function Searchbox({placeholder="Search for a gene, cell line or tissue", histor
       formatOptionLabel={formatOptionLabel}
       formatGroupLabel={formatGroupLabel}
       components={{LoadingMessage}}
+      // onInputChange={onInputChange}
     >
     </AsyncSelect>
   );
