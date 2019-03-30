@@ -16,7 +16,7 @@ const cancerDriverParams = {
   include: 'gene',
 };
 
-function parseDatasets(files) {
+function parseDatasets({datasetFiles: files, drugDataAvailable}) {
   const availableDatasets = groupBy(files, file => file.meta.data_type_abbr);
   return [
     {
@@ -35,15 +35,20 @@ function parseDatasets(files) {
       abbreviation: "MGE",
     },
     {
-      label: "RNAseq",
-      modelHasDataset: availableDatasets.RNA !== undefined,
-      abbreviation: "RNA",
+      label: "Drug Sensitivity Data",
+      modelHasDataset: drugDataAvailable,
+      abbreviation: "DRUG",
     },
     {
       label: "Whole Exome Sequencing",
       modelHasDataset: availableDatasets.WES !== undefined,
       abbreviation: "WES",
-    }
+    },
+    {
+      label: "RNAseq",
+      modelHasDataset: availableDatasets.RNA !== undefined,
+      abbreviation: "RNA",
+    },
   ];
 }
 
@@ -63,7 +68,10 @@ function processResponses(modelInfo, cancerDrivers) {
         })), cancerDriver => cancerDriver.symbol
       ), ['symbol'], ['asc']
     ),
-    datasets: parseDatasets(modelInfo.files),
+    datasets: parseDatasets({
+      datasetFiles: modelInfo.files,
+      drugDataAvailable: modelInfo.drugs_available,
+    }),
     id: modelInfo.id,
   }
 }
@@ -71,6 +79,26 @@ function processResponses(modelInfo, cancerDrivers) {
 export default function fetchModelInfo(modelId) {
   const modelInfoPromise = get(`/models/${modelId}`, modelInfoParams)
     .then(resp => deserialiser.deserialise(resp.data));
+    // .then(modelInfo => {
+    //   const cosmicIdObject = modelInfo.identifiers.filter(identifier =>
+    //     identifier.source.name === 'COSMIC_ID' && identifier.source.public && identifier.source.url_format
+    //   )[0];
+    //   if (cosmicIdObject) {
+    //     const cosmicId = cosmicIdObject.identifier;
+    //     return axios.get(`https://www.cancerrxgene.org/api/drugs_response?cosmic_id=${cosmicId}`)
+    //       .then(cosmicResp => {
+    //         return {
+    //           ...modelInfo,
+    //           drugDataAvailable: cosmicResp.data.drug_data_available,
+    //           drugDataLink: cosmicResp.data.link,
+    //         }
+    //       })
+    //   } else {
+    //     return new Promise((resolve) => {
+    //       resolve(modelInfo);
+    //     })
+    //   }
+    // });
   const cancerDriversPromise = get(`/models/${modelId}/datasets/cancer_drivers`, cancerDriverParams)
     .then(resp => deserialiser.deserialise(resp.data));
 

@@ -29,11 +29,11 @@ function ModelInfoSummary(props) {
         setTissue(modelInfo.tissue);
         setCancerType(modelInfo.cancerType);
         setMsiStatus(modelInfo.msiStatus);
-        setPloidy(modelInfo.ploidy.toFixed(3));
-        setMutationsPerMb(modelInfo.mutationsPerMb.toFixed(3));
+        setPloidy(modelInfo.ploidy ? modelInfo.ploidy.toFixed(3) : 'N/A');
+        setMutationsPerMb(modelInfo.mutationsPerMb ? modelInfo.mutationsPerMb.toFixed(3) : 'N/A');
         setDriverGenes(modelInfo.drivers);
         setDatasets(modelInfo.datasets);
-        setModelId(modelInfo.modelId);
+        setModelId(modelInfo.id);
       });
   }, [urlParams.modelId]);
 
@@ -103,7 +103,6 @@ function ModelDatasets({datasets, modelId}) {
       ...tooltipsOpenState,
       [abbreviation]: !tooltipsOpenState[abbreviation],
     });
-
 
   return (
     <Fragment>
