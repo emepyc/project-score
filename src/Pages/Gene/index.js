@@ -73,7 +73,7 @@ function EssentialitiesSection() {
 }
 
 function EssentialitiesPlotSection(props) {
-  const [colorBy, setColorBy] = useState("score");
+  const [colorBy, setColorBy] = useState("significance");
   const [attributeToPlot, setAttributeToPlot] = useState("fc_clean");
   const [highlightTissue, setHighlightTissue] = useState(null);
 
@@ -125,11 +125,11 @@ function EssentialitiesPlotSection(props) {
                     className='ml-auto'
                   >
                     <Button
-                      active={colorBy === "score"}
-                      outline={colorBy !== "score"}
-                      onClick={() => setColorBy("score")}
+                      active={colorBy === "significance"}
+                      outline={colorBy !== "significance"}
+                      onClick={() => setColorBy("significance")}
                     >
-                      Color by score
+                      Colour by significance
                     </Button>
                     <Button
                       active={colorBy === "tissue"}
