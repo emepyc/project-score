@@ -79,6 +79,7 @@ function processResponses(modelInfo, cancerDrivers) {
 export default function fetchModelInfo(modelId) {
   const modelInfoPromise = get(`/models/${modelId}`, modelInfoParams)
     .then(resp => deserialiser.deserialise(resp.data));
+    // TODO: This code looks for the drug data in the cancerrxgene.org api. I think it is not needed because we can know if there is data directly from the models passport response (drugs_available field). But it may not be the same thing?
     // .then(modelInfo => {
     //   const cosmicIdObject = modelInfo.identifiers.filter(identifier =>
     //     identifier.source.name === 'COSMIC_ID' && identifier.source.public && identifier.source.url_format
