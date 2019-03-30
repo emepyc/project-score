@@ -15,8 +15,8 @@ const header = () => {
       </div>
       <p className="lead">Genetic screens to identify cancer dependencies</p>
       <p className="my-2" style={{textAlign: 'center'}}>
-        Project Score uses CRISPR-Cas9 whole-genome drop out screens to identify dependencies in cancer cells to help
-        guide development of precision cancer medicines.
+        We are using CRISPR-Cas9 whole-genome drop out screens to identify dependencies in cancer cells to help guide
+        precision cancer medicines.
       </p>
     </div>
   );
