@@ -427,6 +427,7 @@ function EssentialitiesCanvasPlot(props) {
     FC_CLEAN_LABEL :
     LOSS_OF_FITNESS_SCORE_LABEL;
 
+  const zeroY = yScale(0);
 
   return (
     <div>
@@ -445,6 +446,7 @@ function EssentialitiesCanvasPlot(props) {
           left: 0,
         }}
       >
+        <line x1={marginLeft} x2={width} y1={zeroY} y2={zeroY} strokeDasharray='5,5' stroke='#CCCCCC'/>
         <g
           ref={xAxisElement}
           transform={`translate(0, ${height - marginTop})`}
