@@ -1,5 +1,6 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faBullseye, faClock} from '@fortawesome/free-solid-svg-icons'
+// import {faBullseye, faClock} from '@fortawesome/free-solid-svg-icons'
+import {faClock} from '@fortawesome/free-solid-svg-icons'
 import React, {useState, useEffect} from 'react';
 
 import {fetchTissues} from '../../api';
@@ -24,7 +25,7 @@ function TissuesSummaryDescription() {
   }, []);
 
   return (
-    <div style={{martinTop: '30px'}}>
+    <div style={{martinTop: '20px'}}>
 
       <div className="sectionDescription" style={{marginLeft: '5px'}}>
           <img
@@ -64,21 +65,21 @@ function TissuesSummaryDescription() {
         </span>
       </div>
 
-      <div className="sectionDescription">
-        <FontAwesomeIcon
-          icon={faBullseye}
-          fixedWidth
-          style={{
-            fontSize: '2.7em',
-            color: '#0061a5',
-            marginRight: '15px',
-            verticalAlign: 'middle',
-          }}
-        />
-        <span>
-          497 unique priority targets
-        </span>
-      </div>
+      {/*<div className="sectionDescription">*/}
+        {/*<FontAwesomeIcon*/}
+          {/*icon={faBullseye}*/}
+          {/*fixedWidth*/}
+          {/*style={{*/}
+            {/*fontSize: '2.7em',*/}
+            {/*color: '#0061a5',*/}
+            {/*marginRight: '15px',*/}
+            {/*verticalAlign: 'middle',*/}
+          {/*}}*/}
+        {/*/>*/}
+        {/*<span>*/}
+          {/*497 unique priority targets*/}
+        {/*</span>*/}
+      {/*</div>*/}
 
       <div className="sectionDescription">
         <FontAwesomeIcon
