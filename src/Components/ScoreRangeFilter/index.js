@@ -9,7 +9,7 @@ import Spinner from '../Spinner';
 import classNames from 'classnames';
 
 function ScoreRangeFilter(props) {
-  const [urlParams, , setUrlParams] = useUrlParams(props, 500);
+  const [urlParams, , setUrlParams] = useUrlParams(props);
 
   const [scoreMin, setScoreMin] = useState(urlParams.scoreMin);
   const [scoreMax, setScoreMax] = useState(urlParams.scoreMax);

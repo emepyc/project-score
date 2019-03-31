@@ -28,7 +28,7 @@ const _deferredSetUrlParams = debounce(_setUrlParams, 500);
 
 
 function useUrlParams(props) {
-  const {tissue, scoreMin, scoreMax} = qs.parse(props.location.search);
+  const {tissue, scoreMin, scoreMax, excludePanCancerGenes} = qs.parse(props.location.search);
   const {geneId, modelId} = props.match.params;
 
   const urlParams = {
@@ -37,6 +37,7 @@ function useUrlParams(props) {
     scoreMax,
     geneId,
     modelId,
+    excludePanCancerGenes,
   };
 
   const setUrlParams = (newParams) =>

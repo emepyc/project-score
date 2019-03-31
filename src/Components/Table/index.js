@@ -49,6 +49,7 @@ function Table(props) {
     const params = {
       geneId: urlParams.geneId,
       modelId: urlParams.modelId,
+      excludePanCancerGenes: urlParams.excludePanCancerGenes,
       sort,
       sortDirection,
       pageSize,

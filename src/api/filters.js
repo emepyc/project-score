@@ -21,6 +21,22 @@ export function expandTissueFilter(tissue) {
   };
 }
 
+export function expandExcludePanCancerGenesFilter() {
+  return {
+    name: 'gene',
+    op: 'has',
+    val: {
+      name: 'essentiality_profiles',
+      op: 'has',
+      val: {
+        name: 'core_fitness_pancar',
+        op: 'eq',
+        val: true,
+      }
+    }
+  };
+}
+
 export function expandGeneFilter(geneId) {
   return {
     name: 'gene',
