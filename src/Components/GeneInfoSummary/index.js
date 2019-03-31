@@ -9,10 +9,10 @@ import Spinner from '../Spinner';
 function GeneInfoSummary(props) {
   const [geneNames, setGeneNames] = useState([]);
   const [geneIdentifiers, setGeneIdentifiers] = useState([]);
-  const [isTumourSuppressor, setIsTumourSuppressor] = useState(false);
+  // const [isTumourSuppressor, setIsTumourSuppressor] = useState(false);
   const [isRibosomal, setIsRibosomal] = useState(false);
   const [isProteasome, setIsProteasome] = useState(false);
-  const [isRnaPolymerase, setIsRnaPolymerase] = useState(false);
+  // const [isRnaPolymerase, setIsRnaPolymerase] = useState(false);
   const [isSpliceosome, setIsSpliceosome] = useState(false);
   const [geneSymbol, setGeneSymbol] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,9 +26,9 @@ function GeneInfoSummary(props) {
         setGeneIdentifiers(geneInfo.identifiers);
         setGeneNames(geneInfo.names);
         setGeneSymbol(geneInfo.symbol);
-        setIsTumourSuppressor(geneInfo.isTumourSuppressor);
+        // setIsTumourSuppressor(geneInfo.isTumourSuppressor);
         setIsProteasome(geneInfo.isProteasome);
-        setIsRnaPolymerase(geneInfo.isRnaPolymerase);
+        // setIsRnaPolymerase(geneInfo.isRnaPolymerase);
         setIsRibosomal(geneInfo.isRibosomal);
         setIsSpliceosome(geneInfo.isSpliceosome);
       });
@@ -42,18 +42,18 @@ function GeneInfoSummary(props) {
         symbol={geneSymbol}
         features={
           [
-            {
-              label: 'Tumour suppressor',
-              value: isTumourSuppressor,
-              id: 'isTumourSuppressor',
-              text: `${geneSymbol} is ${isTumourSuppressor ? '' : 'not'} a tumour suppressor gene`,
-            },
-            {
-              label: 'Rna polymerase',
-              value: isRnaPolymerase,
-              id: 'isRnaPolymerase',
-              text: `${geneSymbol} does ${isRnaPolymerase ? '' : 'not'} encode for a RNA polymerase protein`,
-            },
+            // {
+            //   label: 'Tumour suppressor',
+            //   value: isTumourSuppressor,
+            //   id: 'isTumourSuppressor',
+            //   text: `${geneSymbol} is ${isTumourSuppressor ? '' : 'not'} a tumour suppressor gene`,
+            // },
+            // {
+            //   label: 'Rna polymerase',
+            //   value: isRnaPolymerase,
+            //   id: 'isRnaPolymerase',
+            //   text: `${geneSymbol} does ${isRnaPolymerase ? '' : 'not'} encode for a RNA polymerase protein`,
+            // },
             {
               label: 'Ribosomal',
               value: isRibosomal,
