@@ -9,7 +9,7 @@ import Spinner from '../Spinner';
 import classNames from 'classnames';
 
 function ScoreRangeFilter(props) {
-  const [urlParams, , setUrlParams] = useUrlParams(props, 500);
+  const [urlParams, , setUrlParams] = useUrlParams(props);
 
   const [scoreMin, setScoreMin] = useState(urlParams.scoreMin);
   const [scoreMax, setScoreMax] = useState(urlParams.scoreMax);
@@ -30,6 +30,7 @@ function ScoreRangeFilter(props) {
       tissue: urlParams.tissue,
       geneId: urlParams.geneId,
       modelId: urlParams.modelId,
+      excludePanCancerGenes: urlParams.excludePanCancerGenes,
     };
     setLoading(true);
     fetchScoreExtent(params)
@@ -37,7 +38,12 @@ function ScoreRangeFilter(props) {
         setScoreExtent([newScoreExtent.min, newScoreExtent.max]);
         setLoading(false)
       });
-  }, [urlParams.tissue, urlParams.geneId, urlParams.modelId]);
+  }, [
+    urlParams.tissue,
+    urlParams.geneId,
+    urlParams.modelId,
+    urlParams.excludePanCancerGenes,
+  ]);
 
   if (!scoreExtent) {
     return (

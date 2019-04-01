@@ -7,6 +7,7 @@ import ModelInfoDetails from '../../Components/ModelInfoDetails';
 import {Card, CardBody, CardHeader} from 'reactstrap';
 import {Button} from "../../Components/Buttom";
 import EssentialitiesPlot from "../../Components/EssentialitiesPlot";
+import PanCangerGeneFilter from "../../Components/PanCancerGeneFilter";
 
 function Model() {
   return (
@@ -14,10 +15,10 @@ function Model() {
       <ModelInfoSummary/>
 
       <Row className='my-3'>
-        <Col className="my-3" lg={{size: 10}} md={{size: 8}}  xs={{size: 12}}>
+        <Col className="my-3" lg={{size: 8}} md={{size: 6}}  xs={{size: 12}}>
           <ModelInfoDetails/>
         </Col>
-        <Col className="my-3" lg={{size: 2}} md={{size: 4}} xs={{size: 12}}>
+        <Col className="my-3" lg={{size: 4}} md={{size: 6}} xs={{size: 12}}>
           <Filters />
         </Col>
       </Row>
@@ -36,6 +37,9 @@ function Filters() {
       </CardHeader>
       <CardBody>
         <Row>
+          <Col>
+            <PanCangerGeneFilter/>
+          </Col>
           <Col>
             <ScoreRangeFilter/>
           </Col>

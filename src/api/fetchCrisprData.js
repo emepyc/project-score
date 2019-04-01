@@ -6,6 +6,7 @@ import {
   expandGeneFilter,
   expandModelFilter,
   expandSearchFilter,
+  expandExcludePanCancerGenesFilter,
   combineFilters,
 } from "./filters";
 
@@ -14,6 +15,10 @@ const deserialiser = new Deserialiser();
 function normaliseParams(params) {
   const geneFilter = params.geneId ?
     expandGeneFilter(params.geneId) :
+    null;
+
+  const excludePanCancerGenes = +params.excludePanCancerGenes ?
+    expandExcludePanCancerGenesFilter() :
     null;
 
   const modelFilter = params.modelId ?
@@ -41,6 +46,7 @@ function normaliseParams(params) {
     searchFilter,
     tissueFilter,
     scoreRangeFilter,
+    excludePanCancerGenes,
   ]);
 
   const sort = params.sort || 'fc_clean';
@@ -49,11 +55,12 @@ function normaliseParams(params) {
   return {
     'page[number]': params.pageNumber,
     'page[size]': params.pageSize,
-    include: "gene,model,model.sample.tissue",
+    include: "gene,gene.essentiality_profiles,model,model.sample.tissue",
     filter: combinedFilters,
     sort: `${sortDirection === -1 ? '-' : ''}${sort}`,
     'fields[crispr_ko]': 'bf_scaled,fc_clean,gene,model',
-    'fields[gene]': 'symbol',
+    'fields[gene]': 'symbol,essentiality_profiles',
+    'fields[essentiality_profile]': 'core_fitness_pancan',
     'fields[model]': 'sample,names',
     'fields[sample]': 'tissue',
     'fields[tissue]': 'name',
@@ -65,8 +72,8 @@ export default function fetchCrisprData(params) {
   return get('/datasets/crispr_ko', paramsNormalised)
     .then(resp => deserialiser.deserialise(resp.data)
         .then(deserialisedData => ({
-          count: resp.data.meta.count,
-          data: deserialisedData,
+            count: resp.data.meta.count,
+            data: deserialisedData,
         }))
     );
 }

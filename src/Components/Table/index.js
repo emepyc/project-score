@@ -49,6 +49,7 @@ function Table(props) {
     const params = {
       geneId: urlParams.geneId,
       modelId: urlParams.modelId,
+      excludePanCancerGenes: urlParams.excludePanCancerGenes,
       sort,
       sortDirection,
       pageSize,
@@ -77,6 +78,7 @@ function Table(props) {
     urlParams.tissue,
     urlParams.scoreMin,
     urlParams.scoreMax,
+    urlParams.excludePanCancerGenes,
   ]);
 
   const isFirstPage = pageNumber === 1;

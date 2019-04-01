@@ -49,6 +49,7 @@ function EssentialitiesPlot(props) {
       tissue: urlParams.tissue,
       scoreMin: urlParams.scoreMin,
       scoreMax: urlParams.scoreMax,
+      excludePanCancerGenes: urlParams.excludePanCancerGenes,
       pageSize: 0,
     };
 
@@ -59,7 +60,14 @@ function EssentialitiesPlot(props) {
         setLoading(false);
         setData(sortData(resp.data));
       });
-  }, [urlParams.geneId, urlParams.modelId, urlParams.tissue, urlParams.scoreMin, urlParams.scoreMax]);
+  }, [
+    urlParams.geneId,
+    urlParams.modelId,
+    urlParams.tissue,
+    urlParams.scoreMin,
+    urlParams.scoreMax,
+    urlParams.excludePanCancerGenes,
+  ]);
 
 
   const sortData = data => {
@@ -149,11 +157,12 @@ function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged, marg
   // With this code commented out, the brush does not reset the range after the data has changed (for example when filtering by tissue or score range)
   // This may result in a bit weird behaviour when filtering by tissue and then removing the filtering.
   // Uncomment this block to reset the brushing range with every data change (although that may come with other weirdness)
-  // useEffect(() => {
-  //   setMinRange(0);
-  //   setMaxRange(data.length);
-  //   onRangeChanged([0, data.length]);
-  // }, [data.length]);
+  // Now uncommented!! (comment out to reverse)
+  useEffect(() => {
+    setMinRange(0);
+    setMaxRange(data.length);
+    onRangeChanged([0, data.length]);
+  }, [data.length]);
 
   const onChange = useCallback(newRange => {
     setMinRange(newRange[0]);
