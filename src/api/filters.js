@@ -27,11 +27,11 @@ export function expandExcludePanCancerGenesFilter() {
     op: 'has',
     val: {
       name: 'essentiality_profiles',
-      op: 'has',
+      op: 'any',
       val: {
-        name: 'core_fitness_pancar',
+        name: 'core_fitness_pancan',
         op: 'eq',
-        val: true,
+        val: false,
       }
     }
   };

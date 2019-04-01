@@ -3,12 +3,16 @@ import {
   expandTissueFilter,
   expandGeneFilter,
   expandModelFilter,
-  combineFilters,
+  combineFilters, expandExcludePanCancerGenesFilter,
 } from './filters';
 
 function normaliseParams(params) {
   const tissueFilter = params.tissue ?
     expandTissueFilter(params.tissue) :
+    null;
+
+  const excludePanCancerGenes = +params.excludePanCancerGenes ?
+    expandExcludePanCancerGenesFilter() :
     null;
 
   const geneFilter = params.geneId ?
@@ -23,6 +27,7 @@ function normaliseParams(params) {
     tissueFilter,
     geneFilter,
     modelFilter,
+    excludePanCancerGenes,
   ]);
 
   return {

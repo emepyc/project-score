@@ -17,7 +17,7 @@ function normaliseParams(params) {
     expandGeneFilter(params.geneId) :
     null;
 
-  const excludePanCancerGenes = params.excludePanCancerGenes ?
+  const excludePanCancerGenes = +params.excludePanCancerGenes ?
     expandExcludePanCancerGenesFilter() :
     null;
 
@@ -52,9 +52,6 @@ function normaliseParams(params) {
   const sort = params.sort || 'fc_clean';
   const sortDirection = params.sortDirection || 1;
 
-  console.log('combined filters...');
-  console.log(combinedFilters);
-
   return {
     'page[number]': params.pageNumber,
     'page[size]': params.pageSize,
@@ -62,7 +59,8 @@ function normaliseParams(params) {
     filter: combinedFilters,
     sort: `${sortDirection === -1 ? '-' : ''}${sort}`,
     'fields[crispr_ko]': 'bf_scaled,fc_clean,gene,model',
-    'fields[gene]': 'symbol,essentiality_profiles,essentiality_profiles',
+    'fields[gene]': 'symbol,essentiality_profiles',
+    'fields[essentiality_profile]': 'core_fitness_pancan',
     'fields[model]': 'sample,names',
     'fields[sample]': 'tissue',
     'fields[tissue]': 'name',
@@ -73,12 +71,9 @@ export default function fetchCrisprData(params) {
   const paramsNormalised = normaliseParams(params);
   return get('/datasets/crispr_ko', paramsNormalised)
     .then(resp => deserialiser.deserialise(resp.data)
-        .then(deserialisedData => {
-          console.log(deserialisedData);
-          return {
+        .then(deserialisedData => ({
             count: resp.data.meta.count,
             data: deserialisedData,
-          };
-        })
+        }))
     );
 }
