@@ -55,7 +55,7 @@ function EssentialitiesTable() {
   return (
     <Card>
       <CardHeader>
-        Essentiality Table
+        Fitness Table
       </CardHeader>
       <CardBody>
         <Row>

@@ -82,7 +82,7 @@ function EssentialitiesPlotSection(props) {
       <Col>
         <Card>
           <CardHeader>
-            Essentiality plot
+            Fitness plot
           </CardHeader>
           <CardBody>
             <div
@@ -161,7 +161,7 @@ function EssentialitiesTable({highlight, onHighlight}) {
       <Col className="my-3" xs={{size: 12}}>
         <Card>
           <CardHeader>
-            Essentiality Table
+            Fitness Table
           </CardHeader>
           <CardBody>
             <Table
