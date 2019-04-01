@@ -455,7 +455,9 @@ function EssentialitiesCanvasPlot(props) {
           left: 0,
         }}
       >
-        <line x1={marginLeft} x2={width} y1={zeroY} y2={zeroY} strokeDasharray='5,5' stroke={insignificantNodeColor}/>
+        {attributeToPlot === 'bf_scaled' && (
+          <line x1={marginLeft} x2={width} y1={zeroY} y2={zeroY} strokeDasharray='5,5' stroke={insignificantNodeColor}/>
+        )}
         <g
           ref={xAxisElement}
           transform={`translate(0, ${height - marginTop})`}
