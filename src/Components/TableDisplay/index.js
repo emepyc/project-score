@@ -1,5 +1,5 @@
-import React, {Fragment} from 'react';
-import {Table} from 'reactstrap';
+import React, {Fragment, useState} from 'react';
+import {Table, Tooltip} from 'reactstrap';
 import {Link, withRouter} from 'react-router-dom';
 import qs from 'query-string';
 import pickBy from 'lodash.pickby';
@@ -10,6 +10,10 @@ import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 
 function TableDisplay(props) {
   const data = props.data;
+
+  const [showTooltip, toggleShowTooltip] = useState(false);
+
+  const toggleTooltip = () => toggleShowTooltip(!showTooltip);
 
   const getKeyForRow = (row) => row ? `${row.geneId}-${row.modelName}` : null;
 
@@ -47,7 +51,7 @@ function TableDisplay(props) {
           </th>
           <th>
             <nobr>
-              Loss of fitness score{' '}
+              Loss of fitness score<sup id='lossOfFitnessScoreHelp' style={{cursor: 'default'}}><a href='#'>?</a></sup>{' '}
               <SortArrows {...props} field="bf_scaled" />
             </nobr>
           </th>
@@ -87,6 +91,14 @@ function TableDisplay(props) {
         })}
         </tbody>
       </Table>
+            <Tooltip
+              target='lossOfFitnessScoreHelp'
+              placement='right'
+              isOpen={showTooltip}
+              toggle={toggleTooltip}
+            >
+              Based on Bayes Factor value using BAGEL and scaled to a 5% false discovery rate threshold.
+            </Tooltip>
     </Fragment>
   );
 }

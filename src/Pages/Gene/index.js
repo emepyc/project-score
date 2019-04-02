@@ -6,8 +6,7 @@ import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import EssentialitiesPlot from '../../Components/EssentialitiesPlot';
 import GeneInfoSummary from '../../Components/GeneInfoSummary';
 import TissueHighlight from '../../Components/TissueHighlight';
-import {Row, Col} from 'reactstrap';
-import {Card, CardHeader, CardBody} from 'reactstrap';
+import {Row, Col, Card, CardHeader, CardBody, Tooltip} from 'reactstrap';
 import {Button} from '../../Components/Buttom';
 import GeneSummaryPlots from '../../Components/GeneSummaryPlots';
 
@@ -76,6 +75,9 @@ function EssentialitiesPlotSection(props) {
   const [colorBy, setColorBy] = useState("significance");
   const [attributeToPlot, setAttributeToPlot] = useState("bf_scaled");
   const [highlightTissue, setHighlightTissue] = useState(null);
+  const [showTooltip, toggleShowTooltip] = useState(null);
+
+  const toggleTooltip = () => toggleShowTooltip(!showTooltip);
 
   return (
     <Row className="my-3">
@@ -100,6 +102,7 @@ function EssentialitiesPlotSection(props) {
                   Corrected fold change
                 </Button>
                 <Button
+                  id='lossOfFitnessScoreButton'
                   active={attributeToPlot === "bf_scaled"}
                   outline={attributeToPlot !== "bf_scaled"}
                   onClick={() => setAttributeToPlot("bf_scaled")}
@@ -108,6 +111,14 @@ function EssentialitiesPlotSection(props) {
                 </Button>
               </ButtonGroup>
             </div>
+            <Tooltip
+              target='lossOfFitnessScoreButton'
+              placement='right'
+              isOpen={showTooltip}
+              toggle={toggleTooltip}
+            >
+              Based on Bayes Factor value using BAGEL and scaled to a 5% false discovery rate threshold.
+            </Tooltip>
             <EssentialitiesPlot
               colorBy={colorBy}
               attributeToPlot={attributeToPlot}
