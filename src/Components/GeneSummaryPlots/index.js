@@ -39,7 +39,7 @@ function GeneSummaryPlots(props) {
       >
         <Card>
           <CardHeader>
-              Essentialities summary
+              Fitness summary
           </CardHeader>
           <CardBody>
             <Row>

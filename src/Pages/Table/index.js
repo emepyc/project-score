@@ -12,7 +12,7 @@ function Table() {
       <Row className='my-3'>
         <Col xs={{size: 12}} md={{size: 6}} lg={{size: 4}}>
           <PageHeader
-            header='Explore all essentialities'
+            header='Explore all data'
           />
         </Col>
         <Col xs={{size: 12}} md={{size: 6}} lg={{size: 4, offset: 4}}>
