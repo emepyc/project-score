@@ -92,7 +92,7 @@ function EssentialitiesPlotSection(props) {
                   outline={attributeToPlot !== "fc_clean"}
                   onClick={() => setAttributeToPlot("fc_clean")}
                 >
-                  Corrected log fold change
+                  Corrected fold change
                 </Button>
                 <Button
                   active={attributeToPlot === "bf_scaled"}

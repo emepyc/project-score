@@ -279,7 +279,7 @@ function EssentialitiesTooltip(props) {
       >
         Gene: <b>{geneSymbol}</b><br/>
         Model: <b>{modelName}</b> ({tissue})<br/>
-        Corrected log fold change:<b>{fc_clean}</b><br/>
+        Corrected fold change:<b>{fc_clean}</b><br/>
         Loss of fitness score:<b>{bf_scaled}</b>
       </div>
       <div

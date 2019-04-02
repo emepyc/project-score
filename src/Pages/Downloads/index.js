@@ -51,7 +51,7 @@ class Downloads extends React.Component {
                   </sup>
                 </th>
                 <th>
-                  Copy Number Bias Corrected Log Fold Change Values
+                  Copy Number Bias Corrected Fold Change Values
                   <sup>
                     <span className='tooltipAnchor' id='CorrectedDataFilesTooltip'>
                       ?
