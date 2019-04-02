@@ -6,7 +6,7 @@ import PageHeader from '../PageHeader';
 export default function ModelInfoHeader({name, symbol, tissue, features}) {
   const linkToCellModelPassport = (
     <span>More information in the{' '}
-      <a href={`https://cellmodelpassports.sanger.ac.uk/passports/${symbol}`}>
+      <a target='_blank' rel='noopener noreferrer' href={`https://cellmodelpassports.sanger.ac.uk/passports/${symbol}`}>
         Cell Model Passport
       </a> site
     </span>
