@@ -51,7 +51,7 @@ function TableDisplay(props) {
           </th>
           <th>
             <nobr>
-              Loss of fitness score<sup id='lossOfFitnessScoreHelp' style={{cursor: 'default'}}><a href='#'>?</a></sup>{' '}
+              Loss of fitness score<sup id='lossOfFitnessScoreHelp' style={{cursor: 'default'}}>?</sup>{' '}
               <SortArrows {...props} field="bf_scaled" />
             </nobr>
           </th>

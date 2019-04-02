@@ -35,7 +35,7 @@ function formatResponse(resp) {
     if (data[type]) {
       return [...suggestions, {
         label: label,
-        options: data[type].map(option => ({
+        options: data[type].hits.map(option => ({
           ...extraOptions(option),
           type,
         }))
@@ -46,6 +46,6 @@ function formatResponse(resp) {
 }
 
 export default function search(query) {
-  return get(`/score_autocomplete/${query}`)
+  return get(`/score_search/${query}`)
     .then(formatResponse);
 }
