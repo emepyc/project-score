@@ -6,7 +6,7 @@ export function id2name(name) {
   return name.split('_').join(' ');
 }
 
-export function essentialityIsSignificant(essentiality) {
+export function fitnessIsSignificant(essentiality) {
   return essentiality.bf_scaled < 0;
 }
 

@@ -8,14 +8,14 @@ import useUrlParams from '../useUrlParams';
 import {fetchCrisprData} from '../../api';
 import colors from '../../colors';
 
-import './essentialitiesPlot.scss';
+import './fitnessPlot.scss';
 import * as d3 from "d3";
 import sortBy from "lodash.sortby";
 
 const LOSS_OF_FITNESS_SCORE_LABEL = 'Loss of fitness score';
 const FC_CLEAN_LABEL = 'Corrected log fold change';
 
-function EssentialitiesPlot(props) {
+function FitnessPlot(props) {
   const config = {
     height: 300,
     marginTop: 50,
@@ -84,7 +84,7 @@ function EssentialitiesPlot(props) {
       <Spinner loading={loading}>
         {data.length && (
           <div>
-            <EssentialitiesBrush
+            <FitnessBrush
               data={data}
               width={containerWidth - config.marginLeft}
               onRangeChanged={setXDomain}
@@ -92,7 +92,7 @@ function EssentialitiesPlot(props) {
               {...props}
             />
             <div style={{position: 'relative'}}>
-              {highlight && (<EssentialitiesTooltip
+              {highlight && (<FitnessTooltip
                   xDomain={xDomain}
                   data={data}
                   width={containerWidth}
@@ -102,7 +102,7 @@ function EssentialitiesPlot(props) {
                   {...props}
                 />
               )}
-              <EssentialitiesCanvasPlot
+              <FitnessCanvasPlot
                 data={data}
                 width={containerWidth}
                 height={config.height}
@@ -120,10 +120,10 @@ function EssentialitiesPlot(props) {
   );
 }
 
-export default withRouter(EssentialitiesPlot);
+export default withRouter(FitnessPlot);
 
 
-function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged, marginLeft}) {
+function FitnessBrush({width, data, attributeToPlot, onRangeChanged, marginLeft}) {
   const height = 50;
 
   const brushLineElement = useRef(null);
@@ -211,7 +211,7 @@ function EssentialitiesBrush({width, data, attributeToPlot, onRangeChanged, marg
 }
 
 
-function EssentialitiesTooltip(props) {
+function FitnessTooltip(props) {
   const {
     highlight: nodeData,
     data,
@@ -252,13 +252,13 @@ function EssentialitiesTooltip(props) {
     .range([0, height - marginTop])
     .domain([yExtent[1], yExtent[0]]);
 
-  const essentialityValue =
+  const fitnessValue =
     attributeToPlot === 'fc_clean' ?
       fc_clean :
       bf_scaled;
 
   const x = xScale(index);
-  const y = yScale(essentialityValue);
+  const y = yScale(fitnessValue);
 
   return (
     <Fragment>
@@ -307,7 +307,7 @@ function EssentialitiesTooltip(props) {
   );
 }
 
-function EssentialitiesCanvasPlot(props) {
+function FitnessCanvasPlot(props) {
   const {
     data,
     width,

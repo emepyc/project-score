@@ -3,7 +3,7 @@ import {ButtonGroup} from 'reactstrap';
 import Table from '../../Components/Table';
 import TissueFilter from '../../Components/TissueFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
-import EssentialitiesPlot from '../../Components/EssentialitiesPlot';
+import FitnessPlot from '../../Components/FitnessPlot';
 import GeneInfoSummary from '../../Components/GeneInfoSummary';
 import TissueHighlight from '../../Components/TissueHighlight';
 import {Row, Col, Card, CardHeader, CardBody, Tooltip} from 'reactstrap';
@@ -23,7 +23,7 @@ function Gene() {
           <Filters/>
         </Col>
       </Row>
-      <EssentialitiesSection />
+      <FitnessSection />
     </div>
   );
 }
@@ -51,27 +51,27 @@ function Filters() {
 }
 
 
-function EssentialitiesSection() {
-  const [highlightEssentiality, setHighlightEssentiality] = useState(null);
+function FitnessSection() {
+  const [highlightFitness, setHighlightFitness] = useState(null);
   return (
       <Row>
         <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
-          <EssentialitiesPlotSection
-            highlight={highlightEssentiality}
-            onHighlight={setHighlightEssentiality}
+          <FitnessPlotSection
+            highlight={highlightFitness}
+            onHighlight={setHighlightFitness}
           />
         </Col>
         <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
-          <EssentialitiesTable
-            highlight={highlightEssentiality}
-            onHighlight={setHighlightEssentiality}
+          <FitnessTable
+            highlight={highlightFitness}
+            onHighlight={setHighlightFitness}
           />
         </Col>
       </Row>
   );
 }
 
-function EssentialitiesPlotSection(props) {
+function FitnessPlotSection(props) {
   const [colorBy, setColorBy] = useState("significance");
   const [attributeToPlot, setAttributeToPlot] = useState("bf_scaled");
   const [highlightTissue, setHighlightTissue] = useState(null);
@@ -119,7 +119,7 @@ function EssentialitiesPlotSection(props) {
             >
               Based on Bayes Factor value using BAGEL and scaled to a 5% false discovery rate threshold.
             </Tooltip>
-            <EssentialitiesPlot
+            <FitnessPlot
               colorBy={colorBy}
               attributeToPlot={attributeToPlot}
               xAxisLabel="Cell lines"
@@ -166,7 +166,7 @@ function EssentialitiesPlotSection(props) {
   );
 }
 
-function EssentialitiesTable({highlight, onHighlight}) {
+function FitnessTable({highlight, onHighlight}) {
   return (
     <Row>
       <Col className="my-3" xs={{size: 12}}>

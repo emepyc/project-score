@@ -91,7 +91,7 @@ function Table(props) {
   // };
 
   return (
-    <div className='essentialities-table'>
+    <div className='fitness-table'>
 
       <div className='d-flex h-100'>
 
@@ -100,7 +100,7 @@ function Table(props) {
             Showing {' '}
             <span className='font-weight-bold'>{pageSize * (pageNumber - 1) + 1}</span> - {' '}
             <span className='font-weight-bold'>{pageSize * (pageNumber - 1) + pageSize}</span> out of {' '}
-            <span className='font-weight-bold'>{totalHits}</span> essentialities
+            <span className='font-weight-bold'>{totalHits}</span> fitness values
           </div>
         </div>
 

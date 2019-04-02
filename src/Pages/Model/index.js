@@ -6,7 +6,7 @@ import ModelInfoSummary from '../../Components/ModelInfoSummary';
 import ModelInfoDetails from '../../Components/ModelInfoDetails';
 import {Card, CardBody, CardHeader} from 'reactstrap';
 import {Button} from "../../Components/Buttom";
-import EssentialitiesPlot from "../../Components/EssentialitiesPlot";
+import FitnessPlot from "../../Components/FitnessPlot";
 import PanCangerGeneFilter from "../../Components/PanCancerGeneFilter";
 
 function Model() {
@@ -22,7 +22,7 @@ function Model() {
           <Filters />
         </Col>
       </Row>
-      <EssentialitiesSection />
+      <FitnessSection />
     </div>
   );
 }
@@ -49,27 +49,27 @@ function Filters() {
   );
 }
 
-function EssentialitiesSection() {
-  const [highlightEssentiality, setHighlightEssentiality] = useState(null);
+function FitnessSection() {
+  const [highlightFitness, setHighlightFitness] = useState(null);
   return (
       <Row>
         <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
-          <EssentialitiesPlotSection
-            highlight={highlightEssentiality}
-            onHighlight={setHighlightEssentiality}
+          <FitnessPlotPlotSection
+            highlight={highlightFitness}
+            onHighlight={setHighlightFitness}
           />
         </Col>
         <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
           <EssentialitiesTable
-            highlight={highlightEssentiality}
-            onHighlight={setHighlightEssentiality}
+            highlight={highlightFitness}
+            onHighlight={setHighlightFitness}
           />
         </Col>
       </Row>
   );
 }
 
-function EssentialitiesPlotSection(props) {
+function FitnessPlotPlotSection(props) {
   const [attributeToPlot, setAttributeToPlot] = useState("bf_scaled");
 
   return (
@@ -105,7 +105,7 @@ function EssentialitiesPlotSection(props) {
             </div>
           </Col>
         </Row>
-        <EssentialitiesPlot
+        <FitnessPlot
           colorBy='score'
           attributeToPlot={attributeToPlot}
           xAxisLabel="Genes"
