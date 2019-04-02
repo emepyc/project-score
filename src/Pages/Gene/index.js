@@ -74,7 +74,7 @@ function EssentialitiesSection() {
 
 function EssentialitiesPlotSection(props) {
   const [colorBy, setColorBy] = useState("significance");
-  const [attributeToPlot, setAttributeToPlot] = useState("fc_clean");
+  const [attributeToPlot, setAttributeToPlot] = useState("bf_scaled");
   const [highlightTissue, setHighlightTissue] = useState(null);
 
   return (

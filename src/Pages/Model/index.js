@@ -70,7 +70,7 @@ function EssentialitiesSection() {
 }
 
 function EssentialitiesPlotSection(props) {
-  const [attributeToPlot, setAttributeToPlot] = useState("fc_clean");
+  const [attributeToPlot, setAttributeToPlot] = useState("bf_scaled");
 
   return (
     <Card>
