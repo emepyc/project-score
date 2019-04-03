@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Tooltip } from 'reactstrap';
+import {Jumbotron, Table, Tooltip} from 'reactstrap';
 
 import './downloads.scss';
 
@@ -37,6 +37,17 @@ class Downloads extends React.Component {
         >
           <h2>Downloads</h2>
         </div>
+        <Jumbotron>
+          <h5>Data Usage Policy:</h5>
+          <p>
+            Users have a non-exclusive, non-transferable right to use data files for internal, non-commercial research
+            and educational purposes. Please note: The data files are experimental and academic in nature and are not
+            licensed or certified by any regulatory body. Genome Research Limited provides access to data files on an
+            “as is” basis and excludes all warranties of any kind (express or implied). If you are interested in
+            incorporating results or software into a product, or have questions, please contact depmap@sanger.ac.uk.
+          </p>
+        </Jumbotron>
+
         <div style={{ paddingLeft: '30px', paddingRight: '30px' }}>
           <Table responsive>
             <thead>
