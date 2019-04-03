@@ -19,6 +19,11 @@ export default function Documentation() {
                 Glossary of terms
               </NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink href='#usage'>
+                Data usage policy
+              </NavLink>
+            </NavItem>
           </Nav>
         </div>
         <div className='section'>
@@ -212,7 +217,8 @@ export default function Documentation() {
             <div className='glossary-description'>
               A supervised learning method for analysing gene knockout screens and inferring gene fitness effects,
               starting
-              from the observation of those elicited by two reference sets of essential/non-essential genes. Further details can be
+              from the observation of those elicited by two reference sets of essential/non-essential genes. Further
+              details can be
               found in the <a target='_blank' rel='noopener noreferrer'
                               href='https://www.ncbi.nlm.nih.gov/pubmed/27083490'>corresponding article</a>.
             </div>
@@ -256,6 +262,17 @@ export default function Documentation() {
               testing, genetic screens and analytics (https://depmap.sanger.ac.uk/).
             </div>
           </div>
+        </div>
+
+        <div className='section'>
+          <h2><a name="usage">Data Usage Policy</a></h2>
+          <p className='paragraph'>
+            Users have a non-exclusive, non-transferable right to use data files for internal, non-commercial research
+            and educational purposes. Please note: The data files are experimental and academic in nature and are not
+            licensed or certified by any regulatory body. Genome Research Limited provides access to data files on an
+            “as is” basis and excludes all warranties of any kind (express or implied). If you are interested in
+            incorporating results or software into a product, or have questions, please contact depmap@sanger.ac.uk.
+          </p>
         </div>
       </Container>
     </Fragment>
