@@ -5,17 +5,18 @@ import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import {Row, Col} from 'reactstrap';
 import {Card, CardHeader, CardBody} from 'reactstrap';
 import PageHeader from '../../Components/PageHeader';
+import PanCangerGeneFilter from "../../Components/PanCancerGeneFilter";
 
 function Table() {
   return (
     <div>
       <Row className='my-3'>
-        <Col xs={{size: 12}} md={{size: 6}} lg={{size: 4}}>
+        <Col xs={{size: 12}} md={{size: 4}} lg={{size: 4}}>
           <PageHeader
             header='Explore all data'
           />
         </Col>
-        <Col xs={{size: 12}} md={{size: 6}} lg={{size: 4, offset: 4}}>
+        <Col xs={{size: 12}} md={{size: 8}} lg={{size: 6, offset: 2}}>
           <Filters/>
         </Col>
       </Row>
@@ -38,6 +39,9 @@ function Filters() {
       </CardHeader>
       <CardBody>
         <Row>
+          <Col>
+            <PanCangerGeneFilter/>
+          </Col>
           <Col>
             <TissueFilter/>
           </Col>
