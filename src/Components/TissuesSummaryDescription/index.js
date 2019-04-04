@@ -61,7 +61,7 @@ function TissuesSummaryDescription() {
           style={{verticalAlign: 'middle'}}
         />
         <span style={{marginLeft: '21px'}}>
-          6,830 fitness genes
+          7,470 fitness genes
         </span>
       </div>
 

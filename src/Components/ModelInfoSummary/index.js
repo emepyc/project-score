@@ -9,7 +9,6 @@ function ModelInfoSummary(props) {
   const [loading, setLoading] = useState(false);
   const [urlParams] = useUrlParams(props);
   const [modelName, setModelName] = useState('');
-  const [growthProperties, setGrowProperties] = useState('Unknown');
 
   useEffect(() => {
     setLoading(true);
@@ -17,7 +16,6 @@ function ModelInfoSummary(props) {
       .then(modelInfo => {
         setLoading(false);
         setModelName(modelInfo.names[0]);
-        setGrowProperties(modelInfo.growthProperties);
       });
   }, [urlParams.modelId]);
 
@@ -26,16 +24,6 @@ function ModelInfoSummary(props) {
       <ModelInfoHeader
         name={modelName}
         symbol={urlParams.modelId}
-        features={
-          [
-            {
-              label: growthProperties,
-              value: growthProperties !== 'Unknown',
-              id: growthProperties,
-              text: 'Cell model growth type'
-            }
-          ]
-        }
       />
     </Spinner>
   );

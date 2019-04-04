@@ -8,8 +8,6 @@ const params = {
 };
 
 function processResponse(geneInfo) {
-  console.log('geneInfo...');
-  console.log(geneInfo);
   return {
     identifiers: geneInfo.identifiers,
     names: geneInfo.names,
