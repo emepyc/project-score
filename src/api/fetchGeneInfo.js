@@ -8,6 +8,8 @@ const params = {
 };
 
 function processResponse(geneInfo) {
+  console.log('geneInfo...');
+  console.log(geneInfo);
   return {
     identifiers: geneInfo.identifiers,
     names: geneInfo.names,
@@ -17,6 +19,8 @@ function processResponse(geneInfo) {
     isRnaPolymerase: geneInfo.essentiality_profiles[0].known_rna_polymerase,
     isRibosomal: geneInfo.essentiality_profiles[0].known_ribosomal,
     isSpliceosome: geneInfo.essentiality_profiles[0].known_spliceosome,
+    isHistone: geneInfo.essentiality_profiles[0].known_histones,
+    isDnaReplication: geneInfo.essentiality_profiles[0].known_dna_replication,
   }
 }
 

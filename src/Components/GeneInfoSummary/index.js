@@ -11,8 +11,10 @@ function GeneInfoSummary(props) {
   const [geneIdentifiers, setGeneIdentifiers] = useState([]);
   // const [isTumourSuppressor, setIsTumourSuppressor] = useState(false);
   const [isRibosomal, setIsRibosomal] = useState(false);
+  const [isHistone, setIsHistone] = useState(false);
+  const [isDnaReplication, setIsDnaReplication] = useState(false);
   const [isProteasome, setIsProteasome] = useState(false);
-  // const [isRnaPolymerase, setIsRnaPolymerase] = useState(false);
+  const [isRnaPolymerase, setIsRnaPolymerase] = useState(false);
   const [isSpliceosome, setIsSpliceosome] = useState(false);
   const [geneSymbol, setGeneSymbol] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,7 +30,9 @@ function GeneInfoSummary(props) {
         setGeneSymbol(geneInfo.symbol);
         // setIsTumourSuppressor(geneInfo.isTumourSuppressor);
         setIsProteasome(geneInfo.isProteasome);
-        // setIsRnaPolymerase(geneInfo.isRnaPolymerase);
+        setIsHistone(geneInfo.isHistone);
+        setIsDnaReplication(geneInfo.isDnaReplication);
+        setIsRnaPolymerase(geneInfo.isRnaPolymerase);
         setIsRibosomal(geneInfo.isRibosomal);
         setIsSpliceosome(geneInfo.isSpliceosome);
       });
@@ -48,17 +52,29 @@ function GeneInfoSummary(props) {
             //   id: 'isTumourSuppressor',
             //   text: `${geneSymbol} is ${isTumourSuppressor ? '' : 'not'} a tumour suppressor gene`,
             // },
-            // {
-            //   label: 'Rna polymerase',
-            //   value: isRnaPolymerase,
-            //   id: 'isRnaPolymerase',
-            //   text: `${geneSymbol} does ${isRnaPolymerase ? '' : 'not'} encode for a RNA polymerase protein`,
-            // },
+            {
+              label: 'Rna polymerase',
+              value: isRnaPolymerase,
+              id: 'isRnaPolymerase',
+              text: `${geneSymbol} does ${isRnaPolymerase ? '' : 'not'} encode for a RNA polymerase protein`,
+            },
             {
               label: 'Ribosomal',
               value: isRibosomal,
               id: 'isRibosomal',
               text: `${geneSymbol} does ${isRibosomal ? '' : 'not'} encode for a ribosomal protein`
+            },
+            {
+              label: 'Histone',
+              value: isHistone,
+              id: 'isHistone',
+              text: `${geneSymbol} does ${isHistone ? '' : 'not'} encode for a histone protein`
+            },
+            {
+              label: 'Dna Replication',
+              value: isDnaReplication,
+              id: 'isDnaReplication',
+              text: `${geneSymbol} does ${isDnaReplication ? '' : 'not'} encode for a DNA replication protein`
             },
             {
               label: 'Proteasome',
