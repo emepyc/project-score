@@ -1,0 +1,32 @@
+.section {
+  margin-top: 50px;
+  .paragraph {
+    margin-top: 30px;
+
+    .strong {
+      font-weight: bold;
+    }
+
+    .outlined {
+      text-decoration: underline;
+    }
+
+    &.caption {
+      width: 100%;
+      background: #EFEFEF;
+      padding: 20px 10px;
+    }
+
+    .indented {
+      margin-left: 40px;
+    }
+
+    .glossary-header {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .glossary-description {
+    }
+  }
+}
