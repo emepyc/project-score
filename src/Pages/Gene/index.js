@@ -86,7 +86,7 @@ function FitnessPlotSection(props) {
       <Col>
         <Card>
           <CardHeader>
-            Fitness plot
+            Fitness Plot
           </CardHeader>
           <CardBody>
             <div
