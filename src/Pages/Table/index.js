@@ -22,7 +22,7 @@ function Table() {
       </Row>
       <Row>
         <Col>
-          <EssentialitiesTable/>
+          <FitnessTable/>
         </Col>
       </Row>
     </div>
@@ -54,7 +54,7 @@ function Filters() {
   );
 }
 
-function EssentialitiesTable() {
+function FitnessTable() {
   const [highlight, onHighlight] = useState(null);
   return (
     <Card>

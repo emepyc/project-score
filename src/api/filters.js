@@ -62,20 +62,31 @@ export function expandModelFilter(modelId) {
 }
 
 export function expandSearchFilter(search) {
+  // There is no way to filter by partial model_name, so until that is implemented in the API
+  // we just search for partial matches in the gene symbol
+  // return {
+  //   or: [
+  //     {
+  //       name: 'model_name',
+  //       op: 'contains',
+  //       val: search,
+  //     },
+  //     {
+  //       name: 'gene_symbol',
+  //       op: 'contains',
+  //       val: search,
+  //     },
+  //   ]
+  // }
   return {
-    or: [
-      {
-        name: 'model_name',
-        op: 'contains',
-        val: search,
-      },
-      {
-        name: 'gene_symbol',
-        op: 'contains',
-        val: search,
-      },
-    ]
-  }
+    name: "gene",
+    op: "has",
+    val: {
+      name: "symbol",
+      op: "contains",
+      val: search,
+    }
+  };
 }
 
 export function expandScoreRangeFilter({scoreMin, scoreMax}) {

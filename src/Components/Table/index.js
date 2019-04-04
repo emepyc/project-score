@@ -4,14 +4,13 @@ import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import TableDisplay from '../TableDisplay';
 import useUrlParams from '../useUrlParams';
 import Spinner from '../Spinner';
-// The searchbox for the table has been disabled because there is no way to search for genes names / disease names
-// If the API supports that we can uncomment the functionality (and make sure the search terms are treated properly)
-// import {
-//   Input,
-//   InputGroup,
-//   InputGroupAddon,
-//   InputGroupText,
-// } from 'reactstrap';
+import {
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+} from 'reactstrap';
+import useDeferred from '../useDeferred';
 import {fetchCrisprData} from '../../api';
 
 import './customTable.scss';
@@ -34,7 +33,8 @@ function Table(props) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [sort, setSort] = useState('fc_clean');
-  // const [search, setSearch] = useState("");
+  const [searchInputValue, setSearchInputValue] = useState("");
+  const [search, setSearch] = useDeferred("");
   const [pageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [sortDirection, setSortDirection] = useState(1);
@@ -54,7 +54,7 @@ function Table(props) {
       sortDirection,
       pageSize,
       pageNumber,
-      // search,
+      search,
       tissue: urlParams.tissue,
       scoreMin: urlParams.scoreMin,
       scoreMax: urlParams.scoreMax,
@@ -74,21 +74,25 @@ function Table(props) {
     sortDirection,
     pageSize,
     pageNumber,
-    // search,
+    search,
     urlParams.tissue,
     urlParams.scoreMin,
     urlParams.scoreMax,
     urlParams.excludePanCancerGenes,
   ]);
 
+  console.log("search...");
+  console.log(search);
+
   const isFirstPage = pageNumber === 1;
   const isLastPage = pageNumber >= totalHits / pageSize;
 
   // TODO: debounce
-  // const doSearch = (ev) => {
-  //   const {value} = ev.target;
-  //   setSearch(value);
-  // };
+  const doSearch = (ev) => {
+    const {value} = ev.target;
+    setSearchInputValue(value);
+    setSearch(value);
+  };
 
   return (
     <div className='fitness-table'>
@@ -104,15 +108,14 @@ function Table(props) {
           </div>
         </div>
 
-        {/*<div className='p-1'>*/}
-          {/*<InputGroup style={{width: '300px'}}>*/}
-            {/*<InputGroupAddon addonType="prepend">*/}
-              {/*<InputGroupText>Search</InputGroupText>*/}
-            {/*</InputGroupAddon>*/}
-            {/*<Input value={search} onChange={doSearch}/>*/}
-          {/*</InputGroup>*/}
-        {/*</div>*/}
-
+        <div className='p-1'>
+          <InputGroup style={{width: '300px'}}>
+            <InputGroupAddon addonType="prepend">
+              <InputGroupText>Search</InputGroupText>
+            </InputGroupAddon>
+            <Input placeholder='Search for gene symbol' value={searchInputValue} onChange={doSearch}/>
+          </InputGroup>
+        </div>
 
       </div>
 
