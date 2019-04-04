@@ -16,14 +16,14 @@ function Model() {
       <ModelInfoSummary/>
 
       <Row className='my-3'>
-        <Col className="my-3" lg={{size: 8}} md={{size: 6}}  xs={{size: 12}}>
+        <Col className="my-3" lg={{size: 8}} md={{size: 6}} xs={{size: 12}}>
           <ModelInfoDetails/>
         </Col>
         <Col className="my-3" lg={{size: 4}} md={{size: 6}} xs={{size: 12}}>
-          <Filters />
+          <Filters/>
         </Col>
       </Row>
-      <FitnessSection />
+      <FitnessSection/>
     </div>
   );
 }
@@ -53,20 +53,20 @@ function Filters() {
 function FitnessSection() {
   const [highlightFitness, setHighlightFitness] = useState(null);
   return (
-      <Row>
-        <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
-          <FitnessPlotSection
-            highlight={highlightFitness}
-            onHighlight={setHighlightFitness}
-          />
-        </Col>
-        <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
-          <EssentialitiesTable
-            highlight={highlightFitness}
-            onHighlight={setHighlightFitness}
-          />
-        </Col>
-      </Row>
+    <Row>
+      <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
+        <FitnessPlotSection
+          highlight={highlightFitness}
+          onHighlight={setHighlightFitness}
+        />
+      </Col>
+      <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
+        <EssentialitiesTable
+          highlight={highlightFitness}
+          onHighlight={setHighlightFitness}
+        />
+      </Col>
+    </Row>
   );
 }
 
@@ -151,6 +151,7 @@ function EssentialitiesTable({highlight, onHighlight}) {
         <Row>
           <Col xs={{size: 12}}>
             <Table
+              showSearchbox
               highlight={highlight}
               onHighlight={onHighlight}
             />

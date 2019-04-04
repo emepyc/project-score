@@ -65,6 +65,7 @@ function FitnessTable() {
         <Row>
           <Col xs={{size: 12}}>
             <TableComponent
+              showSearchbox={true}
               highlight={highlight}
               onHighlight={onHighlight}
             />

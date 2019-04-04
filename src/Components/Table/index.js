@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {withRouter} from 'react-router-dom';
+import debounce from 'lodash.debounce';
 import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import TableDisplay from '../TableDisplay';
 import useUrlParams from '../useUrlParams';
@@ -10,7 +11,6 @@ import {
   InputGroupAddon,
   InputGroupText,
 } from 'reactstrap';
-import useDeferred from '../useDeferred';
 import {fetchCrisprData} from '../../api';
 
 import './customTable.scss';
@@ -30,12 +30,12 @@ function parseData(raw) {
 }
 
 function Table(props) {
+  const {showSearchbox} = props;
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [sort, setSort] = useState('fc_clean');
-  const [searchInputValue, setSearchInputValue] = useState("");
-  const [search, setSearch] = useDeferred("");
   const [pageSize] = useState(10);
+  const [search, setSearch] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
   const [sortDirection, setSortDirection] = useState(1);
   const [totalHits, setTotalHits] = useState(null);
@@ -81,18 +81,8 @@ function Table(props) {
     urlParams.excludePanCancerGenes,
   ]);
 
-  console.log("search...");
-  console.log(search);
-
   const isFirstPage = pageNumber === 1;
   const isLastPage = pageNumber >= totalHits / pageSize;
-
-  // TODO: debounce
-  const doSearch = (ev) => {
-    const {value} = ev.target;
-    setSearchInputValue(value);
-    setSearch(value);
-  };
 
   return (
     <div className='fitness-table'>
@@ -108,14 +98,12 @@ function Table(props) {
           </div>
         </div>
 
-        <div className='p-1'>
-          <InputGroup style={{width: '300px'}}>
-            <InputGroupAddon addonType="prepend">
-              <InputGroupText>Search</InputGroupText>
-            </InputGroupAddon>
-            <Input placeholder='Search for gene symbol' value={searchInputValue} onChange={doSearch}/>
-          </InputGroup>
-        </div>
+        {showSearchbox && (
+          <GeneSearchbox
+            onInputChange={setSearch}
+            deferTime={1000}
+          />
+        )}
 
       </div>
 
@@ -159,3 +147,26 @@ function Table(props) {
 }
 
 export default withRouter(Table);
+
+function GeneSearchbox({onInputChange, deferTime=300}) {
+  const [inputValue, setInputValue] = useState("");
+
+  const debounced = useRef(debounce((value) => onInputChange(value), deferTime));
+
+  useEffect(() => debounced.current(inputValue), [inputValue]);
+
+  return (
+    <div className='p-1'>
+      <InputGroup style={{width: '300px'}}>
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>Search</InputGroupText>
+        </InputGroupAddon>
+        <Input
+          placeholder='Search for gene symbol'
+          value={inputValue}
+          onChange={(ev) => setInputValue(ev.target.value)}
+        />
+      </InputGroup>
+    </div>
+  );
+}
