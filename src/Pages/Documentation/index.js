@@ -54,9 +54,7 @@ export default function Documentation() {
           </p>
 
           <p className='paragraph caption'>
-            The Project Score database is a part of an ongoing research project and results will be updated and are
-            neither
-            complete or final.
+            The Project Score database is part of an ongoing research project and results will be regularly updated.
           </p>
         </div>
 
