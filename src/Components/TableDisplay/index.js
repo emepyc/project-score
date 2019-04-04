@@ -8,6 +8,7 @@ import useUrlParams, {sanitiseParams} from '../useUrlParams';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import {foldChangeHelp, lossOfFitnessScoreHelp} from "../../definitions";
+import {colorSignificantBg, colorInsignificantBg} from "../../colors";
 
 function TableDisplay(props) {
   const data = props.data;
@@ -64,12 +65,11 @@ function TableDisplay(props) {
         <tbody>
         {data.map(row => {
           const key = getKeyForRow(row);
-          const backgroundColor = keyForHighlightedNode === key ? '#eeeeee' : (
-            row.bf_scaled < 0 ? '#EFF6EB' : '#FFFFFF'
-          );
+          const scoreBackgroundColor = row.bf_scaled < 0 ? colorSignificantBg : colorInsignificantBg;
+          const backgroundColor = keyForHighlightedNode === key ? scoreBackgroundColor : '#FFFFFF';
           return (
             <tr
-              style={{backgroundColor: backgroundColor}}
+              style={{backgroundColor}}
               key={key}
               onMouseOver={() => mouseOver(row)}
               onMouseOut={mouseOut}
@@ -86,7 +86,7 @@ function TableDisplay(props) {
               <td>
                 {row.fc_clean}
               </td>
-              <td>
+              <td style={{backgroundColor: scoreBackgroundColor}}>
                 {row.bf_scaled}
               </td>
             </tr>
