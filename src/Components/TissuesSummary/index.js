@@ -10,7 +10,7 @@ import TissuesSummaryDescription from '../TissuesSummaryDescription';
 function TissuesSummary() {
   return (
     <Fragment>
-      <h2 className="display-4 text-center">Explore the data</h2>
+      <h2 className="display-4 text-center">Data Overview</h2>
       <Row style={{marginTop: '50px'}}>
         <Col
           md={{size: 12}}
