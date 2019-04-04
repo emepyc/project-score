@@ -24,11 +24,11 @@ function Footer() {
           <div className="footer-header">
             <b>Project SCORE</b>
           </div>
-          <NavLink to="/about-us" style={linkStyle} activeStyle={linkStyle}>
-            <div className="footer-item">About</div>
+          <NavLink to="/downloads" style={linkStyle} activeStyle={linkStyle}>
+            <div className="footer-item">Downloads</div>
           </NavLink>
-          <NavLink to="/download" style={linkStyle} activeStyle={linkStyle}>
-            <div className="footer-item">Download</div>
+          <NavLink to="/documentation" style={linkStyle} activeStyle={linkStyle}>
+            <div className="footer-item">Documentation</div>
           </NavLink>
           <div className="footer-item">Version 1.0</div>
         </Col>
