@@ -93,7 +93,7 @@ function TissuesSummaryDescription() {
           }}
         />
         <span>
-          Last update: February 2019
+          Last update: April 2019
         </span>
       </div>
 

@@ -81,7 +81,7 @@ class Downloads extends React.Component {
             </thead>
             <tbody>
               <tr>
-                <td>Release 1 (19th July 2018)</td>
+                <td>Release 1 (5th April 2019)</td>
                 <td><a href="https://cog.sanger.ac.uk/cmp/download/raw_sgrnas_counts.zip">raw_sgrnas_counts.zip</a></td>
                 <td><a href="https://cog.sanger.ac.uk/cmp/download/essentiality_matrices.zip">essentiality_matrices.zip</a></td>
                 <td><a href="https://cog.sanger.ac.uk/cmp/download/binaryDepScores.tsv.zip">binaryDepScores.tsv.zip</a></td>
