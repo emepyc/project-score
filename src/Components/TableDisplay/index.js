@@ -7,13 +7,16 @@ import identity from 'lodash.identity';
 import useUrlParams, {sanitiseParams} from '../useUrlParams';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
+import {foldChangeHelp, lossOfFitnessScoreHelp} from "../../definitions";
 
 function TableDisplay(props) {
   const data = props.data;
 
-  const [showTooltip, toggleShowTooltip] = useState(false);
+  const [showLFSTooltip, toggleShowLFSTooltip] = useState(false);
+  const [showFCTooltip, toggleShowFCTooltip] = useState(false);
 
-  const toggleTooltip = () => toggleShowTooltip(!showTooltip);
+  const toggleLFSTooltip = () => toggleShowLFSTooltip(!showLFSTooltip);
+  const toggleFCTooltip = () => toggleShowFCTooltip(!showFCTooltip);
 
   const getKeyForRow = (row) => row ? `${row.geneId}-${row.modelName}` : null;
 
@@ -45,7 +48,7 @@ function TableDisplay(props) {
           </th>
           <th>
             <nobr>
-              Corrected log fold change{' '}
+              Corrected log fold change<sup id='foldChangeHelp' style={{cursor: 'default'}}>?</sup>{' '}
               <SortArrows {...props} field="fc_clean" />
             </nobr>
           </th>
@@ -94,10 +97,18 @@ function TableDisplay(props) {
             <Tooltip
               target='lossOfFitnessScoreHelp'
               placement='right'
-              isOpen={showTooltip}
-              toggle={toggleTooltip}
+              isOpen={showLFSTooltip}
+              toggle={toggleLFSTooltip}
             >
-              Based on Bayes Factor value using BAGEL and scaled to a 5% false discovery rate threshold.
+              {lossOfFitnessScoreHelp}
+            </Tooltip>
+            <Tooltip
+              target='foldChangeHelp'
+              placement='right'
+              isOpen={showFCTooltip}
+              toggle={toggleFCTooltip}
+            >
+              {foldChangeHelp}
             </Tooltip>
     </Fragment>
   );

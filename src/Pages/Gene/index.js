@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-import {ButtonGroup} from 'reactstrap';
 import Table from '../../Components/Table';
 import TissueFilter from '../../Components/TissueFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import FitnessPlot from '../../Components/FitnessPlot';
 import GeneInfoSummary from '../../Components/GeneInfoSummary';
 import TissueHighlight from '../../Components/TissueHighlight';
-import {Row, Col, Card, CardHeader, CardBody, Tooltip} from 'reactstrap';
+import {ButtonGroup, Row, Col, Card, CardHeader, CardBody, Tooltip} from 'reactstrap';
 import {Button} from '../../Components/Buttom';
 import GeneSummaryPlots from '../../Components/GeneSummaryPlots';
+import {lossOfFitnessScoreHelp, foldChangeHelp} from "../../definitions";
 
 function Gene() {
 
@@ -75,9 +75,11 @@ function FitnessPlotSection(props) {
   const [colorBy, setColorBy] = useState("significance");
   const [attributeToPlot, setAttributeToPlot] = useState("bf_scaled");
   const [highlightTissue, setHighlightTissue] = useState(null);
-  const [showTooltip, toggleShowTooltip] = useState(null);
+  const [showLFSTooltip, toggleLFSShowTooltip] = useState(null);
+  const [showFCTooltip, toggleFCShowTooltip] = useState(null);
 
-  const toggleTooltip = () => toggleShowTooltip(!showTooltip);
+  const toggleLFSTooltip = () => toggleLFSShowTooltip(!showLFSTooltip);
+  const toggleFCTooltip = () => toggleFCShowTooltip(!showFCTooltip);
 
   return (
     <Row className="my-3">
@@ -95,6 +97,7 @@ function FitnessPlotSection(props) {
                 className="ml-auto"
               >
                 <Button
+                  id='foldChangeScoreButton'
                   active={attributeToPlot === "fc_clean"}
                   outline={attributeToPlot !== "fc_clean"}
                   onClick={() => setAttributeToPlot("fc_clean")}
@@ -114,10 +117,18 @@ function FitnessPlotSection(props) {
             <Tooltip
               target='lossOfFitnessScoreButton'
               placement='right'
-              isOpen={showTooltip}
-              toggle={toggleTooltip}
+              isOpen={showLFSTooltip}
+              toggle={toggleLFSTooltip}
             >
-              Based on Bayes Factor value using BAGEL and scaled to a 5% false discovery rate threshold.
+              {lossOfFitnessScoreHelp}
+            </Tooltip>
+            <Tooltip
+              target='foldChangeScoreButton'
+              placement='right'
+              isOpen={showFCTooltip}
+              toggle={toggleFCTooltip}
+            >
+              {foldChangeHelp}
             </Tooltip>
             <FitnessPlot
               colorBy={colorBy}

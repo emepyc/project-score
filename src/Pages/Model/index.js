@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Row, Col, ButtonGroup} from 'reactstrap';
+import {Row, Col, ButtonGroup, Tooltip} from 'reactstrap';
 import Table from '../../Components/Table';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import ModelInfoSummary from '../../Components/ModelInfoSummary';
@@ -8,6 +8,7 @@ import {Card, CardBody, CardHeader} from 'reactstrap';
 import {Button} from "../../Components/Buttom";
 import FitnessPlot from "../../Components/FitnessPlot";
 import PanCangerGeneFilter from "../../Components/PanCancerGeneFilter";
+import {foldChangeHelp, lossOfFitnessScoreHelp} from "../../definitions";
 
 function Model() {
   return (
@@ -54,7 +55,7 @@ function FitnessSection() {
   return (
       <Row>
         <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
-          <FitnessPlotPlotSection
+          <FitnessPlotSection
             highlight={highlightFitness}
             onHighlight={setHighlightFitness}
           />
@@ -69,8 +70,13 @@ function FitnessSection() {
   );
 }
 
-function FitnessPlotPlotSection(props) {
+function FitnessPlotSection(props) {
   const [attributeToPlot, setAttributeToPlot] = useState("bf_scaled");
+  const [showLFSTooltip, toggleLFSShowTooltip] = useState(null);
+  const [showFCTooltip, toggleFCShowTooltip] = useState(null);
+
+  const toggleLFSTooltip = () => toggleLFSShowTooltip(!showLFSTooltip);
+  const toggleFCTooltip = () => toggleFCShowTooltip(!showFCTooltip);
 
   return (
     <Card>
@@ -88,6 +94,7 @@ function FitnessPlotPlotSection(props) {
                 className="ml-auto"
               >
                 <Button
+                  id='foldChangeScoreButton'
                   active={attributeToPlot === "fc_clean"}
                   outline={attributeToPlot !== "fc_clean"}
                   onClick={() => setAttributeToPlot("fc_clean")}
@@ -95,6 +102,7 @@ function FitnessPlotPlotSection(props) {
                   Corrected fold change
                 </Button>
                 <Button
+                  id='lossOfFitnessScoreButton'
                   active={attributeToPlot === "bf_scaled"}
                   outline={attributeToPlot !== "bf_scaled"}
                   onClick={() => setAttributeToPlot("bf_scaled")}
@@ -103,6 +111,23 @@ function FitnessPlotPlotSection(props) {
                 </Button>
               </ButtonGroup>
             </div>
+            <Tooltip
+              target='lossOfFitnessScoreButton'
+              placement='right'
+              isOpen={showLFSTooltip}
+              toggle={toggleLFSTooltip}
+            >
+              {lossOfFitnessScoreHelp}
+            </Tooltip>
+            <Tooltip
+              target='foldChangeScoreButton'
+              placement='right'
+              isOpen={showFCTooltip}
+              toggle={toggleFCTooltip}
+            >
+              {foldChangeHelp}
+            </Tooltip>
+
           </Col>
         </Row>
         <FitnessPlot
