@@ -6,7 +6,7 @@ import 'rc-slider/assets/index.css';
 import Spinner from '../Spinner';
 import useUrlParams from '../useUrlParams';
 import {fetchCrisprData} from '../../api';
-import colors from '../../colors';
+import colors, {insignificantNodeColor, significantNodeColor, colorInsignificantBg, colorSignificantBg} from '../../colors';
 
 import './fitnessPlot.scss';
 import * as d3 from "d3";
@@ -260,6 +260,8 @@ function FitnessTooltip(props) {
   const x = xScale(index);
   const y = yScale(fitnessValue);
 
+  const backgroundColor = bf_scaled < 0 ? colorSignificantBg : colorInsignificantBg;
+
   return (
     <Fragment>
       <div
@@ -280,7 +282,7 @@ function FitnessTooltip(props) {
         Gene: <b>{geneSymbol}</b><br/>
         Model: <b>{modelName}</b> ({tissue})<br/>
         Corrected fold change:<b>{fc_clean}</b><br/>
-        Loss of fitness score:<b>{bf_scaled}</b>
+        Loss of fitness score:<b><span style={{padding: '0.4em 0.2em', backgroundColor}}>{bf_scaled}</span></b>
       </div>
       <div
         style={{
@@ -323,8 +325,6 @@ function FitnessCanvasPlot(props) {
     xAxisLabel,
   } = props;
 
-  const insignificantNodeColor = '#CCCCCC';
-  const significantNodeColor = '#5ba633';
   const nodeRadius = 3;
 
   const canvasPlot = useRef(null);

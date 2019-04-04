@@ -47,16 +47,14 @@ export default function Documentation() {
             interfaces.
             Project Score is part of the <a target='_blank' rel='noopener noreferrer'
                                             href="https://depmap.sanger.ac.uk/">Cancer
-            Dependency Map</a>
-            at the <a target='_blank' rel='noopener noreferrer' href="https://www.sanger.ac.uk/">Sanger</a>, which aims
+            Dependency Map</a> at the <a target='_blank' rel='noopener noreferrer'
+                                         href="https://www.sanger.ac.uk/">Sanger</a>, which aims
             to
             identify all dependencies in every cancer cell.
           </p>
 
           <p className='paragraph caption'>
-            The Project Score database is a part of an ongoing research project and results will be updated and are
-            neither
-            complete or final.
+            The Project Score database is part of an ongoing research project and results will be regularly updated.
           </p>
         </div>
 
@@ -128,10 +126,9 @@ export default function Documentation() {
                      href='https://www.ncbi.nlm.nih.gov/pubmed/30103702'>CRISPRcleanR</a>.
             Loss of fitness scores are generated from corrected FCs through an in-house R implementation of the <a
             target='_blank' rel='noopener noreferrer' href='https://www.ncbi.nlm.nih.gov/pubmed/27083490'>BAGEL
-            method</a>
-            to call significantly depleted genes (code publicly available at <a target='_blank'
-                                                                                rel='noopener noreferrer'
-                                                                                href='https://github.com/francescojm/BAGELR'>https://github.com/francescojm/BAGELR</a>).
+            method</a> to call significantly depleted genes (code publicly available at <a target='_blank'
+                                                                                           rel='noopener noreferrer'
+                                                                                           href='https://github.com/francescojm/BAGELR'>https://github.com/francescojm/BAGELR</a>).
             Our BAGEL implementation computes gene-level Bayesian factors (BFs) by calculating the average of the sgRNAs
             on a targeted-gene basis,
             instead of summing them. Additionally, it uses reference sets of predefined essential and non-essential

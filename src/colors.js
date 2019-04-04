@@ -19,3 +19,14 @@ export default {
   'Soft Tissue': '#D474A1',
   Stomach: '#DDBB78',
 };
+
+export const insignificantNodeColor = '#CCCCCC';
+export const significantNodeColor = '#5ba633';
+
+export const green1 = '#5ba633';
+export const green2 = '#c8ebc7';
+export const green3 = '#eff6eb';
+
+export const colorSignificantBg = green3;
+export const colorInsignificantBg = '#F0F0F0';
+

@@ -71,7 +71,7 @@ function GeneInfoSummary(props) {
               text: `${geneSymbol} does ${isHistone ? '' : 'not'} encode for a histone protein`
             },
             {
-              label: 'Dna Replication',
+              label: 'Dna replication',
               value: isDnaReplication,
               id: 'isDnaReplication',
               text: `${geneSymbol} does ${isDnaReplication ? '' : 'not'} encode for a DNA replication protein`
