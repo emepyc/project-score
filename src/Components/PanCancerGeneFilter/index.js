@@ -22,7 +22,7 @@ function PanCangerGeneFilter(props) {
           onChange={onChange}
           checked={urlParams.excludePanCancerGenes === '1'}
         />{' '}
-        Exclude pan cancer genes
+        Exclude pan cancer core fitness genes
       </Label>
     </div>
   );
