@@ -11,7 +11,7 @@ const header = () => {
         className="animated fadeInUp text-center"
         style={{marginTop: '60px', marginBottom: '80px'}}
       >
-        <object type='image/svg+xml' data={logo} style={{width: '80%'}}/>
+        <img src={logo} style={{width: '80%'}} />
       </div>
       <p className="lead">Genetic screens to identify cancer dependencies</p>
       <p className="my-2" style={{textAlign: 'center'}}>
