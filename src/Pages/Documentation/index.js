@@ -63,7 +63,7 @@ export default function Documentation() {
 
           <p className='paragraph'>
             <span className='strong'>Citation</span>: For detailed information on Project Score methods please refer
-            to its <a href=''>publication</a>
+            to its <a target='_blank' href='https://www.nature.com/articles/s41586-019-1103-9'>publication</a>
           </p>
 
           <p className='paragraph'>
