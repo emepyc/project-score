@@ -100,7 +100,7 @@ function Table(props) {
 
         {showSearchbox && (
           <GeneSearchbox
-            onInputChange={setSearch}
+            onInputChange={(input) => setSearch(input.toUpperCase())}
             deferTime={1000}
           />
         )}
