@@ -8,6 +8,7 @@ import {withRouter} from 'react-router-dom';
 import {fetchTissues} from '../../api';
 import Spinner from '../Spinner';
 import colors from '../../colors';
+
 import './donutChart.scss';
 
 
@@ -30,7 +31,7 @@ function Label({radius, arc, x, y, maxX, center, children}) {
     return <span/>;
   }
 
-  const textToShow = children.length > 23 ? `${children.substring(0, 20)}...` : children;
+  const textToShow = children.length > 20 ? `${children.substring(0, 17)}...` : children;
 
   const labelX = xHorizontal < 0 ? xHorizontal - 3 : xHorizontal + 3;
 
@@ -50,7 +51,7 @@ function Label({radius, arc, x, y, maxX, center, children}) {
         fill={d3.rgb(colors[arc.data.tissue]).darker()}
         x={labelX}
         y={yDiagonal}
-        fontSize="0.7em"
+        fontSize="0.9em"
         alignmentBaseline="middle"
         textAnchor={xDiagonal < 0 ? 'end' : 'start'}
       >
@@ -63,6 +64,7 @@ function Label({radius, arc, x, y, maxX, center, children}) {
 function DonutChart({history}) {
   const [tissues, setTissues] = useState([]);
   const [containerWidth, setContainerWidth] = useState(500);
+  const [containerHeight, setContainerHeight] = useState(500);
   const [loadingTissues, setLoadingTissues] = useState(false);
 
   const explanationMessageRef = useRef(null);
@@ -81,6 +83,7 @@ function DonutChart({history}) {
   useEffect(() => {
     if (containerRef.current) {
       setContainerWidth(containerRef.current.offsetWidth);
+      setContainerHeight(containerRef.current.offsetWidth - 150);
     }
   });
 
@@ -133,7 +136,7 @@ function DonutChart({history}) {
         <svg
           className='donutChart'
           width={containerWidth}
-          height={300}
+          height={containerHeight - margins.top}
         >
           <Group
             top={radius + margins.top}

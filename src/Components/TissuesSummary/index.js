@@ -6,7 +6,6 @@ import FadeIn from '../FadeInAfterVisible';
 import DonutChart from '../DonutChart';
 import TissuesSummaryDescription from '../TissuesSummaryDescription';
 
-// TODO: Avoid duplication of code for each Col in the Row
 function TissuesSummary() {
   return (
     <Fragment>
@@ -15,7 +14,7 @@ function TissuesSummary() {
         <Col
           md={{size: 12}}
           lg={{size: 6}}
-          className={'my-auto'}
+          className='my-auto justify-content-center d-none d-md-block'
         >
           <FadeIn action='fadeInLeft'>
             <DeferredDonutChart/>
@@ -25,7 +24,7 @@ function TissuesSummary() {
         <Col
           md={{size: 12}}
           lg={{size: 6}}
-          className={'my-auto'}
+          className='my-auto'
         >
           <FadeIn action='fadeInRight'>
             <DeferredTissuesDescription/>
