@@ -25,8 +25,7 @@ function TissuesSummaryDescription() {
   }, []);
 
   return (
-    <div style={{martinTop: '20px'}}>
-
+    <div>
       <div className="sectionDescription" style={{marginLeft: '5px'}}>
           <img
             height={'48px'}
@@ -96,7 +95,6 @@ function TissuesSummaryDescription() {
           Last update: April 2019
         </span>
       </div>
-
     </div>
   );
 }

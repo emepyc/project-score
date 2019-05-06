@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {NavLink, Route} from 'react-router-dom';
 import {Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
-import cancer_dep_map from './DependencyMapLogo.png';
+import cancerDepMap from './DependencyMapLogo.png';
 import Searchbox from '../Searchbox';
 import sangerLogo from './SangerLogo.png';
 
@@ -99,25 +99,27 @@ const Masthead = () => {
             alt=""
           />
         </a>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://depmap.sanger.ac.uk/"
-          className="ml-3 navbar-brand"
-        >
-          <img
-            src={cancer_dep_map}
-            alt="Cancer Dependency Map"
-            width="201"
-            height="57"
-            className="d-inline-block align-top"
-          />
-        </a>
+        <span className='d-none d-md-inline-block'>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://depmap.sanger.ac.uk/"
+            className="ml-3 navbar-brand"
+          >
+            <img
+              src={cancerDepMap}
+              alt="Cancer Dependency Map"
+              width="201"
+              height="57"
+              className="d-inline-block align-top"
+            />
+          </a>
+        </span>
         <div className='ml-md-1 my-auto d-none d-lg-block'>
-          <NavigationExpanded />
+          <NavigationExpanded/>
         </div>
         <div style={menuStyle} className='ml-md-1 my-auto d-lg-none d-inline'>
-          <NavigationContracted />
+          <NavigationContracted/>
         </div>
         <div className="d-none d-lg-inline-block my-auto" style={{width: '250px'}}>
           {window.location.pathname !== '/' && <Searchbox placeholder='Search...'/>}
