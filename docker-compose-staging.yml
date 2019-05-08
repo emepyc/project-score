@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   frontend:
-    image: registry.production.team215.sanger.ac.uk/score_frontend:staging
+    image: registry.team215.sanger.ac.uk/score_frontend:staging
     networks:
       - traefik_net
     deploy:
@@ -11,7 +11,7 @@ services:
       labels:
         - "traefik.api.port=80"
         - "traefik.docker.network=traefik_net"
-        - "traefik.api.frontend.rule=Host:score.staging.team215.sanger.ac.uk"
+        - "traefik.api.frontend.rule=Host:score.staging.team215.sanger.ac.uk,score.eta-staging.team215.sanger.ac.uk"
         - "traefik.frontend.entryPoints=http"
 
 networks:

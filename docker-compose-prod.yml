@@ -1,0 +1,19 @@
+version: '3.5'
+
+services:
+
+  frontend:
+    image: registry.team215.sanger.ac.uk/score_frontend:1.0.1
+    networks:
+      - traefik_net
+    deploy:
+      replicas: 2
+      labels:
+        - "traefik.api.port=80"
+        - "traefik.docker.network=traefik_net"
+        - "traefik.api.frontend.rule=Host:score.production.team215.sanger.ac.uk,score.eta-production.team215.sanger.ac.uk,score.depmap.sanger.ac.uk"
+        - "traefik.frontend.entryPoints=http,external"
+
+networks:
+  traefik_net:
+    external: true
