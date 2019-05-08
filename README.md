@@ -7,7 +7,7 @@ This project contains the web application code for the Crispr / Cas9 project
 
 ```bash
 $ git clone https://github.com/emepyc/project-score
-$ cd crispr-app 
+$ cd project-score 
 ```
 
 - Install all dependencies:
