@@ -264,11 +264,14 @@ export default function Documentation() {
         <div className='section'>
           <h2><a name="usage">Data Usage Policy</a></h2>
           <p className='paragraph'>
-            Users have a non-exclusive, non-transferable right to use data files for internal, non-commercial research
-            and educational purposes. Please note: The data files are experimental and academic in nature and are not
-            licensed or certified by any regulatory body. Genome Research Limited provides access to data files on an
-            “as is” basis and excludes all warranties of any kind (express or implied). If you are interested in
-            incorporating results or software into a product, or have questions, please contact depmap@sanger.ac.uk.
+            Users have a non-exclusive, non-transferable right to use data files for internal proprietary research and
+              educational purposes, including target, biomarker and drug discovery. Excluded from this licence are use
+              of the data (in whole or any significant part) for resale either alone or in combination with additional
+              data/product offerings, or for provision of commercial services.Please note: The data files are experimental
+              and academic in nature and are not licensed or certified by any regulatory body. Genome Research Limited
+              provides access to data files on an “as is” basis and excludes all warranties of any kind (express or
+              implied). If you are interested in incorporating results or software into a product, or have questions,
+              please contact depmap@sanger.ac.uk.
           </p>
         </div>
       </Container>
