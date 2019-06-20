@@ -13,9 +13,11 @@ export default function GeneInfoHeader(props) {
   const geneName = names.filter(name => name.current)[0];
 
   const externalLinks = (
-    <span>External links: <ExternalLinks
-      identifiers={identifiers}
-    /></span>
+    <span>External links:
+      <ExternalLinks
+        identifiers={identifiers}
+      />
+    </span>
   );
 
   const subheaders = geneName && geneName.name ? [geneName.name, externalLinks]: [externalLinks];
@@ -69,7 +71,7 @@ function ExternalLinks({identifiers}) {
         {ensemblId && (
           <LogoExternalLink
             resource='OpenTargets'
-            link={`https://www.targetvalidation.org/target/${ensemblId}/associations`}
+            link={`https://www.targetvalidation.org/target/${ensemblId}`}
           />
         )}
         {cosmicGeneSymbol && (
