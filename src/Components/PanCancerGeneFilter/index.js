@@ -2,6 +2,7 @@ import {Label, Input} from 'reactstrap';
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 import useUrlParams from '../useUrlParams';
+import {colorPanCancerGeneBg} from '../../colors';
 
 function PanCangerGeneFilter(props) {
   const [urlParams, setUrlParams] = useUrlParams(props);
@@ -22,7 +23,10 @@ function PanCangerGeneFilter(props) {
           onChange={onChange}
           checked={urlParams.excludePanCancerGenes === '1'}
         />{' '}
-        Exclude pan cancer core fitness genes
+        Exclude{' '}
+        <span style={{padding: "0.4em 0.2em", borderRadius: "5px", backgroundColor: colorPanCancerGeneBg}}>
+          pan cancer core fitness genes
+        </span>
       </Label>
     </div>
   );

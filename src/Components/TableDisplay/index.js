@@ -8,7 +8,7 @@ import useUrlParams, {sanitiseParams} from '../useUrlParams';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import {foldChangeHelp, lossOfFitnessScoreHelp} from "../../definitions";
-import {colorSignificantBg, colorInsignificantBg} from "../../colors";
+import {colorSignificantBg, colorInsignificantBg, colorPanCancerGeneBg} from "../../colors";
 
 function TableDisplay(props) {
   const data = props.data;
@@ -74,7 +74,7 @@ function TableDisplay(props) {
               onMouseOver={() => mouseOver(row)}
               onMouseOut={mouseOut}
             >
-              <td>
+              <td style={{backgroundColor: row.isPanCancer ? colorPanCancerGeneBg : "white"}}>
                 <Link to={`/gene/${row.geneId}?${paramsForGeneLink}`}>{row.geneSymbol}</Link>
               </td>
               <td style={{whiteSpace: 'nowrap'}}>
