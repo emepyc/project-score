@@ -54,7 +54,7 @@ function Searchbox({placeholder="Search for a gene, cell line or tissue", histor
     if (value.type === 'genes') {
       history.push(`/gene/${value.id}`);
     } else if (value.type === 'models') {
-      history.push(`/model/${value.id}`);
+      history.push(`/model/${value.id}?scoreMax=0`);
     } else {
       history.push(`/table?tissue=${value.id}`);
     }
