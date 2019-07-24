@@ -94,6 +94,18 @@ class Downloads extends React.Component {
                                 href="https://cog.sanger.ac.uk/cmp/download/binaryDepScores.tsv.zip">binaryDepScores.tsv.zip</a>
                             </td>
                         </tr>
+                        <tr>
+                            <td>Broad Institute 19Q2 cell lines<br /><small>processed through Project Score pipeline</small></td>
+                            <td><a
+                                href="https://depmap.org/portal/download/">Available from depmap.org</a>
+                            </td>
+                            <td><a
+                                href="https://cog.sanger.ac.uk/cmp/download/broad_essentiality_matrices_190724.zip">broad_essentiality_matrices_190724.zip</a>
+                            </td>
+                            <td><a
+                                href="https://cog.sanger.ac.uk/cmp/download/broad_binaryDepScores_190724.tsv.zip">broad_binaryDepScores_190724.tsv.zip</a>
+                            </td>
+                        </tr>
                         </tbody>
                     </Table>
                     <Tooltip
