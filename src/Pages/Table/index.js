@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import TableComponent from '../../Components/Table';
 import TissueFilter from '../../Components/TissueFilter';
+import CancerTypeFilter from '../../Components/CancerTypeFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import {Row, Col} from 'reactstrap';
 import {Card, CardHeader, CardBody} from 'reactstrap';
@@ -44,6 +45,9 @@ function Filters() {
           </Col>
           <Col>
             <TissueFilter/>
+          </Col>
+          <Col>
+            <CancerTypeFilter/>
           </Col>
           <Col>
             <ScoreRangeFilter/>

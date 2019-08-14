@@ -1,5 +1,6 @@
 import {get, post} from './api';
 import fetchTissues from './fetchTissues';
+import fetchCancerTypes from './fetchCancerTypes';
 import search from './search';
 import {id2name, name2id, fitnessIsSignificant, totalModels} from "./utils";
 import fetchCrisprData from './fetchCrisprData';
@@ -13,6 +14,7 @@ export {
   get,
   post,
   fetchTissues,
+  fetchCancerTypes,
   fetchCrisprData,
   fetchScoreExtent,
   fetchGeneInfo,

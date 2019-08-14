@@ -2,8 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import Select from 'react-select';
 import {withRouter} from 'react-router';
 import useUrlParams from '../useUrlParams';
-import {fetchTissues} from '../../api';
-import {name2id} from '../../api';
+import {fetchTissues, name2id} from '../../api';
 
 function TissueFilter(props) {
   const [tissue, setTissue] = useState({});
