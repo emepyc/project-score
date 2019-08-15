@@ -1,26 +1,4 @@
 import identity from "lodash.identity";
-import {id2name} from "./utils";
-
-// TODO: Remove expandTissueFilter since we are going to filter by cancer type and not tissue
-export function expandTissueFilter(tissue) {
-  return {
-    name: "model",
-    op: "has",
-    val: {
-      name: "sample",
-      op: "has",
-      val: {
-        name: "tissue",
-        op: "has",
-        val: {
-          name: "name",
-          op: "eq",
-          val: id2name(tissue),
-        }
-      }
-    }
-  };
-}
 
 export function expandExcludePanCancerGenesFilter() {
   return {

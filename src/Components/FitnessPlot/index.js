@@ -46,7 +46,7 @@ function FitnessPlot(props) {
     const params = {
       geneId: urlParams.geneId,
       modelId: urlParams.modelId,
-      tissue: urlParams.tissue,
+      cancerType: urlParams.cancerType,
       scoreMin: urlParams.scoreMin,
       scoreMax: urlParams.scoreMax,
       excludePanCancerGenes: urlParams.excludePanCancerGenes,
@@ -63,7 +63,7 @@ function FitnessPlot(props) {
   }, [
     urlParams.geneId,
     urlParams.modelId,
-    urlParams.tissue,
+    urlParams.cancerType,
     urlParams.scoreMin,
     urlParams.scoreMax,
     urlParams.excludePanCancerGenes,

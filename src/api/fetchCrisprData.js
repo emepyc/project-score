@@ -1,7 +1,6 @@
 import {get} from './index';
 import Deserialiser from 'deserialise-jsonapi';
 import {
-  expandTissueFilter,
   expandScoreRangeFilter,
   expandGeneFilter,
   expandModelFilter,
@@ -37,15 +36,10 @@ function normaliseParams(params) {
     }) :
     null;
 
-  const tissueFilter = params.tissue ?
-    expandTissueFilter(params.tissue) :
-    null;
-
   const combinedFilters = combineFilters([
     geneFilter,
     modelFilter,
     searchFilter,
-    tissueFilter,
     scoreRangeFilter,
     excludePanCancerGenes,
   ]);
