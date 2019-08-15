@@ -10,7 +10,7 @@ function SearchExamples() {
         <Link to={'/gene/SIDG02491'}>BRAF</Link>
         <Link className='d-none d-md-inline-block' to={'/gene/SIDG26200'}>PTEN</Link>
         <Link to={'/model/SIDM01197?scoreMax=0'}>SNU&#8209;C1</Link>
-        <Link to={'/table?tissue=Breast'}>Breast</Link>
+        <Link to={'/table?cancerType=2'}>Breast carcinoma</Link>
         <span className='d-none d-md-inline-block' style={{marginLeft: '20px'}}>
           Or:<Link to={'/table'}>explore all the data</Link>
         </span>
