@@ -8,6 +8,7 @@ import {
   expandSearchFilter,
   expandExcludePanCancerGenesFilter,
   combineFilters,
+  datasetEntpoint
 } from "./filters";
 
 const deserialiser = new Deserialiser();
@@ -69,7 +70,10 @@ function normaliseParams(params) {
 
 export default function fetchCrisprData(params) {
   const paramsNormalised = normaliseParams(params);
-  return get('/datasets/crispr_ko', paramsNormalised)
+
+  const endpoint = datasetEntpoint(params.cancerType);
+
+  return get(endpoint, paramsNormalised)
     .then(resp => deserialiser.deserialise(resp.data)
         .then(deserialisedData => ({
             count: resp.data.meta.count,

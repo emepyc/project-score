@@ -1,6 +1,7 @@
 import identity from "lodash.identity";
 import {id2name} from "./utils";
 
+// TODO: Remove expandTissueFilter since we are going to filter by cancer type and not tissue
 export function expandTissueFilter(tissue) {
   return {
     name: "model",
@@ -122,4 +123,11 @@ export function expandScoreRangeFilter({scoreMin, scoreMax}) {
 
 export function combineFilters(filters) {
   return filters.filter(identity);
+}
+
+export function datasetEntpoint(cancerType) {
+  const cancerTypeEndpoint = cancerType ?
+    `analyses/${cancerType}` :
+    '';
+  return `${cancerTypeEndpoint}/datasets/crispr_ko`;
 }

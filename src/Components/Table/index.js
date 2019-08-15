@@ -57,6 +57,7 @@ function Table(props) {
       pageNumber,
       search,
       tissue: urlParams.tissue,
+      cancerType: urlParams.cancerType,
       scoreMin: urlParams.scoreMin,
       scoreMax: urlParams.scoreMax,
     };

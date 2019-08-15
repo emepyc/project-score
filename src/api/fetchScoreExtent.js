@@ -4,6 +4,7 @@ import {
   expandGeneFilter,
   expandModelFilter,
   combineFilters, expandExcludePanCancerGenesFilter,
+  datasetEntpoint,
 } from './filters';
 
 function normaliseParams(params) {
@@ -42,6 +43,9 @@ function normaliseParams(params) {
 
 export default function fetchScoreExtent(params) {
   const paramsNormalised = normaliseParams(params);
-  return get('/datasets/crispr_ko', paramsNormalised)
+
+  const endpoint = datasetEntpoint(params.cancerType);
+
+  return get(endpoint, paramsNormalised)
     .then(resp => resp.data.meta.agg.fc_clean);
 }

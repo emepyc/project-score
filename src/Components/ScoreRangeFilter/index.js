@@ -28,6 +28,7 @@ function ScoreRangeFilter(props) {
   useEffect(() => {
     const params = {
       tissue: urlParams.tissue,
+      cancerType: urlParams.cancerType,
       geneId: urlParams.geneId,
       modelId: urlParams.modelId,
       excludePanCancerGenes: urlParams.excludePanCancerGenes,
