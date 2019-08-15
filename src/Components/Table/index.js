@@ -79,6 +79,7 @@ function Table(props) {
     urlParams.scoreMin,
     urlParams.scoreMax,
     urlParams.excludePanCancerGenes,
+    urlParams.cancerType,
   ]);
 
   const isFirstPage = pageNumber === 1;

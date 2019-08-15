@@ -42,6 +42,7 @@ function ScoreRangeFilter(props) {
     urlParams.geneId,
     urlParams.modelId,
     urlParams.excludePanCancerGenes,
+    urlParams.cancerType,
   ]);
 
   if (!scoreExtent) {
