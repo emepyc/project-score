@@ -9,6 +9,7 @@ function formatResponse(resp) {
       extraOptions: gene => ({
         label: gene.symbol,
         id: gene.id,
+        disabled: gene.status !== "available",
       })
     },
     {
@@ -18,6 +19,7 @@ function formatResponse(resp) {
         label: model.names[0],
         id: model.id,
         tissue: model.tissue,
+        disabled: model.status !== "available",
       }),
     },
     {
@@ -46,6 +48,6 @@ function formatResponse(resp) {
 }
 
 export default function search(query) {
-  return get(`/score_search/${query}`)
+  return get(`/score_search/${query}?include=all`)
     .then(formatResponse);
 }

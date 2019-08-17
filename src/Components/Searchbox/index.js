@@ -40,7 +40,7 @@ const LoadingMessage = (props) => {
 };
 
 const _loadSuggestions = (inputValue, callback) => search(inputValue)
-  .then(resp => callback(resp));
+  .then(callback);
 
 const loadSuggestions = debounce(_loadSuggestions, 500, {leading: true});
 
@@ -78,6 +78,8 @@ function Searchbox({placeholder="Search for a gene, cell line or tissue", histor
 
   const onInputChange = value => setInputValue(value);
 
+  const isOptionDisabled = option => option.disabled === true;
+
   return (
     <AsyncSelect
       value={inputValue}
@@ -89,6 +91,7 @@ function Searchbox({placeholder="Search for a gene, cell line or tissue", histor
       formatGroupLabel={formatGroupLabel}
       components={{LoadingMessage}}
       onInputChange={onInputChange}
+      isOptionDisabled={isOptionDisabled}
     >
     </AsyncSelect>
   );
