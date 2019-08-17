@@ -28,14 +28,6 @@ function formatResponse(resp) {
         id: cancerType.id,
       }),
     },
-    {
-      type: "tissue",
-      label: "Tissue",
-      extraOptions: tissue => ({
-        label: tissue.name,
-        id: tissue.name,
-      })
-    }
   ];
 
   return options.reduce((suggestions, suggestionType) => {
