@@ -21,13 +21,21 @@ function formatResponse(resp) {
       }),
     },
     {
-      type: "tissues",
-      label: "Tissues",
+      type: "cancer_types",
+      label: "Cancer types",
+      extraOptions: cancerType => ({
+        label: cancerType.name,
+        id: cancerType.id,
+      }),
+    },
+    {
+      type: "tissue",
+      label: "Tissue",
       extraOptions: tissue => ({
         label: tissue.name,
         id: tissue.name,
-      }),
-    },
+      })
+    }
   ];
 
   return options.reduce((suggestions, suggestionType) => {
