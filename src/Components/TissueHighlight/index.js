@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Row, Col} from 'reactstrap';
-import colors from '../../colors';
+import {tissueColor} from '../../colors';
 import {fetchTissues} from '../../api';
 import Spinner from '../Spinner';
 
@@ -10,7 +10,7 @@ function tissueFilterElement(tissue, key, onSelectTissue) {
       <div
         style={{
           display: 'inline-block',
-          backgroundColor: colors[tissue],
+          backgroundColor: tissueColor[tissue],
           width: '10px',
           height: '10px',
           borderRadius: '5px'

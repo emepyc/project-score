@@ -7,7 +7,7 @@ import {withRouter} from 'react-router-dom';
 
 import {fetchCancerTypes} from '../../api';
 import Spinner from '../Spinner';
-import colors from '../../colors';
+import {tissueColor} from '../../colors';
 
 import './donutChart.scss';
 
@@ -38,17 +38,17 @@ function Label({radius, arc, x, y, maxX, center, children}) {
   return (
     <React.Fragment>
       <Line
-        stroke={colors[arc.data.id]}
+        stroke={tissueColor[arc.data.id]}
         from={new Point({x: x, y: y})}
         to={new Point({x: xDiagonal, y: yDiagonal})}
       />
       <Line
-        stroke={colors[arc.data.id]}
+        stroke={tissueColor[arc.data.id]}
         from={new Point({x: xDiagonal, y: yDiagonal})}
         to={new Point({x: xHorizontal, y: yDiagonal})}
       />
       <text
-        fill={d3.rgb(colors[arc.data.id]).darker()}
+        fill={d3.rgb(tissueColor[arc.data.id]).darker()}
         x={labelX}
         y={yDiagonal}
         fontSize="0.9em"
@@ -160,7 +160,7 @@ function DonutChart({history}) {
             >
               {pie => {
                 return pie.arcs.map((arc, i) => {
-                  const color = colors[arc.data.id];
+                  const color = tissueColor[arc.data.id];
                   const [centroidX, centroidY] = pie.path.centroid(arc);
                   return (
                     <g key={`cancerType-${arc.data.id}-${i}`}>
