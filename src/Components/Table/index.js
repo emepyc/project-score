@@ -25,6 +25,7 @@ function parseData(raw) {
       bf_scaled: d.bf_scaled,
       modelId: d.model.id,
       geneId: d.gene.id,
+      isPanCancer: d.gene.essentiality_profiles[0].core_fitness_pancan,
     }
   });
 }

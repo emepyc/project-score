@@ -13,9 +13,11 @@ export default function GeneInfoHeader(props) {
   const geneName = names.filter(name => name.current)[0];
 
   const externalLinks = (
-    <span>External links: <ExternalLinks
-      identifiers={identifiers}
-    /></span>
+    <span>External links:
+      <ExternalLinks
+        identifiers={identifiers}
+      />
+    </span>
   );
 
   const subheaders = geneName && geneName.name ? [geneName.name, externalLinks]: [externalLinks];
@@ -35,9 +37,9 @@ export default function GeneInfoHeader(props) {
 }
 
 function LogoExternalLink(props) {
-  const {link, resource} = props;
+  const {link, resource, ...otherProps} = props;
   return (
-    <span className='mr-2'>
+    <span {...otherProps} className='mr-2'>
       <a target="_blank" rel="noopener noreferrer" href={link}>
         {resource}
       </a>
@@ -54,6 +56,13 @@ function ExternalLinks({identifiers}) {
 
     return (
       <div>
+        {ensemblId && (
+          <LogoExternalLink
+            style={{fontWeight: "bold"}}
+            resource='OpenTargets'
+            link={`https://www.targetvalidation.org/target/${ensemblId}`}
+          />
+        )}
         {uniprotId && (
           <LogoExternalLink
             resource='Uniprot'
@@ -64,12 +73,6 @@ function ExternalLinks({identifiers}) {
           <LogoExternalLink
             resource='Ensembl'
             link={`http://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=${ensemblId}`}
-          />
-        )}
-        {ensemblId && (
-          <LogoExternalLink
-            resource='OpenTargets'
-            link={`https://www.targetvalidation.org/target/${ensemblId}/associations`}
           />
         )}
         {cosmicGeneSymbol && (

@@ -30,3 +30,5 @@ export const green3 = '#eff6eb';
 export const colorSignificantBg = green3;
 export const colorInsignificantBg = '#F0F0F0';
 
+export const colorPanCancerGeneBg = "#FFEEEE";
+
