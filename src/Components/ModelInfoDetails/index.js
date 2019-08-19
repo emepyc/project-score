@@ -1,3 +1,4 @@
+import partition from 'lodash.partition';
 import React, {Fragment, useState, useEffect} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Row, Col, Tooltip} from 'reactstrap';
@@ -37,6 +38,10 @@ function ModelInfoSummary(props) {
       });
   }, [urlParams.modelId]);
 
+  const [driverGenesWithEssentialities, driverGenesWithoutEssentialities] = partition(
+    driverGenes, driverGene => driverGene.hasEssentialityProfiles,
+  );
+
   return (
     <Spinner loading={loading}>
       <div className='mx-3 my-3'>
@@ -47,8 +52,18 @@ function ModelInfoSummary(props) {
             <div>MSI status <span className={style.infoItem}>{msiStatus}</span></div>
             <div>Ploidy <span className={style.infoItem}>{ploidy}</span></div>
             <div>Mutations per MB <span className={style.infoItem}>{mutationsPerMb}</span></div>
-            <div>Driver genes:
-              {driverGenes.map(
+            <div>Driver genes:</div>
+            <div className="ml-2">with fitness data:
+              {driverGenesWithEssentialities.map(
+                driverGene => (
+                  <CancerDriverGene
+                    key={driverGene.id}
+                    driverGene={driverGene}
+                  />
+                )
+              )}</div>
+            <div className="ml-2">without fitness data:
+              {driverGenesWithoutEssentialities.map(
                 driverGene => (
                   <CancerDriverGene
                     key={driverGene.id}
