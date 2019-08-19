@@ -5,7 +5,7 @@ import {withRouter} from 'react-router-dom';
 
 import Spinner from '../Spinner';
 import {search} from '../../api';
-import {colorInsignificantBg, insignificantNodeColor} from "../../colors";
+import {insignificantNodeColor} from "../../colors";
 
 const groupStyles = {
   display: 'flex',
