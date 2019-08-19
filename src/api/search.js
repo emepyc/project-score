@@ -9,7 +9,7 @@ function formatResponse(resp) {
       extraOptions: gene => ({
         label: gene.symbol,
         id: gene.id,
-        disabled: gene.status !== "available",
+        status: gene.status,
       })
     },
     {
@@ -19,7 +19,7 @@ function formatResponse(resp) {
         label: model.names[0],
         id: model.id,
         tissue: model.tissue,
-        disabled: model.status !== "available",
+        status: model.status,
       }),
     },
     {
