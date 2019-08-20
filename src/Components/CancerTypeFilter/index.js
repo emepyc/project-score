@@ -40,7 +40,7 @@ function CancerTypeFilter(props) {
         value={cancerType}
         options={cancerTypes}
         onChange={onChange}
-        placeholder="Select a cancer type"
+        placeholder="Select analysis"
         isClearable
         getOptionValue={getOptionValue}
         getOptionLabel={getOptionLabel}
