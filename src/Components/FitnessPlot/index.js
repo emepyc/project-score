@@ -1,16 +1,23 @@
+import * as d3 from "d3";
+import sortBy from "lodash.sortby";
 import React, {useCallback, useState, useEffect, useRef, Fragment} from 'react';
 import {withRouter} from 'react-router-dom';
 import findIndex from 'lodash.findindex';
 import {Range} from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import Spinner from '../Spinner';
-import useUrlParams from '../useUrlParams';
 import {fetchCrisprData} from '../../api';
-import colors, {insignificantNodeColor, significantNodeColor, colorInsignificantBg, colorSignificantBg} from '../../colors';
+import colors, {
+  insignificantNodeColor,
+  significantNodeColor,
+  colorInsignificantBg,
+  colorSignificantBg
+} from '../../colors';
+import useFetchData from "../useFetchData";
+import useUrlParams from '../useUrlParams';
+import Spinner from '../Spinner';
+import Error from '../Error';
 
 import './fitnessPlot.scss';
-import * as d3 from "d3";
-import sortBy from "lodash.sortby";
 
 const LOSS_OF_FITNESS_SCORE_LABEL = 'Loss of fitness score';
 const FC_CLEAN_LABEL = 'Corrected log fold change';
@@ -24,10 +31,31 @@ function FitnessPlot(props) {
   };
 
   const container = useRef(null);
-
-  const [data, setData] = useState([]);
   const [urlParams] = useUrlParams(props);
-  const [loading, setLoading] = useState(false);
+
+  const params = {
+    geneId: urlParams.geneId,
+    modelId: urlParams.modelId,
+    tissue: urlParams.tissue,
+    scoreMin: urlParams.scoreMin,
+    scoreMax: urlParams.scoreMax,
+    excludePanCancerGenes: urlParams.excludePanCancerGenes,
+    pageSize: 0,
+  };
+
+  const [data, loading, error] = useFetchData(
+    () => fetchCrisprData(params),
+    [
+      urlParams.geneId,
+      urlParams.modelId,
+      urlParams.tissue,
+      urlParams.scoreMin,
+      urlParams.scoreMax,
+      urlParams.excludePanCancerGenes,
+    ]
+  );
+
+  const [sortedData, setSortedData] = useState([]);
   const [containerWidth, setContainerWidth] = useState(750);
   const [xDomain, setXDomain] = useState(null);
 
@@ -41,34 +69,11 @@ function FitnessPlot(props) {
     return () => window.removeEventListener('resize', resize);
   }, []);
 
-
   useEffect(() => {
-    const params = {
-      geneId: urlParams.geneId,
-      modelId: urlParams.modelId,
-      tissue: urlParams.tissue,
-      scoreMin: urlParams.scoreMin,
-      scoreMax: urlParams.scoreMax,
-      excludePanCancerGenes: urlParams.excludePanCancerGenes,
-      pageSize: 0,
-    };
-
-    setLoading(true);
-
-    fetchCrisprData(params)
-      .then(resp => {
-        setLoading(false);
-        setData(sortData(resp.data));
-      });
-  }, [
-    urlParams.geneId,
-    urlParams.modelId,
-    urlParams.tissue,
-    urlParams.scoreMin,
-    urlParams.scoreMax,
-    urlParams.excludePanCancerGenes,
-  ]);
-
+    if (data !== null) {
+      setSortedData(sortData(data.data));
+    }
+  }, [data]);
 
   const sortData = data => {
     const dataSorted = sortBy(data, rec => rec[attributeToPlot]);
@@ -76,16 +81,23 @@ function FitnessPlot(props) {
   };
 
   useEffect(() => {
-    setData(sortData(data));
+    if (data !== null) {
+      setSortedData(sortData(data.data));
+    }
   }, [attributeToPlot]);
+
+  if (error !== null) {
+    return (
+      <Error message="Error loading data"/>)
+  }
 
   return (
     <div ref={container}>
       <Spinner loading={loading}>
-        {data.length && (
+        {sortedData.length && (
           <div>
             <FitnessBrush
-              data={data}
+              data={sortedData}
               width={containerWidth - config.marginLeft}
               onRangeChanged={setXDomain}
               marginLeft={config.marginLeft}
@@ -94,7 +106,7 @@ function FitnessPlot(props) {
             <div style={{position: 'relative'}}>
               {highlight && (<FitnessTooltip
                   xDomain={xDomain}
-                  data={data}
+                  data={sortedData}
                   width={containerWidth}
                   height={config.height}
                   marginLeft={config.marginLeft}
@@ -103,7 +115,7 @@ function FitnessPlot(props) {
                 />
               )}
               <FitnessCanvasPlot
-                data={data}
+                data={sortedData}
                 width={containerWidth}
                 height={config.height}
                 significantField={config.significantField}
