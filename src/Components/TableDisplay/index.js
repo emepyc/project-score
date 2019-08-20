@@ -50,13 +50,13 @@ function TableDisplay(props) {
           <th>
             <nobr>
               Corrected log fold change<sup id='foldChangeHelp' style={{cursor: 'default'}}>?</sup>{' '}
-              <SortArrows {...props} field="fc_clean" />
+              <SortArrows {...props} field="fc_clean"/>
             </nobr>
           </th>
           <th>
             <nobr>
               Loss of fitness score<sup id='lossOfFitnessScoreHelp' style={{cursor: 'default'}}>?</sup>{' '}
-              <SortArrows {...props} field="bf_scaled" />
+              <SortArrows {...props} field="bf_scaled"/>
             </nobr>
           </th>
         </tr>
@@ -94,22 +94,22 @@ function TableDisplay(props) {
         })}
         </tbody>
       </Table>
-            <Tooltip
-              target='lossOfFitnessScoreHelp'
-              placement='right'
-              isOpen={showLFSTooltip}
-              toggle={toggleLFSTooltip}
-            >
-              {lossOfFitnessScoreHelp}
-            </Tooltip>
-            <Tooltip
-              target='foldChangeHelp'
-              placement='right'
-              isOpen={showFCTooltip}
-              toggle={toggleFCTooltip}
-            >
-              {foldChangeHelp}
-            </Tooltip>
+      <Tooltip
+        target='lossOfFitnessScoreHelp'
+        placement='right'
+        isOpen={showLFSTooltip}
+        toggle={toggleLFSTooltip}
+      >
+        {lossOfFitnessScoreHelp}
+      </Tooltip>
+      <Tooltip
+        target='foldChangeHelp'
+        placement='right'
+        isOpen={showFCTooltip}
+        toggle={toggleFCTooltip}
+      >
+        {foldChangeHelp}
+      </Tooltip>
     </Fragment>
   );
 }

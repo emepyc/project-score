@@ -7,7 +7,7 @@ import {withRouter} from 'react-router-dom';
 
 import {fetchCancerTypes} from '../../api';
 import Spinner from '../Spinner';
-import {tissueColor} from '../../colors';
+import {cancerTypeColor} from '../../colors';
 
 import './donutChart.scss';
 
@@ -38,17 +38,17 @@ function Label({radius, arc, x, y, maxX, center, children}) {
   return (
     <React.Fragment>
       <Line
-        stroke={tissueColor[arc.data.id]}
+        stroke={cancerTypeColor[arc.data.id]}
         from={new Point({x: x, y: y})}
         to={new Point({x: xDiagonal, y: yDiagonal})}
       />
       <Line
-        stroke={tissueColor[arc.data.id]}
+        stroke={cancerTypeColor[arc.data.id]}
         from={new Point({x: xDiagonal, y: yDiagonal})}
         to={new Point({x: xHorizontal, y: yDiagonal})}
       />
       <text
-        fill={d3.rgb(tissueColor[arc.data.id]).darker()}
+        fill={d3.rgb(cancerTypeColor[arc.data.id]).darker()}
         x={labelX}
         y={yDiagonal}
         fontSize="0.9em"
@@ -59,12 +59,6 @@ function Label({radius, arc, x, y, maxX, center, children}) {
       </text>
     </React.Fragment>
   );
-}
-
-function cycle(arr, step) {
-    const left = arr.slice(step);
-    const right = arr.slice(0, step);
-    return [...left, ...right];
 }
 
 function DonutChart({history}) {
@@ -81,8 +75,7 @@ function DonutChart({history}) {
       fetchCancerTypes()
         .then(resp => {
           setLoadingTissues(false);
-          const rotated = cycle(resp, 3);
-          setCancerTypes(rotated);
+          setCancerTypes(resp.filter(cancerType => cancerType.name !== "Pan-Cancer"));
         });
     }, []
   );
@@ -156,11 +149,10 @@ function DonutChart({history}) {
               innerRadius={radius - 20}
               cornerRadius={0}
               padAngle={0}
-              pieSortValues={(a, b) => 0}
             >
               {pie => {
                 return pie.arcs.map((arc, i) => {
-                  const color = tissueColor[arc.data.id];
+                  const color = cancerTypeColor[arc.data.id];
                   const [centroidX, centroidY] = pie.path.centroid(arc);
                   return (
                     <g key={`cancerType-${arc.data.id}-${i}`}>
