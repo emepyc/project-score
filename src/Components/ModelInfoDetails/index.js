@@ -4,14 +4,19 @@ import {Row, Col, Tooltip} from 'reactstrap';
 import {fetchModelDetails} from '../../api';
 import useUrlParams from '../useUrlParams';
 import Spinner from '../Spinner';
+import Error from '../Error';
+import useFetchData from "../useFetchData";
 import ModelDatasetIcon from '../../modelDatasetIcons';
 
 import style from './modelInfoDetails.module.scss';
 
 function ModelInfoSummary(props) {
-
-  const [loading, setLoading] = useState(false);
   const [urlParams] = useUrlParams(props);
+  const [modelInfo, loading, error] = useFetchData(
+    () => fetchModelDetails(urlParams.modelId),
+    [urlParams.modelId],
+  );
+
   const [tissue, setTissue] = useState('');
   const [cancerType, setCancerType] = useState('');
   const [msiStatus, setMsiStatus] = useState('');
@@ -22,10 +27,7 @@ function ModelInfoSummary(props) {
   const [modelId, setModelId] = useState("");
 
   useEffect(() => {
-    setLoading(true);
-    fetchModelDetails(urlParams.modelId)
-      .then(modelInfo => {
-        setLoading(false);
+    if (modelInfo !== null) {
         setTissue(modelInfo.tissue);
         setCancerType(modelInfo.cancerType);
         setMsiStatus(modelInfo.msiStatus);
@@ -34,8 +36,16 @@ function ModelInfoSummary(props) {
         setDriverGenes(modelInfo.drivers);
         setDatasets(modelInfo.datasets);
         setModelId(modelInfo.id);
-      });
-  }, [urlParams.modelId]);
+    }
+  }, [modelInfo]);
+
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    )
+  }
 
   return (
     <Spinner loading={loading}>
