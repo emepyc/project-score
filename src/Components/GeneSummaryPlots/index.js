@@ -7,29 +7,41 @@ import SignificantCountPlot from '../SignificantCountPlot';
 import {Card, CardHeader, CardBody} from 'reactstrap';
 import {Col, Row} from "reactstrap";
 import HasAttribute from '../HasAttribute';
+import Error from '../Error';
+import useFetchData from "../useFetchData";
 
 function GeneSummaryPlots(props) {
+  const [urlParams] = useUrlParams(props);
+
+  const [gene, loading, error] = useFetchData(
+    () => fetchSignificantModels(urlParams.geneId),
+    [urlParams.geneId],
+  );
+
   const [numberOfEssentialModels, setNumberOfEssentialModels] = useState(0);
   const [numberOfEssentialTissues, setNumberOfEssentialTissues] = useState(0);
   const [totalNumberOfTissues, setTotalNumberOfTissues] = useState(0);
-  const [urlParams] = useUrlParams(props);
-  const [loading, setLoading] = useState(false);
   const [isPanCancer, setIsPanCancer] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    fetchSignificantModels(urlParams.geneId)
-      .then(gene => {
-        setNumberOfEssentialModels(gene.numberOfSignificantModels);
-        setIsPanCancer(gene.isPanCancer);
-        setNumberOfEssentialTissues(gene.numberOfSignificantTissues);
-        setTotalNumberOfTissues(gene.numberOfTotalTissues);
-        setLoading(false);
-      });
-  }, [urlParams.geneId]);
+    if (gene !== null) {
+      setNumberOfEssentialModels(gene.numberOfSignificantModels);
+      setIsPanCancer(gene.isPanCancer);
+      setNumberOfEssentialTissues(gene.numberOfSignificantTissues);
+      setTotalNumberOfTissues(gene.numberOfTotalTissues);
+    }
+  }, [gene]);
 
   const essentialModelsSuffix = numberOfEssentialModels === 1 ? '' : 's';
   const essentialTissuesSuffix = totalNumberOfTissues === 1 ? '' : 's';
+
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    )
+  }
 
   return (
     <Fragment>
