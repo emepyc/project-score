@@ -1,20 +1,39 @@
+import classNames from 'classnames';
 import React, {useState, useEffect} from 'react';
 import {withRouter} from 'react-router-dom';
 import {Range} from 'rc-slider';
 import {fetchScoreExtent} from '../../api';
 import useUrlParams from '../useUrlParams';
+import Spinner from '../Spinner';
+import Error from '../Error';
+import useFetchData from "../useFetchData";
+
 import 'rc-slider/assets/index.css';
 import './scoreRangeSlider.scss';
-import Spinner from '../Spinner';
-import classNames from 'classnames';
 
 function ScoreRangeFilter(props) {
   const [urlParams, , setUrlParams] = useUrlParams(props);
 
+  const params = {
+    tissue: urlParams.tissue,
+    geneId: urlParams.geneId,
+    modelId: urlParams.modelId,
+    excludePanCancerGenes: urlParams.excludePanCancerGenes,
+  };
+
+  const [newScoreExtent, loading, error] = useFetchData(
+    () => fetchScoreExtent(params),
+    [
+      urlParams.tissue,
+      urlParams.geneId,
+      urlParams.modelId,
+      urlParams.excludePanCancerGenes,
+    ],
+  );
+
   const [scoreMin, setScoreMin] = useState(urlParams.scoreMin);
   const [scoreMax, setScoreMax] = useState(urlParams.scoreMax);
   const [scoreExtent, setScoreExtent] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   const onChange = (range) => {
     setScoreMin(range[0]);
@@ -26,24 +45,18 @@ function ScoreRangeFilter(props) {
   };
 
   useEffect(() => {
-    const params = {
-      tissue: urlParams.tissue,
-      geneId: urlParams.geneId,
-      modelId: urlParams.modelId,
-      excludePanCancerGenes: urlParams.excludePanCancerGenes,
-    };
-    setLoading(true);
-    fetchScoreExtent(params)
-      .then(newScoreExtent => {
-        setScoreExtent([newScoreExtent.min, newScoreExtent.max]);
-        setLoading(false)
-      });
-  }, [
-    urlParams.tissue,
-    urlParams.geneId,
-    urlParams.modelId,
-    urlParams.excludePanCancerGenes,
-  ]);
+    if (newScoreExtent !== null) {
+      setScoreExtent([newScoreExtent.min, newScoreExtent.max]);
+    }
+  }, [newScoreExtent]);
+
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    )
+  }
 
   if (!scoreExtent) {
     return (
