@@ -3,6 +3,8 @@ import {Row, Col} from 'reactstrap';
 import colors from '../../colors';
 import {fetchTissues} from '../../api';
 import Spinner from '../Spinner';
+import Error from '../Error';
+import useFetchData from "../useFetchData";
 
 function tissueFilterElement(tissue, key, onSelectTissue) {
   return (
@@ -29,23 +31,31 @@ function tissueFilterElement(tissue, key, onSelectTissue) {
 
 
 function TissuesHighlight({blocks, onSelectTissue}) {
+  const [tissuesResponse, loading, error] = useFetchData(
+    () => fetchTissues(),
+    [],
+  );
   const [tissues, setTissues] = useState([]);
-  const [loadingTissues, setLoadingTissues] = useState(false);
 
   const tissuesPerBlock = Math.round(tissues.length / blocks);
 
   useEffect(() => {
-    setLoadingTissues(true);
-    fetchTissues()
-      .then(resp => {
-        setLoadingTissues(false);
-        setTissues(resp.map(tissue => tissue.tissue));
-      })
-  }, []);
+    if (tissuesResponse) {
+        setTissues(tissuesResponse.map(tissue => tissue.tissue));
+    }
+  }, [tissuesResponse]);
+
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    )
+  }
 
   return (
     <Spinner
-      loading={loadingTissues}
+      loading={loading}
     >
       <Row
         style={{marginTop: '20px'}}

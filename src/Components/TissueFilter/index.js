@@ -2,13 +2,21 @@ import React, {useState, useEffect, useCallback} from 'react';
 import Select from 'react-select';
 import {withRouter} from 'react-router';
 import useUrlParams from '../useUrlParams';
-import {fetchTissues} from '../../api';
-import {name2id} from '../../api';
+import {fetchTissues, name2id} from '../../api';
+import Error from '../Error';
+import Spinner from '../Spinner';
+import useFetchData from "../useFetchData";
 
 function TissueFilter(props) {
+  const [urlParams, setUrlParams] = useUrlParams(props);
+
+  const [tissuesResponse, loading, error] = useFetchData(
+    () => fetchTissues(),
+    [],
+  );
+
   const [tissue, setTissue] = useState({});
   const [tissues, setTissues] = useState([]);
-  const [urlParams, setUrlParams] = useUrlParams(props);
 
   const tissueFromUrlObject = urlParams.tissue ? {
     tissue: urlParams.tissue,
@@ -16,12 +24,10 @@ function TissueFilter(props) {
   } : null;
 
   useEffect(() => {
-      fetchTissues()
-        .then(resp => {
-          setTissues(resp);
-        });
-    }, []
-  );
+    if (tissuesResponse) {
+      setTissues(tissuesResponse);
+    }
+  }, [tissuesResponse]);
 
   const onInputChange = useCallback(newValue => {
     setTissue(newValue)
@@ -36,8 +42,16 @@ function TissueFilter(props) {
   const getOptionLabel = option => option.tissue;
   const getOptionValue = option => option.tissue;
 
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    )
+  }
+
   return (
-    <div>
+    <Spinner>
       <Select
         defaultValue={tissueFromUrlObject}
         options={tissues}
@@ -48,7 +62,7 @@ function TissueFilter(props) {
         getOptionLabel={getOptionLabel}
         onInputChange={onInputChange}
       />
-    </div>
+    </Spinner>
   );
 }
 

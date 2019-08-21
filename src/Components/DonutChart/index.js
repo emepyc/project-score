@@ -7,10 +7,11 @@ import {withRouter} from 'react-router-dom';
 
 import {fetchTissues} from '../../api';
 import Spinner from '../Spinner';
+import Error from '../Error';
+import useFetchData from "../useFetchData";
 import colors from '../../colors';
 
 import './donutChart.scss';
-
 
 const donutChartSideOffset = 150;
 
@@ -62,30 +63,30 @@ function Label({radius, arc, x, y, maxX, center, children}) {
 }
 
 function DonutChart({history}) {
+  const [tissuesResponse, loading, error] = useFetchData(
+    () => fetchTissues(),
+    [],
+  );
+
   const [tissues, setTissues] = useState([]);
   const [containerWidth, setContainerWidth] = useState(500);
   const [containerHeight, setContainerHeight] = useState(500);
-  const [loadingTissues, setLoadingTissues] = useState(false);
 
   const explanationMessageRef = useRef(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
-      setLoadingTissues(true);
-      fetchTissues()
-        .then(resp => {
-          setLoadingTissues(false);
-          setTissues(resp);
-        });
-    }, []
-  );
+    if (tissuesResponse) {
+      setTissues(tissuesResponse);
+    }
+  }, [tissuesResponse]);
 
   useEffect(() => {
     if (containerRef.current) {
       setContainerWidth(containerRef.current.offsetWidth);
       setContainerHeight(containerRef.current.offsetWidth - 150);
     }
-  });
+  }, [containerRef.current]);
 
   const handleMouseOverBar = (event, tissueData) => {
     const explanationElement = explanationMessageRef.current;
@@ -114,10 +115,18 @@ function DonutChart({history}) {
 
   const gotoTable = (data) => history.push(`/table?tissue=${data.id}`);
 
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    )
+  }
+
   return (
     <Spinner
       style={{backgroundColor: '#FAFAFA'}}
-      loading={loadingTissues}
+      loading={loading}
     >
       <div ref={containerRef} style={{position: 'relative'}}>
         <div
