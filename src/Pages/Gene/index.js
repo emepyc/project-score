@@ -10,44 +10,10 @@ import {Button} from '../../Components/Buttom';
 import GeneSummaryPlots from '../../Components/GeneSummaryPlots';
 import {lossOfFitnessScoreHelp, foldChangeHelp} from "../../definitions";
 
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasErrored: false,
-    };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    this.setState({
-      hasErrored: true,
-    });
-  }
-
-  render() {
-    if (this.state.hasErrored) {
-      return (<div>Error happened</div>);
-    }
-    return this.props.children;
-  }
-}
-
-function ErrorBoundaryContent() {
-  throw Error("Error raised in Error Boundary Content");
-  return (
-    <div>
-       inside error boundary -- All Ok
-    </div>
-  );
-}
-
 function Gene() {
 
   return (
     <div>
-      <ErrorBoundary>
-        <ErrorBoundaryContent />
-      </ErrorBoundary>
       <GeneInfoSummary/>
       <Row>
         <Col className="my-3" lg={{size: 8}} xs={{size: 12}}>
