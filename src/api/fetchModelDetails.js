@@ -10,6 +10,7 @@ const deserialiser = new Desearialiser();
 const modelInfoParams = {
   include: 'identifiers,sample,sample.tissue,sample.cancer_type,files,analyses',
   'fields[sample]': 'tissue,cancer_type',
+  'fields[analysis]': 'name',
 };
 
 const cancerDriverParams = {
