@@ -1,8 +1,8 @@
 import {get} from './api';
 import axios from 'axios';
-import groupBy from 'lodash/groupBy';
-import uniqBy from 'lodash/uniqBy';
-import sortBy from 'lodash/sortBy';
+import groupBy from 'lodash.groupby';
+import uniqBy from 'lodash.uniqby';
+import sortBy from 'lodash.sortby';
 import Desearialiser from 'deserialise-jsonapi';
 
 const deserialiser = new Desearialiser();
