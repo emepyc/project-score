@@ -56,7 +56,7 @@ function Table(props) {
       pageSize,
       pageNumber,
       search,
-      cancerType: urlParams.cancerType,
+      analysis: urlParams.analysis,
       scoreMin: urlParams.scoreMin,
       scoreMax: urlParams.scoreMax,
     };
@@ -79,7 +79,7 @@ function Table(props) {
     urlParams.scoreMin,
     urlParams.scoreMax,
     urlParams.excludePanCancerGenes,
-    urlParams.cancerType,
+    urlParams.analysis,
   ]);
 
   const isFirstPage = pageNumber === 1;

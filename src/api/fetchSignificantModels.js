@@ -26,12 +26,12 @@ export default function fetchSignificantModels(geneId) {
 
 
 function getTissuesCounts(attributes) {
-  const allCancerTypes = Object.keys(attributes).filter(
+  const allTissues = Object.keys(attributes).filter(
     attribute => attribute.indexOf('adm_status_') > -1
   );
-  const significantCancerTypes = allCancerTypes.filter(cancerType => attributes[cancerType] !== null);
+  const significantTissues = allTissues.filter(tissue => attributes[tissue] !== null);
   return {
-    total: allCancerTypes.length,
-    significant: significantCancerTypes.length,
+    total: allTissues.length,
+    significant: significantTissues.length,
   }
 }

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Table from '../../Components/Table';
-import CancerTypeFilter from '../../Components/CancerTypeFilter';
+import CancerTypeFilter from '../../Components/AnalysisFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import FitnessPlot from '../../Components/FitnessPlot';
 import GeneInfoSummary from '../../Components/GeneInfoSummary';

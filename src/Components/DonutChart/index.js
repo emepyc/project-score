@@ -5,7 +5,7 @@ import {Pie, Line} from '@vx/shape'
 import {Point} from '@vx/point';
 import {withRouter} from 'react-router-dom';
 
-import {fetchCancerTypes} from '../../api';
+import {fetchAnalyses} from '../../api';
 import Spinner from '../Spinner';
 import {cancerTypeColor} from '../../colors';
 
@@ -72,7 +72,7 @@ function DonutChart({history}) {
 
   useEffect(() => {
       setLoadingTissues(true);
-      fetchCancerTypes()
+      fetchAnalyses()
         .then(resp => {
           setLoadingTissues(false);
           setCancerTypes(resp.filter(cancerType => cancerType.name !== "Pan-Cancer"));

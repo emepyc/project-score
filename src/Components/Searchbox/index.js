@@ -57,7 +57,7 @@ function Searchbox({placeholder="Search for a gene, cell line or cancer type", h
       history.push(`/model/${value.id}?scoreMax=0`);
     } else {
       // TODO: Remove default cancer types when they are available through the api
-      history.push(`/table?cancerType=${value.id || 1}`);
+      history.push(`/table?analysis=${value.id || 1}`);
     }
   };
 

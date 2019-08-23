@@ -65,7 +65,7 @@ function normaliseParams(params) {
 export default function fetchCrisprData(params) {
   const paramsNormalised = normaliseParams(params);
 
-  const endpoint = datasetEntpoint(params.cancerType);
+  const endpoint = datasetEntpoint(params.analysis);
 
   return get(endpoint, paramsNormalised)
     .then(resp => deserialiser.deserialise(resp.data)

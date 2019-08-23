@@ -23,8 +23,8 @@ function TableDisplay(props) {
 
   const [urlParams] = useUrlParams(props);
 
-  const {score, cancerType} = urlParams;
-  const paramsForGeneLink = qs.stringify(sanitiseParams(pickBy({cancerType, score}, identity)));
+  const {score, analysis} = urlParams;
+  const paramsForGeneLink = qs.stringify(sanitiseParams(pickBy({analysis, score}, identity)));
   const paramsForModelLink = qs.stringify(sanitiseParams(pickBy({score}, identity)));
 
   const mouseOver = (row) => props.onHighlight(row);

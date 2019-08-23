@@ -98,7 +98,7 @@ function Analysis({analysis}) {
   });
   return (
     <div className={classes}>
-      <Link to={`/table?cancerType=${analysis.id}`}>
+      <Link to={`/table?analysis=${analysis.id}`}>
         {analysis.name}
       </Link>
     </div>

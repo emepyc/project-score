@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import TableComponent from '../../Components/Table';
-import CancerTypeFilter from '../../Components/CancerTypeFilter';
+import CancerTypeFilter from '../../Components/AnalysisFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import {Row, Col} from 'reactstrap';
 import {Card, CardHeader, CardBody} from 'reactstrap';

@@ -38,7 +38,7 @@ function normaliseParams(params) {
 export default function fetchScoreExtent(params) {
   const paramsNormalised = normaliseParams(params);
 
-  const endpoint = datasetEntpoint(params.cancerType);
+  const endpoint = datasetEntpoint(params.analysis);
 
   return get(endpoint, paramsNormalised)
     .then(resp => resp.data.meta.agg.fc_clean);
