@@ -4,20 +4,30 @@ import {fetchModelInfo} from '../../api';
 import useUrlParams from '../useUrlParams';
 import Spinner from '../Spinner';
 import ModelInfoHeader from '../ModelInfoHeader';
+import useFetchData from '../useFetchData';
+import Error from '../Error';
 
 function ModelInfoSummary(props) {
-  const [loading, setLoading] = useState(false);
   const [urlParams] = useUrlParams(props);
-  const [modelName, setModelName] = useState('');
+  const [modelName, setModelName] = useState(null);
+  const [modelInfo, loading, error] = useFetchData(
+    () => fetchModelInfo(urlParams.modelId),
+    [urlParams.modelId]
+  );
 
   useEffect(() => {
-    setLoading(true);
-    fetchModelInfo(urlParams.modelId)
-      .then(modelInfo => {
-        setLoading(false);
-        setModelName(modelInfo.names[0]);
-      });
-  }, [urlParams.modelId]);
+    if (modelInfo !== null) {
+      setModelName(modelInfo.names[0]);
+    }
+  }, [modelInfo]);
+
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    )
+  }
 
   return (
     <Spinner loading={loading}>

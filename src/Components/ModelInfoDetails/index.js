@@ -6,14 +6,19 @@ import {Row, Col, Tooltip} from 'reactstrap';
 import {fetchModelDetails} from '../../api';
 import useUrlParams from '../useUrlParams';
 import Spinner from '../Spinner';
+import Error from '../Error';
+import useFetchData from "../useFetchData";
 import ModelDatasetIcon from '../../modelDatasetIcons';
 
 import style from './modelInfoDetails.module.scss';
 
 function ModelInfoSummary(props) {
-
-  const [loading, setLoading] = useState(false);
   const [urlParams] = useUrlParams(props);
+  const [modelInfo, loading, error] = useFetchData(
+    () => fetchModelDetails(urlParams.modelId),
+    [urlParams.modelId],
+  );
+
   const [tissue, setTissue] = useState('');
   const [cancerType, setCancerType] = useState('');
   const [analyses, setAnalyses] = useState([]);
@@ -25,10 +30,7 @@ function ModelInfoSummary(props) {
   const [modelId, setModelId] = useState("");
 
   useEffect(() => {
-    setLoading(true);
-    fetchModelDetails(urlParams.modelId)
-      .then(modelInfo => {
-        setLoading(false);
+    if (modelInfo !== null) {
         setAnalyses(modelInfo.analyses);
         setTissue(modelInfo.tissue);
         setCancerType(modelInfo.cancerType);
@@ -38,8 +40,16 @@ function ModelInfoSummary(props) {
         setDriverGenes(modelInfo.drivers);
         setDatasets(modelInfo.datasets);
         setModelId(modelInfo.id);
-      });
-  }, [urlParams.modelId]);
+    }
+  }, [modelInfo]);
+
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    )
+  }
 
   const [driverGenesWithEssentialities, driverGenesWithoutEssentialities] = partition(
     driverGenes, driverGene => driverGene.hasEssentialityProfiles,

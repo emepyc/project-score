@@ -7,10 +7,12 @@ import {withRouter} from 'react-router-dom';
 
 import {fetchAnalyses} from '../../api';
 import Spinner from '../Spinner';
+
+import Error from '../Error';
+import useFetchData from "../useFetchData";
 import {cancerTypeColor} from '../../colors';
 
 import './donutChart.scss';
-
 
 const donutChartSideOffset = 150;
 
@@ -62,30 +64,30 @@ function Label({radius, arc, x, y, maxX, center, children}) {
 }
 
 function DonutChart({history}) {
+  const [cancerTypesResponse, loading, error] = useFetchData(
+    () => fetchAnalyses(),
+    [],
+  );
+
   const [cancerTypes, setCancerTypes] = useState([]);
   const [containerWidth, setContainerWidth] = useState(500);
   const [containerHeight, setContainerHeight] = useState(500);
-  const [loadingTissues, setLoadingTissues] = useState(false);
 
   const explanationMessageRef = useRef(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
-      setLoadingTissues(true);
-      fetchAnalyses()
-        .then(resp => {
-          setLoadingTissues(false);
-          setCancerTypes(resp.filter(cancerType => cancerType.name !== "Pan-Cancer"));
-        });
-    }, []
-  );
+    if (cancerTypesResponse) {
+      setCancerTypes(cancerTypesResponse);
+    }
+  }, [cancerTypesResponse]);
 
   useEffect(() => {
     if (containerRef.current) {
       setContainerWidth(containerRef.current.offsetWidth);
       setContainerHeight(containerRef.current.offsetWidth - 150);
     }
-  });
+  }, [containerRef.current]);
 
   const handleMouseOverBar = (event, cancerTypeData) => {
     const explanationElement = explanationMessageRef.current;
@@ -114,10 +116,18 @@ function DonutChart({history}) {
 
   const gotoTable = (data) => history.push(`/table?cancerType=${data.id}`);
 
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    )
+  }
+
   return (
     <Spinner
       style={{backgroundColor: '#FAFAFA'}}
-      loading={loadingTissues}
+      loading={loading}
     >
       <div ref={containerRef} style={{position: 'relative'}}>
         <div

@@ -4,6 +4,7 @@ import debounce from 'debounce-promise';
 import {withRouter} from 'react-router-dom';
 import Spinner from '../Spinner';
 import {search} from '../../api';
+import Error from '../Error';
 
 const groupStyles = {
   display: 'flex',
@@ -40,7 +41,17 @@ const LoadingMessage = (props) => {
 };
 
 const _loadSuggestions = (inputValue, callback) => search(inputValue)
-  .then(resp => callback(resp));
+  .then(resp => callback(resp))
+  .catch(() => {
+    callback([{
+      options: [{
+        value: 'error',
+        label: 'Error loading data',
+        disabled: true,
+        error: true,
+      }]
+    }])
+  });
 
 const loadSuggestions = debounce(_loadSuggestions, 500, {leading: true});
 
@@ -68,14 +79,21 @@ function Searchbox({placeholder="Search for a gene, cell line or cancer type", h
     </div>
   );
 
-  const formatOptionLabel = option => (
-    <div style={groupStyles}>
-      <span>{option.label}</span>
-      {option.tissue && (
-        <span style={groupBadgeStyles}>{option.tissue}</span>
-      )}
-    </div>
-  );
+  const formatOptionLabel = option => {
+    if (option.error) {
+      return (
+          <Error message={option.label}/>
+      );
+    }
+    return (
+      <div style={groupStyles}>
+        <span>{option.label}</span>
+        {option.tissue && (
+          <span style={groupBadgeStyles}>{option.tissue}</span>
+        )}
+      </div>
+    );
+  };
 
   const onInputChange = value => setInputValue(value);
 
