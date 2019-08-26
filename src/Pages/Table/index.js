@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import TableComponent from '../../Components/Table';
-import TissueFilter from '../../Components/TissueFilter';
+import CancerTypeFilter from '../../Components/AnalysisFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import {Row, Col} from 'reactstrap';
 import {Card, CardHeader, CardBody} from 'reactstrap';
@@ -43,7 +43,7 @@ function Filters() {
             <PanCangerGeneFilter/>
           </Col>
           <Col>
-            <TissueFilter/>
+            <CancerTypeFilter/>
           </Col>
           <Col>
             <ScoreRangeFilter/>

@@ -1,13 +1,13 @@
 import {get} from './index';
 import Deserialiser from 'deserialise-jsonapi';
 import {
-  expandTissueFilter,
   expandScoreRangeFilter,
   expandGeneFilter,
   expandModelFilter,
   expandSearchFilter,
   expandExcludePanCancerGenesFilter,
   combineFilters,
+  datasetEntpoint
 } from "./filters";
 
 const deserialiser = new Deserialiser();
@@ -36,15 +36,10 @@ function normaliseParams(params) {
     }) :
     null;
 
-  const tissueFilter = params.tissue ?
-    expandTissueFilter(params.tissue) :
-    null;
-
   const combinedFilters = combineFilters([
     geneFilter,
     modelFilter,
     searchFilter,
-    tissueFilter,
     scoreRangeFilter,
     excludePanCancerGenes,
   ]);
@@ -69,7 +64,10 @@ function normaliseParams(params) {
 
 export default function fetchCrisprData(params) {
   const paramsNormalised = normaliseParams(params);
-  return get('/datasets/crispr_ko', paramsNormalised)
+
+  const endpoint = datasetEntpoint(params.analysis);
+
+  return get(endpoint, paramsNormalised)
     .then(resp => deserialiser.deserialise(resp.data)
         .then(deserialisedData => ({
             count: resp.data.meta.count,

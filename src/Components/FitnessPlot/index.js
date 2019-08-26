@@ -6,7 +6,13 @@ import 'rc-slider/assets/index.css';
 import Spinner from '../Spinner';
 import useUrlParams from '../useUrlParams';
 import {fetchCrisprData} from '../../api';
-import colors, {insignificantNodeColor, significantNodeColor, colorInsignificantBg, colorSignificantBg} from '../../colors';
+import {
+  tissueColor,
+  insignificantNodeColor,
+  significantNodeColor,
+  colorInsignificantBg,
+  colorSignificantBg
+} from '../../colors';
 
 import './fitnessPlot.scss';
 import * as d3 from "d3";
@@ -46,7 +52,7 @@ function FitnessPlot(props) {
     const params = {
       geneId: urlParams.geneId,
       modelId: urlParams.modelId,
-      tissue: urlParams.tissue,
+      analysis: urlParams.analysis,
       scoreMin: urlParams.scoreMin,
       scoreMax: urlParams.scoreMax,
       excludePanCancerGenes: urlParams.excludePanCancerGenes,
@@ -63,7 +69,7 @@ function FitnessPlot(props) {
   }, [
     urlParams.geneId,
     urlParams.modelId,
-    urlParams.tissue,
+    urlParams.analysis,
     urlParams.scoreMin,
     urlParams.scoreMax,
     urlParams.excludePanCancerGenes,
@@ -363,7 +369,7 @@ function FitnessCanvasPlot(props) {
       }
 
       const dataPointColor = colorBy === 'tissue' ?
-        colors[dataPoint.model.sample.tissue.name] : (
+        tissueColor[dataPoint.model.sample.tissue.name] : (
           dataPoint[significantField] < 0 ? significantNodeColor : insignificantNodeColor
         );
 

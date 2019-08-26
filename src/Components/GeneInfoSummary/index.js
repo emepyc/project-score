@@ -9,7 +9,6 @@ import Spinner from '../Spinner';
 function GeneInfoSummary(props) {
   const [geneNames, setGeneNames] = useState([]);
   const [geneIdentifiers, setGeneIdentifiers] = useState([]);
-  // const [isTumourSuppressor, setIsTumourSuppressor] = useState(false);
   const [isRibosomal, setIsRibosomal] = useState(false);
   const [isHistone, setIsHistone] = useState(false);
   const [isDnaReplication, setIsDnaReplication] = useState(false);
@@ -28,7 +27,6 @@ function GeneInfoSummary(props) {
         setGeneIdentifiers(geneInfo.identifiers);
         setGeneNames(geneInfo.names);
         setGeneSymbol(geneInfo.symbol);
-        // setIsTumourSuppressor(geneInfo.isTumourSuppressor);
         setIsProteasome(geneInfo.isProteasome);
         setIsHistone(geneInfo.isHistone);
         setIsDnaReplication(geneInfo.isDnaReplication);
@@ -46,12 +44,6 @@ function GeneInfoSummary(props) {
         symbol={geneSymbol}
         features={
           [
-            // {
-            //   label: 'Tumour suppressor',
-            //   value: isTumourSuppressor,
-            //   id: 'isTumourSuppressor',
-            //   text: `${geneSymbol} is ${isTumourSuppressor ? '' : 'not'} a tumour suppressor gene`,
-            // },
             {
               label: 'Rna polymerase',
               value: isRnaPolymerase,
