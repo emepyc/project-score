@@ -1,16 +1,12 @@
 import {get} from './index';
 import {
-  expandTissueFilter,
   expandGeneFilter,
   expandModelFilter,
   combineFilters, expandExcludePanCancerGenesFilter,
+  datasetEntpoint,
 } from './filters';
 
 function normaliseParams(params) {
-  const tissueFilter = params.tissue ?
-    expandTissueFilter(params.tissue) :
-    null;
-
   const excludePanCancerGenes = +params.excludePanCancerGenes ?
     expandExcludePanCancerGenesFilter() :
     null;
@@ -24,7 +20,6 @@ function normaliseParams(params) {
     null;
 
   const filters = combineFilters([
-    tissueFilter,
     geneFilter,
     modelFilter,
     excludePanCancerGenes,
@@ -42,6 +37,9 @@ function normaliseParams(params) {
 
 export default function fetchScoreExtent(params) {
   const paramsNormalised = normaliseParams(params);
-  return get('/datasets/crispr_ko', paramsNormalised)
+
+  const endpoint = datasetEntpoint(params.analysis);
+
+  return get(endpoint, paramsNormalised)
     .then(resp => resp.data.meta.agg.fc_clean);
 }

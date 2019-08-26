@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+import partition from 'lodash.partition';
 import React, {Fragment, useState, useEffect} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Row, Col, Tooltip} from 'reactstrap';
@@ -19,6 +21,7 @@ function ModelInfoSummary(props) {
 
   const [tissue, setTissue] = useState('');
   const [cancerType, setCancerType] = useState('');
+  const [analyses, setAnalyses] = useState([]);
   const [msiStatus, setMsiStatus] = useState('');
   const [ploidy, setPloidy] = useState('');
   const [mutationsPerMb, setMutationsPerMb] = useState('');
@@ -28,6 +31,7 @@ function ModelInfoSummary(props) {
 
   useEffect(() => {
     if (modelInfo !== null) {
+        setAnalyses(modelInfo.analyses);
         setTissue(modelInfo.tissue);
         setCancerType(modelInfo.cancerType);
         setMsiStatus(modelInfo.msiStatus);
@@ -47,6 +51,10 @@ function ModelInfoSummary(props) {
     )
   }
 
+  const [driverGenesWithEssentialities, driverGenesWithoutEssentialities] = partition(
+    driverGenes, driverGene => driverGene.hasEssentialityProfiles,
+  );
+
   return (
     <Spinner loading={loading}>
       <div className='mx-3 my-3'>
@@ -54,11 +62,26 @@ function ModelInfoSummary(props) {
           <Col xs={{size: 12}} lg={{size: 6}}>
             <div>Tissue <span className={style.infoItem}>{tissue}</span></div>
             <div>Cancer type <span className={style.infoItem}>{cancerType}</span></div>
+            <div>Analyses{' '}
+              {analyses.map(analysis => (
+                <Analysis key={analysis.id} analysis={analysis}/>
+              ))}
+            </div>
             <div>MSI status <span className={style.infoItem}>{msiStatus}</span></div>
             <div>Ploidy <span className={style.infoItem}>{ploidy}</span></div>
             <div>Mutations per MB <span className={style.infoItem}>{mutationsPerMb}</span></div>
-            <div>Driver genes:
-              {driverGenes.map(
+            <div>Driver genes:</div>
+            <div className="ml-2">with fitness data:
+              {driverGenesWithEssentialities.map(
+                driverGene => (
+                  <CancerDriverGene
+                    key={driverGene.id}
+                    driverGene={driverGene}
+                  />
+                )
+              )}</div>
+            <div className="ml-2">without fitness data:
+              {driverGenesWithoutEssentialities.map(
                 driverGene => (
                   <CancerDriverGene
                     key={driverGene.id}
@@ -78,6 +101,20 @@ function ModelInfoSummary(props) {
 
 export default withRouter(ModelInfoSummary);
 
+function Analysis({analysis}) {
+  const classes = classNames(style.infoItem, {
+    "mx-1": true,
+    "d-inline-block": true,
+  });
+  return (
+    <div className={classes}>
+      <Link to={`/table?analysis=${analysis.id}`}>
+        {analysis.name}
+      </Link>
+    </div>
+  );
+}
+
 function CancerDriverGene({driverGene}) {
   const cancerDriverLabel = driverGene.hasEssentialityProfiles ? (
     <Link to={`/gene/${driverGene.id}`}>
@@ -85,15 +122,13 @@ function CancerDriverGene({driverGene}) {
     </Link>
   ) : (<Fragment>{driverGene.symbol}</Fragment>);
 
+  const classes = classNames(style.infoItem, {
+    "mx-1": true,
+    "d-inline-block": true,
+  });
+
   return (
-    <div
-      style={{
-        marginLeft: '5px',
-        marginRight: '5px',
-        display: 'inline-block',
-      }}
-      className={style.infoItem}
-    >
+    <div className={classes}>
       {cancerDriverLabel}
     </div>
   );

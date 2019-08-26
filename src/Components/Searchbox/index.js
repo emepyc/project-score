@@ -55,7 +55,7 @@ const _loadSuggestions = (inputValue, callback) => search(inputValue)
 
 const loadSuggestions = debounce(_loadSuggestions, 500, {leading: true});
 
-function Searchbox({placeholder="Search for a gene, cell line or tissue", history}) {
+function Searchbox({placeholder="Search for a gene, cell line or cancer type", history}) {
   const [inputValue, setInputValue] = useState("");
 
   const onChange = value => {
@@ -67,7 +67,8 @@ function Searchbox({placeholder="Search for a gene, cell line or tissue", histor
     } else if (value.type === 'models') {
       history.push(`/model/${value.id}?scoreMax=0`);
     } else {
-      history.push(`/table?tissue=${value.id}`);
+      // TODO: Remove default cancer types when they are available through the api
+      history.push(`/table?analysis=${value.id || 1}`);
     }
   };
 

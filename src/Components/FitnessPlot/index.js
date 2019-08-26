@@ -6,7 +6,8 @@ import findIndex from 'lodash.findindex';
 import {Range} from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import {fetchCrisprData} from '../../api';
-import colors, {
+import {
+  tissueColor,
   insignificantNodeColor,
   significantNodeColor,
   colorInsignificantBg,
@@ -375,7 +376,7 @@ function FitnessCanvasPlot(props) {
       }
 
       const dataPointColor = colorBy === 'tissue' ?
-        colors[dataPoint.model.sample.tissue.name] : (
+        tissueColor[dataPoint.model.sample.tissue.name] : (
           dataPoint[significantField] < 0 ? significantNodeColor : insignificantNodeColor
         );
 

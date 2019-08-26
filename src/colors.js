@@ -1,4 +1,21 @@
-export default {
+export const cancerTypeColor = {
+  1: '#69D38B', // Bone
+  2: '#F190F2', // Breast Carcinoma
+  3: '#988D67', // Central Nervous System
+  4: '#FD8E4E', // Colorectal Carcinoma
+  5: '#5AA9CD', // Esophagus
+  6: '#F5D349', // Gastric Carcinoma
+  7: '#D07D80', // Haematopoietic and Lyphoid
+  8: '#65CC51', // Head and Neck Carcinoma
+  9: '#186EF2', // Lung Adenocarcinoma
+  10: '#E2A536', // Neuroblastoma
+  11: '#79F361', // Oral Cavity Carcinoma
+  12: '#6BD6CE', // Ovarian Carcinoma
+  13: '#F84498', // Pancreatic Carcinoma
+  14: '#91B8F2', // Squamous Cell Lung Carcinoma
+};
+
+export const tissueColor = {
   'Biliary Tract': '#C6B843',
   Bone: '#69D38B',
   Breast: '#CB79CC',

@@ -15,7 +15,7 @@ function ScoreRangeFilter(props) {
   const [urlParams, , setUrlParams] = useUrlParams(props);
 
   const params = {
-    tissue: urlParams.tissue,
+    analysis: urlParams.analysis,
     geneId: urlParams.geneId,
     modelId: urlParams.modelId,
     excludePanCancerGenes: urlParams.excludePanCancerGenes,
@@ -24,7 +24,7 @@ function ScoreRangeFilter(props) {
   const [newScoreExtent, loading, error] = useFetchData(
     () => fetchScoreExtent(params),
     [
-      urlParams.tissue,
+      urlParams.analysis,
       urlParams.geneId,
       urlParams.modelId,
       urlParams.excludePanCancerGenes,
