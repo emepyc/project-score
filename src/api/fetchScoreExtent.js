@@ -41,5 +41,5 @@ export default function fetchScoreExtent(params) {
   const endpoint = datasetEntpoint(params.analysis);
 
   return get(endpoint, paramsNormalised)
-    .then(resp => resp.data.meta.agg.fc_clean);
+    .then(resp => resp.meta.agg.fc_clean);
 }

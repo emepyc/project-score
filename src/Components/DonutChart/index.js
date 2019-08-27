@@ -78,7 +78,10 @@ function DonutChart({history}) {
 
   useEffect(() => {
     if (cancerTypesResponse) {
-      setCancerTypes(cancerTypesResponse);
+      const cancerTypesWithoutPanCancer = cancerTypesResponse.filter(
+        cancerType => cancerType.id !== 15,
+      );
+      setCancerTypes(cancerTypesWithoutPanCancer);
     }
   }, [cancerTypesResponse]);
 

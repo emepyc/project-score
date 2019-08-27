@@ -23,6 +23,6 @@ function processResponse(modelInfo) {
 
 export default function fetchModelInfo(modelId) {
   return get(`/models/${modelId}`, params)
-    .then(resp => deserialiser.deserialise(resp.data))
+    .then(resp => deserialiser.deserialise(resp))
     .then(processResponse)
 }

@@ -68,10 +68,10 @@ export default function fetchCrisprData(params) {
   const endpoint = datasetEntpoint(params.analysis);
 
   return get(endpoint, paramsNormalised)
-    .then(resp => deserialiser.deserialise(resp.data)
-        .then(deserialisedData => ({
-            count: resp.data.meta.count,
-            data: deserialisedData,
-        }))
+    .then(resp => deserialiser.deserialise(resp)
+      .then(deserialisedData => ({
+        count: resp.meta.count,
+        data: deserialisedData,
+      }))
     );
 }

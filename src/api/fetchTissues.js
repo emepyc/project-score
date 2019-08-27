@@ -16,7 +16,7 @@ export default function tissues() {
       }
     ]
   })
-    .then(resp => resp.data.meta.agg['sample.tissue.name'].count)
+    .then(resp => resp.meta.agg['sample.tissue.name'].count)
     .then(data => {
       const tissuesWithData = pickBy(data, (count) => {
         return count > 0;

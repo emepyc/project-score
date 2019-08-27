@@ -10,5 +10,5 @@ function analysisResponseToAnalysis(analysisResponse) {
 
 export default function analyses() {
   return get('analyses')
-    .then(resp => resp.data.data.map(analysisResponseToAnalysis));
+    .then(resp => resp.data.map(analysisResponseToAnalysis));
 }

@@ -1,6 +1,4 @@
-import axios from 'axios';
 import qs from 'query-string';
-
 
 const API_BASEURL = process.env.REACT_APP_API_BASEURL;
 
@@ -10,19 +8,15 @@ function paramsSerializer(params) {
   return qs.stringify(params, {depth: 0});
 }
 
-export function post(endpoint, data) {
-  return axios.post(
-    `${API_BASEURL}/${endpoint}`,
-    data,
-  );
-}
+export async function get(endpoint, params={}) {
+  const serialisedParams = paramsSerializer(params);
+  const result = await fetch(`${API_BASEURL}/${endpoint}?${serialisedParams}`, {
+    method: 'GET',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
-export function get(endpoint, params = {}) {
-  return axios.get(
-    `${API_BASEURL}/${endpoint}`,
-    {
-      params,
-      paramsSerializer,
-    }
-  );
+  return await result.json();
 }
