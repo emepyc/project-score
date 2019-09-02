@@ -9,6 +9,7 @@ import Masthead from './Components/Masthead';
 import Footer from './Components/Footer';
 import Table from './Pages/Table';
 import Documentation from './Pages/Documentation';
+import Test from './Test'
 
 const App = (props) => (
   <div>
@@ -26,6 +27,7 @@ const App = (props) => (
             <Route path='/gene/:geneId' component={Gene}/>
             <Route path='/model/:modelId' component={Model}/>
             <Route path='/documentation' component={Documentation}/>
+            <Route path='/test' component={Test}/>
           </main>
         </div>
         <Footer/>
