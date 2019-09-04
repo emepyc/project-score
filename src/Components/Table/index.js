@@ -59,9 +59,7 @@ function Table(props) {
       scoreMax: urlParams.scoreMax,
     };
 
-  const [dataResponse, loading, error] = useFetchData(
-    () => fetchCrisprData(params),
-    [
+  const deps = [
       urlParams.geneId,
       urlParams.modelId,
       sort,
@@ -73,7 +71,12 @@ function Table(props) {
       urlParams.scoreMax,
       urlParams.excludePanCancerGenes,
       urlParams.analysis,
-    ],
+    ];
+
+  const [dataResponse, loading, error] = useFetchData(
+    fetchCrisprData,
+    params,
+    deps,
   );
 
   const goPrev = () => setPageNumber(pageNumber - 1);
@@ -167,7 +170,9 @@ function GeneSearchbox({onInputChange, deferTime=300}) {
 
   return (
     <div className='p-1'>
-      <InputGroup style={{width: '300px'}}>
+      <InputGroup
+        style={{width: '300px'}}
+      >
         <InputGroupAddon addonType="prepend">
           <InputGroupText>Search</InputGroupText>
         </InputGroupAddon>
