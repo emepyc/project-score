@@ -12,6 +12,8 @@ import {
   InputGroupText,
 } from 'reactstrap';
 import {fetchCrisprData} from '../../api';
+import useFetchData from "../useFetchData";
+import Error from '../Error';
 
 import './customTable.scss';
 
@@ -32,22 +34,18 @@ function parseData(raw) {
 
 function Table(props) {
   const {showSearchbox} = props;
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [sort, setSort] = useState('fc_clean');
-  const [pageSize] = useState(10);
-  const [search, setSearch] = useState('');
-  const [pageNumber, setPageNumber] = useState(1);
-  const [sortDirection, setSortDirection] = useState(1);
-  const [totalHits, setTotalHits] = useState(null);
 
   const [urlParams] = useUrlParams(props);
 
-  const goPrev = () => setPageNumber(pageNumber - 1);
-  const goNext = () => setPageNumber(pageNumber + 1);
+  const [data, setData] = useState([]);
+  const [sort, setSort] = useState('fc_clean');
+  const [sortDirection, setSortDirection] = useState(1);
+  const [pageSize] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [search, setSearch] = useState('');
+  const [totalHits, setTotalHits] = useState(null);
 
-  useEffect(() => {
-    const params = {
+  const params = {
       geneId: urlParams.geneId,
       modelId: urlParams.modelId,
       excludePanCancerGenes: urlParams.excludePanCancerGenes,
@@ -61,29 +59,43 @@ function Table(props) {
       scoreMax: urlParams.scoreMax,
     };
 
-    setLoading(true);
-    fetchCrisprData(params)
-      .then(resp => {
-        setLoading(false);
-        setData(parseData(resp.data));
-        setTotalHits(resp.count)
-      })
-  }, [
-    urlParams.geneId,
-    urlParams.modelId,
-    sort,
-    sortDirection,
-    pageSize,
-    pageNumber,
-    search,
-    urlParams.scoreMin,
-    urlParams.scoreMax,
-    urlParams.excludePanCancerGenes,
-    urlParams.analysis,
-  ]);
+  const deps = [
+      urlParams.geneId,
+      urlParams.modelId,
+      sort,
+      sortDirection,
+      pageSize,
+      pageNumber,
+      search,
+      urlParams.scoreMin,
+      urlParams.scoreMax,
+      urlParams.excludePanCancerGenes,
+      urlParams.analysis,
+    ];
+
+  const [dataResponse, loading, error] = useFetchData(
+    fetchCrisprData,
+    params,
+    deps,
+  );
+
+  const goPrev = () => setPageNumber(pageNumber - 1);
+  const goNext = () => setPageNumber(pageNumber + 1);
+
+  useEffect(() => {
+    if (dataResponse !== null) {
+        setData(parseData(dataResponse.data));
+        setTotalHits(dataResponse.count);
+    }
+  }, [dataResponse]);
 
   const isFirstPage = pageNumber === 1;
   const isLastPage = pageNumber >= totalHits / pageSize;
+
+  if (error !== null) {
+    return (
+      <Error message="Error loading data"/>)
+  }
 
   return (
     <div className='fitness-table'>
@@ -158,7 +170,9 @@ function GeneSearchbox({onInputChange, deferTime=300}) {
 
   return (
     <div className='p-1'>
-      <InputGroup style={{width: '300px'}}>
+      <InputGroup
+        style={{width: '300px'}}
+      >
         <InputGroupAddon addonType="prepend">
           <InputGroupText>Search</InputGroupText>
         </InputGroupAddon>

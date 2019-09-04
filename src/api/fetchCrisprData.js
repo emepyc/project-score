@@ -62,16 +62,17 @@ function normaliseParams(params) {
   };
 }
 
-export default function fetchCrisprData(params) {
+export default function fetchCrisprData(params, ...args) {
   const paramsNormalised = normaliseParams(params);
 
   const endpoint = datasetEntpoint(params.analysis);
+  // const endpoint = "kk";
 
-  return get(endpoint, paramsNormalised)
-    .then(resp => deserialiser.deserialise(resp.data)
-        .then(deserialisedData => ({
-            count: resp.data.meta.count,
-            data: deserialisedData,
-        }))
+  return get(endpoint, paramsNormalised, ...args)
+    .then(resp => deserialiser.deserialise(resp)
+      .then(deserialisedData => ({
+        count: resp.meta.count,
+        data: deserialisedData,
+      }))
     );
 }

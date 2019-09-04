@@ -9,9 +9,9 @@ const params = {
   'fields[gene]': 'tumour_suppressor,essentiality_profiles',
 };
 
-export default function fetchSignificantModels(geneId) {
-  return get(`genes/${geneId}`, params)
-    .then(resp => deserialiser.deserialise(resp.data))
+export default function fetchSignificantModels({geneId}, ...args) {
+  return get(`genes/${geneId}`, params, ...args)
+    .then(resp => deserialiser.deserialise(resp))
     .then(gene => {
       const tissuesCounts = getTissuesCounts(gene.essentiality_profiles[0]);
       return {

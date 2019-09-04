@@ -1,96 +1,71 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React from 'react';
 import {withRouter} from 'react-router-dom';
 import useUrlParams from '../useUrlParams';
 import {fetchSignificantModels, totalModels} from '../../api';
-import Spinner from '../Spinner';
 import SignificantCountPlot from '../SignificantCountPlot';
 import {Card, CardHeader, CardBody} from 'reactstrap';
 import {Col, Row} from "reactstrap";
 import HasAttribute from '../HasAttribute';
-import Error from '../Error';
-import useFetchData from "../useFetchData";
+import FetchData from "../FetchData";
 
 function GeneSummaryPlots(props) {
   const [urlParams] = useUrlParams(props);
 
-  const [gene, loading, error] = useFetchData(
-    () => fetchSignificantModels(urlParams.geneId),
-    [urlParams.geneId],
-  );
-
-  const [numberOfEssentialModels, setNumberOfEssentialModels] = useState(0);
-  const [numberOfEssentialTissues, setNumberOfEssentialTissues] = useState(0);
-  const [totalNumberOfTissues, setTotalNumberOfTissues] = useState(0);
-  const [isPanCancer, setIsPanCancer] = useState(false);
-
-  useEffect(() => {
-    if (gene !== null) {
-      setNumberOfEssentialModels(gene.numberOfSignificantModels);
-      setIsPanCancer(gene.isPanCancer);
-      setNumberOfEssentialTissues(gene.numberOfSignificantTissues);
-      setTotalNumberOfTissues(gene.numberOfTotalTissues);
-    }
-  }, [gene]);
-
-  const essentialModelsSuffix = numberOfEssentialModels === 1 ? '' : 's';
-  const essentialTissuesSuffix = totalNumberOfTissues === 1 ? '' : 's';
-
-  if (error !== null) {
-    return (
-      <Error
-        message="Error loading data"
-      />
-    )
-  }
-
   return (
-    <Fragment>
+    <FetchData
+      endpoint={fetchSignificantModels}
+      params={{
+        geneId: urlParams.geneId,
+      }}
+      deps={[urlParams.geneId]}
+    >
+      {gene => {
+        const essentialModelsSuffix = gene.numberOfSignificantModels === 1 ? '' : 's';
+        const essentialTissuesSuffix = gene.numberOfTotalTissues === 1 ? '' : 's';
 
-      <Spinner
-        loading={loading}
-      >
-        <Card>
-          <CardHeader>
+        return (
+          <Card>
+            <CardHeader>
               Fitness Summary
-          </CardHeader>
-          <CardBody>
-            <Row>
-              <Col>
-                <div className="text-center">Loss of fitness in <b>{numberOfEssentialModels}</b> cell
-                  line{essentialModelsSuffix}</div>
-              </Col>
-              <Col>
-                <div className="text-center">Loss of fitness in <b>{numberOfEssentialTissues}</b> cancer
-                  type{essentialTissuesSuffix}</div>
-              </Col>
-              <Col>
-                <div className="text-center">Pan-cancer core fitness</div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <SignificantCountPlot
-                  total={totalModels}
-                  significant={numberOfEssentialModels}
-                />
-              </Col>
-              <Col>
-                <SignificantCountPlot
-                  total={totalNumberOfTissues}
-                  significant={numberOfEssentialTissues}
-                />
-              </Col>
-              <Col>
-                <HasAttribute
-                  attribute={isPanCancer}
-                />
-              </Col>
-            </Row>
-          </CardBody>
-        </Card>
-      </Spinner>
-
-    </Fragment>
+            </CardHeader>
+            <CardBody>
+              <Row>
+                <Col>
+                  <div className="text-center">Loss of fitness in <b>{gene.numberOfSignificantModels}</b> cell
+                    line{essentialModelsSuffix}</div>
+                </Col>
+                <Col>
+                  <div className="text-center">Loss of fitness in <b>{gene.numberOfSignificantTissues}</b> cancer
+                    type{essentialTissuesSuffix}</div>
+                </Col>
+                <Col>
+                  <div className="text-center">Pan-cancer core fitness</div>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <SignificantCountPlot
+                    total={totalModels}
+                    significant={gene.numberOfSignificantModels}
+                  />
+                </Col>
+                <Col>
+                  <SignificantCountPlot
+                    total={gene.numberOfTotalTissues}
+                    significant={gene.numberOfSignificantTissues}
+                  />
+                </Col>
+                <Col>
+                  <HasAttribute
+                    attribute={gene.isPanCancer}
+                  />
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        );
+      }}
+    </FetchData>
   );
 }
 

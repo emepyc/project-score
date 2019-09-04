@@ -1,4 +1,4 @@
-import {get} from './index';
+import {get} from './api';
 
 function analysisResponseToAnalysis(analysisResponse) {
   return {
@@ -8,7 +8,7 @@ function analysisResponseToAnalysis(analysisResponse) {
   }
 }
 
-export default function analyses() {
-  return get('analyses')
-    .then(resp => resp.data.data.map(analysisResponseToAnalysis));
+export default function analyses(params, ...args) {
+  return get('analyses', params, ...args)
+    .then(resp => resp.data.map(analysisResponseToAnalysis));
 }

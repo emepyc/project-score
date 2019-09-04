@@ -6,10 +6,8 @@ import {Point} from '@vx/point';
 import {withRouter} from 'react-router-dom';
 
 import {fetchAnalyses} from '../../api';
-import Spinner from '../Spinner';
+import FetchData from "../FetchData";
 
-import Error from '../Error';
-import useFetchData from "../useFetchData";
 import {cancerTypeColor} from '../../colors';
 
 import './donutChart.scss';
@@ -64,23 +62,11 @@ function Label({radius, arc, x, y, maxX, center, children}) {
 }
 
 function DonutChart({history}) {
-  const [cancerTypesResponse, loading, error] = useFetchData(
-    () => fetchAnalyses(),
-    [],
-  );
-
-  const [cancerTypes, setCancerTypes] = useState([]);
   const [containerWidth, setContainerWidth] = useState(500);
   const [containerHeight, setContainerHeight] = useState(500);
 
   const explanationMessageRef = useRef(null);
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    if (cancerTypesResponse) {
-      setCancerTypes(cancerTypesResponse);
-    }
-  }, [cancerTypesResponse]);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -95,7 +81,7 @@ function DonutChart({history}) {
 
     explanationElement.innerHTML = `${cancerTypeData.name}<br /><strong>${
       cancerTypeData.count
-      }</strong> cell line${cancerTypeData.count === 1 ? '' : 's'}`;
+    }</strong> cell line${cancerTypeData.count === 1 ? '' : 's'}`;
 
     // style of slices
     const slices = d3.select(containerElement).selectAll('path');
@@ -116,84 +102,85 @@ function DonutChart({history}) {
 
   const gotoTable = (data) => history.push(`/table?cancerType=${data.id}`);
 
-  if (error !== null) {
-    return (
-      <Error
-        message="Error loading data"
-      />
-    )
-  }
-
   return (
-    <Spinner
-      style={{backgroundColor: '#FAFAFA'}}
-      loading={loading}
+    <FetchData
+      endpoint={fetchAnalyses}
     >
-      <div ref={containerRef} style={{position: 'relative'}}>
-        <div
-          id="explanation"
-          className="my-auto"
-          style={{
-            top: `${radius + radius * 0.30}px`,
-            left: `${radius + donutChartSideOffset - radius * 1.5 / 2}px`,
-            borderRadius: `${radius * 1.5 / 2}`,
-            width: `${radius * 1.5}px`
-          }}
-        >
-          <span ref={explanationMessageRef} className="reset"/>
-        </div>
+      {
+        cancerTypesRespose => {
+          const cancerTypes = cancerTypesRespose.filter(
+            cancerType => cancerType.id !== 15,
+          );
 
-        <svg
-          className='donutChart'
-          width={containerWidth}
-          height={containerHeight - margins.top}
-        >
-          <Group
-            top={radius + margins.top}
-            left={radius + margins.left}
-          >
-            <Pie
-              data={cancerTypes}
-              pieValue={d => d.count}
-              outerRadius={radius}
-              innerRadius={radius - 20}
-              cornerRadius={0}
-              padAngle={0}
-            >
-              {pie => {
-                return pie.arcs.map((arc, i) => {
-                  const color = cancerTypeColor[arc.data.id];
-                  const [centroidX, centroidY] = pie.path.centroid(arc);
-                  return (
-                    <g key={`cancerType-${arc.data.id}-${i}`}>
-                      <path
-                        style={{cursor: 'pointer'}}
-                        d={pie.path(arc)}
-                        fill={color}
-                        onMouseOver={event => handleMouseOverBar(event, arc.data)}
-                        onMouseOut={handleMouseOut}
-                        onClick={() => gotoTable(arc.data)}
-                      />
-                      <Label
-                        radius={radius}
-                        arc={arc}
-                        x={centroidX}
-                        y={centroidY}
-                        maxX={containerWidth}
-                        center={radius + margins.left}
-                      >
-                        {arc.data.name}
-                      </Label>
-                    </g>
-                  );
-                })
-              }}
-            </Pie>
-          </Group>
-        </svg>
-      </div>
-    </Spinner>
-  )
+          return (
+            <div ref={containerRef} style={{position: 'relative'}}>
+              <div
+                id="explanation"
+                className="my-auto"
+                style={{
+                  top: `${radius + radius * 0.30}px`,
+                  left: `${radius + donutChartSideOffset - radius * 1.5 / 2}px`,
+                  borderRadius: `${radius * 1.5 / 2}`,
+                  width: `${radius * 1.5}px`
+                }}
+              >
+                <span ref={explanationMessageRef} className="reset"/>
+              </div>
+
+              <svg
+                className='donutChart'
+                width={containerWidth}
+                height={containerHeight - margins.top}
+              >
+                <Group
+                  top={radius + margins.top}
+                  left={radius + margins.left}
+                >
+                  <Pie
+                    data={cancerTypes}
+                    pieValue={d => d.count}
+                    outerRadius={radius}
+                    innerRadius={radius - 20}
+                    cornerRadius={0}
+                    padAngle={0}
+                  >
+                    {pie => {
+                      return pie.arcs.map((arc, i) => {
+                        const color = cancerTypeColor[arc.data.id];
+                        const [centroidX, centroidY] = pie.path.centroid(arc);
+                        return (
+                          <g key={`cancerType-${arc.data.id}-${i}`}>
+                            <path
+                              style={{cursor: 'pointer'}}
+                              d={pie.path(arc)}
+                              fill={color}
+                              onMouseOver={event => handleMouseOverBar(event, arc.data)}
+                              onMouseOut={handleMouseOut}
+                              onClick={() => gotoTable(arc.data)}
+                            />
+                            <Label
+                              radius={radius}
+                              arc={arc}
+                              x={centroidX}
+                              y={centroidY}
+                              maxX={containerWidth}
+                              center={radius + margins.left}
+                            >
+                              {arc.data.name}
+                            </Label>
+                          </g>
+                        );
+                      })
+                    }}
+                  </Pie>
+                </Group>
+              </svg>
+            </div>
+          )
+        }
+      }
+    </FetchData>
+  );
 }
 
 export default withRouter(DonutChart);

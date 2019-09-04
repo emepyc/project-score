@@ -1,22 +1,41 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 
-export default function useFetchData(fetchData, deps=[]) {
+export default function useFetchData(fetchData, params = {}, deps = []) {
+  const isCancelled = useRef(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const abortController = new AbortController();
+  const signal = abortController.signal;
+
+  useEffect(() => {
+    return () => {
+      isCancelled.current = true;
+    }
+  }, []);
+
   useEffect(() => {
     setLoading(true);
+    isCancelled.current = false;
 
-    fetchData()
+    fetchData(params, signal)
       .then(data => {
-        setLoading(false);
-        setData(data);
+        if (isCancelled.current === false) {
+          setLoading(false);
+          setData(data);
+        }
       })
-      .catch((error) => {
-        setLoading(false);
-        setError(error);
-      })
+      .catch(error => {
+        if (error.name !== "AbortError") {
+          setLoading(false);
+          setError(error);
+        }
+      });
+
+    return () => {
+      abortController.abort();
+    }
   }, deps);
 
   return [data, loading, error];
