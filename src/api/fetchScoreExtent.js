@@ -35,11 +35,11 @@ function normaliseParams(params) {
   };
 }
 
-export default function fetchScoreExtent(params) {
+export default function fetchScoreExtent(params={}, ...args) {
   const paramsNormalised = normaliseParams(params);
 
   const endpoint = datasetEntpoint(params.analysis);
 
-  return get(endpoint, paramsNormalised)
+  return get(endpoint, paramsNormalised, ...args)
     .then(resp => resp.meta.agg.fc_clean);
 }

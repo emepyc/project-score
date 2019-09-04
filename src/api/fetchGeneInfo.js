@@ -22,8 +22,8 @@ function processResponse(geneInfo) {
   }
 }
 
-export default function fetchGeneInfo(geneId) {
-  return get(`genes/${geneId}`, params)
+export default function fetchGeneInfo({geneId}, ...args) {
+  return get(`genes/${geneId}`, params, ...args)
     .then(resp => deserialiser.deserialise(resp))
     .then(processResponse);
 }

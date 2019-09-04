@@ -8,25 +8,7 @@ function paramsSerializer(params) {
   return qs.stringify(params, {depth: 0});
 }
 
-export async function get(endpoint, params = {}) {
-  const abortController = new AbortController();
-  const signal = abortController.signal;
-
-  const serialisedParams = paramsSerializer(params);
-  const result = await fetch(`${API_BASEURL}/${endpoint}?${serialisedParams}`, {
-    method: 'GET',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    signal,
-  });
-
-  return await result.json();
-}
-
-export async function getCancel(endpoint, params = {}, signal) {
-  console.log("signal... ", signal);
+export async function get(endpoint, params = {}, signal) {
   const serialisedParams = paramsSerializer(params);
   const result = await fetch(`${API_BASEURL}/${endpoint}?${serialisedParams}`, {
     method: 'GET',

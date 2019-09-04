@@ -84,8 +84,8 @@ function processResponses(modelInfo, cancerDrivers) {
   }
 }
 
-export default async function fetchModelInfo(modelId) {
-  const modelInfoPromise = await get(`/models/${modelId}`, modelInfoParams)
+export default async function fetchModelDetails({modelId}, ...args) {
+  const modelInfoPromise = await get(`/models/${modelId}`, modelInfoParams, ...args)
     .then(resp => deserialiser.deserialise(resp));
 
   const cancerDriversPromise = await get(`/models/${modelId}/datasets/cancer_drivers`, cancerDriverParams)

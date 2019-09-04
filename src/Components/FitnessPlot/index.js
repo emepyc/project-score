@@ -13,10 +13,8 @@ import {
   colorInsignificantBg,
   colorSignificantBg
 } from '../../colors';
-import useFetchData from "../useFetchData";
 import useUrlParams from '../useUrlParams';
-import Spinner from '../Spinner';
-import Error from '../Error';
+import FetchData from "../FetchData";
 
 import './fitnessPlot.scss';
 
@@ -44,19 +42,15 @@ function FitnessPlot(props) {
     pageSize: 0,
   };
 
-  const [data, loading, error] = useFetchData(
-    () => fetchCrisprData(params),
-    [
-      urlParams.geneId,
-      urlParams.modelId,
-      urlParams.analysis,
-      urlParams.scoreMin,
-      urlParams.scoreMax,
-      urlParams.excludePanCancerGenes,
-    ]
-  );
+  const deps = [
+    urlParams.geneId,
+    urlParams.modelId,
+    urlParams.analysis,
+    urlParams.scoreMin,
+    urlParams.scoreMax,
+    urlParams.excludePanCancerGenes,
+  ];
 
-  const [sortedData, setSortedData] = useState([]);
   const [containerWidth, setContainerWidth] = useState(750);
   const [xDomain, setXDomain] = useState(null);
 
@@ -70,65 +64,55 @@ function FitnessPlot(props) {
     return () => window.removeEventListener('resize', resize);
   }, []);
 
-  useEffect(() => {
-    if (data !== null) {
-      setSortedData(sortData(data.data));
-    }
-  }, [data]);
-
   const sortData = data => {
     const dataSorted = sortBy(data, rec => rec[attributeToPlot]);
     return dataSorted.map((d, i) => ({...d, index: i}));
   };
 
-  useEffect(() => {
-    if (data !== null) {
-      setSortedData(sortData(data.data));
-    }
-  }, [attributeToPlot]);
-
-  if (error !== null) {
-    return (
-      <Error message="Error loading data"/>)
-  }
-
   return (
     <div ref={container}>
-      <Spinner loading={loading}>
-        {sortedData.length && (
-          <div>
-            <FitnessBrush
-              data={sortedData}
-              width={containerWidth - config.marginLeft}
-              onRangeChanged={setXDomain}
-              marginLeft={config.marginLeft}
-              {...props}
-            />
-            <div style={{position: 'relative'}}>
-              {highlight && (<FitnessTooltip
-                  xDomain={xDomain}
+      <FetchData
+        endpoint={fetchCrisprData}
+        params={params}
+        deps={deps}
+      >
+        {data => {
+          const sortedData = sortData(data.data);
+          return (
+            <div>
+              <FitnessBrush
+                data={sortedData}
+                width={containerWidth - config.marginLeft}
+                onRangeChanged={setXDomain}
+                marginLeft={config.marginLeft}
+                {...props}
+              />
+              <div style={{position: 'relative'}}>
+                {highlight && (<FitnessTooltip
+                    xDomain={xDomain}
+                    data={sortedData}
+                    width={containerWidth}
+                    height={config.height}
+                    marginLeft={config.marginLeft}
+                    marginTop={config.marginTop}
+                    {...props}
+                  />
+                )}
+                <FitnessCanvasPlot
                   data={sortedData}
                   width={containerWidth}
                   height={config.height}
+                  significantField={config.significantField}
+                  xDomain={xDomain}
                   marginLeft={config.marginLeft}
                   marginTop={config.marginTop}
                   {...props}
                 />
-              )}
-              <FitnessCanvasPlot
-                data={sortedData}
-                width={containerWidth}
-                height={config.height}
-                significantField={config.significantField}
-                xDomain={xDomain}
-                marginLeft={config.marginLeft}
-                marginTop={config.marginTop}
-                {...props}
-              />
+              </div>
             </div>
-          </div>
-        )}
-      </Spinner>
+          );
+        }}
+      </FetchData>
     </div>
   );
 }

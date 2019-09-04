@@ -1,9 +1,6 @@
-// import {get} from './api';
-import {getCancel} from "./api";
+import {get} from './api';
 
 function analysisResponseToAnalysis(analysisResponse) {
-  console.log("analysisResponse...");
-  console.log(analysisResponse);
   return {
     name: analysisResponse.attributes.name,
     id: analysisResponse.id,
@@ -12,6 +9,6 @@ function analysisResponseToAnalysis(analysisResponse) {
 }
 
 export default function analyses(params, ...args) {
-  return getCancel('analyses', params, ...args)
+  return get('analyses', params, ...args)
     .then(resp => resp.data.map(analysisResponseToAnalysis));
 }

@@ -1,27 +1,19 @@
 import React from 'react';
 import fetchAnalyses from "./api/fetchAnalyses";
-import useFetchData from "./Components/useFetchData";
+import FetchData from "./Components/FetchData";
 
-export default function() {
-  const [analyses, loading, error] = useFetchData(
-    fetchAnalyses,
-  );
-
-  const [data, setData] = React.useState([]);
-
-  React.useEffect(() => {
-    if (analyses !== null) {
-      setData(analyses);
-    }
-  }, [analyses]);
-
-  console.log(data);
-
+export default function () {
   return (
-    <div>
-      {data.map(analysis => (
-        <div key={analysis.id}>{analysis.name}</div>
-      ))}
-    </div>
-  );
+    <FetchData
+      endpoint={fetchAnalyses}
+    >
+      {data => (
+        <div>
+          {data.map(analysis => (
+            <div key={analysis.id}>{analysis.name}</div>
+          ))}
+        </div>
+      )}
+    </FetchData>
+  )
 }

@@ -4,7 +4,6 @@ import debounce from 'lodash.debounce';
 import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import TableDisplay from '../TableDisplay';
 import useUrlParams from '../useUrlParams';
-import Spinner from '../Spinner';
 import {
   Input,
   InputGroup,
@@ -12,8 +11,7 @@ import {
   InputGroupText,
 } from 'reactstrap';
 import {fetchCrisprData} from '../../api';
-import useFetchData from "../useFetchData";
-import Error from '../Error';
+import FetchData from "../FetchData";
 
 import './customTable.scss';
 
@@ -37,13 +35,11 @@ function Table(props) {
 
   const [urlParams] = useUrlParams(props);
 
-  const [data, setData] = useState([]);
   const [sort, setSort] = useState('fc_clean');
   const [sortDirection, setSortDirection] = useState(1);
   const [pageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [search, setSearch] = useState('');
-  const [totalHits, setTotalHits] = useState(null);
 
   const params = {
       geneId: urlParams.geneId,
@@ -59,101 +55,92 @@ function Table(props) {
       scoreMax: urlParams.scoreMax,
     };
 
-  const [dataResponse, loading, error] = useFetchData(
-    () => fetchCrisprData(params),
-    [
-      urlParams.geneId,
-      urlParams.modelId,
-      sort,
-      sortDirection,
-      pageSize,
-      pageNumber,
-      search,
-      urlParams.scoreMin,
-      urlParams.scoreMax,
-      urlParams.excludePanCancerGenes,
-      urlParams.analysis,
-    ],
-  );
+  const deps = [
+    urlParams.geneId,
+    urlParams.modelId,
+    sort,
+    sortDirection,
+    pageSize,
+    pageNumber,
+    search,
+    urlParams.scoreMin,
+    urlParams.scoreMax,
+    urlParams.excludePanCancerGenes,
+    urlParams.analysis,
+  ];
 
   const goPrev = () => setPageNumber(pageNumber - 1);
   const goNext = () => setPageNumber(pageNumber + 1);
 
-  useEffect(() => {
-    if (dataResponse !== null) {
-        setData(parseData(dataResponse.data));
-        setTotalHits(dataResponse.count);
-    }
-  }, [dataResponse]);
-
-  const isFirstPage = pageNumber === 1;
-  const isLastPage = pageNumber >= totalHits / pageSize;
-
-  if (error !== null) {
-    return (
-      <Error message="Error loading data"/>)
-  }
-
   return (
-    <div className='fitness-table'>
+    <FetchData
+      endpoint={fetchCrisprData}
+      params={params}
+      deps={deps}
+    >
+      {dataResponse => {
+        const data = parseData(dataResponse.data);
+        const totalHits = dataResponse.count;
+        const isFirstPage = pageNumber === 1;
+        const isLastPage = pageNumber >= totalHits / pageSize;
+        return (
+                <div className='fitness-table'>
+                  <div className='d-flex h-100'>
 
-      <div className='d-flex h-100'>
+                    <div className='my-auto mr-auto p-1'>
+                      <div>
+                        Showing {' '}
+                        <span className='font-weight-bold'>{pageSize * (pageNumber - 1) + 1}</span> - {' '}
+                        <span className='font-weight-bold'>{pageSize * (pageNumber - 1) + pageSize}</span> out of {' '}
+                        <span className='font-weight-bold'>{totalHits}</span> fitness values
+                      </div>
+                    </div>
 
-        <div className='my-auto mr-auto p-1'>
-          <div>
-            Showing {' '}
-            <span className='font-weight-bold'>{pageSize * (pageNumber - 1) + 1}</span> - {' '}
-            <span className='font-weight-bold'>{pageSize * (pageNumber - 1) + pageSize}</span> out of {' '}
-            <span className='font-weight-bold'>{totalHits}</span> fitness values
-          </div>
-        </div>
+                    {showSearchbox && (
+                      <GeneSearchbox
+                        onInputChange={(input) => setSearch(input.toUpperCase())}
+                        deferTime={1000}
+                      />
+                    )}
 
-        {showSearchbox && (
-          <GeneSearchbox
-            onInputChange={(input) => setSearch(input.toUpperCase())}
-            deferTime={1000}
-          />
-        )}
+                  </div>
 
-      </div>
+                    <TableDisplay
+                      {...props}
+                      data={data}
+                      sortDirection={sortDirection}
+                      sort={sort}
+                      onSortChange={(sortField) => {
+                        if (sortField !== sort) {
+                          setSortDirection(1);
+                          setSort(sortField);
+                        } else {
+                          setSortDirection(sortDirection * -1);
+                        }
+                      }}
+                    />
 
-      <Spinner
-        loading={loading}
-      >
+                  <Pagination>
+                    <PaginationItem disabled={isFirstPage}>
+                      <PaginationLink href='#' onClick={goPrev}>
+                        Previous
+                      </PaginationLink>
+                    </PaginationItem>
+                    <small style={{padding: '0.75rem 0.25rem'}}>
+                    </small>
+                    <PaginationItem disabled={isLastPage}>
+                      <PaginationLink href='#' onClick={goNext}>
+                        Next
+                      </PaginationLink>
+                    </PaginationItem>
+                  </Pagination>
+                  Page <b>{pageNumber}</b> of {1 + ~~(totalHits / pageSize)}
+                </div>
 
-        <TableDisplay
-          {...props}
-          data={data}
-          sortDirection={sortDirection}
-          sort={sort}
-          onSortChange={(sortField) => {
-            if (sortField !== sort) {
-              setSortDirection(1);
-              setSort(sortField);
-            } else {
-              setSortDirection(sortDirection * -1);
-            }
-          }}
-        />
-      </Spinner>
-
-      <Pagination>
-        <PaginationItem disabled={isFirstPage}>
-          <PaginationLink href='#' onClick={goPrev}>
-            Previous
-          </PaginationLink>
-        </PaginationItem>
-        <small style={{padding: '0.75rem 0.25rem'}}>
-        </small>
-        <PaginationItem disabled={isLastPage}>
-          <PaginationLink href='#' onClick={goNext}>
-            Next
-          </PaginationLink>
-        </PaginationItem>
-      </Pagination>
-      Page <b>{pageNumber}</b> of {1 + ~~(totalHits / pageSize)}
-    </div>
-  )
+        );
+      }}
+    </FetchData>
+  );
 }
 
 export default withRouter(Table);
