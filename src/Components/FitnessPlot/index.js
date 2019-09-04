@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import sortBy from "lodash.sortby";
-import React, {useCallback, useState, useEffect, useRef, Fragment} from 'react';
+import React, {useState, useEffect, useRef, Fragment} from 'react';
 import {withRouter} from 'react-router-dom';
 import findIndex from 'lodash.findindex';
 import {Range} from 'rc-slider';
@@ -161,11 +161,11 @@ function FitnessBrush({width, data, attributeToPlot, onRangeChanged, marginLeft}
     onRangeChanged([0, data.length]);
   }, [data.length]);
 
-  const onChange = useCallback(newRange => {
+  const onChange = newRange => {
     setMinRange(newRange[0]);
     setMaxRange(newRange[1]);
     onRangeChanged(newRange)
-  });
+  };
 
   return (
     <div
@@ -387,7 +387,7 @@ function FitnessCanvasPlot(props) {
 
   }, [data, attributeToPlot, xDomain, highlightTissue, colorBy, width]);
 
-  const onMouseMove = useCallback(() => {
+  const onMouseMove = () => {
     const ev = d3.event;
     if (ev) {
       const xMouse = xScale.invert(ev.offsetX + marginLeft);
@@ -405,11 +405,11 @@ function FitnessCanvasPlot(props) {
         index: closest.index,
       });
     }
-  });
+  };
 
-  const onMouseOut = useCallback(() => {
+  const onMouseOut = () => {
     onHighlight(null);
-  });
+  };
 
   useEffect(() => {
     d3.select(eventsContainer.current)
