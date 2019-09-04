@@ -2,9 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Row, Col} from 'reactstrap';
 import {tissueColor} from '../../colors';
 import {fetchTissues} from '../../api';
-import Spinner from '../Spinner';
-import Error from '../Error';
-import useFetchData from "../useFetchData";
+import FetchData from "../FetchData";
 
 function tissueFilterElement(tissue, key, onSelectTissue) {
   return (
@@ -31,49 +29,36 @@ function tissueFilterElement(tissue, key, onSelectTissue) {
 
 
 function TissuesHighlight({blocks, onSelectTissue}) {
-  const [tissuesResponse, loading, error] = useFetchData(
-    () => fetchTissues(),
-    [],
-  );
-  const [tissues, setTissues] = useState([]);
-
-  const tissuesPerBlock = Math.round(tissues.length / blocks);
-
-  useEffect(() => {
-    if (tissuesResponse) {
-        setTissues(tissuesResponse.map(tissue => tissue.tissue));
-    }
-  }, [tissuesResponse]);
-
-  if (error !== null) {
-    return (
-      <Error
-        message="Error loading data"
-      />
-    )
-  }
-
   return (
-    <Spinner
-      loading={loading}
+    <FetchData
+      endpoint={fetchTissues}
     >
-      <Row
-        style={{marginTop: '20px'}}
-      >
-        {[...Array(blocks).keys()].map(block => {
+      {
+        tissuesResponse => {
+          const tissues = tissuesResponse.map(tissue => tissue.tissue);
+          const tissuesPerBlock = Math.round(tissues.length / blocks);
+
           return (
-            <Col xs={12 / blocks} key={block}>
-              {[...Array(tissuesPerBlock).keys()].map(pos => tissueFilterElement(
-                tissues[block * tissuesPerBlock + pos],
-                `${block}${tissuesPerBlock}${pos}`,
-                onSelectTissue,
-                )
-              )}
-            </Col>
+            <Row
+              style={{marginTop: '20px'}}
+            >
+              {[...Array(blocks).keys()].map(block => {
+                return (
+                  <Col xs={12 / blocks} key={block}>
+                    {[...Array(tissuesPerBlock).keys()].map(pos => tissueFilterElement(
+                      tissues[block * tissuesPerBlock + pos],
+                      `${block}${tissuesPerBlock}${pos}`,
+                      onSelectTissue,
+                      )
+                    )}
+                  </Col>
+                );
+              })}
+            </Row>
           );
-        })}
-      </Row>
-    </Spinner>
+        }
+      }
+    </FetchData>
   );
 }
 
