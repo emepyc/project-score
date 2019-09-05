@@ -6,6 +6,7 @@ import {withRouter} from 'react-router-dom';
 import Spinner from '../Spinner';
 import {search} from '../../api';
 import {insignificantNodeColor} from "../../colors";
+import Error from '../Error';
 
 const groupStyles = {
   display: 'flex',
@@ -61,11 +62,21 @@ const LoadingMessage = (props) => {
 };
 
 const _loadSuggestions = (inputValue, callback) => search(inputValue)
-  .then(callback);
+  .then(callback)
+  .catch(() => {
+    callback([{
+      options: [{
+        value: 'error',
+        label: 'Error loading data',
+        disabled: true,
+        error: true,
+      }]
+    }])
+  });
 
 const loadSuggestions = debounce(_loadSuggestions, 500, {leading: true});
 
-function Searchbox({placeholder = "Search for a gene, cell line or tissue", history}) {
+function Searchbox({placeholder="Search for a gene, cell line or cancer type", history}) {
   const [inputValue, setInputValue] = useState("");
 
   const onChange = value => {
@@ -77,7 +88,7 @@ function Searchbox({placeholder = "Search for a gene, cell line or tissue", hist
     } else if (value.type === 'models') {
       history.push(`/model/${value.id}?scoreMax=0`);
     } else {
-      history.push(`/table?tissue=${value.id}`);
+      history.push(`/table?analysis=${value.id}`);
     }
   };
 
@@ -89,6 +100,12 @@ function Searchbox({placeholder = "Search for a gene, cell line or tissue", hist
   );
 
   const formatOptionLabel = option => {
+      if (option.error) {
+      return (
+          <Error message={option.label}/>
+      );
+    }
+
     const tissueStyles = isOptionDisabled(option) ?
       groupBadgeStylesDisabled :
       groupBadgeStyles;

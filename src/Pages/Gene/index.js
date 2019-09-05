@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Table from '../../Components/Table';
-import TissueFilter from '../../Components/TissueFilter';
+import CancerTypeFilter from '../../Components/AnalysisFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import FitnessPlot from '../../Components/FitnessPlot';
 import GeneInfoSummary from '../../Components/GeneInfoSummary';
@@ -39,7 +39,7 @@ function Filters() {
       <CardBody>
         <Row>
           <Col className="my-3">
-            <TissueFilter/>
+            <CancerTypeFilter/>
           </Col>
           <Col className="my-3">
             <ScoreRangeFilter/>

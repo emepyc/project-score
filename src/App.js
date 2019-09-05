@@ -16,7 +16,9 @@ const App = (props) => (
       <div>
         <Masthead/>
 
-        <div className="container-fluid pt-2 pb-5" style={{backgroundColor: '#fdfffd', color: '#5A5F5F', fontSize: '0.9em', fontWeight: 300}}>
+        <div className="container-fluid pt-2 pb-5"
+             style={{backgroundColor: '#fdfffd', color: '#5A5F5F', fontSize: '0.9em', fontWeight: 300}}
+        >
           <main>
             <Route exact path='/' component={Home}/>
             <Route exact path='/downloads' component={Downloads}/>

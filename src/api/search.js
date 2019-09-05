@@ -23,11 +23,11 @@ function formatResponse(resp) {
       }),
     },
     {
-      type: "tissues",
-      label: "Tissues",
-      extraOptions: tissue => ({
-        label: tissue.name,
-        id: tissue.name,
+      type: "cancer_types",
+      label: "Cancer types",
+      extraOptions: cancerType => ({
+        label: cancerType.name,
+        id: cancerType.id,
       }),
     },
   ];

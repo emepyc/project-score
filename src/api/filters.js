@@ -1,25 +1,4 @@
 import identity from "lodash.identity";
-import {id2name} from "./utils";
-
-export function expandTissueFilter(tissue) {
-  return {
-    name: "model",
-    op: "has",
-    val: {
-      name: "sample",
-      op: "has",
-      val: {
-        name: "tissue",
-        op: "has",
-        val: {
-          name: "name",
-          op: "eq",
-          val: id2name(tissue),
-        }
-      }
-    }
-  };
-}
 
 export function expandExcludePanCancerGenesFilter() {
   return {
@@ -122,4 +101,11 @@ export function expandScoreRangeFilter({scoreMin, scoreMax}) {
 
 export function combineFilters(filters) {
   return filters.filter(identity);
+}
+
+export function datasetEntpoint(analysis) {
+  const analysisEndpoint = analysis ?
+    `analyses/${analysis}` :
+    '';
+  return `${analysisEndpoint}/datasets/crispr_ko`;
 }

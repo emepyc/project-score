@@ -1,15 +1,16 @@
 import {get} from './api';
 import axios from 'axios';
-import groupBy from 'lodash/groupBy';
-import uniqBy from 'lodash/uniqBy';
-import sortBy from 'lodash/sortBy';
+import groupBy from 'lodash.groupby';
+import uniqBy from 'lodash.uniqby';
+import sortBy from 'lodash.sortby';
 import Desearialiser from 'deserialise-jsonapi';
 
 const deserialiser = new Desearialiser();
 
 const modelInfoParams = {
-  include: 'identifiers,sample,sample.tissue,sample.cancer_type,files',
+  include: 'identifiers,sample,sample.tissue,sample.cancer_type,files,analyses',
   'fields[sample]': 'tissue,cancer_type',
+  'fields[analysis]': 'name',
 };
 
 const cancerDriverParams = {
@@ -52,10 +53,18 @@ function parseDatasets({datasetFiles: files, drugDataAvailable}) {
   ];
 }
 
+function analysesFromModelInfo(analyses) {
+  return analyses.map(analysis => ({
+    id: analysis.id,
+    name: analysis.name,
+  }));
+}
+
 function processResponses(modelInfo, cancerDrivers) {
   return {
     tissue: modelInfo.sample.tissue.name,
     cancerType: modelInfo.sample.cancer_type.name,
+    analyses: analysesFromModelInfo(modelInfo.analyses),
     msiStatus: modelInfo.msi_status,
     ploidy: modelInfo.ploidy,
     mutationsPerMb: modelInfo.mutations_per_mb,
@@ -100,10 +109,12 @@ export default function fetchModelInfo(modelId) {
     //     })
     //   }
     // });
+
   const cancerDriversPromise = get(`/models/${modelId}/datasets/cancer_drivers`, cancerDriverParams)
     .then(resp => deserialiser.deserialise(resp.data));
 
   return axios.all([modelInfoPromise, cancerDriversPromise])
     .then(([modelInfoResponse, cancerDriversResponse]) =>
-      processResponses(modelInfoResponse, cancerDriversResponse));
+      processResponses(modelInfoResponse, cancerDriversResponse)
+    );
 }

@@ -5,12 +5,14 @@ import {Pie, Line} from '@vx/shape'
 import {Point} from '@vx/point';
 import {withRouter} from 'react-router-dom';
 
-import {fetchTissues} from '../../api';
+import {fetchAnalyses} from '../../api';
 import Spinner from '../Spinner';
-import colors from '../../colors';
+
+import Error from '../Error';
+import useFetchData from "../useFetchData";
+import {cancerTypeColor} from '../../colors';
 
 import './donutChart.scss';
-
 
 const donutChartSideOffset = 150;
 
@@ -38,17 +40,17 @@ function Label({radius, arc, x, y, maxX, center, children}) {
   return (
     <React.Fragment>
       <Line
-        stroke={colors[arc.data.tissue]}
+        stroke={cancerTypeColor[arc.data.id]}
         from={new Point({x: x, y: y})}
         to={new Point({x: xDiagonal, y: yDiagonal})}
       />
       <Line
-        stroke={colors[arc.data.tissue]}
+        stroke={cancerTypeColor[arc.data.id]}
         from={new Point({x: xDiagonal, y: yDiagonal})}
         to={new Point({x: xHorizontal, y: yDiagonal})}
       />
       <text
-        fill={d3.rgb(colors[arc.data.tissue]).darker()}
+        fill={d3.rgb(cancerTypeColor[arc.data.id]).darker()}
         x={labelX}
         y={yDiagonal}
         fontSize="0.9em"
@@ -62,38 +64,38 @@ function Label({radius, arc, x, y, maxX, center, children}) {
 }
 
 function DonutChart({history}) {
-  const [tissues, setTissues] = useState([]);
+  const [cancerTypesResponse, loading, error] = useFetchData(
+    () => fetchAnalyses(),
+    [],
+  );
+
+  const [cancerTypes, setCancerTypes] = useState([]);
   const [containerWidth, setContainerWidth] = useState(500);
   const [containerHeight, setContainerHeight] = useState(500);
-  const [loadingTissues, setLoadingTissues] = useState(false);
 
   const explanationMessageRef = useRef(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
-      setLoadingTissues(true);
-      fetchTissues()
-        .then(resp => {
-          setLoadingTissues(false);
-          setTissues(resp);
-        });
-    }, []
-  );
+    if (cancerTypesResponse) {
+      setCancerTypes(cancerTypesResponse);
+    }
+  }, [cancerTypesResponse]);
 
   useEffect(() => {
     if (containerRef.current) {
       setContainerWidth(containerRef.current.offsetWidth);
       setContainerHeight(containerRef.current.offsetWidth - 150);
     }
-  });
+  }, [containerRef.current]);
 
-  const handleMouseOverBar = (event, tissueData) => {
+  const handleMouseOverBar = (event, cancerTypeData) => {
     const explanationElement = explanationMessageRef.current;
     const containerElement = containerRef.current;
 
-    explanationElement.innerHTML = `${tissueData.tissue}<br /><strong>${
-      tissueData.counts
-      }</strong> cell line${tissueData.counts === 1 ? '' : 's'}`;
+    explanationElement.innerHTML = `${cancerTypeData.name}<br /><strong>${
+      cancerTypeData.count
+      }</strong> cell line${cancerTypeData.count === 1 ? '' : 's'}`;
 
     // style of slices
     const slices = d3.select(containerElement).selectAll('path');
@@ -112,12 +114,20 @@ function DonutChart({history}) {
 
   const radius = (containerWidth - (margins.left + margins.right)) / 2;
 
-  const gotoTable = (data) => history.push(`/table?tissue=${data.id}`);
+  const gotoTable = (data) => history.push(`/table?cancerType=${data.id}`);
+
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    )
+  }
 
   return (
     <Spinner
       style={{backgroundColor: '#FAFAFA'}}
-      loading={loadingTissues}
+      loading={loading}
     >
       <div ref={containerRef} style={{position: 'relative'}}>
         <div
@@ -143,8 +153,8 @@ function DonutChart({history}) {
             left={radius + margins.left}
           >
             <Pie
-              data={tissues}
-              pieValue={d => d.counts}
+              data={cancerTypes}
+              pieValue={d => d.count}
               outerRadius={radius}
               innerRadius={radius - 20}
               cornerRadius={0}
@@ -152,10 +162,10 @@ function DonutChart({history}) {
             >
               {pie => {
                 return pie.arcs.map((arc, i) => {
-                  const color = colors[arc.data.tissue];
+                  const color = cancerTypeColor[arc.data.id];
                   const [centroidX, centroidY] = pie.path.centroid(arc);
                   return (
-                    <g key={`tissue-${arc.data.id}-${i}`}>
+                    <g key={`cancerType-${arc.data.id}-${i}`}>
                       <path
                         style={{cursor: 'pointer'}}
                         d={pie.path(arc)}
@@ -172,7 +182,7 @@ function DonutChart({history}) {
                         maxX={containerWidth}
                         center={radius + margins.left}
                       >
-                        {arc.data.tissue}
+                        {arc.data.name}
                       </Label>
                     </g>
                   );

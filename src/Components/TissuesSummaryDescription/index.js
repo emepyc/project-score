@@ -4,6 +4,9 @@ import {faClock} from '@fortawesome/free-solid-svg-icons'
 import React, {useState, useEffect} from 'react';
 
 import {fetchTissues} from '../../api';
+import Spinner from "../Spinner";
+import Error from '../Error';
+import useFetchData from "../useFetchData";
 import PetriDiagram from './petri-diagram.png';
 import Organ9 from './organ-9.png';
 import Gene from './dna.png';
@@ -12,20 +15,31 @@ import './tissuesSummaryDescription.scss';
 
 
 function TissuesSummaryDescription() {
+  const [tissues, loading, error] = useFetchData(
+    () => fetchTissues(),
+    [],
+  );
 
   const [numberOfCellLines, setNumberOfCellLines] = useState(0);
   const [numberOfTissues, setNumberOfTissues] = useState(0);
 
   useEffect(() => {
-    fetchTissues()
-      .then(tissues => {
-        setNumberOfTissues(tissues.length);
-        setNumberOfCellLines(tissues.reduce((acc, curr) => acc + ~~curr.counts, 0))
-      })
-  }, []);
+    if (tissues) {
+      setNumberOfTissues(tissues.length);
+      setNumberOfCellLines(tissues.reduce((acc, curr) => acc + ~~curr.counts, 0))
+    }
+  }, [tissues]);
+
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    )
+  }
 
   return (
-    <div>
+    <Spinner loading={loading}>
       <div className="sectionDescription" style={{marginLeft: '5px'}}>
           <img
             height={'48px'}
@@ -95,7 +109,7 @@ function TissuesSummaryDescription() {
           Last update: April 2019
         </span>
       </div>
-    </div>
+    </Spinner>
   );
 }
 

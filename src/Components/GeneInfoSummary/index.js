@@ -4,12 +4,19 @@ import {fetchGeneInfo} from '../../api';
 import useUrlParams from '../useUrlParams';
 import GeneInfoHeader from '../GeneInfoHeader';
 import Spinner from '../Spinner';
+import Error from '../Error';
+import useFetchData from "../useFetchData";
 
 
 function GeneInfoSummary(props) {
+  const [urlParams] = useUrlParams(props);
+  const [geneInfo, loading, error] = useFetchData(
+    () => fetchGeneInfo(urlParams.geneId),
+    [urlParams.geneId],
+  );
+
   const [geneNames, setGeneNames] = useState([]);
   const [geneIdentifiers, setGeneIdentifiers] = useState([]);
-  // const [isTumourSuppressor, setIsTumourSuppressor] = useState(false);
   const [isRibosomal, setIsRibosomal] = useState(false);
   const [isHistone, setIsHistone] = useState(false);
   const [isDnaReplication, setIsDnaReplication] = useState(false);
@@ -17,26 +24,28 @@ function GeneInfoSummary(props) {
   const [isRnaPolymerase, setIsRnaPolymerase] = useState(false);
   const [isSpliceosome, setIsSpliceosome] = useState(false);
   const [geneSymbol, setGeneSymbol] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [urlParams] = useUrlParams(props);
 
   useEffect(() => {
-    setLoading(true);
-    fetchGeneInfo(urlParams.geneId)
-      .then(geneInfo => {
-        setLoading(false);
-        setGeneIdentifiers(geneInfo.identifiers);
-        setGeneNames(geneInfo.names);
-        setGeneSymbol(geneInfo.symbol);
-        // setIsTumourSuppressor(geneInfo.isTumourSuppressor);
-        setIsProteasome(geneInfo.isProteasome);
-        setIsHistone(geneInfo.isHistone);
-        setIsDnaReplication(geneInfo.isDnaReplication);
-        setIsRnaPolymerase(geneInfo.isRnaPolymerase);
-        setIsRibosomal(geneInfo.isRibosomal);
-        setIsSpliceosome(geneInfo.isSpliceosome);
-      });
-  }, [urlParams.geneId]);
+    if (geneInfo !== null) {
+      setGeneIdentifiers(geneInfo.identifiers);
+      setGeneNames(geneInfo.names);
+      setGeneSymbol(geneInfo.symbol);
+      setIsProteasome(geneInfo.isProteasome);
+      setIsHistone(geneInfo.isHistone);
+      setIsDnaReplication(geneInfo.isDnaReplication);
+      setIsRnaPolymerase(geneInfo.isRnaPolymerase);
+      setIsRibosomal(geneInfo.isRibosomal);
+      setIsSpliceosome(geneInfo.isSpliceosome);
+    }
+  }, [geneInfo]);
+
+  if (error !== null) {
+    return (
+      <Error
+        message="Error loading data"
+      />
+    );
+  }
 
   return (
     <Spinner loading={loading}>
@@ -46,12 +55,6 @@ function GeneInfoSummary(props) {
         symbol={geneSymbol}
         features={
           [
-            // {
-            //   label: 'Tumour suppressor',
-            //   value: isTumourSuppressor,
-            //   id: 'isTumourSuppressor',
-            //   text: `${geneSymbol} is ${isTumourSuppressor ? '' : 'not'} a tumour suppressor gene`,
-            // },
             {
               label: 'Rna polymerase',
               value: isRnaPolymerase,
