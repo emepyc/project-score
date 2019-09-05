@@ -76,7 +76,7 @@ const _loadSuggestions = (inputValue, callback) => search(inputValue)
 
 const loadSuggestions = debounce(_loadSuggestions, 500, {leading: true});
 
-function Searchbox({placeholder="Search for a gene, cell line or cancer type", history}) {
+function Searchbox({placeholder = "Search for a gene, cell line or cancer type", history}) {
   const [inputValue, setInputValue] = useState("");
 
   const onChange = value => {
@@ -92,17 +92,22 @@ function Searchbox({placeholder="Search for a gene, cell line or cancer type", h
     }
   };
 
-  const formatGroupLabel = data => (
-    <div style={groupStyles}>
-      <span>{data.label}</span>
-      <span style={groupBadgeStyles}>{data.options.length}</span>
-    </div>
-  );
+  const formatGroupLabel = data => {
+    if (data.options[0].error) {
+      return null;
+    }
+    return (
+      <div style={groupStyles}>
+        <span>{data.label}</span>
+        <span style={groupBadgeStyles}>{data.options.length}</span>
+      </div>
+    );
+  };
 
   const formatOptionLabel = option => {
-      if (option.error) {
+    if (option.error) {
       return (
-          <Error message={option.label}/>
+        <Error message={option.label}/>
       );
     }
 
