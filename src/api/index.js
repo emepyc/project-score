@@ -1,4 +1,4 @@
-import {get, post} from './api';
+import {get} from './api';
 import fetchTissues from './fetchTissues';
 import fetchAnalyses from './fetchAnalyses';
 import search from './search';
@@ -12,7 +12,6 @@ import fetchSignificantModels from './fetchSignificantModels';
 
 export {
   get,
-  post,
   fetchTissues,
   fetchAnalyses,
   fetchCrisprData,

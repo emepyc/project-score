@@ -12,7 +12,6 @@
     "@vx/shape": "^0.0.184",
     "@vx/tooltip": "^0.0.184",
     "animate.css": "^3.7.0",
-    "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
     "d3": "^5.9.1",

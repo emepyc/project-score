@@ -1,7 +1,7 @@
 import {get} from "./index";
 
 function formatResponse(resp) {
-  const data = resp.data;
+  const data = resp;
   const options = [
     {
       type: "genes",

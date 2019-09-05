@@ -21,8 +21,8 @@ function processResponse(modelInfo) {
   }
 }
 
-export default function fetchModelInfo(modelId) {
-  return get(`/models/${modelId}`, params)
-    .then(resp => deserialiser.deserialise(resp.data))
+export default function fetchModelInfo({modelId}, ...args) {
+  return get(`/models/${modelId}`, params, ...args)
+    .then(resp => deserialiser.deserialise(resp))
     .then(processResponse)
 }

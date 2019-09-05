@@ -1,32 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Select from 'react-select';
 import {withRouter} from 'react-router';
 
 import useUrlParams from '../useUrlParams';
 import {fetchAnalyses} from '../../api';
+import FetchData from "../FetchData";
 
 function AnalysisFilter(props) {
-  const [analysis, setAnalysis] = useState(null);
-  const [analyses, setAnalyses] = useState([]);
+  const [selectedAnalysis, setSelectedAnalysis] = useState(null);
   const [urlParams, setUrlParams] = useUrlParams(props);
 
   const analysisFromUrl = urlParams.analysis;
 
-  useEffect(() => {
-    fetchAnalyses()
-      .then(analyses => {
-        setAnalyses(analyses);
-        if(analysisFromUrl) {
-          const analysis = analyses.filter(
-            analysis => analysisFromUrl === `${analysis.id}`
-          )[0];
-          setAnalysis(analysis);
-        }
-      })
-  }, []);
-
   const onInputChange = analysis => {
-    setAnalysis(analysis.id);
+    setSelectedAnalysis(analysis.id);
   };
 
   const onChange = value => setUrlParams({analysis: value ? value.id : ""});
@@ -35,18 +22,32 @@ function AnalysisFilter(props) {
   const getOptionValue = option => option.id;
 
   return (
-    <React.Fragment>
-      <Select
-        value={analysis}
-        options={analyses}
-        onChange={onChange}
-        placeholder="Select analysis"
-        isClearable
-        getOptionValue={getOptionValue}
-        getOptionLabel={getOptionLabel}
-        onInputChange={onInputChange}
-      />
-    </React.Fragment>
+    <FetchData
+      endpoint={fetchAnalyses}
+      params={{}}
+      deps={[]}
+    >
+      {analyses => {
+        const analysis = analysisFromUrl ?
+          analyses.filter(
+            analysis => analysisFromUrl === `${analysis.id}`
+          )[0] :
+          null;
+
+        return (
+          <Select
+            value={analysis || selectedAnalysis}
+            options={analyses}
+            onChange={onChange}
+            placeholder="Select analysis"
+            isClearable
+            getOptionValue={getOptionValue}
+            getOptionLabel={getOptionLabel}
+            onInputChange={onInputChange}
+          />
+        );
+      }}
+    </FetchData>
   );
 }
 

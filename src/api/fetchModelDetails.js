@@ -1,5 +1,4 @@
 import {get} from './api';
-import axios from 'axios';
 import groupBy from 'lodash.groupby';
 import uniqBy from 'lodash.uniqby';
 import sortBy from 'lodash.sortby';
@@ -85,36 +84,12 @@ function processResponses(modelInfo, cancerDrivers) {
   }
 }
 
-export default function fetchModelInfo(modelId) {
-  const modelInfoPromise = get(`/models/${modelId}`, modelInfoParams)
-    .then(resp => deserialiser.deserialise(resp.data));
-    // TODO: This code looks for the drug data in the cancerrxgene.org api. I think it is not needed because we can know if there is data directly from the models passport response (drugs_available field). But it may not be the same thing?
-    // .then(modelInfo => {
-    //   const cosmicIdObject = modelInfo.identifiers.filter(identifier =>
-    //     identifier.source.name === 'COSMIC_ID' && identifier.source.public && identifier.source.url_format
-    //   )[0];
-    //   if (cosmicIdObject) {
-    //     const cosmicId = cosmicIdObject.identifier;
-    //     return axios.get(`https://www.cancerrxgene.org/api/drugs_response?cosmic_id=${cosmicId}`)
-    //       .then(cosmicResp => {
-    //         return {
-    //           ...modelInfo,
-    //           drugDataAvailable: cosmicResp.data.drug_data_available,
-    //           drugDataLink: cosmicResp.data.link,
-    //         }
-    //       })
-    //   } else {
-    //     return new Promise((resolve) => {
-    //       resolve(modelInfo);
-    //     })
-    //   }
-    // });
+export default async function fetchModelDetails({modelId}, ...args) {
+  const modelInfoPromise = await get(`/models/${modelId}`, modelInfoParams, ...args)
+    .then(resp => deserialiser.deserialise(resp));
 
-  const cancerDriversPromise = get(`/models/${modelId}/datasets/cancer_drivers`, cancerDriverParams)
-    .then(resp => deserialiser.deserialise(resp.data));
+  const cancerDriversPromise = await get(`/models/${modelId}/datasets/cancer_drivers`, cancerDriverParams)
+    .then(resp => deserialiser.deserialise(resp));
 
-  return axios.all([modelInfoPromise, cancerDriversPromise])
-    .then(([modelInfoResponse, cancerDriversResponse]) =>
-      processResponses(modelInfoResponse, cancerDriversResponse)
-    );
+  return processResponses(modelInfoPromise, cancerDriversPromise);
 }

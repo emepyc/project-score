@@ -2,8 +2,8 @@ import pickBy from 'lodash.pickby';
 import {get} from './index';
 import {id2name} from './utils';
 
-export default function tissues() {
-  return get('models', {
+export default function tissues(_, ...args) {
+  const params = {
     'page[size]': 1,
     agg: {
       'sample.tissue.name': 'count'
@@ -14,9 +14,11 @@ export default function tissues() {
         op: 'eq',
         val: 'true'
       }
-    ]
-  })
-    .then(resp => resp.data.meta.agg['sample.tissue.name'].count)
+    ],
+  };
+
+  return get('models', params, ...args)
+    .then(resp => resp.meta.agg['sample.tissue.name'].count)
     .then(data => {
       const tissuesWithData = pickBy(data, (count) => {
         return count > 0;
