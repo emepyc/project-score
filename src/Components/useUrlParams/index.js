@@ -28,7 +28,14 @@ const _deferredSetUrlParams = debounce(_setUrlParams, 500);
 
 
 function useUrlParams(props) {
-  const {analysis, scoreMin, scoreMax, excludePanCancerGenes='1'} = qs.parse(props.location.search);
+  const endpoint = props.location.pathname.split('/')[1];
+  const defaultExcludePanCancerGenes = endpoint === 'model' ? '1' : null;
+  const {
+    analysis,
+    scoreMin,
+    scoreMax,
+    excludePanCancerGenes=defaultExcludePanCancerGenes
+  } = qs.parse(props.location.search);
   const {geneId, modelId} = props.match.params;
 
   const urlParams = {
