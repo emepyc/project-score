@@ -2,8 +2,10 @@ import React, {useState} from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 import debounce from 'debounce-promise';
 import {withRouter} from 'react-router-dom';
+
 import Spinner from '../Spinner';
 import {search} from '../../api';
+import {insignificantNodeColor} from "../../colors";
 import Error from '../Error';
 
 const groupStyles = {
@@ -12,10 +14,8 @@ const groupStyles = {
   justifyContent: 'space-between',
 };
 
-const groupBadgeStyles = {
-  backgroundColor: '#EBECF0',
+const _groupBadgeStyles = {
   borderRadius: '2em',
-  color: '#172B4D',
   display: 'inline-block',
   fontSize: 12,
   fontWeight: 'normal',
@@ -23,6 +23,27 @@ const groupBadgeStyles = {
   minWidth: 1,
   padding: '0.16666666666667em 0.5em',
   textAlign: 'center',
+  marginLeft: '10px',
+};
+
+const _colorsGroupBageStyles = {
+  backgroundColor: '#EBECF0',
+  color: '#172B4D',
+};
+
+const _colorsGroupBadgesDisabledStyles = {
+  backgroundColor: '#FAFAFA',
+  color: insignificantNodeColor,
+};
+
+const groupBadgeStyles = {
+  ..._groupBadgeStyles,
+  ..._colorsGroupBageStyles,
+};
+
+const groupBadgeStylesDisabled = {
+  ..._groupBadgeStyles,
+  ..._colorsGroupBadgesDisabledStyles,
 };
 
 const LoadingMessage = (props) => {
@@ -41,7 +62,7 @@ const LoadingMessage = (props) => {
 };
 
 const _loadSuggestions = (inputValue, callback) => search(inputValue)
-  .then(resp => callback(resp))
+  .then(callback)
   .catch(() => {
     callback([{
       options: [{
@@ -55,7 +76,7 @@ const _loadSuggestions = (inputValue, callback) => search(inputValue)
 
 const loadSuggestions = debounce(_loadSuggestions, 500, {leading: true});
 
-function Searchbox({placeholder="Search for a gene, cell line or cancer type", history}) {
+function Searchbox({placeholder = "Search for a gene, cell line or cancer type", history}) {
   const [inputValue, setInputValue] = useState("");
 
   const onChange = value => {
@@ -67,35 +88,51 @@ function Searchbox({placeholder="Search for a gene, cell line or cancer type", h
     } else if (value.type === 'models') {
       history.push(`/model/${value.id}?scoreMax=0`);
     } else {
-      // TODO: Remove default cancer types when they are available through the api
-      history.push(`/table?analysis=${value.id || 1}`);
+      history.push(`/table?analysis=${value.id}`);
     }
   };
 
-  const formatGroupLabel = data => (
-    <div style={groupStyles}>
-      <span>{data.label}</span>
-      <span style={groupBadgeStyles}>{data.options.length}</span>
-    </div>
-  );
-
-  const formatOptionLabel = option => {
-    if (option.error) {
-      return (
-          <Error message={option.label}/>
-      );
+  const formatGroupLabel = data => {
+    if (data.options[0].error) {
+      return null;
     }
     return (
       <div style={groupStyles}>
-        <span>{option.label}</span>
-        {option.tissue && (
-          <span style={groupBadgeStyles}>{option.tissue}</span>
-        )}
+        <span>{data.label}</span>
+        <span style={groupBadgeStyles}>{data.options.length}</span>
       </div>
     );
   };
 
+  const formatOptionLabel = option => {
+    if (option.error) {
+      return (
+        <Error message={option.label}/>
+      );
+    }
+
+    const tissueStyles = isOptionDisabled(option) ?
+      groupBadgeStylesDisabled :
+      groupBadgeStyles;
+
+    return (
+      <React.Fragment>
+        <span>{option.label}</span>
+        <div className="float-right">
+          {isOptionDisabled(option) && (
+            <span>({option.status})</span>
+          )}
+          {option.tissue && (
+            <span style={tissueStyles}>{option.tissue}</span>
+          )}
+        </div>
+      </React.Fragment>
+    );
+  };
+
   const onInputChange = value => setInputValue(value);
+
+  const isOptionDisabled = option => option.status !== "available";
 
   return (
     <AsyncSelect
@@ -108,6 +145,7 @@ function Searchbox({placeholder="Search for a gene, cell line or cancer type", h
       formatGroupLabel={formatGroupLabel}
       components={{LoadingMessage}}
       onInputChange={onInputChange}
+      isOptionDisabled={isOptionDisabled}
     >
     </AsyncSelect>
   );
