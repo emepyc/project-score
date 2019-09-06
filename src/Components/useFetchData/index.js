@@ -36,7 +36,7 @@ export default function useFetchData(fetchData, params={}, deps=[]) {
     return () => {
       abortController.abort();
     }
-  }, [fetchData, ...deps]);
+  }, deps);
 
   return [data, loading, error];
 }
