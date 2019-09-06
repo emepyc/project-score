@@ -68,12 +68,14 @@ function DonutChart({history}) {
   const explanationMessageRef = useRef(null);
   const containerRef = useRef(null);
 
+  const containerIsReady = containerRef.current !== null;
+
   useEffect(() => {
     if (containerRef.current) {
       setContainerWidth(containerRef.current.offsetWidth);
       setContainerHeight(containerRef.current.offsetWidth - 150);
     }
-  }, [containerRef.current]);
+  }, [containerIsReady]);
 
   const handleMouseOverBar = (event, cancerTypeData) => {
     const explanationElement = explanationMessageRef.current;
