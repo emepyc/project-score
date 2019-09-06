@@ -1,6 +1,6 @@
 import {useState, useEffect, useRef} from 'react';
 
-export default function useFetchData(fetchData, params = {}, deps = []) {
+export default function useFetchData(fetchData, params={}, deps=[]) {
   const isCancelled = useRef(false);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
