@@ -59,11 +59,11 @@ export default function Documentation() {
         </div>
 
         <div className='section'>
-          <h2><a name="experimental">Experimental methods</a></h2>
+          <h2 id="experimental">Experimental methods</h2>
 
           <p className='paragraph'>
             <span className='strong'>Citation</span>: For detailed information on Project Score methods please refer
-            to its <a target='_blank' href='https://www.nature.com/articles/s41586-019-1103-9'>publication</a>
+            to its <a target='_blank' href='https://www.nature.com/articles/s41586-019-1103-9' rel='noopener noreferrer'>publication</a>
           </p>
 
           <p className='paragraph'>
@@ -174,10 +174,8 @@ export default function Documentation() {
         </div>
 
         <div className='section'>
-          <h2>
-            <a name='glossary'>
-              Glossary of terms
-            </a>
+          <h2 id="glossary">
+            Glossary of terms
           </h2>
 
           <div className='paragraph'>
@@ -262,7 +260,7 @@ export default function Documentation() {
         </div>
 
         <div className='section'>
-          <h2><a name="usage">Data Usage Policy</a></h2>
+          <h2 id="usage">Data Usage Policy</h2>
           <p className='paragraph'>
             Users have a non-exclusive, non-transferable right to use data files for internal proprietary research and
               educational purposes, including target, biomarker and drug discovery. Excluded from this licence are use
