@@ -48,6 +48,6 @@ function formatResponse(resp) {
 }
 
 export default function search(query) {
-  return get(`/score_search/${query}?include=all`)
+  return get(`/score_search/${query}`, {include: 'all'})
     .then(formatResponse);
 }
