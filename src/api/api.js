@@ -3,9 +3,12 @@ import qs from 'query-string';
 const API_BASEURL = process.env.REACT_APP_API_BASEURL;
 
 function paramsSerializer(params) {
-  params.agg = params.agg ? JSON.stringify(params.agg) : undefined;
-  params.filter = params.filter ? JSON.stringify(params.filter) : undefined;
-  return qs.stringify(params, {depth: 0});
+  const serialisedParams = {
+    ...params,
+    agg: params.agg ? JSON.stringify(params.agg) : undefined,
+    filter: params.filter ? JSON.stringify(params.filter) : undefined,
+  };
+  return qs.stringify(serialisedParams, {depth: 0});
 }
 
 export async function get(endpoint, params = {}, signal) {

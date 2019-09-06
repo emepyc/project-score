@@ -1,5 +1,5 @@
-import * as d3 from "d3";
-import sortBy from "lodash.sortby";
+import * as d3 from 'd3';
+import sortBy from 'lodash.sortby';
 import React, {useState, useEffect, useRef, Fragment} from 'react';
 import {withRouter} from 'react-router-dom';
 import findIndex from 'lodash.findindex';
@@ -20,6 +20,7 @@ import './fitnessPlot.scss';
 
 const LOSS_OF_FITNESS_SCORE_LABEL = 'Loss of fitness score';
 const FC_CLEAN_LABEL = 'Corrected log fold change';
+
 
 function FitnessPlot(props) {
   const config = {
@@ -159,7 +160,7 @@ function FitnessBrush({width, data, attributeToPlot, onRangeChanged, marginLeft}
     setMinRange(0);
     setMaxRange(data.length);
     onRangeChanged([0, data.length]);
-  }, [data.length]);
+  }, [onRangeChanged, data.length]);
 
   const onChange = newRange => {
     setMinRange(newRange[0]);
@@ -333,20 +334,26 @@ function FitnessCanvasPlot(props) {
     data,
     d => d[attributeToPlot],
   );
-  const xScale = d3.scaleLinear()
-    .range([marginLeft, width])
-    .domain(xDomain || [0, data.length]);
 
-  const yScale = d3.scaleLinear()
-    .range([0, height - marginTop])
-    .domain([yExtent[1], yExtent[0]]);
+  const xScale = React.useCallback(
+    d3.scaleLinear()
+      .range([marginLeft, width])
+      .domain(xDomain || [0, data.length]),
+    [marginLeft, width, xDomain, data.length]
+  );
+
+  const yScale = React.useCallback(
+    d3.scaleLinear()
+      .range([0, height - marginTop])
+      .domain([yExtent[1], yExtent[0]]),
+  [height, marginTop, yExtent[0], yExtent[1]]
+  );
 
   const quadTree = d3.quadtree(
     data,
     d => d.index,
     d => d[attributeToPlot]
   );
-
 
   useEffect(() => {
     const ctx = canvasPlot.current.getContext('2d');
@@ -385,7 +392,19 @@ function FitnessCanvasPlot(props) {
       }
     });
 
-  }, [data, attributeToPlot, xDomain, highlightTissue, colorBy, width]);
+  }, [
+    data,
+    attributeToPlot,
+    xDomain,
+    highlightTissue,
+    colorBy,
+    width,
+    height,
+    marginLeft,
+    significantField,
+    xScale,
+    yScale,
+  ]);
 
   const onMouseMove = () => {
     const ev = d3.event;

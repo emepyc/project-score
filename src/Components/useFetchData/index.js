@@ -6,9 +6,6 @@ export default function useFetchData(fetchData, params = {}, deps = []) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const abortController = new AbortController();
-  const signal = abortController.signal;
-
   useEffect(() => {
     return () => {
       isCancelled.current = true;
@@ -16,6 +13,9 @@ export default function useFetchData(fetchData, params = {}, deps = []) {
   }, []);
 
   useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
     setLoading(true);
     isCancelled.current = false;
 
@@ -36,7 +36,7 @@ export default function useFetchData(fetchData, params = {}, deps = []) {
     return () => {
       abortController.abort();
     }
-  }, deps);
+  }, [fetchData, ...deps]);
 
   return [data, loading, error];
 }
