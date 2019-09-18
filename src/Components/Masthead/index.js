@@ -35,11 +35,19 @@ const NavigationExpanded = () => (
   </header>
 );
 
+const goToPageIfNeeded = (history, path) => {
+  if (history.location.pathname !== path) {
+    history.push(path);
+  }
+};
+
 const NavigationContractedLink = ({path, text}) => (
   <Route render={({history}) => (
-    <span onClick={() => history.push(path)}>
-      {text}
-    </span>
+    <DropdownItem onClick={() => goToPageIfNeeded(history, path)}>
+      <div>
+        {text}
+      </div>
+    </DropdownItem>
   )}/>
 );
 
@@ -60,15 +68,9 @@ const NavigationContracted = () => {
           Menu
         </DropdownToggle>
         <DropdownMenu right>
-          <DropdownItem>
-            <NavigationContractedLink path='/' text='Home'/>
-          </DropdownItem>
-          <DropdownItem>
-            <NavigationContractedLink path='/downloads' text='Downloads'/>
-          </DropdownItem>
-          <DropdownItem>
-            <NavigationContractedLink path='/documentation' text='Documentation'/>
-          </DropdownItem>
+          <NavigationContractedLink path='/' text='Home'/>
+          <NavigationContractedLink path='/downloads' text='Downloads'/>
+          <NavigationContractedLink path='/documentation' text='Documentation'/>
         </DropdownMenu>
       </Dropdown>
     </header>
