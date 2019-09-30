@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+
 import TableComponent from '../../Components/Table';
 import CancerTypeFilter from '../../Components/AnalysisFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
@@ -6,6 +7,7 @@ import {Row, Col} from 'reactstrap';
 import {Card, CardHeader, CardBody} from 'reactstrap';
 import PageHeader from '../../Components/PageHeader';
 import PanCangerGeneFilter from "../../Components/PanCancerGeneFilter";
+import PriorityScoresSection from "../../Components/PriorityScoresSection";
 
 function Table() {
   return (
@@ -20,7 +22,12 @@ function Table() {
           <Filters/>
         </Col>
       </Row>
-      <Row>
+      <Row className='my-3'>
+        <Col>
+          <PriorityScoresSection/>
+        </Col>
+      </Row>
+      <Row className='my-3'>
         <Col>
           <FitnessTable/>
         </Col>

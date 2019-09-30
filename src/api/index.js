@@ -8,6 +8,7 @@ import fetchScoreExtent from './fetchScoreExtent';
 import fetchGeneInfo from './fetchGeneInfo';
 import fetchModelInfo from './fetchModelInfo';
 import fetchModelDetails from './fetchModelDetails';
+import fetchPriorityScores from './fetchPriorityScores';
 import fetchSignificantModels from './fetchSignificantModels';
 
 export {
@@ -19,6 +20,7 @@ export {
   fetchGeneInfo,
   fetchModelDetails,
   fetchModelInfo,
+  fetchPriorityScores,
   fetchSignificantModels,
   id2name,
   name2id,
