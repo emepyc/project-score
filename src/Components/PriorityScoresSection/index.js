@@ -1,13 +1,12 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
 import {withRouter} from "react-router-dom";
 import * as d3 from "d3";
 import {Card, CardBody, CardHeader} from 'reactstrap';
-// import { ParentSize } from '@vx/responsive'; // TODO: remove from package.json if not used
-// import useComponentSize from '@rehooks/component-size'; // TODO: remove from package.json if not used
 
 import useUrlParams from '../useUrlParams';
 import {fetchPriorityScores} from '../../api';
 import FetchData from '../FetchData';
+import useWidth from '../useWidth';
 
 import "./priorityScores.scss";
 
@@ -29,15 +28,7 @@ export default withRouter(PriorityScoresSection);
 
 function PriorityScores({analysis}) {
   const container = useRef(null);
-  const [containerWidth, setContainerWidth] = useState(750);
-
-  const resize = () => setContainerWidth(container.current.offsetWidth);
-
-  useEffect(() => {
-    window.addEventListener('resize', resize);
-    resize();
-    return () => window.removeEventListener('resize', resize);
-  }, []);
+  const containerWidth = useWidth(container);
 
   return (
     <Card>
