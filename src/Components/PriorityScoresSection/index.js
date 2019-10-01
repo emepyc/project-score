@@ -7,6 +7,7 @@ import useUrlParams from '../useUrlParams';
 import {fetchPriorityScores} from '../../api';
 import FetchData from '../FetchData';
 import useWidth from '../useWidth';
+import {textDefaultColor} from '../../colors';
 
 import "./priorityScores.scss";
 
@@ -84,25 +85,43 @@ function PriorityScoresPlot({plotWidth, priorityScores}) {
           isFirst={index === 0}
           domain={priorityScoresDomain}
           key={bucketNumber}
-          bucket={bucketNumber}
+          bucket={bucketNumber === "null" ? "Unclassified" : bucketNumber}
           priorityScores={priorityScoresByBucket[bucketNumber]}
         />
       ))}
+      <PriorityScoresXlabel plotWidth={plotWidth} xOffset={xOffset}/>
     </React.Fragment>
   );
 }
 
+function PriorityScoresXlabel({plotWidth, xOffset}) {
+  return (
+    <svg width={plotWidth} height={50}>
+      <g transform={`translate(${plotWidth / 2}, 25)`}>
+        <text
+          textAnchor={"middle"}
+          alignmentBaseline={"middle"}
+          fill={textDefaultColor}
+        >
+          Bucket number
+        </text>
+      </g>
+    </svg>
+  )
+}
+
 function PriorityScoreBucketPlot({plotWidth, xOffset, isFirst, domain, bucket, priorityScores}) {
-  const height = 300;
+  const height = 400;
+  const plotHeight = 350;
 
   const yAxisRef = useRef(null);
 
   const xScale = d3.scaleLinear()
-    .range([0, plotWidth])
+    .range([5, plotWidth - 5])
     .domain([0, priorityScores.length - 1]);
 
   const yScale = d3.scaleLinear()
-    .range([height, 0])
+    .range([plotHeight - 5, 5])
     .domain(domain);
 
   useEffect(() => {
@@ -116,12 +135,11 @@ function PriorityScoreBucketPlot({plotWidth, xOffset, isFirst, domain, bucket, p
 
   const yAxisElement = isFirst ? (
     <React.Fragment>
-      <g
-        transform={`translate(${xOffset - 35}, ${height / 2}) rotate(-90)`}
-      >
+      <g transform={`translate(${xOffset - 35}, ${plotHeight / 2}) rotate(-90)`}>
         <text
-          fill="#5A5F5F"
+          fill={textDefaultColor}
           textAnchor="middle"
+          alignmentBaseline="middle"
         >
           Priority score
         </text>
@@ -136,18 +154,18 @@ function PriorityScoreBucketPlot({plotWidth, xOffset, isFirst, domain, bucket, p
   return (
     <svg
       width={isFirst ? (plotWidth + xOffset) : plotWidth}
-      height={500}
+      height={height}
     >
       {yAxisElement}
       <g transform={`translate(${isFirst ? xOffset : 0}, 0)`}>
-        <rect width={plotWidth} height={300} className="bucketBox"/>
+        <rect width={plotWidth} height={plotHeight} className="bucketBox"/>
         {priorityScores.map((priorityScore, index) => (
           <circle key={priorityScore["gene_id"]} cx={xScale(index)} cy={yScale(priorityScore["score"])} r="3"
                   fill="green"/>
         ))}
-        <g transform="translate(0, 300)">
-          <rect y={0} x={0} width={plotWidth} height={50} className="bucketBox"/>
-          <text x={plotWidth / 2} y={25} alignmentBaseline="middle" textAnchor="middle" stroke="black">
+        <g transform={`translate(0, ${plotHeight})`}>
+          <rect y={0} x={0} width={plotWidth} height={height - plotHeight} className="bucketBox"/>
+          <text x={plotWidth / 2} y={(height - plotHeight) / 2} alignmentBaseline="middle" textAnchor="middle" stroke="black">
             {bucket}
           </text>
         </g>
