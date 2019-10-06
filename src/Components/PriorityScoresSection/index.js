@@ -35,6 +35,7 @@ export default withRouter(PriorityScoresSection);
 
 const defaultSettings = {
   tractability: true,
+  threshold: 40,
 };
 
 function PriorityScores({analysis}) {
@@ -43,6 +44,13 @@ function PriorityScores({analysis}) {
 
   const container = useRef(null);
   const containerWidth = useWidth(container);
+
+  const fetchDataParams = {
+    analysis,
+    threshold: settings.threshold,
+  };
+
+  const fetchDataDependencies = [analysis, settings.threshold];
 
   return (
     <Card>
@@ -62,21 +70,26 @@ function PriorityScores({analysis}) {
           </Button>
           <Collapse isOpen={settingsIsOpen}>
             <div style={{width: "100%", height: "150px"}}>
-              <PriorityScoresSettings defaultSettings={settings} onSubmit={(newSettings) => setSettings(newSettings)}/>
+              <PriorityScoresSettings
+                defaultSettings={defaultSettings}
+                onSubmit={(newSettings) => setSettings(newSettings)}
+              />
             </div>
           </Collapse>
           <FetchData
             endpoint={fetchPriorityScores}
-            params={{analysis}}
-            deps={analysis}
+            params={fetchDataParams}
+            deps={fetchDataDependencies}
           >
-            {priorityScores => (
-              <PriorityScoresPlot
-                plotWidth={containerWidth}
-                priorityScores={priorityScores.data}
-                byBucket={settings.tractability}
-              />
-            )}
+            {priorityScores => {
+              return (
+                <PriorityScoresPlot
+                  plotWidth={containerWidth}
+                  priorityScores={priorityScores.data}
+                  byBucket={settings.tractability}
+                />
+              );
+            }}
           </FetchData>
         </div>
       </CardBody>
@@ -103,6 +116,10 @@ function distributeIntoBuckets(priorityScores) {
 function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBucket}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [priorityScores, setPriorityScores] = useState(priorityScoresAll);
+
+  useEffect(() => {
+    setPriorityScores(priorityScoresAll);
+  }, [priorityScoresAll]);
 
   const priorityScoresDomain = d3.extent(priorityScores, priorityScore => priorityScore["score"]);
 
@@ -221,7 +238,7 @@ function PriorityScoreBucketPlot(props) {
         .select(xAxisRef.current);
       axisRight.call(xAxis);
     }
-  }, []);
+  }, [domain]);
 
   const yAxisElement = isFirst ? (
     <React.Fragment>

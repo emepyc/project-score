@@ -5,7 +5,7 @@ import {withRouter} from 'react-router-dom';
 import {fetchScoreExtent} from '../../api';
 import useUrlParams from '../useUrlParams';
 import FetchData from "../FetchData";
-import RangeSlider from "../RangeSlider";
+import {Range} from "../RangeSlider";
 
 import './scoreRangeSlider.scss';
 
@@ -60,7 +60,7 @@ function ScoreRangeFilter(props) {
 
         return (
           <React.Fragment>
-            <RangeSlider
+            <Range
               min={newScoreExtent.min}
               max={newScoreExtent.max}
               value={scoreRange}
