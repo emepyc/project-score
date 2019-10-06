@@ -1,0 +1,13 @@
+@import '../../common.scss';
+
+.rc-slider {
+  .rc-slider-rail {
+    background-color: $green-2;
+  }
+  .rc-slider-track {
+    background-color: $green-1;
+  }
+  .rc-slider-handle {
+    border-color: $green-1;
+  }
+}
