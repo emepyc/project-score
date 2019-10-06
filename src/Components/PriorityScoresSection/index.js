@@ -4,8 +4,7 @@ import classNames from "classnames";
 import React, {useState, useEffect, useRef} from "react";
 import {withRouter} from "react-router-dom";
 import * as d3 from "d3";
-import {Button, Card, CardBody, CardHeader, Collapse, Label, Input} from 'reactstrap';
-import isEqual from "lodash.isequal";
+import {Button, Card, CardBody, CardHeader, Collapse} from 'reactstrap';
 import orderBy from "lodash.orderby";
 
 import useUrlParams from '../useUrlParams';
@@ -13,6 +12,7 @@ import {fetchPriorityScores} from '../../api';
 import FetchData from '../FetchData';
 import useWidth from '../useWidth';
 import {textDefaultColor} from '../../colors';
+import PriorityScoresSettings from '../PriorityScoresSettings';
 import SvgIcon from '../SvgIcon';
 
 import "./priorityScoresSection.scss";
@@ -62,7 +62,7 @@ function PriorityScores({analysis}) {
           </Button>
           <Collapse isOpen={settingsIsOpen}>
             <div style={{width: "100%", height: "150px"}}>
-              <Settings defaultSettings={settings} onSubmit={(newSettings) => setSettings(newSettings)}/>
+              <PriorityScoresSettings defaultSettings={settings} onSubmit={(newSettings) => setSettings(newSettings)}/>
             </div>
           </Collapse>
           <FetchData
@@ -308,40 +308,6 @@ function PriorityScoreBucketPlot(props) {
         show={showExpandLabel}
       />
     </svg>
-  );
-}
-
-function Settings({defaultSettings, onSubmit}) {
-  const [tractability, setTractability] = useState(defaultSettings.tractability);
-
-  const submit = () => onSubmit(currentSettings());
-
-  const currentSettings = () => ({
-    tractability,
-  });
-
-  return (
-    <div>
-      <div className="mx-5 my-4">
-        <Label>
-          <Input
-            type='checkbox'
-            checked={tractability}
-            onChange={() => setTractability(!tractability)}
-          />{' '}
-          Tractability
-        </Label>
-      </div>
-      <div className="mx-5 my-2">
-        <Button
-          onClick={() => submit()}
-          color={"primary"}
-          disabled={isEqual(currentSettings(), defaultSettings)}
-        >
-          Update
-        </Button>
-      </div>
-    </div>
   );
 }
 
