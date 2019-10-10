@@ -11,3 +11,19 @@
     border-color: $green-1;
   }
 }
+
+.label1 {
+  &:after {
+    font-weight: bold;
+    font-size: 1em;
+    content: "|";
+  }
+}
+
+.label2 {
+  &:before {
+    font-weight: bold;
+    font-size: 1em;
+    content: "|";
+  }
+}
