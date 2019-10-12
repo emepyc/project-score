@@ -7,6 +7,10 @@ import {Slider} from '../RangeSlider';
 export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   const [tractability, setTractability] = useState(defaultSettings.tractability);
   const [hcg, setHcg] = useState(defaultSettings.hcg);
+  const [csHcg, setCsHcg] = useState(defaultSettings.csHcg);
+  const [mutatedInPrimaryTumors, setMutatedInPrimaryTumors] = useState(defaultSettings.mutatedInPrimaryTumors);
+  const [mutatedInPrimaryTumorsCosmic, setMutatedInPrimaryTumorsCosmic] = useState(defaultSettings.mutatedInPrimaryTumorsCosmic);
+  const [weakerMarker, setWeakerMarker] = useState(defaultSettings.weakerMarker);
   const [genomicMarkerStrength, setGenomicMarkerStrength] = useState(defaultSettings.genomicMarkerStrength);
   const [foldSbf, setFoldSbf] = useState(defaultSettings.foldSbf);
   const [mgkPercFdr, setMgkPercFrd] = useState(defaultSettings.mgkPercFdr);
@@ -26,6 +30,10 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   const currentSettings = () => ({
     tractability,
     hcg,
+    csHcg,
+    mutatedInPrimaryTumors,
+    mutatedInPrimaryTumorsCosmic,
+    weakerMarker,
     genomicMarkerStrength,
     foldSbf,
     mgkPercFdr,
@@ -66,6 +74,46 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                       onChange={() => setHcg(!hcg)}
                     />
                     High-confidence cancer gene
+                  </Label>
+                </div>
+                <div className="ml-2">
+                  <Label>
+                    <Input
+                      type="checkbox"
+                      checked={csHcg}
+                      onChange={() => setCsHcg(!csHcg)}
+                    />
+                    High-confidence cancer gene (cancer type)
+                  </Label>
+                </div>
+                <div className="ml-2">
+                  <Label>
+                    <Input
+                      type="checkbox"
+                      checked={mutatedInPrimaryTumors}
+                      onChange={() => setMutatedInPrimaryTumors(!mutatedInPrimaryTumors)}
+                    />
+                    Mutated in primary tumors
+                  </Label>
+                </div>
+                <div className="ml-2">
+                  <Label>
+                    <Input
+                      type="checkbox"
+                      checked={mutatedInPrimaryTumorsCosmic}
+                      onChange={() => setMutatedInPrimaryTumorsCosmic(!mutatedInPrimaryTumorsCosmic)}
+                    />
+                    Mutated in primary tumors (in COSMIC)
+                  </Label>
+                </div>
+                <div className="ml-2">
+                  <Label>
+                    <Input
+                      type="checkbox"
+                      checked={weakerMarker}
+                      onChange={() => setWeakerMarker(!weakerMarker)}
+                    />
+                    Genomic marker is weak
                   </Label>
                 </div>
                 <div className="ml-2">

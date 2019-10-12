@@ -34,10 +34,21 @@ function PriorityScoresSection(props) {
 export default withRouter(PriorityScoresSection);
 
 const defaultSettings = {
+  // Tractability section
   tractability: true,
+
+  // Threshold section
   threshold: 40,
+
+  // Level 1: Target section
   hcg: false,
+  csHcg: false,
+  mutatedInPrimaryTumors: true,
+  mutatedInPrimaryTumorsCosmic: false,
+  weakerMarker: true,
   genomicMarkerStrength: 3,
+
+  // Level 2: Cell type section
   foldSbf: 3,
   mgkPercFdr: 10,
   highlyExpr: true,
@@ -57,6 +68,10 @@ function PriorityScores({analysis}) {
     threshold: settings.threshold,
     weights: {
       hcg: settings.hcg ? 1 : 0,
+      cs_hcg: settings.csHcg ? 1 : 0,
+      mutprimtum: settings.mutatedInPrimaryTumors ? 1 : 0,
+      mutprimtum_cosmic: settings.mutatedInPrimaryTumorsCosmic ? 1 : 0,
+      weaker_marker: settings.weakerMarker ? 1 : 0,
       class_a: settings.genomicMarkerStrength >= 1 ? 1 : 0,
       class_b: settings.genomicMarkerStrength >= 2 ? 1 : 0,
       class_c: settings.genomicMarkerStrength >= 3 ? 1 : 0,
@@ -74,6 +89,10 @@ function PriorityScores({analysis}) {
   const fetchDataDependencies = [
     analysis,
     settings.hcg,
+    settings.csHcg,
+    settings.mutatedInPrimaryTumors,
+    settings.mutatedInPrimaryTumorsCosmic,
+    settings.weakerMarker,
     settings.threshold,
     settings.genomicMarkerStrength,
     settings.foldSbf,
