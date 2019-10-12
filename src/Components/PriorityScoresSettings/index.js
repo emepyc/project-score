@@ -6,13 +6,13 @@ import {Slider} from '../RangeSlider';
 
 export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   const [tractability, setTractability] = useState(defaultSettings.tractability);
-  const [classAMarker, setClassAMarker] = useState(defaultSettings.classAMarker);
-  const [classBMarker, setClassBMarker] = useState(defaultSettings.classBMarker);
-  const [classCMarker, setClassCMarker] = useState(defaultSettings.classCMarker);
+  const [hcg, setHcg] = useState(defaultSettings.hcg);
+  const [genomicMarkerStrength, setGenomicMarkerStrength] = useState(defaultSettings.genomicMarkerStrength);
   const [foldSbf, setFoldSbf] = useState(defaultSettings.foldSbf);
   const [mgkPercFdr, setMgkPercFrd] = useState(defaultSettings.mgkPercFdr);
   const [highlyExpr, setHighlyExpr] = useState(defaultSettings.highlyExpr);
   const [isMutated, setIsMutated] = useState(defaultSettings.isMutated);
+  const [depPathway, setDepPathway] = useState(defaultSettings.depPathway);
   const [threshold, setThreshold] = useState(defaultSettings.threshold);
 
   const prevSettings = useRef(defaultSettings);
@@ -25,14 +25,14 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
 
   const currentSettings = () => ({
     tractability,
-    classAMarker,
-    classBMarker,
-    classCMarker,
+    hcg,
+    genomicMarkerStrength,
     foldSbf,
     mgkPercFdr,
     threshold,
     highlyExpr,
     isMutated,
+    depPathway,
   });
 
   return (
@@ -62,37 +62,30 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   <Label>
                     <Input
                       type="checkbox"
-                      checked={classAMarker}
-                      onChange={() => setClassAMarker(!classAMarker)}
+                      checked={hcg}
+                      onChange={() => setHcg(!hcg)}
                     />
-                    Class A marker
+                    High-confidence cancer gene
                   </Label>
                 </div>
                 <div className="ml-2">
-                  <Label>
-                    <Input
-                      type="checkbox"
-                      checked={classBMarker}
-                      onChange={() => setClassBMarker(!classBMarker)}
-                    />
-                    Class B marker
-                  </Label>
-                </div>
-                <div className="ml-2">
-                  <Label>
-                    <Input
-                      type="checkbox"
-                      checked={classCMarker}
-                      onChange={() => setClassCMarker(!classCMarker)}
-                    />
-                    Class C marker
-                  </Label>
+                  <Label>Min genomic marker strength</Label>
+                  <Input
+                    type="select"
+                    value={genomicMarkerStrength}
+                    onChange={(event) => setGenomicMarkerStrength(event.target.value)}
+                  >
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                  </Input>
                 </div>
               </div>
               <div className="d-column mx-3">
                 Level 2: Cell line
                 <div className="ml-2">
-                  <Label>Scaled bayes factor &gt;</Label>
+                  <Label>Min fold scaled bayes factor</Label>
                   <Input
                     type="select"
                     value={foldSbf}
@@ -105,7 +98,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   </Input>
                 </div>
                 <div className="ml-2">
-                  <Label>Gene fitness FDR &lt;</Label>
+                  <Label>Max perc gene fitness FDR</Label>
                   <Input
                     type="select"
                     value={mgkPercFdr}
@@ -124,6 +117,16 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                       onChange={() => setHighlyExpr(!highlyExpr)}
                     />
                     Highly expressed
+                  </Label>
+                </div>
+                <div className="ml-2">
+                  <Label>
+                    <Input
+                      type="checkbox"
+                      checked={depPathway}
+                      onChange={() => setDepPathway(!depPathway)}
+                    />
+                    In over-represented pathway
                   </Label>
                 </div>
                 <div className="ml-2">

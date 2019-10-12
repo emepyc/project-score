@@ -39,8 +39,6 @@ export function Range({width, min, max, value, step, defaultValue, onChange}) {
 
   }, [labelRef1.current, labelRef2.current]);
 
-  console.log(labelWidth1, labelWidth2);
-
   const rangeWidth = width - labelWidth1 - labelWidth2;
 
   const xScale = d3.scaleLinear()

@@ -36,12 +36,12 @@ export default withRouter(PriorityScoresSection);
 const defaultSettings = {
   tractability: true,
   threshold: 40,
-  classAMarker: true,
-  classBMarker: true,
-  classCMarker: true,
+  hcg: false,
+  genomicMarkerStrength: 3,
   foldSbf: 3,
   mgkPercFdr: 10,
   highlyExpr: true,
+  depPathway: true,
   isMutated: true,
 };
 
@@ -56,28 +56,30 @@ function PriorityScores({analysis}) {
     analysis,
     threshold: settings.threshold,
     weights: {
-      class_a: settings.classAMarker ? 1 : 0,
-      class_b: settings.classBMarker ? 1 : 0,
-      class_c: settings.classCMarker ? 1 : 0,
+      hcg: settings.hcg ? 1 : 0,
+      class_a: settings.genomicMarkerStrength >= 1 ? 1 : 0,
+      class_b: settings.genomicMarkerStrength >= 2 ? 1 : 0,
+      class_c: settings.genomicMarkerStrength >= 3 ? 1 : 0,
       fold1_sbf: settings.foldSbf >= 1 ? 1 : 0,
       fold2_sbf: settings.foldSbf >= 2 ? 1 : 0,
       fold3_sbf: settings.foldSbf >= 3 ? 1 : 0,
       mgk_10perc_fdr: settings.mgkPercFdr <= 10 ? 1 : 0,
       mgk_5perc_fdr: settings.mgkPercFdr <= 5 ? 1 : 0,
       highly_expr: settings.highlyExpr ? 1 : 0,
+      dep_pathway: settings.depPathway ? 1 : 0,
       mut: settings.isMutated ? 1 : 0,
     },
   };
 
   const fetchDataDependencies = [
     analysis,
+    settings.hcg,
     settings.threshold,
-    settings.classAMarker,
-    settings.classBMarker,
-    settings.classCMarker,
+    settings.genomicMarkerStrength,
     settings.foldSbf,
     settings.mgkPercFdr,
     settings.highlyExpr,
+    settings.depPathway,
     settings.isMutated,
   ];
 
