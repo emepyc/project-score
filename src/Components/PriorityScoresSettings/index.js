@@ -75,10 +75,10 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                     value={genomicMarkerStrength}
                     onChange={(event) => setGenomicMarkerStrength(event.target.value)}
                   >
-                    <option>0</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                    <option value={0}>0</option>
+                    <option value={1}>1 (class A)</option>
+                    <option value={2}>2 (class B)</option>
+                    <option value={3}>3 (class C)</option>
                   </Input>
                 </div>
               </div>
