@@ -41,6 +41,7 @@ const defaultSettings = {
   classCMarker: true,
   foldSbf: 3,
   mgkPercFdr: 10,
+  highlyExpr: true,
 };
 
 function PriorityScores({analysis}) {
@@ -62,6 +63,7 @@ function PriorityScores({analysis}) {
       fold3_sbf: settings.foldSbf >= 3 ? 1 : 0,
       mgk_10perc_fdr: settings.mgkPercFdr <= 10 ? 1 : 0,
       mgk_5perc_fdr: settings.mgkPercFdr <= 5 ? 1 : 0,
+      highly_expr: settings.highlyExpr ? 1 : 0,
     },
   };
 
@@ -73,6 +75,7 @@ function PriorityScores({analysis}) {
     settings.classCMarker,
     settings.foldSbf,
     settings.mgkPercFdr,
+    settings.highlyExpr,
   ];
 
   return (

@@ -11,6 +11,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   const [classCMarker, setClassCMarker] = useState(defaultSettings.classCMarker);
   const [foldSbf, setFoldSbf] = useState(defaultSettings.foldSbf);
   const [mgkPercFdr, setMgkPercFrd] = useState(defaultSettings.mgkPercFdr);
+  const [highlyExpr, setHighlyExpr] = useState(defaultSettings.highlyExpr);
   const [threshold, setThreshold] = useState(defaultSettings.threshold);
 
   const prevSettings = useRef(defaultSettings);
@@ -29,6 +30,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
     foldSbf,
     mgkPercFdr,
     threshold,
+    highlyExpr,
   });
 
   return (
@@ -111,6 +113,16 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                     <option>5</option>
                     <option>0</option>
                   </Input>
+                </div>
+                <div className="ml-2">
+                  <Label>
+                    <Input
+                      type="checkbox"
+                      checked={highlyExpr}
+                      onChange={() => setHighlyExpr(!highlyExpr)}
+                    />
+                    Highly expressed
+                  </Label>
                 </div>
               </div>
             </div>
