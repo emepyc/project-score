@@ -4,6 +4,8 @@ import isEqual from 'lodash.isequal';
 
 import {Slider} from '../RangeSlider';
 
+import "./priorityScoresSettings.scss";
+
 export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   const [tractability, setTractability] = useState(defaultSettings.tractability);
   const [hcg, setHcg] = useState(defaultSettings.hcg);
@@ -44,29 +46,29 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   });
 
   return (
-    <div>
-      <div className="mx-5 d-flex justify-content-between flex-row">
-        <div className="my-4 flex-column">
+    <div className="mb-5">
+      <div className="mx-5 my-4 d-flex justify-content-between flex-row flex-wrap">
+        <div className="mt-4 mx-2 flex-column">
           <Label>
             <Input
               type='checkbox'
               checked={tractability}
               onChange={() => setTractability(!tractability)}
             />{' '}
-            Tractability
+            <span className="settings-header-section">Tractability</span>
           </Label>
         </div>
 
-        <div className="my-4 flex-column">
-          <div className="text-center">
-            Priority scores:
+        <div className="mt-4 mx-2 flex-column">
+          <div className="text-lg-center">
+            <span className="settings-header-section">Priority scores:</span>
           </div>
           <div className="ml-2">
 
             <div className="d-flex flex-row">
               <div className="d-column mx-3">
-                Level 1: Target
-                <div className="ml-2">
+                <span className="settings-subheader-section">Level 1: Target</span>
+                <div className="ml-2 mt-2">
                   <Label>
                     <Input
                       type="checkbox"
@@ -76,7 +78,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                     High-confidence cancer gene
                   </Label>
                 </div>
-                <div className="ml-2">
+                <div className="ml-2 mt-2">
                   <Label>
                     <Input
                       type="checkbox"
@@ -86,7 +88,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                     High-confidence cancer gene (cancer type)
                   </Label>
                 </div>
-                <div className="ml-2">
+                <div className="ml-2 mt-2">
                   <Label>
                     <Input
                       type="checkbox"
@@ -106,7 +108,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                     Mutated in primary tumors (in COSMIC)
                   </Label>
                 </div>
-                <div className="ml-2">
+                <div className="ml-2 mt-2">
                   <Label>
                     <Input
                       type="checkbox"
@@ -116,7 +118,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                     Genomic marker is weak
                   </Label>
                 </div>
-                <div className="ml-2">
+                <div className="ml-2 mt-2">
                   <Label>Min genomic marker strength</Label>
                   <Input
                     type="select"
@@ -131,8 +133,8 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                 </div>
               </div>
               <div className="d-column mx-3">
-                Level 2: Cell line
-                <div className="ml-2">
+                <span className="settings-subheader-section">Level 2: Cell line</span>
+                <div className="ml-2 mt-2">
                   <Label>Min fold scaled bayes factor</Label>
                   <Input
                     type="select"
@@ -145,7 +147,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                     <option>3</option>
                   </Input>
                 </div>
-                <div className="ml-2">
+                <div className="ml-2 mt-2">
                   <Label>Max perc gene fitness FDR</Label>
                   <Input
                     type="select"
@@ -157,7 +159,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                     <option>0</option>
                   </Input>
                 </div>
-                <div className="ml-2">
+                <div className="ml-2 mt-2">
                   <Label>
                     <Input
                       type="checkbox"
@@ -167,7 +169,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                     Highly expressed
                   </Label>
                 </div>
-                <div className="ml-2">
+                <div className="ml-2 mt-2">
                   <Label>
                     <Input
                       type="checkbox"
@@ -177,7 +179,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                     In over-represented pathway
                   </Label>
                 </div>
-                <div className="ml-2">
+                <div className="ml-2 mt-2">
                   <Label>
                     <Input
                       type="checkbox"
@@ -194,9 +196,9 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
 
         </div>
 
-        <div className="my-4 flex-column">
+        <div className="my-4 mx-2 flex-column">
           <Label for="priority-score-threshold-slider">
-            Priority score threshold
+            <span className="settings-header-section">Priority score threshold</span>
           </Label>
           <Slider
             id="priority-score-threshold-slider"
