@@ -36,6 +36,11 @@ export default withRouter(PriorityScoresSection);
 const defaultSettings = {
   tractability: true,
   threshold: 40,
+  classAMarker: true,
+  classBMarker: true,
+  classCMarker: true,
+  foldSbf: 3,
+  mgkPercFdr: 10,
 };
 
 function PriorityScores({analysis}) {
@@ -48,9 +53,27 @@ function PriorityScores({analysis}) {
   const fetchDataParams = {
     analysis,
     threshold: settings.threshold,
+    weights: {
+      class_a: settings.classAMarker ? 1 : 0,
+      class_b: settings.classBMarker ? 1 : 0,
+      class_c: settings.classCMarker ? 1 : 0,
+      fold1_sbf: settings.foldSbf >= 1 ? 1 : 0,
+      fold2_sbf: settings.foldSbf >= 2 ? 1 : 0,
+      fold3_sbf: settings.foldSbf >= 3 ? 1 : 0,
+      mgk_10perc_fdr: settings.mgkPercFdr <= 10 ? 1 : 0,
+      mgk_5perc_fdr: settings.mgkPercFdr <= 5 ? 1 : 0,
+    },
   };
 
-  const fetchDataDependencies = [analysis, settings.threshold];
+  const fetchDataDependencies = [
+    analysis,
+    settings.threshold,
+    settings.classAMarker,
+    settings.classBMarker,
+    settings.classCMarker,
+    settings.foldSbf,
+    settings.mgkPercFdr,
+  ];
 
   return (
     <Card>
@@ -69,7 +92,7 @@ function PriorityScores({analysis}) {
             </FontAwesomeIcon>
           </Button>
           <Collapse isOpen={settingsIsOpen}>
-            <div style={{width: "100%", height: "150px"}}>
+            <div style={{width: "100%"}}>
               <PriorityScoresSettings
                 defaultSettings={defaultSettings}
                 onSubmit={(newSettings) => setSettings(newSettings)}
