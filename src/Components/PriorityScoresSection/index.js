@@ -42,6 +42,7 @@ const defaultSettings = {
   foldSbf: 3,
   mgkPercFdr: 10,
   highlyExpr: true,
+  isMutated: true,
 };
 
 function PriorityScores({analysis}) {
@@ -64,6 +65,7 @@ function PriorityScores({analysis}) {
       mgk_10perc_fdr: settings.mgkPercFdr <= 10 ? 1 : 0,
       mgk_5perc_fdr: settings.mgkPercFdr <= 5 ? 1 : 0,
       highly_expr: settings.highlyExpr ? 1 : 0,
+      mut: settings.isMutated ? 1 : 0,
     },
   };
 
@@ -76,6 +78,7 @@ function PriorityScores({analysis}) {
     settings.foldSbf,
     settings.mgkPercFdr,
     settings.highlyExpr,
+    settings.isMutated,
   ];
 
   return (

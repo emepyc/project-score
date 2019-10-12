@@ -12,6 +12,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   const [foldSbf, setFoldSbf] = useState(defaultSettings.foldSbf);
   const [mgkPercFdr, setMgkPercFrd] = useState(defaultSettings.mgkPercFdr);
   const [highlyExpr, setHighlyExpr] = useState(defaultSettings.highlyExpr);
+  const [isMutated, setIsMutated] = useState(defaultSettings.isMutated);
   const [threshold, setThreshold] = useState(defaultSettings.threshold);
 
   const prevSettings = useRef(defaultSettings);
@@ -31,6 +32,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
     mgkPercFdr,
     threshold,
     highlyExpr,
+    isMutated,
   });
 
   return (
@@ -122,6 +124,16 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                       onChange={() => setHighlyExpr(!highlyExpr)}
                     />
                     Highly expressed
+                  </Label>
+                </div>
+                <div className="ml-2">
+                  <Label>
+                    <Input
+                      type="checkbox"
+                      checked={isMutated}
+                      onChange={() => setIsMutated(!isMutated)}
+                    />
+                    Is mutated
                   </Label>
                 </div>
               </div>
