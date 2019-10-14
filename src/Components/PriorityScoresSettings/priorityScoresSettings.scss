@@ -1,0 +1,15 @@
+
+@mixin settings-section {
+  font-weight: bold;
+  display: inline-block;
+}
+
+.settings-header-section {
+  @include settings-section;
+  font-size: 1.2em;
+}
+
+.settings-subheader-section {
+  @include settings-section;
+  margin-top: 20px;
+}
