@@ -14,6 +14,7 @@ import useWidth from '../useWidth';
 import {textDefaultColor} from '../../colors';
 import PriorityScoresSettings from '../PriorityScoresSettings';
 import SvgIcon from '../SvgIcon';
+import Tooltip from '../Tooltip';
 
 import "./priorityScoresSection.scss";
 
@@ -260,6 +261,7 @@ function PriorityScoreBucketPlot(props) {
   } = props;
 
   const [showExpandLabel, setShowExpandLabel] = useState(false);
+  const [tooltip, setTooltip] = useState(null);
 
   const height = 400;
   const plotHeight = 350;
@@ -339,42 +341,63 @@ function PriorityScoreBucketPlot(props) {
     setShowExpandLabel(false);
   };
 
+  const highlightPriorityScore = (priorityScore, index) => {
+    setTooltip({
+      x: isFirst ? xScale(index) + xOffset : xScale(index),
+      y: yScale(priorityScore["score"]),
+      priorityScore,
+    })
+  };
+
+  const unHighlightPriorityScore = () => {
+    setTooltip(null);
+  };
+
+  const priorityScoreTooltip = tooltip ? (
+    <PriorityScoreTooltip x={tooltip.x} y={tooltip.y} priorityScore={tooltip.priorityScore}/>
+  ) : null;
+
   return (
-    <svg
-      width={isFirst ? (plotWidth + xOffset) : plotWidth}
-      height={height}
-      onMouseEnter={() => mouseOverElement()}
-      onMouseLeave={() => mouseLeaveElement()}
-    >
-      {yAxisElement}
-      <g transform={`translate(${isFirst ? xOffset : 0}, 0)`}>
-        <rect
-          width={plotWidth}
-          height={plotHeight}
-          className="bucketBox"
-        />
-        {priorityScores.map((priorityScore, index) => (
-          <circle
-            key={priorityScore["gene_id"]}
-            cx={xScale(index)}
-            cy={yScale(priorityScore["score"])}
-            r="3"
-            fill="green"
+    <div style={{display: "inline-block", position: "relative"}}>
+      <svg
+        width={isFirst ? (plotWidth + xOffset) : plotWidth}
+        height={height}
+        onMouseEnter={() => mouseOverElement()}
+        onMouseLeave={() => mouseLeaveElement()}
+      >
+        {yAxisElement}
+        <g transform={`translate(${isFirst ? xOffset : 0}, 0)`}>
+          <rect
+            width={plotWidth}
+            height={plotHeight}
+            className="bucketBox"
           />
-        ))}
-      </g>
-      {xAxisOrBucketNumber}
-      <ExpandElement
-        bucket={bucket}
-        isCramped={isCramped}
-        isExpanded={isExpanded}
-        onExpand={onExpand}
-        onShrink={onShrink}
-        plotWidth={plotWidth}
-        xOffset={isFirst ? xOffset : 0}
-        show={showExpandLabel}
-      />
-    </svg>
+          {priorityScores.map((priorityScore, index) => (
+            <circle
+              key={priorityScore["gene_id"]}
+              cx={xScale(index)}
+              cy={yScale(priorityScore["score"])}
+              r="3"
+              fill="green"
+              onMouseEnter={() => highlightPriorityScore(priorityScore, index)}
+              onMouseLeave={() => unHighlightPriorityScore()}
+            />
+          ))}
+        </g>
+        {xAxisOrBucketNumber}
+        <ExpandElement
+          bucket={bucket}
+          isCramped={isCramped}
+          isExpanded={isExpanded}
+          onExpand={onExpand}
+          onShrink={onShrink}
+          plotWidth={plotWidth}
+          xOffset={isFirst ? xOffset : 0}
+          show={showExpandLabel}
+        />
+      </svg>
+      {priorityScoreTooltip}
+    </div>
   );
 }
 
@@ -428,9 +451,23 @@ function ExpandShrinkIcon({iconElement, xPos, action, iconWidth}) {
         height={iconWidth}
         onClick={() => action()}
         className="expandPointerEvent"
-        />
+      />
       {iconElement}
     </g>
   );
 }
 
+function PriorityScoreTooltip({x, y, priorityScore}) {
+  return (
+    <Tooltip
+      x={x}
+      y={y}
+      width={0}
+      height={0}
+    >
+      Gene: <b>{priorityScore.symbol}</b><br/>
+      Priority score: <b>{priorityScore.score.toFixed(2)}</b><br/>
+      Bucket: <b>{priorityScore.bucket}</b><br/>
+    </Tooltip>
+  );
+}
