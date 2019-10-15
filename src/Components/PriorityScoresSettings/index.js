@@ -30,7 +30,6 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   };
 
   const reset = () => {
-    const settings = currentSettings();
     setTractability(defaultSettings.tractability);
     setHcg(defaultSettings.hcg);
     setCsHcg(defaultSettings.csHcg);
@@ -44,7 +43,6 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
     setIsMutated(defaultSettings.isMutated);
     setDepPathway(defaultSettings.depPathway);
     setThreshold(defaultSettings.threshold);
-    // prevSettings.current = settings;
   };
 
   const currentSettings = () => ({
@@ -219,7 +217,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
           <Slider
             id="priority-score-threshold-slider"
             width={250}
-            min={defaultSettings.threshold}
+            min={1}
             max={100}
             defaultValue={defaultSettings.threshold}
             step={1}
