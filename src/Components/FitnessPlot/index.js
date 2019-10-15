@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import sortBy from 'lodash.sortby';
-import React, {useState, useEffect, useRef, Fragment} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {withRouter} from 'react-router-dom';
 import findIndex from 'lodash.findindex';
 import {Range} from 'rc-slider';
@@ -15,6 +15,7 @@ import {
 } from '../../colors';
 import useUrlParams from '../useUrlParams';
 import FetchData from "../FetchData";
+import Tooltip from "../Tooltip";
 
 import './fitnessPlot.scss';
 
@@ -261,49 +262,17 @@ function FitnessTooltip(props) {
   const backgroundColor = bf_scaled < 0 ? colorSignificantBg : colorInsignificantBg;
 
   return (
-    <Fragment>
-      <div
-        style={{
-          backgroundColor: '#FFFFFF',
-          borderRadius: '3px',
-          boxShadow: 'gray 0px 1px 2px',
-          padding: '0.3rem 0.5rem',
-          pointerEvents: 'none',
-          position: 'absolute',
-          whiteSpace: 'nowrap',
-          zIndex: 100,
-          left: `${x}px`,
-          top: `${y}px`,
-          display: 'block',
-        }}
-      >
-        Gene: <b>{geneSymbol}</b><br/>
-        Model: <b>{modelName}</b> ({tissue})<br/>
-        Corrected fold change:<b>{fc_clean}</b><br/>
-        Loss of fitness score:<b><span style={{padding: '0.4em 0.2em', backgroundColor}}>{bf_scaled}</span></b>
-      </div>
-      <div
-        style={{
-          border: '1px solid #EEEEEE',
-          width: '0.5px',
-          height: height,
-          position: 'absolute',
-          top: 0,
-          left: x,
-        }}
-      />
-      <div
-        style={{
-          border: '1px solid #EEEEEE',
-          width: width,
-          height: '0.5px',
-          position: 'absolute',
-          top: y,
-          left: 0,
-        }}
-      />
-    </Fragment>
-
+    <Tooltip
+      x={x}
+      y={y}
+      width={width}
+      height={height}
+    >
+      Gene: <b>{geneSymbol}</b><br/>
+      Model: <b>{modelName}</b> ({tissue})<br/>
+      Corrected fold change:<b>{fc_clean}</b><br/>
+      Loss of fitness score:<b><span style={{padding: '0.4em 0.2em', backgroundColor}}>{bf_scaled}</span></b>
+    </Tooltip>
   );
 }
 
@@ -346,7 +315,7 @@ function FitnessCanvasPlot(props) {
     d3.scaleLinear()
       .range([0, height - marginTop])
       .domain([yExtent[1], yExtent[0]]),
-  [height, marginTop, yExtent[0], yExtent[1]]
+    [height, marginTop, yExtent[0], yExtent[1]]
   );
 
   const quadTree = d3.quadtree(

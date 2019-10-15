@@ -1,12 +1,11 @@
-import classNames from 'classnames';
 import React, {useState} from 'react';
 import {withRouter} from 'react-router-dom';
-import {Range} from 'rc-slider';
+
 import {fetchScoreExtent} from '../../api';
 import useUrlParams from '../useUrlParams';
 import FetchData from "../FetchData";
+import {Range} from "../RangeSlider";
 
-import 'rc-slider/assets/index.css';
 import './scoreRangeSlider.scss';
 
 function ScoreRangeFilter(props) {
@@ -48,20 +47,13 @@ function ScoreRangeFilter(props) {
           scoreMax === undefined ? newScoreExtent.max : +scoreMax,
         ];
 
-        const fromClasses = classNames({
-          rangeNumber: true,
-          significantScore: scoreRange[0] < 0,
-        });
-
-        const toClasses = classNames({
-          rangeNumber: true,
-          significantScore: scoreRange[1] < 0,
-        });
-
         return (
           <React.Fragment>
+            <div className='my-2'>
+              Score range:
+            </div>
             <Range
-              allowCross={false}
+              width={300} // TODO: Hardcoded?
               min={newScoreExtent.min}
               max={newScoreExtent.max}
               value={scoreRange}
@@ -69,13 +61,6 @@ function ScoreRangeFilter(props) {
               defaultValue={[newScoreExtent.min, newScoreExtent.max]}
               onChange={onChange}
             />
-            <div className='my-2'>
-              Score range:
-            </div>
-            <div className='my-2'>
-              From <span className={fromClasses}>{scoreRange[0]}</span> to <span
-              className={toClasses}>{scoreRange[1]}</span>
-            </div>
           </React.Fragment>
         );
       }}

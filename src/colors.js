@@ -49,3 +49,5 @@ export const colorInsignificantBg = '#F0F0F0';
 
 export const colorPanCancerGeneBg = "#FFEEEE";
 
+export const textDefaultColor = "#5A5F5F";
+export const backgroundDefaultColor = "#fdfffd";

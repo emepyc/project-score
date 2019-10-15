@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
+import {backgroundDefaultColor, textDefaultColor} from "./colors";
 import Gene from './Pages/Gene';
 import Model from './Pages/Model';
 import Home from './Pages/Home';
@@ -17,7 +18,13 @@ const App = (props) => (
         <Masthead/>
 
         <div className="container-fluid pt-2 pb-5"
-             style={{backgroundColor: '#fdfffd', color: '#5A5F5F', fontSize: '0.9em', fontWeight: 300}}
+             style={{
+               backgroundColor: backgroundDefaultColor,
+               color: textDefaultColor,
+               fontSize:
+                 '0.9em',
+               fontWeight: 300,
+             }}
         >
           <main>
             <Route exact path='/' component={Home}/>

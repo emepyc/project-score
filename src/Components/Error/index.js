@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function ({message="Error"}) {
   return (
-    <div>
+    <div className="m-4">
       <FontAwesomeIcon
         icon={faExclamationTriangle}
         fixedWidth
