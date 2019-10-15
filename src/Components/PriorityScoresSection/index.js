@@ -21,14 +21,8 @@ import "./priorityScoresSection.scss";
 function PriorityScoresSection(props) {
   const [urlParams] = useUrlParams(props);
 
-  if (!urlParams.analysis) {
-    return (
-      <div>No priority scores to show</div>
-    );
-  }
-
   return (
-    <PriorityScores analysis={urlParams.analysis}/>
+    <PriorityScores analysis={urlParams.analysis || 15}/>
   );
 }
 
