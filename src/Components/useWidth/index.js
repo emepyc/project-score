@@ -9,7 +9,7 @@ export default function useWidth(container, defaultWidth = 750) {
     window.addEventListener('resize', resize);
     resize();
     return () => window.removeEventListener('resize', resize);
-  }, []);
+  }, [resize, container]);
 
   return containerWidth;
 }

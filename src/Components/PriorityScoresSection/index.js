@@ -49,6 +49,9 @@ const defaultSettings = {
   highlyExpr: true,
   depPathway: true,
   isMutated: true,
+
+  // L1 / L2 weights
+  l1Weight: 30,
 };
 
 function PriorityScores({analysis}) {
@@ -78,6 +81,8 @@ function PriorityScores({analysis}) {
       highly_expr: settings.highlyExpr ? 1 : 0,
       dep_pathway: settings.depPathway ? 1 : 0,
       mut: settings.isMutated ? 1 : 0,
+      l1: settings.l1Weight,
+      l2: 100 - settings.l1Weight,
     },
   };
 
@@ -95,6 +100,7 @@ function PriorityScores({analysis}) {
     settings.highlyExpr,
     settings.depPathway,
     settings.isMutated,
+    settings.l1Weight,
   ];
 
   return (
@@ -117,7 +123,7 @@ function PriorityScores({analysis}) {
             <div style={{width: "100%"}}>
               <PriorityScoresSettings
                 defaultSettings={defaultSettings}
-                onSubmit={(newSettings) => setSettings(newSettings)}
+                onSubmit={setSettings}
               />
             </div>
           </Collapse>

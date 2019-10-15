@@ -3,11 +3,13 @@ import {Button, Input, Label} from 'reactstrap';
 import isEqual from 'lodash.isequal';
 
 import {Slider} from '../RangeSlider';
+import useWidth from "../useWidth";
 
 import "./priorityScoresSettings.scss";
 
 export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   const [tractability, setTractability] = useState(defaultSettings.tractability);
+  const [l1Weight, setL1Weight] = useState(defaultSettings.l1Weight);
   const [hcg, setHcg] = useState(defaultSettings.hcg);
   const [csHcg, setCsHcg] = useState(defaultSettings.csHcg);
   const [mutatedInPrimaryTumors, setMutatedInPrimaryTumors] = useState(defaultSettings.mutatedInPrimaryTumors);
@@ -21,6 +23,12 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   const [depPathway, setDepPathway] = useState(defaultSettings.depPathway);
   const [threshold, setThreshold] = useState(defaultSettings.threshold);
 
+  const l1ScoreContainer = useRef(null);
+  const l1ContainerWidth = useWidth(l1ScoreContainer);
+
+  const l2ScoreContainer = useRef(null);
+  const l2ContainerWidth = useWidth(l2ScoreContainer);
+
   const prevSettings = useRef(defaultSettings);
 
   const submit = () => {
@@ -31,6 +39,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
 
   const reset = () => {
     setTractability(defaultSettings.tractability);
+    setL1Weight(defaultSettings.l1Weight);
     setHcg(defaultSettings.hcg);
     setCsHcg(defaultSettings.csHcg);
     setMutatedInPrimaryTumors(defaultSettings.mutatedInPrimaryTumors);
@@ -47,6 +56,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
 
   const currentSettings = () => ({
     tractability,
+    l1Weight,
     hcg,
     csHcg,
     mutatedInPrimaryTumors,
@@ -82,8 +92,13 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
           <div className="ml-2">
 
             <div className="d-flex flex-row flex-wrap">
-              <div className="d-column mx-3">
-                <span className="settings-subheader-section">Level 1: Target</span>
+              <div ref={l1ScoreContainer} className="d-column mx-3">
+                <ScoreWeightSlider
+                  width={l1ContainerWidth}
+                  value={l1Weight}
+                  defaultValue={defaultSettings.l1Weight}
+                  onChange={setL1Weight}
+                />
                 <div className="ml-2 mt-2">
                   <Label>
                     <Input
@@ -148,8 +163,13 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   </Input>
                 </div>
               </div>
-              <div className="d-column mx-3">
-                <span className="settings-subheader-section">Level 2: Cell line</span>
+              <div ref={l2ScoreContainer} className="d-column mx-3">
+                <ScoreWeightSlider
+                  width={l2ContainerWidth}
+                  value={100 - l1Weight}
+                  defaultValue={100 - defaultSettings.l1Weight}
+                  onChange={newL1Weight => setL1Weight(100 - newL1Weight)}
+                />
                 <div className="ml-2 mt-2">
                   <Label>Min fold scaled bayes factor</Label>
                   <Input
@@ -250,5 +270,29 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
         </span>
       </div>
     </div>
+  );
+}
+
+function ScoreWeightSlider({width, value, defaultValue, onChange}) {
+  return (
+    <React.Fragment>
+      <span className="settings-subheader-section">Level 1: Target</span>
+      <div className="mt-3 mb-5">
+        <Label>
+          Score contribution
+        </Label>
+        <Slider
+          width={width}
+          min={0}
+          max={100}
+          value={value}
+          step={1}
+          defaultValue={defaultValue}
+          onChange={onChange}
+          tipFormatter={value => `${value}%`}
+        />
+      </div>
+
+    </React.Fragment>
   );
 }

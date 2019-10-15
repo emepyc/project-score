@@ -97,10 +97,12 @@ export function Range({width, min, max, value, step, defaultValue, onChange}) {
   );
 }
 
-export function Slider({width, min, max, value, step, defaultValue, onChange}) {
+export function Slider({width, min, max, value, step, defaultValue, onChange, tipFormatter}) {
   const labelRef = useRef(null);
 
   const labelWidth = labelRef.current ? labelRef.current.clientWidth : 0;
+
+  const tipFormatterNotNull = tipFormatter || (tip => tip);
 
   const containerStyle = {
     width,
@@ -128,11 +130,12 @@ export function Slider({width, min, max, value, step, defaultValue, onChange}) {
           defaultValue={defaultValue}
           onChange={onChange}
           handle={handle}
+          tipFormatter={tipFormatterNotNull}
         />
       </div>
       <div ref={labelRef} style={labelStyle}>
         <span>
-          {value}
+          {tipFormatterNotNull(value)}
         </span>
       </div>
     </div>
