@@ -1,6 +1,5 @@
 import React from 'react';
 import keyBy from 'lodash.keyby';
-import {Row, Col} from 'reactstrap';
 import PageHeader from '../PageHeader';
 
 const maybeIdentifier = (identifiers, resource) =>
@@ -20,19 +19,15 @@ export default function GeneInfoHeader(props) {
     </span>
   );
 
-  const subheaders = geneName && geneName.name ? [geneName.name, externalLinks]: [externalLinks];
+  const subheaders = geneName && geneName.name ? [geneName.name, externalLinks] : [externalLinks];
 
   return (
-    <Row>
-      <Col>
-        <PageHeader
-          {...props}
-          header={symbol}
-          entity='gene'
-          subheaders={subheaders}
-        />
-      </Col>
-    </Row>
+    <PageHeader
+      {...props}
+      header={symbol}
+      entity='gene'
+      subheaders={subheaders}
+    />
   );
 }
 

@@ -7,7 +7,6 @@ import style from './pageHeader.module.scss';
 function PageHeader({header, entity, subheaders=[], features=[]}) {
   const headerClasses = classnames(style.header, {
     'my-4': true,
-    'ml-3': true,
   });
 
   return (

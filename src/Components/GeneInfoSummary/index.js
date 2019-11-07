@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom';
 import {fetchGeneInfo} from '../../api';
 import useUrlParams from '../useUrlParams';
 import GeneInfoHeader from '../GeneInfoHeader';
-import FetchData from "../FetchData";
+import FetchData from '../FetchData';
 
 
 function GeneInfoSummary(props) {
