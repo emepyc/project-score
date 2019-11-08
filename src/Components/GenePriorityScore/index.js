@@ -296,6 +296,12 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight}) {
         value={scores.l2Scores.fold2Sbf.true}
         maxValue={scores.l2Scores.fold2Sbf.total}
         color={color}
+        onMouseEnter={() => onHighlight({
+          y: rowY + cellWidth / 2,
+          x: (cellWidth * 9) + (blockMargin * 2),
+          message: `${scores.l2Scores.fold2Sbf.true} / ${scores.l2Scores.fold2Sbf.total}`
+        })}
+        onMouseLeave={() => onHighlight(null)}
       />
       <PriorityScoreWithColorScale
         posX={(cellWidth * 9) + (blockMargin * 2)}
@@ -303,6 +309,12 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight}) {
         value={scores.l2Scores.fold3Sbf.true}
         maxValue={scores.l2Scores.fold3Sbf.total}
         color={color}
+        onMouseEnter={() => onHighlight({
+          y: rowY + cellWidth / 2,
+          x: (cellWidth * 10) + (blockMargin * 2),
+          message: `${scores.l2Scores.fold3Sbf.true} / ${scores.l2Scores.fold3Sbf.total}`
+        })}
+        onMouseLeave={() => onHighlight(null)}
       />
       <PriorityScoreWithColorScale
         posX={(cellWidth * 10) + (blockMargin * 2)}
@@ -310,6 +322,12 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight}) {
         value={scores.l2Scores.mgk5percFdr.true}
         maxValue={scores.l2Scores.mgk5percFdr.total}
         color={color}
+        onMouseEnter={() => onHighlight({
+          y: rowY + cellWidth / 2,
+          x: (cellWidth * 11) + (blockMargin * 2),
+          message: `${scores.l2Scores.mgk5percFdr.true} / ${scores.l2Scores.mgk5percFdr.total}`
+        })}
+        onMouseLeave={() => onHighlight(null)}
       />
       <PriorityScoreWithColorScale
         posX={(cellWidth * 11) + (blockMargin * 2)}
@@ -317,6 +335,12 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight}) {
         value={scores.l2Scores.mgk10percFdr.true}
         maxValue={scores.l2Scores.mgk10percFdr.total}
         color={color}
+        onMouseEnter={() => onHighlight({
+          y: rowY + cellWidth / 2,
+          x: (cellWidth * 12) + (blockMargin * 2),
+          message: `${scores.l2Scores.mgk10percFdr.true} / ${scores.l2Scores.mgk10percFdr.total}`
+        })}
+        onMouseLeave={() => onHighlight(null)}
       />
       <PriorityScoreWithColorScale
         posX={(cellWidth * 12) + (blockMargin * 2)}
@@ -324,6 +348,12 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight}) {
         value={scores.l2Scores.mut.true}
         maxValue={scores.l2Scores.mut.total}
         color={color}
+        onMouseEnter={() => onHighlight({
+          y: rowY + cellWidth / 2,
+          x: (cellWidth * 13) + (blockMargin * 2),
+          message: `${scores.l2Scores.mut.true} / ${scores.l2Scores.mut.total}`
+        })}
+        onMouseLeave={() => onHighlight(null)}
       />
       <PriorityScoreWithColorScale
         posX={(cellWidth * 13) + (blockMargin * 2)}
@@ -331,6 +361,12 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight}) {
         value={scores.l2Scores.depPathway.true}
         maxValue={scores.l2Scores.depPathway.total}
         color={color}
+        onMouseEnter={() => onHighlight({
+          y: rowY + cellWidth / 2,
+          x: (cellWidth * 14) + (blockMargin * 2),
+          message: `${scores.l2Scores.depPathway.true} / ${scores.l2Scores.depPathway.total}`
+        })}
+        onMouseLeave={() => onHighlight(null)}
       />
       <text
         x={(cellWidth * 14) + (blockMargin * 2) + 10}
