@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import {withRouter} from 'react-router-dom';
 import {Card, CardHeader, CardBody} from 'reactstrap';
 import * as d3 from 'd3';
@@ -8,6 +8,8 @@ import {fetchGenePriorityScore} from '../../api';
 import useUrlParams from '../useUrlParams';
 import FetchData from '../FetchData';
 import useWidth from "../useWidth";
+import Tooltip from '../Tooltip';
+
 
 function GenePriorityScore(props) {
   const [{geneId}] = useUrlParams(props);
@@ -36,9 +38,7 @@ function GenePriorityScore(props) {
                 Priority Scores
               </CardHeader>
               <CardBody>
-                <div>
-                  <PriorityScoreForAnalyses width={containerWidth} scores={priorityScore}/>
-                </div>
+                <PriorityScoreForAnalyses width={containerWidth} scores={priorityScore}/>
               </CardBody>
             </Card>
           )
@@ -52,6 +52,7 @@ export default withRouter(GenePriorityScore);
 
 
 function PriorityScoreForAnalyses({width, scores}) {
+  const [tooltip, setTooltip] = useState(null);
   const numberOfScores = 14;
 
   const maxLabelLength = d3.max(scores.map(score => score.analysis.length));
@@ -69,19 +70,40 @@ function PriorityScoreForAnalyses({width, scores}) {
 
   const svgHeight = yLabelHeight + (scores.length * (verticalMargin + cellWidth)) + levelLabelHeight;
 
+  const tooltipElement = tooltip ? (
+    <Tooltip
+      x={tooltip.x}
+      y={tooltip.y}
+      width={20}
+      height={20}
+      hideGuide={true}
+    >
+      {tooltip.message}
+    </Tooltip>
+  ) : null;
+
   return (
-    <div style={{width: '100%', marginRight: `${xMargin}px`}}>
+    <div style={{position: 'relative', width: '100%', marginRight: `${xMargin}px`}}>
       <svg
         width={svgWidth}
         height={svgHeight}
       >
         <g transform={`translate(0, ${yLabelHeight})`}>
           <Xlabels cellWidth={cellWidth} blockMargin={blockMargin}/>
-          {scores.map((scoresForAnalysis, index) => (
-            <g key={scoresForAnalysis.analysis} transform={`translate(0, ${index * (verticalMargin + cellWidth)})`}>
-              <PriorityScoreRow cellWidth={cellWidth} scores={scoresForAnalysis} blockMargin={blockMargin}/>
-            </g>
-          ))}
+          {scores.map((scoresForAnalysis, index) => {
+            const rowY = index * (verticalMargin + cellWidth);
+            return (
+              <g key={scoresForAnalysis.analysis} transform={`translate(0, ${rowY})`}>
+                <PriorityScoreRow
+                  onHighlight={setTooltip}
+                  rowY={rowY + yLabelHeight}
+                  cellWidth={cellWidth}
+                  scores={scoresForAnalysis}
+                  blockMargin={blockMargin}
+                />
+              </g>
+            )
+          })}
           <LevelLabel
             posX={(cellWidth * 2) + blockMargin + (cellWidth * 5 / 2)}
             posY={levellabelYPosition}
@@ -94,6 +116,7 @@ function PriorityScoreForAnalyses({width, scores}) {
           />
         </g>
       </svg>
+      {tooltipElement}
     </div>
   )
 }
@@ -207,7 +230,7 @@ function Xlabel({posX, label}) {
   );
 }
 
-function PriorityScoreRow({scores, cellWidth, blockMargin}) {
+function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight}) {
   const color = cancerTypeColor[scores.analysisId];
 
   return (
@@ -260,6 +283,12 @@ function PriorityScoreRow({scores, cellWidth, blockMargin}) {
         value={scores.l2Scores.fold1Sbf.true}
         maxValue={scores.l2Scores.fold1Sbf.total}
         color={color}
+        onMouseEnter={() => onHighlight({
+          y: rowY + cellWidth / 2,
+          x: (cellWidth * 8) + (blockMargin * 2),
+          message: `${scores.l2Scores.fold1Sbf.true} / ${scores.l2Scores.fold1Sbf.total}`
+        })}
+        onMouseLeave={() => onHighlight(null)}
       />
       <PriorityScoreWithColorScale
         posX={(cellWidth * 8) + (blockMargin * 2)}
@@ -342,7 +371,7 @@ function PriorityScoreWithTextValue({posX, width, color, text}) {
   );
 }
 
-function PriorityScoreWithColorScale({posX, width, value, maxValue, color}) {
+function PriorityScoreWithColorScale({posX, width, value, maxValue, color, ...props}) {
   const colorScale = d3.scaleLinear()
     .range(['#FFFFFF', color])
     .domain([0, maxValue]);
@@ -352,11 +381,12 @@ function PriorityScoreWithColorScale({posX, width, value, maxValue, color}) {
       posX={posX}
       width={width}
       color={colorScale(value)}
+      {...props}
     />
   );
 }
 
-function PriorityScoreWithColor({posX, width, color}) {
+function PriorityScoreWithColor({posX, width, color, ...props}) {
   return (
     <rect
       x={posX}
@@ -368,6 +398,7 @@ function PriorityScoreWithColor({posX, width, color}) {
         strokeWidth: 0.5,
         stroke: "#333333",
       }}
+      {...props}
     />
   );
 }

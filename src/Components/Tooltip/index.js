@@ -1,8 +1,8 @@
 import React from 'react';
 
-export default function Tooltip({x, y, width, height, ...props}) {
+export default function Tooltip({x, y, width, height, hideGuide, ...props}) {
   return (
-      <React.Fragment>
+    <React.Fragment>
       <div
         style={{
           backgroundColor: '#FFFFFF',
@@ -29,6 +29,7 @@ export default function Tooltip({x, y, width, height, ...props}) {
           pointerEvents: 'none',
           top: 0,
           left: x,
+          display: hideGuide ? 'none': 'block',
         }}
       />
       <div
@@ -40,6 +41,7 @@ export default function Tooltip({x, y, width, height, ...props}) {
           pointerEvents: 'none',
           top: y,
           left: 0,
+          display: hideGuide ? 'none': 'block',
         }}
       />
     </React.Fragment>
