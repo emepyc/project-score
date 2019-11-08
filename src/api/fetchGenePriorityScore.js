@@ -112,5 +112,5 @@ function addScore(scoresForAnalysis, category, score) {
 }
 
 function getGeneRank(priorityScores, geneId) {
-  return findIndex(priorityScores, priorityScore => priorityScore.gene_id === geneId);
+  return findIndex(priorityScores, priorityScore => priorityScore.gene_id === geneId) + 1;
 }
