@@ -50,13 +50,26 @@ function GenePriorityScore(props) {
 
 export default withRouter(GenePriorityScore);
 
+function getLabelFontSize(labelLength, maxLabelWidth) {
+  let fontFactor = 8, fontSize = 0.9;
+  while (true) {
+    const labelWidth = fontFactor * labelLength;
+    if (labelWidth > maxLabelWidth) {
+      fontSize -= 0.1;
+      fontFactor -= 1;
+      continue;
+    }
+    return [fontSize, fontFactor];
+  }
+}
 
 function PriorityScoreForAnalyses({width, scores}) {
   const [tooltip, setTooltip] = useState(null);
   const numberOfScores = 14;
 
   const maxLabelLength = d3.max(scores.map(score => score.analysis.length));
-  const xLabelWidth = maxLabelLength * 8;
+  const [fontSize, fontFactor] = getLabelFontSize(maxLabelLength, width * 0.3);
+  const xLabelWidth = maxLabelLength * fontFactor;
 
   const levelLabelHeight = 30;
   const xMargin = 15;
@@ -100,6 +113,7 @@ function PriorityScoreForAnalyses({width, scores}) {
                   cellWidth={cellWidth}
                   scores={scoresForAnalysis}
                   blockMargin={blockMargin}
+                  fontSize={fontSize}
                 />
               </g>
             )
@@ -213,11 +227,11 @@ function Xlabels({cellWidth, blockMargin}) {
 function Xlabel({posX, label}) {
   return (
     <g
-      transform={`translate(${posX}) rotate(-45)`}
+      transform={`translate(${posX}, -15) rotate(-45)`}
     >
       <text
         x={0}
-        y={-15}
+        y={0}
         alignmentBaseline='central'
         style={{
           fontSize: '0.9em',
@@ -230,7 +244,7 @@ function Xlabel({posX, label}) {
   );
 }
 
-function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight}) {
+function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight, fontSize}) {
   const color = cancerTypeColor[scores.analysisId];
 
   return (
@@ -375,6 +389,7 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight}) {
         textAnchor='left'
         style={{
           fill: textDefaultColor,
+          fontSize: `${fontSize}em`,
         }}
       >
         {scores.analysis}
@@ -384,6 +399,7 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight}) {
 }
 
 function PriorityScoreWithTextValue({posX, width, color, text}) {
+  const [fontSize] = getLabelFontSize(`${text}`.length, width);
   return (
     <React.Fragment>
       <PriorityScoreWithColor
@@ -398,7 +414,7 @@ function PriorityScoreWithTextValue({posX, width, color, text}) {
         textAnchor='middle'
         alignmentBaseline='central'
         style={{
-          fontSize: '0.9em',
+          fontSize: `${fontSize}em`,
         }}
       >
         {text}
