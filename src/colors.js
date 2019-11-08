@@ -13,6 +13,7 @@ export const cancerTypeColor = {
   12: '#6BD6CE', // Ovarian Carcinoma
   13: '#F84498', // Pancreatic Carcinoma
   14: '#91B8F2', // Squamous Cell Lung Carcinoma
+  15: '#EEEEEE', // Pan Cancer
 };
 
 export const tissueColor = {
@@ -49,5 +50,6 @@ export const colorInsignificantBg = '#F0F0F0';
 
 export const colorPanCancerGeneBg = "#FFEEEE";
 
-export const textDefaultColor = "#5A5F5F";
+// export const textDefaultColor = "#5A5F5F";
+export const textDefaultColor = "#333333";
 export const backgroundDefaultColor = "#fdfffd";

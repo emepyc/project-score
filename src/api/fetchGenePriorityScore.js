@@ -31,9 +31,11 @@ export default async function fetchGenePriorityScore({geneId}, ...args) {
         .then(results => {
           return results.map(result => {
             const analysis = result.analysis.name;
+            const analysisId = result.analysis.id;
             const rank = getGeneRank(result.data, geneId);
             return {
               analysis,
+              analysisId,
               rank,
               l1Scores: l1ScoresByAnalysis[analysis],
               l2Scores: l2ScoresByAnalysis[analysis],
