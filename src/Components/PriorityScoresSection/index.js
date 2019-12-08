@@ -2,7 +2,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCog} from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import React, {useState, useEffect, useRef} from "react";
-import {withRouter} from "react-router-dom";
+import {withRouter, Link} from "react-router-dom";
 import * as d3 from "d3";
 import {Button, Card, CardBody, CardHeader, Collapse} from 'reactstrap';
 import orderBy from "lodash.orderby";
@@ -373,15 +373,16 @@ function PriorityScoreBucketPlot(props) {
             className="bucketBox"
           />
           {priorityScores.map((priorityScore, index) => (
-            <circle
-              key={priorityScore["gene_id"]}
-              cx={xScale(index)}
-              cy={yScale(priorityScore["score"])}
-              r="3"
-              fill="green"
-              onMouseEnter={() => highlightPriorityScore(priorityScore, index)}
-              onMouseLeave={() => unHighlightPriorityScore()}
-            />
+            <Link key={priorityScore["gene_id"]} to={`/gene/${priorityScore.gene_id}`}>
+              <circle
+                cx={xScale(index)}
+                cy={yScale(priorityScore["score"])}
+                r="3"
+                fill="green"
+                onMouseEnter={() => highlightPriorityScore(priorityScore, index)}
+                onMouseLeave={() => unHighlightPriorityScore()}
+              />
+            </Link>
           ))}
         </g>
         {xAxisOrBucketNumber}

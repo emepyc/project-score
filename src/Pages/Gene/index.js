@@ -8,22 +8,34 @@ import TissueHighlight from '../../Components/TissueHighlight';
 import {ButtonGroup, Row, Col, Card, CardHeader, CardBody, Tooltip} from 'reactstrap';
 import {Button} from '../../Components/Buttom';
 import GeneSummaryPlots from '../../Components/GeneSummaryPlots';
-import {lossOfFitnessScoreHelp, foldChangeHelp} from "../../definitions";
+import {lossOfFitnessScoreHelp, foldChangeHelp} from '../../definitions';
+import GenePriorityScore from '../../Components/GenePriorityScore';
 
 function Gene() {
 
   return (
     <div>
       <GeneInfoSummary/>
-      <Row>
-        <Col className="my-3" lg={{size: 8}} xs={{size: 12}}>
-          <GeneSummaryPlots/>
+      <Row className="my-3">
+        <Col lg={{size: 6}} xs={{size: 12}}>
+          <GenePriorityScore/>
         </Col>
-        <Col className="my-3" lg={{size: 4}} xs={{size: 12}}>
-          <Filters/>
+        <Col lg={{size: 6}} xs={{size: 12}}>
+          <Row>
+            <Col xs={{size: 12}}>
+              <GeneSummaryPlots/>
+            </Col>
+          </Row>
+          <div className="mt-3">
+            <Row>
+              <Col xs={{size: 12}}>
+                <Filters/>
+              </Col>
+            </Row>
+          </div>
         </Col>
       </Row>
-      <FitnessSection />
+      <FitnessSection/>
     </div>
   );
 }
@@ -54,20 +66,20 @@ function Filters() {
 function FitnessSection() {
   const [highlightFitness, setHighlightFitness] = useState(null);
   return (
-      <Row>
-        <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
-          <FitnessPlotSection
-            highlight={highlightFitness}
-            onHighlight={setHighlightFitness}
-          />
-        </Col>
-        <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
-          <FitnessTable
-            highlight={highlightFitness}
-            onHighlight={setHighlightFitness}
-          />
-        </Col>
-      </Row>
+    <Row>
+      <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
+        <FitnessPlotSection
+          highlight={highlightFitness}
+          onHighlight={setHighlightFitness}
+        />
+      </Col>
+      <Col className="my-3" xl={{size: 6}} xs={{size: 12}}>
+        <FitnessTable
+          highlight={highlightFitness}
+          onHighlight={setHighlightFitness}
+        />
+      </Col>
+    </Row>
   );
 }
 
