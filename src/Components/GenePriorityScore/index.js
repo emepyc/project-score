@@ -254,7 +254,7 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight, fo
         posX={0}
         width={cellWidth}
         color={cancerTypeColor[scores.analysisId]}
-        text={10}
+        text={Math.round(scores.score)}
       />
       <PriorityScoreWithTextValue
         posX={cellWidth}

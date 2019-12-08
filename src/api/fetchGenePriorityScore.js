@@ -32,10 +32,11 @@ export default async function fetchGenePriorityScore({geneId}, ...args) {
           return results.map(result => {
             const analysis = result.analysis.name;
             const analysisId = result.analysis.id;
-            const rank = getGeneRank(result.data, geneId);
+            const [score, rank] = getGeneScoreAndRank(result.data, geneId);
             return {
               analysis,
               analysisId,
+              score,
               rank,
               l1Scores: l1ScoresByAnalysis[analysis],
               l2Scores: l2ScoresByAnalysis[analysis],
@@ -111,6 +112,8 @@ function addScore(scoresForAnalysis, category, score) {
   };
 }
 
-function getGeneRank(priorityScores, geneId) {
-  return findIndex(priorityScores, priorityScore => priorityScore.gene_id === geneId) + 1;
+function getGeneScoreAndRank(priorityScores, geneId) {
+  const index = findIndex(priorityScores, priorityScore => priorityScore.gene_id === geneId);
+  const priorityScore = priorityScores[index].score;
+  return [priorityScore, index + 1];
 }
