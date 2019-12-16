@@ -18,6 +18,9 @@ import Tooltip from '../Tooltip';
 
 import "./priorityScoresSection.scss";
 
+const bucketColors = ["blue", "blue", "blue", "green", "green", "green", "green", "red", "red", "red"];
+
+
 function PriorityScoresSection(props) {
   const [urlParams] = useUrlParams(props);
 
@@ -227,6 +230,26 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
         />
       ))}
       <PriorityScoresXlabel plotWidth={plotWidth} label="Tractability bucket" xOffset={xOffset}/>
+      <PriorityScoresBucketLegend/>
+    </React.Fragment>
+  );
+}
+
+function PriorityScoresBucketLegend() {
+  return (
+    <React.Fragment>
+      <div className="bucketBoxLegend">
+        <div className={classNames("element", "group1")}/>
+        <span className="label">Group 1 bucket: Approved or in clinical development</span>
+      </div>
+      <div className="bucketBoxLegend">
+        <div className={classNames("element", "group2")}/>
+        <span className="label">Group 2 bucket: Supporting evidence</span>
+      </div>
+      <div className="bucketBoxLegend">
+        <div className={classNames("element", "group3")}/>
+        <span className="label">Group 3 bucket: Weak or no supporting evidence</span>
+      </div>
     </React.Fragment>
   );
 }
@@ -245,6 +268,18 @@ function PriorityScoresXlabel({plotWidth, label}) {
       </g>
     </svg>
   )
+}
+
+function bucketGroupClassName(bucket) {
+  if (bucket > 0 && bucket < 4) {
+    return "group1";
+  }
+  if (bucket > 3 && bucket < 8) {
+    return "group2"
+  }
+  if (bucket > 7) {
+    return "group3";
+  }
 }
 
 function PriorityScoreBucketPlot(props) {
@@ -312,7 +347,8 @@ function PriorityScoreBucketPlot(props) {
 
   const xAxisOrBucketNumber = bucket ? (
     <g transform={`translate(${isFirst ? xOffset : 0}, ${plotHeight})`}>
-      <rect y={0} x={0} width={plotWidth} height={height - plotHeight} className="bucketBox"/>
+      <rect y={0} x={0} width={plotWidth} height={height - plotHeight}
+            className={classNames("bucketBox", bucketGroupClassName(bucket))}/>
       <text
         x={plotWidth / 2}
         y={(height - plotHeight) / 2}

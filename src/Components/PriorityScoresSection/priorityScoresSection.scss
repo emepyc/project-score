@@ -1,7 +1,21 @@
+$bucket-group1-color: #91B8F2;
+$bucket-group2-color: #69D38B;
+$bucket-group3-color: #D07D80;
+
 .bucketBox {
   stroke: black;
   stroke-width: 0.5px;
   fill: white;
+
+  &.group1 {
+    fill: $bucket-group1-color;
+  }
+  &.group2 {
+    fill: $bucket-group2-color;
+  }
+  &.group3 {
+    fill: $bucket-group3-color;
+  }
 }
 
 .expandLabel {
@@ -21,3 +35,25 @@
   fill: white;
 }
 
+.bucketBoxLegend {
+  .element {
+    width: 15px;
+    height: 15px;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    &.group1 {
+      background-color: $bucket-group1-color;
+    }
+    &.group2 {
+      background-color: $bucket-group2-color;
+    }
+    &.group3 {
+      background-color: $bucket-group3-color;
+    }
+  }
+  .label {
+    font-size: 0.9em;
+    vertical-align: middle;
+  }
+}
