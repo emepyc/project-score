@@ -447,6 +447,7 @@ function PriorityScoreBucketPlot(props) {
                     textAnchor={labelAnchor}
                     alignmentBaseline='middle'
                     fontSize={10}
+                    style={{pointerEvents: 'none'}}
                   >
                     {priorityScore.symbol}
                   </text>
