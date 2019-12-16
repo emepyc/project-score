@@ -4,7 +4,7 @@ import classNames from "classnames";
 import React, {useState, useEffect, useRef} from "react";
 import {withRouter, Link} from "react-router-dom";
 import * as d3 from "d3";
-import {Button, Card, CardBody, CardHeader, Collapse} from 'reactstrap';
+import {Button, Card, CardBody, CardHeader, Collapse, Label, Input, Row} from 'reactstrap';
 import orderBy from "lodash.orderby";
 
 import useUrlParams from '../useUrlParams';
@@ -17,9 +17,6 @@ import SvgIcon from '../SvgIcon';
 import Tooltip from '../Tooltip';
 
 import "./priorityScoresSection.scss";
-
-const bucketColors = ["blue", "blue", "blue", "green", "green", "green", "green", "red", "red", "red"];
-
 
 function PriorityScoresSection(props) {
   const [urlParams] = useUrlParams(props);
@@ -60,6 +57,7 @@ const defaultSettings = {
 function PriorityScores({analysis}) {
   const [settingsIsOpen, setSettingsIsOpen] = useState(false);
   const [settings, setSettings] = useState(defaultSettings);
+  const [showLabels, setShowLabels] = useState(false);
 
   const container = useRef(null);
   const containerWidth = useWidth(container);
@@ -137,11 +135,25 @@ function PriorityScores({analysis}) {
           >
             {priorityScores => {
               return (
-                <PriorityScoresPlot
-                  plotWidth={containerWidth}
-                  priorityScores={priorityScores.data}
-                  byBucket={settings.tractability}
-                />
+                <React.Fragment>
+                  <Row className='flex-row-reverse mx-4 mt-4'>
+                    <Label>
+                      <Input
+                        type='checkbox'
+                        checked={showLabels}
+                        onClick={() => setShowLabels(!showLabels)}
+                      />{' '}
+                      <span>Show gene names</span>
+                    </Label>
+                  </Row>
+
+                  <PriorityScoresPlot
+                    plotWidth={containerWidth}
+                    priorityScores={priorityScores.data}
+                    byBucket={settings.tractability}
+                    showLabels={showLabels}
+                  />
+                </React.Fragment>
               );
             }}
           </FetchData>
@@ -167,7 +179,7 @@ function distributeIntoBuckets(priorityScores) {
   }, {})
 }
 
-function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBucket}) {
+function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBucket, showLabels}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [priorityScores, setPriorityScores] = useState(priorityScoresAll);
 
@@ -190,6 +202,7 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
           key={1}
           bucket={null}
           priorityScores={orderBy(priorityScores, ['score'], ['desc'])}
+          showLabels={showLabels}
         />
         <PriorityScoresXlabel plotWidth={plotWidth} label="Rank" xOffset={xOffset}/>
       </React.Fragment>
@@ -227,6 +240,7 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
           isExpanded={isExpanded}
           onExpand={expandBucket}
           onShrink={resetExpandBucket}
+          showLabels={showLabels}
         />
       ))}
       <PriorityScoresXlabel plotWidth={plotWidth} label="Tractability bucket" xOffset={xOffset}/>
@@ -293,6 +307,7 @@ function PriorityScoreBucketPlot(props) {
     isExpanded = false,
     onExpand,
     onShrink,
+    showLabels,
   } = props;
 
   const [showExpandLabel, setShowExpandLabel] = useState(false);
@@ -393,6 +408,7 @@ function PriorityScoreBucketPlot(props) {
     <PriorityScoreTooltip x={tooltip.x} y={tooltip.y} priorityScore={tooltip.priorityScore}/>
   ) : null;
 
+
   return (
     <div style={{display: "inline-block", position: "relative"}}>
       <svg
@@ -408,18 +424,36 @@ function PriorityScoreBucketPlot(props) {
             height={plotHeight}
             className="bucketBox"
           />
-          {priorityScores.map((priorityScore, index) => (
-            <Link key={priorityScore["gene_id"]} to={`/gene/${priorityScore.gene_id}`}>
-              <circle
-                cx={xScale(index)}
-                cy={yScale(priorityScore["score"])}
-                r="3"
-                fill="green"
-                onMouseEnter={() => highlightPriorityScore(priorityScore, index)}
-                onMouseLeave={() => unHighlightPriorityScore()}
-              />
-            </Link>
-          ))}
+          {priorityScores.map((priorityScore, index) => {
+            const xPos = xScale(index);
+            const labelOffset = 5;
+            const labelAproxWidth = 8 * priorityScore.symbol.length;
+            const labelAnchor = plotWidth < (xPos + labelAproxWidth) ? 'end' : 'start';
+            const labelXposition = plotWidth < (xPos + labelAproxWidth) ? xPos - labelOffset : xPos + labelOffset
+            return (
+              <Link key={priorityScore["gene_id"]} to={`/gene/${priorityScore.gene_id}`}>
+                <circle
+                  cx={xPos}
+                  cy={yScale(priorityScore["score"])}
+                  r="3"
+                  fill="green"
+                  onMouseEnter={() => highlightPriorityScore(priorityScore, index)}
+                  onMouseLeave={() => unHighlightPriorityScore()}
+                />
+                {showLabels && (
+                  <text
+                    x={labelXposition}
+                    y={yScale(priorityScore["score"])}
+                    textAnchor={labelAnchor}
+                    alignmentBaseline='middle'
+                    fontSize={10}
+                  >
+                    {priorityScore.symbol}
+                  </text>
+                )}
+              </Link>
+            )
+          })}
         </g>
         {xAxisOrBucketNumber}
         <ExpandElement
