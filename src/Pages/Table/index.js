@@ -54,7 +54,7 @@ function Table() {
       <TabContent activeTab={activeTab}>
         <TabPane tabId='fitness'>
           <Row className='my-3'>
-            <Col xs={{size: 12}} lg={{size: 12, offset: 0}} xl={{size: 6, offset: 6}}>
+            <Col xs={{size: 12}} lg={{size: 10, offset: 2}} xl={{size: 8, offset: 4}}>
               <FitnessFilters/>
             </Col>
           </Row>
@@ -106,17 +106,19 @@ function FitnessFilters() {
         Filters
       </CardHeader>
       <CardBody>
-        <Row>
-          <Col>
-            <PanCangerGeneFilter/>
-          </Col>
-          <Col>
-            <CancerTypeFilter/>
-          </Col>
-          <Col>
-            <ScoreRangeFilter/>
-          </Col>
-        </Row>
+        <div className='h-100'>
+          <Row className='justify-content-between'>
+            <Col className='align-self-center text-center'>
+              <PanCangerGeneFilter/>
+            </Col>
+            <Col className='align-self-center'>
+              <CancerTypeFilter/>
+            </Col>
+            <Col className='align-self-center'>
+              <ScoreRangeFilter/>
+            </Col>
+          </Row>
+        </div>
       </CardBody>
     </Card>
   );
