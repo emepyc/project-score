@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button as BButton} from 'reactstrap';
 
-export function Button(props) {
+export default function Button(props) {
   return (
     <BButton
       {...props}

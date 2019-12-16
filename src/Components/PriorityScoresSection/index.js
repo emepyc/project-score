@@ -468,7 +468,7 @@ function PriorityScoreTooltip({x, y, priorityScore}) {
     >
       Gene: <b>{priorityScore.symbol}</b><br/>
       Priority score: <b>{priorityScore.score.toFixed(2)}</b><br/>
-      Bucket: <b>{priorityScore.bucket}</b><br/>
+      Tractability bucket: <b>{priorityScore.bucket}</b><br/>
     </Tooltip>
   );
 }

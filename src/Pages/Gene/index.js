@@ -6,7 +6,7 @@ import FitnessPlot from '../../Components/FitnessPlot';
 import GeneInfoSummary from '../../Components/GeneInfoSummary';
 import TissueHighlight from '../../Components/TissueHighlight';
 import {ButtonGroup, Row, Col, Card, CardHeader, CardBody, Tooltip} from 'reactstrap';
-import {Button} from '../../Components/Buttom';
+import Button from '../../Components/Button';
 import GeneSummaryPlots from '../../Components/GeneSummaryPlots';
 import {lossOfFitnessScoreHelp, foldChangeHelp} from '../../definitions';
 import GenePriorityScore from '../../Components/GenePriorityScore';

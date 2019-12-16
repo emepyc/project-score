@@ -5,7 +5,7 @@ import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import ModelInfoSummary from '../../Components/ModelInfoSummary';
 import ModelInfoDetails from '../../Components/ModelInfoDetails';
 import {Card, CardBody, CardHeader} from 'reactstrap';
-import {Button} from "../../Components/Buttom";
+import Button from "../../Components/Button";
 import FitnessPlot from "../../Components/FitnessPlot";
 import PanCangerGeneFilter from "../../Components/PanCancerGeneFilter";
 import {foldChangeHelp, lossOfFitnessScoreHelp} from "../../definitions";
