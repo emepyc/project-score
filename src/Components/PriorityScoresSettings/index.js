@@ -1,9 +1,11 @@
 import React, {useState, useRef} from 'react';
-import {Button, Input, Label} from 'reactstrap';
+import {Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import isEqual from 'lodash.isequal';
+import isArray from 'lodash.isarray';
 
 import {Slider} from '../RangeSlider';
 import useWidth from "../useWidth";
+import {priorityScoresHelp} from "../../definitions";
 
 import "./priorityScoresSettings.scss";
 
@@ -72,182 +74,240 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   });
 
   return (
-    <div className="mb-5">
-      <div className="mx-5 my-4 d-flex justify-content-between flex-row flex-wrap">
-        <div className="mt-4 mx-2 flex-column">
-          <Label>
-            <Input
-              type='checkbox'
-              checked={tractability}
-              onChange={() => setTractability(!tractability)}
-            />{' '}
-            <span className="settings-header-section">Tractability</span>
-          </Label>
-        </div>
-
-        <div className="mt-4 mx-2 flex-column">
-          <div className="text-lg-center">
-            <span className="settings-header-section">Priority scores:</span>
+    <React.Fragment>
+      <div className="mb-5">
+        <div className="mx-5 my-4 d-flex justify-content-between flex-row flex-wrap">
+          <div className="mt-4 mx-2 flex-column">
+            <Label>
+              <Input
+                type='checkbox'
+                checked={tractability}
+                onChange={() => setTractability(!tractability)}
+              />{' '}
+              <span className="settings-header-section">Tractability</span>
+            </Label>
           </div>
-          <div className="ml-2">
 
-            <div className="d-flex flex-row flex-wrap">
-              <div ref={l1ScoreContainer} className="d-column mx-3">
-                <ScoreWeightSlider
-                  width={l1ContainerWidth}
-                  value={l1Weight}
-                  defaultValue={defaultSettings.l1Weight}
-                  onChange={setL1Weight}
-                />
-                <div className="ml-2 mt-2">
-                  <Label>
+          <div className="mt-4 mx-2 flex-column">
+            <div className="text-lg-center">
+              <span className="settings-header-section">Priority scores:</span>
+            </div>
+            <div className="ml-2">
+
+              <div className="d-flex flex-row flex-wrap">
+                <div ref={l1ScoreContainer} className="d-column mx-3">
+                  <ScoreWeightSlider
+                    width={l1ContainerWidth}
+                    value={l1Weight}
+                    defaultValue={defaultSettings.l1Weight}
+                    onChange={setL1Weight}
+                  />
+                  <div className="ml-2 mt-2">
+                    <Label>
+                      <Input
+                        type="checkbox"
+                        checked={hcg}
+                        onChange={() => setHcg(!hcg)}
+                      />
+                      High confidence driver
+                      <Help
+                        label='High confidence driver'
+                        definition={priorityScoresHelp.highConfidenceDriver}
+                      />
+                    </Label>
+                  </div>
+                  <div className="ml-2 mt-2">
+                    <Label>
+                      <Input
+                        type="checkbox"
+                        checked={csHcg}
+                        onChange={() => setCsHcg(!csHcg)}
+                      />
+                      High-confidence cancer gene (cancer type)
+                    </Label>
+                  </div>
+                  <div className="ml-2 mt-2">
+                    <Label>
+                      <Input
+                        type="checkbox"
+                        checked={mutatedInPrimaryTumors}
+                        onChange={() => setMutatedInPrimaryTumors(!mutatedInPrimaryTumors)}
+                      />
+                      Mutated in primary tumours
+                      <Help
+                        label='Mutatd in primary tumours'
+                        definition={priorityScoresHelp.mutatedInPrimaryTumors}
+                      />
+                    </Label>
+                  </div>
+                  <div className="ml-2 mt-2">
+                    <Label>
+                      <Input
+                        type="checkbox"
+                        checked={mutatedInPrimaryTumorsCosmic}
+                        onChange={() => setMutatedInPrimaryTumorsCosmic(!mutatedInPrimaryTumorsCosmic)}
+                      />
+                      COSMIC variant in primary tumours
+                      <Help
+                        label='COSMIC variant in primary tumours'
+                        definition={priorityScoresHelp.cosmicVariantInPrimaryTumors}
+                      />
+                    </Label>
+                  </div>
+                  <div className="ml-2 mt-2">
+                    <Label>
+                      <Input
+                        type="checkbox"
+                        checked={weakerMarker}
+                        onChange={() => setWeakerMarker(!weakerMarker)}
+                      />
+                      Weaker marker
+                      <Help
+                        label='Weaker marker'
+                        definition={priorityScoresHelp.weakerMarker}
+                      />
+                    </Label>
+                  </div>
+                  <div className="ml-2 mt-2">
+                    <Label>
+                      Min genomic marker strength
+                      <Help
+                        label='Genomic marker class'
+                        definition={[
+                          {label: 'Class A marker', definition: priorityScoresHelp.classAmarker},
+                          {label: 'Class B marker', definition: priorityScoresHelp.classBmarker},
+                          {label: 'Class C marker', definition: priorityScoresHelp.classCmarker},
+                        ]}
+                      />
+                    </Label>
                     <Input
-                      type="checkbox"
-                      checked={hcg}
-                      onChange={() => setHcg(!hcg)}
-                    />
-                    High-confidence cancer gene
-                  </Label>
+                      type="select"
+                      value={genomicMarkerStrength}
+                      onChange={(event) => setGenomicMarkerStrength(event.target.value)}
+                    >
+                      <option value={0}>0</option>
+                      <option value={1}>1 (class A)</option>
+                      <option value={2}>2 (class B)</option>
+                      <option value={3}>3 (class C)</option>
+                    </Input>
+                  </div>
                 </div>
-                <div className="ml-2 mt-2">
-                  <Label>
+                <div ref={l2ScoreContainer} className="d-column mx-3">
+                  <ScoreWeightSlider
+                    width={l2ContainerWidth}
+                    value={100 - l1Weight}
+                    defaultValue={100 - defaultSettings.l1Weight}
+                    onChange={newL1Weight => setL1Weight(100 - newL1Weight)}
+                  />
+                  <div className="ml-2 mt-2">
+                    <Label>
+                      Min fitness score category
+                      <Help
+                        label='Fitness score categories'
+                        definition={[
+                          {label: 'Fitness score < -1', definition: priorityScoresHelp.fitnessScoreFold1},
+                          {label: 'Fitness score < -2', definition: priorityScoresHelp.fitnessScoreFold2},
+                          {label: 'Fitness score < -3', definition: priorityScoresHelp.fitnessScoreFold3},
+                        ]}
+                      />
+                    </Label>
                     <Input
-                      type="checkbox"
-                      checked={csHcg}
-                      onChange={() => setCsHcg(!csHcg)}
-                    />
-                    High-confidence cancer gene (cancer type)
-                  </Label>
-                </div>
-                <div className="ml-2 mt-2">
-                  <Label>
+                      type="select"
+                      value={foldSbf}
+                      onChange={(event) => setFoldSbf(event.target.value)}
+                    >
+                      <option value={0}>Not set</option>
+                      <option value={1}>Fitness score &lt; -1</option>
+                      <option value={2}>Fitness score &lt; -2</option>
+                      <option value={3}>Fitness score &lt; -3</option>
+                    </Input>
+                  </div>
+                  <div className="ml-2 mt-2">
+                    <Label>
+                      Max MAGeCK FDR %
+                      <Help
+                        label={'MAGeCK FDR percentage'}
+                        definition={[
+                          {label: 'MAGeCK < 10% FDR', definition: priorityScoresHelp.mageck10fdr},
+                          {label: 'MAGeCK < 5% FDR', definition: priorityScoresHelp.mageck5fdr},
+                        ]}
+                      />
+                    </Label>
                     <Input
-                      type="checkbox"
-                      checked={mutatedInPrimaryTumors}
-                      onChange={() => setMutatedInPrimaryTumors(!mutatedInPrimaryTumors)}
-                    />
-                    Mutated in primary tumors
-                  </Label>
-                </div>
-                <div className="ml-2">
-                  <Label>
-                    <Input
-                      type="checkbox"
-                      checked={mutatedInPrimaryTumorsCosmic}
-                      onChange={() => setMutatedInPrimaryTumorsCosmic(!mutatedInPrimaryTumorsCosmic)}
-                    />
-                    Mutated in primary tumors (in COSMIC)
-                  </Label>
-                </div>
-                <div className="ml-2 mt-2">
-                  <Label>
-                    <Input
-                      type="checkbox"
-                      checked={weakerMarker}
-                      onChange={() => setWeakerMarker(!weakerMarker)}
-                    />
-                    Genomic marker is weak
-                  </Label>
-                </div>
-                <div className="ml-2 mt-2">
-                  <Label>Min genomic marker strength</Label>
-                  <Input
-                    type="select"
-                    value={genomicMarkerStrength}
-                    onChange={(event) => setGenomicMarkerStrength(event.target.value)}
-                  >
-                    <option value={0}>0</option>
-                    <option value={1}>1 (class A)</option>
-                    <option value={2}>2 (class B)</option>
-                    <option value={3}>3 (class C)</option>
-                  </Input>
-                </div>
-              </div>
-              <div ref={l2ScoreContainer} className="d-column mx-3">
-                <ScoreWeightSlider
-                  width={l2ContainerWidth}
-                  value={100 - l1Weight}
-                  defaultValue={100 - defaultSettings.l1Weight}
-                  onChange={newL1Weight => setL1Weight(100 - newL1Weight)}
-                />
-                <div className="ml-2 mt-2">
-                  <Label>Min fold scaled bayes factor</Label>
-                  <Input
-                    type="select"
-                    value={foldSbf}
-                    onChange={(event) => setFoldSbf(event.target.value)}
-                  >
-                    <option>0</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                  </Input>
-                </div>
-                <div className="ml-2 mt-2">
-                  <Label>Max perc gene fitness FDR</Label>
-                  <Input
-                    type="select"
-                    value={mgkPercFdr}
-                    onChange={(event) => setMgkPercFrd(event.target.value)}
-                  >
-                    <option>10</option>
-                    <option>5</option>
-                    <option>0</option>
-                  </Input>
-                </div>
-                <div className="ml-2 mt-2">
-                  <Label>
-                    <Input
-                      type="checkbox"
-                      checked={highlyExpr}
-                      onChange={() => setHighlyExpr(!highlyExpr)}
-                    />
-                    Highly expressed
-                  </Label>
-                </div>
-                <div className="ml-2 mt-2">
-                  <Label>
-                    <Input
-                      type="checkbox"
-                      checked={depPathway}
-                      onChange={() => setDepPathway(!depPathway)}
-                    />
-                    In over-represented pathway
-                  </Label>
-                </div>
-                <div className="ml-2 mt-2">
-                  <Label>
-                    <Input
-                      type="checkbox"
-                      checked={isMutated}
-                      onChange={() => setIsMutated(!isMutated)}
-                    />
-                    Is mutated
-                  </Label>
+                      type="select"
+                      value={mgkPercFdr}
+                      onChange={(event) => setMgkPercFrd(event.target.value)}
+                    >
+                      <option value={10}>MAGeCK &lt; 10% FDR</option>
+                      <option value={5}>MAGeCK &lt; 5% FDR</option>
+                      <option value={0}>Not set</option>
+                    </Input>
+                  </div>
+                  <div className="ml-2 mt-2">
+                    <Label>
+                      <Input
+                        type="checkbox"
+                        checked={highlyExpr}
+                        onChange={() => setHighlyExpr(!highlyExpr)}
+                      />
+                      Highly expressed
+                      <Help
+                        label='Highly expressed'
+                        definition={priorityScoresHelp.highlyExpressed}
+                      />
+                    </Label>
+                  </div>
+                  <div className="ml-2 mt-2">
+                    <Label>
+                      <Input
+                        type="checkbox"
+                        checked={depPathway}
+                        onChange={() => setDepPathway(!depPathway)}
+                      />
+                      Enriched pathway
+                      <Help
+                        label='Enriched pathway'
+                        definition={priorityScoresHelp.enrichedPathway}
+                      />
+                    </Label>
+                  </div>
+                  <div className="ml-2 mt-2">
+                    <Label>
+                      <Input
+                        type="checkbox"
+                        checked={isMutated}
+                        onChange={() => setIsMutated(!isMutated)}
+                      />
+                      Mutated
+                      <Help
+                        label='Mutated'
+                        definition={priorityScoresHelp.mutated}
+                      />
+                    </Label>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <div className="my-4 mx-2 flex-column">
+            <Label for="priority-score-threshold-slider">
+              <span className="settings-header-section">Priority score threshold</span>
+            </Label>
+            <Slider
+              id="priority-score-threshold-slider"
+              width={250}
+              min={1}
+              max={100}
+              defaultValue={defaultSettings.threshold}
+              step={1}
+              onChange={setThreshold}
+              value={threshold}
+            />
+          </div>
         </div>
 
-        <div className="my-4 mx-2 flex-column">
-          <Label for="priority-score-threshold-slider">
-            <span className="settings-header-section">Priority score threshold</span>
-          </Label>
-          <Slider
-            id="priority-score-threshold-slider"
-            width={250}
-            min={1}
-            max={100}
-            defaultValue={defaultSettings.threshold}
-            step={1}
-            onChange={setThreshold}
-            value={threshold}
-          />
-        </div>
-      </div>
-
-      <div className="mx-5 my-4">
+        <div className="mx-5 my-4">
         <span className="mx-2">
           <Button
             onClick={() => submit()}
@@ -257,7 +317,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
             Update
           </Button>
         </span>
-        <span className="mx-2">
+          <span className="mx-2">
           <Button
             onClick={() => reset()}
             color={"secondary"}
@@ -268,8 +328,9 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
           Reset
         </Button>
         </span>
+        </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 }
 
@@ -292,7 +353,43 @@ function ScoreWeightSlider({width, value, defaultValue, onChange}) {
           tipFormatter={value => `${value}%`}
         />
       </div>
+    </React.Fragment>
+  );
+}
 
+function Help({label, definition}) {
+  const [helpModalIsOpen, setHelpModalIsVisible] = useState(false);
+
+  const helpModalToggle = () => setHelpModalIsVisible(!helpModalIsOpen);
+
+  const modalBody = isArray(definition) ? (
+    <div className='priorityScoreSettingsHelp'>
+      {definition.map(nextDefinition => (
+        <div className='item' key={nextDefinition.label}>
+          <b>{nextDefinition.label}</b>: <span dangerouslySetInnerHTML={{__html: nextDefinition.definition}}/>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div className='priorityScoreSettingsHelp'>
+      <span dangerouslySetInnerHTML={{__html: definition}}/>
+    </div>
+  );
+
+  return (
+    <React.Fragment>
+      <span className='helpItem' onClick={helpModalToggle}>?</span>
+      <Modal isOpen={helpModalIsOpen} toggle={helpModalToggle}>
+        <ModalHeader>
+          {label}
+        </ModalHeader>
+        <ModalBody>
+          {modalBody}
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={helpModalToggle}>Ok</Button>
+        </ModalFooter>
+      </Modal>
     </React.Fragment>
   );
 }

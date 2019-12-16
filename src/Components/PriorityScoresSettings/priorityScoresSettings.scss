@@ -1,4 +1,3 @@
-
 @mixin settings-section {
   font-weight: bold;
   display: inline-block;
@@ -11,5 +10,21 @@
 
 .settings-subheader-section {
   @include settings-section;
-  margin-top: 20px;
+  margin-top: 15px;
+}
+
+.priorityScoreSettingsHelp {
+  font-size: 0.8em;
+  margin: 10px 0;
+
+  .item {
+    margin: 15px 0;
+  }
+}
+
+.helpItem {
+  vertical-align: top;
+  font-size: 0.9em;
+  margin-left: 2px;
+  cursor: pointer;
 }

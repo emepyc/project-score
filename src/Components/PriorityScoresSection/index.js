@@ -240,15 +240,15 @@ function PriorityScoresBucketLegend() {
     <React.Fragment>
       <div className="bucketBoxLegend">
         <div className={classNames("element", "group1")}/>
-        <span className="label">Group 1 bucket: Approved or in clinical development</span>
+        <span className="label">Group 1 bucket: <b>Approved or in clinical development</b></span>
       </div>
       <div className="bucketBoxLegend">
         <div className={classNames("element", "group2")}/>
-        <span className="label">Group 2 bucket: Supporting evidence</span>
+        <span className="label">Group 2 bucket: <b>Supporting evidence</b></span>
       </div>
       <div className="bucketBoxLegend">
         <div className={classNames("element", "group3")}/>
-        <span className="label">Group 3 bucket: Weak or no supporting evidence</span>
+        <span className="label">Group 3 bucket: <b>Weak or no supporting evidence</b></span>
       </div>
     </React.Fragment>
   );
