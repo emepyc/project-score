@@ -34,7 +34,7 @@ function Table() {
       <Nav tabs>
         <NavItem>
           <NavLink
-            tabindex={0}
+            tabIndex={0}
             className={classNames('tabLabel', {active: activeTab === 'fitness'})}
             onClick={() => tabToggle('fitness')}
           >
@@ -43,7 +43,7 @@ function Table() {
         </NavItem>
         <NavItem>
           <NavLink
-            tabindex={1}
+            tabIndex={1}
             className={classNames('tabLabel', {active: activeTab === 'priorityScores'})}
             onClick={() => tabToggle('priorityScores')}
           >

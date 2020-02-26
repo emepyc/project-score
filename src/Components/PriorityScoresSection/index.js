@@ -22,13 +22,13 @@ function PriorityScoresSection(props) {
   const [urlParams] = useUrlParams(props);
 
   return (
-    <PriorityScores analysis={urlParams.analysis || 15}/>
+    <PriorityScoresCard analysis={urlParams.analysis || 15}/>
   );
 }
 
 export default withRouter(PriorityScoresSection);
 
-const defaultSettings = {
+export const defaultSettings = {
   // Tractability section
   tractability: true,
 
@@ -54,11 +54,43 @@ const defaultSettings = {
   l1Weight: 30,
 };
 
-function PriorityScores({analysis}) {
+function PriorityScoresCard({analysis}) {
   const [settingsIsOpen, setSettingsIsOpen] = useState(false);
   const [settings, setSettings] = useState(defaultSettings);
-  const [showLabels, setShowLabels] = useState(false);
 
+  return (
+    <Card>
+      <CardHeader>
+        Priority scores
+      </CardHeader>
+      <CardBody>
+        <div>
+          <Button
+            outline
+            color="secondary"
+            onClick={() => setSettingsIsOpen(!settingsIsOpen)}
+          >
+            <FontAwesomeIcon icon={faCog}>
+              Settings
+            </FontAwesomeIcon>
+          </Button>
+          <Collapse isOpen={settingsIsOpen}>
+            <div style={{width: "100%"}}>
+              <PriorityScoresSettings
+                defaultSettings={defaultSettings}
+                onSubmit={setSettings}
+              />
+            </div>
+          </Collapse>
+          <PriorityScores analysis={analysis} settings={settings}/>
+        </div>
+      </CardBody>
+    </Card>
+  );
+}
+
+export function PriorityScores({analysis, settings}) {
+  const [showLabels, setShowLabels] = useState(false);
   const container = useRef(null);
   const containerWidth = useWidth(container);
 
@@ -105,61 +137,37 @@ function PriorityScores({analysis}) {
   ];
 
   return (
-    <Card>
-      <CardHeader>
-        Priority scores
-      </CardHeader>
-      <CardBody>
-        <div ref={container}>
-          <Button
-            outline
-            color="secondary"
-            onClick={() => setSettingsIsOpen(!settingsIsOpen)}
-          >
-            <FontAwesomeIcon icon={faCog}>
-              Settings
-            </FontAwesomeIcon>
-          </Button>
-          <Collapse isOpen={settingsIsOpen}>
-            <div style={{width: "100%"}}>
-              <PriorityScoresSettings
-                defaultSettings={defaultSettings}
-                onSubmit={setSettings}
-              />
-            </div>
-          </Collapse>
-          <FetchData
-            endpoint={fetchPriorityScores}
-            params={fetchDataParams}
-            deps={fetchDataDependencies}
-          >
-            {priorityScores => {
-              return (
-                <React.Fragment>
-                  <Row className='flex-row-reverse mx-4 mt-4'>
-                    <Label>
-                      <Input
-                        type='checkbox'
-                        checked={showLabels}
-                        onClick={() => setShowLabels(!showLabels)}
-                      />{' '}
-                      <span>Show gene names</span>
-                    </Label>
-                  </Row>
+    <div ref={container}>
+      <FetchData
+        endpoint={fetchPriorityScores}
+        params={fetchDataParams}
+        deps={fetchDataDependencies}
+      >
+        {priorityScores => {
+          return (
+            <React.Fragment>
+              <Row className='flex-row-reverse mx-4 mt-4'>
+                <Label>
+                  <Input
+                    type='checkbox'
+                    checked={showLabels}
+                    onClick={() => setShowLabels(!showLabels)}
+                  />{' '}
+                  <span>Show gene names</span>
+                </Label>
+              </Row>
 
-                  <PriorityScoresPlot
-                    plotWidth={containerWidth}
-                    priorityScores={priorityScores.data}
-                    byBucket={settings.tractability}
-                    showLabels={showLabels}
-                  />
-                </React.Fragment>
-              );
-            }}
-          </FetchData>
-        </div>
-      </CardBody>
-    </Card>
+              <PriorityScoresPlot
+                plotWidth={containerWidth}
+                priorityScores={priorityScores.data}
+                byBucket={settings.tractability}
+                showLabels={showLabels}
+              />
+            </React.Fragment>
+          );
+        }}
+      </FetchData>
+    </div>
   );
 }
 

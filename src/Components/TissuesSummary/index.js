@@ -5,6 +5,7 @@ import HomeSectionDescription from '../HomeSectionDescription';
 import FadeIn from '../FadeInAfterVisible';
 import DonutChart from '../DonutChart';
 import TissuesSummaryDescription from '../TissuesSummaryDescription';
+import {PriorityScores, defaultSettings} from "../PriorityScoresSection";
 
 function TissuesSummary() {
   return (
@@ -30,6 +31,9 @@ function TissuesSummary() {
             <DeferredTissuesDescription/>
           </FadeIn>
         </Col>
+      </Row>
+      <Row>
+        <PriorityScores analysis={15} settings={defaultSettings}/>
       </Row>
     </Fragment>
   )
