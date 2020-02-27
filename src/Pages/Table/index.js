@@ -72,7 +72,9 @@ function Table() {
             </Col>
           </Row>
           <Row className='my-3'>
-            <PriorityScoresSection/>
+            <Col>
+              <PriorityScoresSection/>
+            </Col>
           </Row>
         </TabPane>
       </TabContent>

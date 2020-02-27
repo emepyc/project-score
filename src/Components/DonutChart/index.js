@@ -63,7 +63,7 @@ function Label({radius, arc, x, y, maxX, center, children}) {
 
 function DonutChart({history}) {
   const [containerWidth, setContainerWidth] = useState(500);
-  const [containerHeight, setContainerHeight] = useState(500);
+  const containerHeight = 295 + margins.top;
 
   const explanationMessageRef = useRef(null);
   const containerRef = useRef(null);
@@ -73,7 +73,6 @@ function DonutChart({history}) {
   useEffect(() => {
     if (containerRef.current) {
       setContainerWidth(containerRef.current.offsetWidth);
-      setContainerHeight(containerRef.current.offsetWidth - 150);
     }
   }, [containerIsReady]);
 
@@ -115,7 +114,7 @@ function DonutChart({history}) {
           );
 
           return (
-            <div ref={containerRef} style={{position: 'relative'}}>
+            <div ref={containerRef} style={{position: 'relative'}} className='d-flex justify-content-center'>
               <div
                 id="explanation"
                 className="my-auto"

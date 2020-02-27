@@ -137,7 +137,9 @@ export function PriorityScores({analysis, settings}) {
   ];
 
   return (
-    <div ref={container}>
+    <div
+      ref={container}
+    >
       <FetchData
         endpoint={fetchPriorityScores}
         params={fetchDataParams}
@@ -145,8 +147,8 @@ export function PriorityScores({analysis, settings}) {
       >
         {priorityScores => {
           return (
-            <React.Fragment>
-              <Row className='flex-row-reverse mx-4 mt-4'>
+            <div className='my-3'>
+              <div className='d-flex justify-content-end'>
                 <Label>
                   <Input
                     type='checkbox'
@@ -155,15 +157,18 @@ export function PriorityScores({analysis, settings}) {
                   />{' '}
                   <span>Show gene names</span>
                 </Label>
+              </div>
+              <Row
+                className='d-flex p-2 justify-content-center align-items-center'
+              >
+                <PriorityScoresPlot
+                  plotWidth={containerWidth}
+                  priorityScores={priorityScores.data}
+                  byBucket={settings.tractability}
+                  showLabels={showLabels}
+                />
               </Row>
-
-              <PriorityScoresPlot
-                plotWidth={containerWidth}
-                priorityScores={priorityScores.data}
-                byBucket={settings.tractability}
-                showLabels={showLabels}
-              />
-            </React.Fragment>
+            </div>
           );
         }}
       </FetchData>
@@ -197,7 +202,7 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
 
   const priorityScoresDomain = d3.extent(priorityScores, priorityScore => priorityScore["score"]);
 
-  const xOffset = 100;
+  const xOffset = 50;
 
   if (!byBucket) {
     return (
