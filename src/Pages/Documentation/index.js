@@ -10,6 +10,11 @@ export default function Documentation() {
         <div className='d-flex justify-content-center'>
           <Nav>
             <NavItem>
+              <NavLink href='#scores'>
+                Target priority scores
+              </NavLink>
+            </NavItem>
+            <NavItem>
               <NavLink href='#experimental'>
                 Experimental methods
               </NavLink>
@@ -55,6 +60,73 @@ export default function Documentation() {
 
           <p className='paragraph caption'>
             The Project Score database is part of an ongoing research project and results will be regularly updated.
+          </p>
+        </div>
+
+        <div className='section'>
+          <h2 id="scores">Target priority scores</h2>
+
+          <p className='paragraph'>
+            To nominate promising candidate therapeutic targets, we developed a computational framework to
+            assign each gene a target priority score that integrates CRISPR knockout gene fitness effects with
+            genomic biomarker and patient data (<a target='_blank' rel='noopener noreferrer'
+                                                   href='https://pubmed.ncbi.nlm.nih.gov/30971826/'>Behan et al.,
+            Nature. 2019</a>). All genes are assigned a target
+            priority score between 0 – 100 from lowest to highest priority. Priority scores for a gene are
+            calculated individually for each cancer type with at least 10 cell lines and considering all cancer types
+            together in a pan-cancer analysis.
+          </p>
+
+          <p className='paragraph'>
+            Confirmatory studies are required to further evaluate the candidate targets identified here.
+          </p>
+
+          <p className='paragraph'>
+            The priority score consists of three components described here:
+          </p>
+
+          <p className='paragraph'>
+            <ol className='paragraph'>
+              <li>
+                <span className='strong'>Exclusion filter [defining genes with null priority score]</span> - Genes have a priority score of zero
+                (or <i>null</i>) if they:
+                <ul>
+                  <li>were defined as <i>core fitness</i> (i.e. required for the fitness of the majority of cell
+                    lines) because as drug targets they have an increased likelihood of toxicity
+                  </li>
+                  <li>
+                    belonged to a prior known set of essential genes, such as Ribosomal proteins genes
+                    (defined in <a target='_blank' rel='noopener noreferrer'
+                                   href='https://pubmed.ncbi.nlm.nih.gov/30971826/'>Behan et al.,
+                    Nature. 2019</a>);
+                  </li>
+                  <li>
+                    are targeted by only 1 sgRNA in the library and so more likely to be false positives.
+                  </li>
+                </ul>
+              </li>
+              <li className='paragraph'>
+                <span className='strong'>Biomarker &amp; tumour prevalence [30% of the priority score by default]</span> - This component of the
+                priority score is based on evidence of a genetic biomarker associated with a target dependency. It
+                is proportional to biomarker strength and also accounts for genomic alterations of the target
+                occurring in patient tumours of the indicated cancer type at &gt;2% frequency. For the biomarker
+                analysis, we performed an analysis of variance (ANOVA) to test associations between the fitness
+                effect of gene knockout in cell lines and the presence or absence of 484 cancer driver events, or
+                MSI, in each cancer type with sample size (n ≥ 10 cell lines) and pan-cancer. The score is the sum
+                of the individual equally weighted components and when combined represent 30% of the total
+                score by default.
+              </li>
+              <li className='paragraph'>
+                <span className='strong'>Cell Lines Fitness effect [70% of the priority score by default]</span> - This component of the score is
+                the average sum of multiple factors for cell lines in which the gene is a significant fitness gene (at
+                a 5% FDR), and is expressed at least at the basal level, and is not homozygously deleted. For each
+                cell line under consideration, these factors account for the gene knockout fitness effect (BAGEL
+                fitness score), the significance of the fitness effect (MAGeCK p-value), whether the gene is highly
+                expressed or mutated, and whether it is belongs to a pathway that is statistically enriched overall
+                for fitness genes. These factors are equally weighted components and when combined represent
+                70% of the total score by default.
+              </li>
+            </ol>
           </p>
         </div>
 
@@ -227,6 +299,15 @@ export default function Documentation() {
               targeting; based on segmentation of sgRNA fold change values across the genomes. Further details can be
               found in the <a target='_blank' rel='noopener noreferrer'
                               href='https://www.ncbi.nlm.nih.gov/pubmed/30103702'>corresponding article</a>.
+            </div>
+          </div>
+
+          <div className='paragraph'>
+            <div className='glossary-header'>Target Priority Score</div>
+            <div className='glossary-description'>
+              A quantitative assessment of the potential of each gene as a candidate cancer therapeutic target. It
+              is computed by an analytical framework that combines CRISPR knockout gene fitness effects with
+              biomarker and patient data to output a target priority score from 0 – 100 (highest to lowest).
             </div>
           </div>
 
