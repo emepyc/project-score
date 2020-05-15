@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
+import OtLogo from "./OtLogo.png";
 import './footer.scss';
 
 function Footer() {
@@ -68,20 +69,30 @@ function Footer() {
           <a
             target="_blank"
             rel="noopener noreferrer"
+            href="https://www.opentargets.org"
+            style={linkStyle}
+          >
+            <div
+              className="footer-item text-center"
+              style={{
+                backgroundColor: 'white',
+                padding: '5px',
+              }}
+            >
+              {/*Open Targets*/}
+              <img src={OtLogo} width={100} alt='OpenTargets'/>
+            </div>
+          </a>
+
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
             href="https://www.broadinstitute.org/cancer/cancer-dependency-map"
             style={linkStyle}
           >
             <div className="footer-item">
               Broad Institute Cancer Dependency Map
             </div>
-          </a>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://www.opentargets.org"
-            style={linkStyle}
-          >
-            <div className="footer-item">Open Targets</div>
           </a>
           <a
             target="_blank"
