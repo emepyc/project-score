@@ -5,7 +5,7 @@ import HomeSectionDescription from '../HomeSectionDescription';
 import FadeIn from '../FadeInAfterVisible';
 import DonutChart from '../DonutChart';
 import TissuesSummaryDescription from '../TissuesSummaryDescription';
-import {PriorityScores, defaultSettings} from "../PriorityScoresSection";
+// import {PriorityScores, defaultSettings} from "../PriorityScoresSection";
 
 function TissuesSummary() {
   return (
@@ -32,20 +32,20 @@ function TissuesSummary() {
           </FadeIn>
         </Col>
       </Row>
-      <Row style={{width: "100%"}}>
-        <FadeIn action='fadeInBottom'>
-          <DeferredPriorityScores/>
-        </FadeIn>
-      </Row>
+      {/*<Row style={{width: "100%"}}>*/}
+      {/*  <FadeIn action='fadeInBottom'>*/}
+      {/*    <DeferredPriorityScores/>*/}
+      {/*  </FadeIn>*/}
+      {/*</Row>*/}
     </Fragment>
   )
 }
 
-const DeferredPriorityScores = ({visibilityClasses, visibilityStyles}) => (
-  <div className={visibilityClasses} style={visibilityStyles}>
-    <PriorityScores analysis={15} settings={defaultSettings}/>
-  </div>
-);
+// const DeferredPriorityScores = ({visibilityClasses, visibilityStyles}) => (
+//   <div className={visibilityClasses} style={visibilityStyles}>
+//     <PriorityScores analysis={15} settings={defaultSettings}/>
+//   </div>
+// );
 
 const DeferredDonutChart = ({visibilityClasses, visibilityStyles}) => (
   <div
