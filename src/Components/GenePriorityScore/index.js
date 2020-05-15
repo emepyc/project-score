@@ -53,7 +53,7 @@ function GenePriorityScore(props) {
                 <ModalBody>
                   <div className='priorityScoreHelp'>
                     <div className='section'>
-                      <h6>L1 scores</h6>
+                      <h6>Level 1: Biomarker & tumour prevalence</h6>
                       <PriorityScoresHelpItem label='Class A marker' description={priorityScoresHelp.classAmarker}/>
                       <PriorityScoresHelpItem label='Class B marker' description={priorityScoresHelp.classBmarker}/>
                       <PriorityScoresHelpItem label='Class C marker' description={priorityScoresHelp.classCmarker}/>
@@ -65,7 +65,7 @@ function GenePriorityScore(props) {
                     </div>
 
                     <div className='section'>
-                      <h6>L2 scores</h6>
+                      <h6>Level 2: Cell lines fitness effect (averaged for sensitive cell lines)</h6>
                       <PriorityScoresHelpItem
                         label='Fitness score < -1'
                         description={priorityScoresHelp.fitnessScoreFold1}
