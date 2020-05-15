@@ -1,6 +1,7 @@
 import React from 'react';
 import keyBy from 'lodash.keyby';
 import PageHeader from '../PageHeader';
+import OtLogo from "./OtLogo.png";
 
 const maybeIdentifier = (identifiers, resource) =>
   identifiers[resource] ?
@@ -50,11 +51,12 @@ function ExternalLinks({identifiers}) {
     const uniprotId = maybeIdentifier(identifiersDict, 'uniprot_id');
 
     return (
-      <div>
+      <div className='mt-2 ml-2'>
         {ensemblId && (
           <LogoExternalLink
-            style={{fontWeight: "bold"}}
-            resource='OpenTargets'
+            // style={{fontWeight: "bold"}}
+            // resource='OpenTargets'
+            resource={<img alt='OpenTargets' src={OtLogo} width={125}/>}
             link={`https://www.targetvalidation.org/target/${ensemblId}`}
           />
         )}
