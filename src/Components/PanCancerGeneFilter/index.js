@@ -9,7 +9,7 @@ function PanCangerGeneFilter(props) {
 
   const onChange = (ev) => {
     setUrlParams({
-      urlParams,
+      ...urlParams,
       excludePanCancerGenes: ev.target.checked ? 1 : 0,
     });
   };

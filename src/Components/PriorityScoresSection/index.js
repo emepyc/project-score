@@ -153,7 +153,7 @@ export function PriorityScores({analysis, settings}) {
                   <Input
                     type='checkbox'
                     checked={showLabels}
-                    onClick={() => setShowLabels(!showLabels)}
+                    onChange={() => setShowLabels(!showLabels)}
                   />{' '}
                   <span>Show gene names</span>
                 </Label>

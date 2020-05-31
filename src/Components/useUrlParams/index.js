@@ -30,10 +30,12 @@ const _deferredSetUrlParams = debounce(_setUrlParams, 500);
 function useUrlParams(props) {
   const endpoint = props.location.pathname.split('/')[1];
   const defaultExcludePanCancerGenes = endpoint === 'model' ? '1' : null;
+  const defaultDataTab = "fitness";
   const {
     analysis,
     scoreMin,
     scoreMax,
+    dataTab=defaultDataTab,
     excludePanCancerGenes=defaultExcludePanCancerGenes
   } = qs.parse(props.location.search);
   const {geneId, modelId} = props.match.params;
@@ -42,6 +44,7 @@ function useUrlParams(props) {
     analysis,
     scoreMin,
     scoreMax,
+    dataTab,
     geneId,
     modelId,
     excludePanCancerGenes,

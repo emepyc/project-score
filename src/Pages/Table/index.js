@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap';
+import {withRouter} from 'react-router-dom';
 import classNames from 'classnames';
 
 import TableComponent from '../../Components/Table';
@@ -10,15 +11,25 @@ import {Card, CardHeader, CardBody} from 'reactstrap';
 import PageHeader from '../../Components/PageHeader';
 import PanCangerGeneFilter from "../../Components/PanCancerGeneFilter";
 import PriorityScoresSection from "../../Components/PriorityScoresSection";
+import useUrlParams from '../../Components/useUrlParams';
 
 import './table.scss';
 
-function Table() {
-  const [activeTab, setActiveTab] = useState('fitness');
+function Table(props) {
+  const [urlParams, setUrlParams] = useUrlParams(props);
+  const [activeTab, setActiveTab] = useState(urlParams.dataTab);
+
+  const onTabChange = newTab => {
+    setUrlParams({
+      ...urlParams,
+      dataTab: newTab,
+    })
+    setActiveTab(newTab);
+  }
 
   const tabToggle = tabName => {
     if (activeTab !== tabName) {
-      setActiveTab(tabName);
+      onTabChange(tabName);
     }
   };
 
@@ -82,7 +93,7 @@ function Table() {
   )
 }
 
-export default Table;
+export default withRouter(Table);
 
 function PriorityScoresFilters() {
   return (
