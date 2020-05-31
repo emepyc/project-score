@@ -1,3 +1,5 @@
+@import "common.scss";
+
 body {
   margin: 0;
   padding: 0;
@@ -9,5 +11,10 @@ body {
 
   .card-header {
     font-size: 1.2em;
+  }
+
+  .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    background-color: $background-light;
+    font-weight: bold;
   }
 }
