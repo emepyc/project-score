@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import useUrlParams from '../useUrlParams';
 import {colorPanCancerGeneBg} from '../../colors';
 
-function PanCangerGeneFilter(props) {
+function PanCanerGeneFilter(props) {
   const [urlParams, setUrlParams] = useUrlParams(props);
 
   const onChange = (ev) => {
@@ -32,4 +32,4 @@ function PanCangerGeneFilter(props) {
   );
 }
 
-export default withRouter(PanCangerGeneFilter);
+export default withRouter(PanCanerGeneFilter);
