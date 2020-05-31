@@ -73,14 +73,10 @@ function Footer() {
             style={linkStyle}
           >
             <div
-              className="footer-item text-center"
-              style={{
-                backgroundColor: 'white',
-                padding: '5px',
-              }}
+              className="footer-item"
             >
               {/*Open Targets*/}
-              <img src={OtLogo} width={100} alt='OpenTargets'/>
+              <img src={OtLogo} width={150} alt='OpenTargets'/>
             </div>
           </a>
 
