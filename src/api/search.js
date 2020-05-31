@@ -1,6 +1,6 @@
 import {get} from "./index";
 
-function formatResponse(resp) {
+function formatResponse(resp, allAnalyses) {
   const data = resp;
   const options = [
     {
@@ -25,10 +25,7 @@ function formatResponse(resp) {
     {
       type: "cancer_types",
       label: "Cancer types",
-      extraOptions: cancerType => ({
-        label: cancerType.name,
-        id: cancerType.id,
-      }),
+      extraOptions: cancerType => getExtraOptionsForCancerType(cancerType, allAnalyses),
     },
   ];
 
@@ -47,7 +44,25 @@ function formatResponse(resp) {
   }, []);
 }
 
-export default function search(query) {
+export default function search(query, allAnalyses) {
   return get(`/score_search/${query}`, {include: 'all'})
-    .then(formatResponse);
+    .then(response => formatResponse(response, allAnalyses));
+}
+
+function getExtraOptionsForCancerType(cancerType, allAnalyses) {
+  if (allAnalyses) {
+    const analysis = allAnalyses.find(analysis => analysis.name === cancerType.name);
+    return analysis ? {
+      label: cancerType.name,
+      status: "available",
+      id: analysis.id,
+    } : {
+      label: cancerType.name,
+      status: "disabled",
+    };
+  }
+  return {
+    label: cancerType.name,
+    status: "disabled",
+  };
 }

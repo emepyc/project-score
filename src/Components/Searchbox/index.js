@@ -7,6 +7,8 @@ import Spinner from '../Spinner';
 import {search} from '../../api';
 import {insignificantNodeColor} from "../../colors";
 import Error from '../Error';
+import FetchData from "../FetchData";
+import analyses from "../../api/fetchAnalyses";
 
 const groupStyles = {
   display: 'flex',
@@ -61,7 +63,7 @@ const LoadingMessage = (props) => {
   );
 };
 
-const _loadSuggestions = (inputValue, callback) => search(inputValue)
+const _loadSuggestions = (inputValue, callback, allAnalyses) => search(inputValue, allAnalyses)
   .then(callback)
   .catch(() => {
     callback([{
@@ -135,19 +137,26 @@ function Searchbox({placeholder = "Search for a gene, cell line or cancer type",
   const isOptionDisabled = option => option.status !== "available";
 
   return (
-    <AsyncSelect
-      value={inputValue}
-      loadOptions={loadSuggestions}
-      placeholder={placeholder}
-      onChange={onChange}
-      isClearable
-      formatOptionLabel={formatOptionLabel}
-      formatGroupLabel={formatGroupLabel}
-      components={{LoadingMessage}}
-      onInputChange={onInputChange}
-      isOptionDisabled={isOptionDisabled}
+    <FetchData
+      endpoint={analyses}
+      params={{}}
+      deps={[]}
     >
-    </AsyncSelect>
+      {allAnalyses => (
+        <AsyncSelect
+          value={inputValue}
+          loadOptions={(query, callback) => loadSuggestions(query, callback, allAnalyses)}
+          placeholder={placeholder}
+          onChange={onChange}
+          isClearable
+          formatOptionLabel={formatOptionLabel}
+          formatGroupLabel={formatGroupLabel}
+          components={{LoadingMessage}}
+          onInputChange={onInputChange}
+          isOptionDisabled={isOptionDisabled}
+        />
+      )}
+    </FetchData>
   );
 }
 
