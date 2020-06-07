@@ -3,11 +3,6 @@ import keyBy from 'lodash.keyby';
 import PageHeader from '../PageHeader';
 import OtLogo from "./OtLogo.png";
 
-const maybeIdentifier = (identifiers, resource) =>
-  identifiers[resource] ?
-    identifiers[resource].identifier :
-    null;
-
 export default function GeneInfoHeader(props) {
   const {symbol, names, identifiers} = props;
   const geneName = names.filter(name => name.current)[0];
@@ -49,13 +44,12 @@ function ExternalLinks({identifiers}) {
     const cosmicGeneSymbol = maybeIdentifier(identifiersDict, 'cosmic_gene_symbol');
     const ensemblId = maybeIdentifier(identifiersDict, 'ensembl_gene_id');
     const uniprotId = maybeIdentifier(identifiersDict, 'uniprot_id');
+    const hgncSymbol = maybeIdentifier(identifiersDict, 'hgnc_symbol');
 
     return (
       <div className='mt-2 ml-2'>
         {ensemblId && (
           <LogoExternalLink
-            // style={{fontWeight: "bold"}}
-            // resource='OpenTargets'
             resource={<img alt='OpenTargets' src={OtLogo} width={125}/>}
             link={`https://www.targetvalidation.org/target/${ensemblId}`}
           />
@@ -78,10 +72,21 @@ function ExternalLinks({identifiers}) {
             link={`https://cancer.sanger.ac.uk/cosmic/gene/analysis?ln=${cosmicGeneSymbol}`}
           />
         )}
+        {hgncSymbol && (
+          <LogoExternalLink
+            resource='Broad DepMap'
+            link={`https://depmap.org/portal/gene/${hgncSymbol}?tab=overview`}
+          />
+        )}
       </div>
     );
   }
 
   return <div/>;
 }
+
+const maybeIdentifier = (identifiers, resource) =>
+  identifiers[resource] ?
+    identifiers[resource].identifier :
+    null;
 
