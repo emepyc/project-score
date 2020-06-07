@@ -39,8 +39,16 @@ function GenePriorityScore(props) {
             {priorityScore => {
               if (priorityScore.length === 0) {
                 return (
-                  <div className="text-center">
-                    No priority scores for gene
+                  <div
+                    className="d-flex justify-content-center font-weight-bold"
+                    style={{
+                      minHeight: "150px",
+                      fontSize: "1.2em",
+                    }}
+                  >
+                    <div className="align-self-center">
+                      No priority scores for gene
+                    </div>
                   </div>
                 );
               }
