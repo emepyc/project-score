@@ -47,7 +47,7 @@ function GenePriorityScore(props) {
                     }}
                   >
                     <div className="align-self-center">
-                      No priority scores for gene
+                      Core fitness gene. Not a priority target
                     </div>
                   </div>
                 );
