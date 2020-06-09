@@ -10,6 +10,7 @@ import Button from '../../Components/Button';
 import GeneSummaryPlots from '../../Components/GeneSummaryPlots';
 import {lossOfFitnessScoreHelp, foldChangeHelp} from '../../definitions';
 import GenePriorityScore from '../../Components/GenePriorityScore';
+import GeneOpenTargetsPlots from '../../Components/GeneOpenTargetsPlots';
 
 function Gene() {
 
@@ -21,18 +22,15 @@ function Gene() {
           <GenePriorityScore/>
         </Col>
         <Col lg={{size: 6}} xs={{size: 12}}>
-          <Row>
-            <Col xs={{size: 12}}>
-              <GeneSummaryPlots/>
-            </Col>
-          </Row>
+          <GeneSummaryPlots/>
           <div className="mt-3">
-            <Row>
-              <Col xs={{size: 12}}>
-                <Filters/>
-              </Col>
-            </Row>
+            <Filters/>
           </div>
+        </Col>
+      </Row>
+      <Row className="my-3">
+        <Col xs={{size: 6}}>
+          <GeneOpenTargetsPlots/>
         </Col>
       </Row>
       <FitnessSection/>

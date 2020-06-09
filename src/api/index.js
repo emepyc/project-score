@@ -11,6 +11,7 @@ import fetchModelDetails from './fetchModelDetails';
 import fetchPriorityScores from './fetchPriorityScores';
 import fetchGenePriorityScore from "./fetchGenePriorityScore";
 import fetchSignificantModels from './fetchSignificantModels';
+import fetchOtGeneInfo from "./fetchOtGeneInfo";
 
 export {
   get,
@@ -24,6 +25,7 @@ export {
   fetchPriorityScores,
   fetchGenePriorityScore,
   fetchSignificantModels,
+  fetchOtGeneInfo,
   id2name,
   name2id,
   fitnessIsSignificant,
