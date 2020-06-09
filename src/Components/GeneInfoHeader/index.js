@@ -1,7 +1,9 @@
 import React from 'react';
 import keyBy from 'lodash.keyby';
 import PageHeader from '../PageHeader';
-import OtLogo from "./OtLogo.png";
+import OtLogo from './OtLogo.png';
+import useFetchData from "../useFetchData";
+import cancerrxgene from '../../api/cancerrxgene';
 
 export default function GeneInfoHeader(props) {
   const {symbol, names, identifiers} = props;
@@ -73,10 +75,15 @@ function ExternalLinks({identifiers}) {
           />
         )}
         {hgncSymbol && (
-          <LogoExternalLink
-            resource='Broad DepMap'
-            link={`https://depmap.org/portal/gene/${hgncSymbol}?tab=overview`}
-          />
+          <React.Fragment>
+            <LogoExternalLink
+              resource='Broad DepMap'
+              link={`https://depmap.org/portal/gene/${hgncSymbol}?tab=overview`}
+            />
+            <GDCSLink
+              geneId={hgncSymbol}
+            />
+          </React.Fragment>
         )}
       </div>
     );
@@ -90,3 +97,27 @@ const maybeIdentifier = (identifiers, resource) =>
     identifiers[resource].identifier :
     null;
 
+function GDCSLink({geneId}) {
+  const [cancerRxGeneLink] = useFetchData(
+    cancerrxgene,
+    {
+      geneId,
+    },
+    [geneId],
+  );
+
+  return (
+    <React.Fragment>
+      {cancerRxGeneLink ? (
+        <LogoExternalLink
+          resource='GDSC'
+          link={`${cancerRxGeneLink}/volcano`}
+        />
+      ) : (
+        <span>
+            GDSC
+        </span>
+      )}
+    </React.Fragment>
+  );
+}
