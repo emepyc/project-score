@@ -3,6 +3,5 @@ export default async function cancerrxgene(params, ...args) {
     `https://www.cancerrxgene.org/api/feature_link?feature=${params.geneId}`,
   );
   const cancerRxGeneLink = await cancerRxGeneResponse.json();
-  console.log(cancerRxGeneLink);
-  return cancerRxGeneLink.link;
+  return cancerRxGeneLink.link === "None" ? null : cancerRxGeneLink.link;
 }
