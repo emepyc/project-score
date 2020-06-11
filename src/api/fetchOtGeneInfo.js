@@ -1,22 +1,18 @@
-import groupBy from 'lodash.groupby';
+import filter from 'lodash.filter';
 
 export default async function fetchOtGeneInfo({ensemblId}) {
   const otGeneResponse = await fetch(`https://platform-api.opentargets.io/v3/platform/private/target/${ensemblId}`);
   const otGene = await otGeneResponse.json();
-  console.log(otGene);
   const hallmarks = otGene.hallmarks;
-  console.log(otGene.hallmarks);
-  if (!hallmarks) {
-    return null;
-  }
-  // const cancerHallmarks = groupBy(
-  //   hallmarks.cancer_hallmarks,
-  //   'label',
-  // );
-  //
-  // console.log(cancerHallmarks);
+
+  const tractability = otGene.tractability
+  const tractabilityLabels = tractability && tractability.smallmolecule ? filter(
+    Object.keys(
+      tractability.smallmolecule.categories
+    ), key => tractability.smallmolecule.categories[key] === 1) : [];
 
   return {
-    cancerHallmarks: hallmarks.cancer_hallmarks,
+    cancerHallmarks: hallmarks ? hallmarks.cancer_hallmarks : null,
+    tractability: tractabilityLabels.map(label => label.replace(/_/g, " ")),
   };
 }

@@ -60,7 +60,6 @@ export default function SignificantCountPlot({total, significant}) {
 }
 
 export function BinaryCountPlot({count1, count2}) {
-  console.log(count1, count2);
   return (
     <div className='text-center'>
       <svg width={width} height={height}>
