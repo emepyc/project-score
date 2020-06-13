@@ -6,7 +6,7 @@ import {faCheck} from "@fortawesome/free-solid-svg-icons";
 import {withRouter} from 'react-router-dom';
 import useUrlParams from "../useUrlParams";
 import FetchData from "../FetchData";
-import {BinaryCountPlot} from "../SignificantCountPlot";
+import {BinaryCountPlot, DonutChart} from "../SignificantCountPlot";
 import {fetchGeneInfo, fetchOtGeneInfo} from "../../api";
 import {significantNodeColor} from "../../colors";
 
@@ -62,6 +62,9 @@ function FetchOpenTargetsGene(props) {
         <React.Fragment>
           <Row>
             <Col>
+              <div className="text-center">{otGene.drugs.uniqueDrugs} Drugs</div>
+            </Col>
+            <Col>
               <div className="text-center">Tractability</div>
             </Col>
             <Col>
@@ -69,6 +72,12 @@ function FetchOpenTargetsGene(props) {
             </Col>
           </Row>
           <Row>
+            <Col>
+              <DonutChart
+                segments={otGene.drugs.clinicalTrialsPerPhase}
+                mainNumber={otGene.drugs.uniqueDrugs}
+              />
+            </Col>
             <Col>
               <BinaryCountPlot
                 count1={otGene.cancerHallmarks.filter(hallmark => hallmark.suppress).length}
