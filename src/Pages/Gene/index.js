@@ -24,13 +24,11 @@ function Gene() {
         <Col lg={{size: 6}} xs={{size: 12}}>
           <GeneSummaryPlots/>
           <div className="mt-3">
+            <GeneOpenTargetsPlots/>
+          </div>
+          <div className="mt-3">
             <Filters/>
           </div>
-        </Col>
-      </Row>
-      <Row className="my-3">
-        <Col xs={{size: 6}}>
-          <GeneOpenTargetsPlots/>
         </Col>
       </Row>
       <FitnessSection/>
