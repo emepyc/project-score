@@ -2,13 +2,14 @@ import React from 'react';
 import first from 'lodash.first';
 import {Card, CardHeader, CardBody, Row, Col} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCheck} from "@fortawesome/free-solid-svg-icons";
+import {faCheck} from '@fortawesome/free-solid-svg-icons';
 import {withRouter} from 'react-router-dom';
-import useUrlParams from "../useUrlParams";
-import FetchData from "../FetchData";
-import {BinaryCountPlot, DonutChart} from "../SignificantCountPlot";
-import {fetchGeneInfo, fetchOtGeneInfo} from "../../api";
-import {significantNodeColor} from "../../colors";
+import useUrlParams from '../useUrlParams';
+import FetchData from '../FetchData';
+import {BinaryCountPlot, DonutChart} from '../SignificantCountPlot';
+import {fetchGeneInfo, fetchOtGeneInfo} from '../../api';
+import {significantNodeColor} from '../../colors';
+import otLogo from '../GeneInfoHeader/OtLogo.png';
 
 function GeneOpenTargetsPlots(props) {
   const [urlParams] = useUrlParams(props);
@@ -28,7 +29,13 @@ function GeneOpenTargetsPlots(props) {
         return (
           <Card>
             <CardHeader>
-              Open Targets Resources
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={`https://www.targetvalidation.org/target/${ensemblIdentifier.identifier}`}
+              >
+                <img alt='OpenTargets' src={otLogo} width={125}/>
+              </a>
             </CardHeader>
             <CardBody>
               {(ensemblIdentifier ? (
