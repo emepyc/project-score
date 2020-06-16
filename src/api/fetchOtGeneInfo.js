@@ -17,8 +17,6 @@ export default async function fetchOtGeneInfo({ensemblId}) {
     ensemblId,
   });
 
-  console.log(otGeneDrugs);
-
   return {
     cancerHallmarks: hallmarks ? hallmarks.cancer_hallmarks : null,
     tractability: tractabilityLabels.map(label => label.replace(/_/g, " ")),

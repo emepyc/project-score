@@ -87,8 +87,20 @@ function FetchOpenTargetsGene(props) {
             </Col>
             <Col>
               <BinaryCountPlot
-                count1={otGene.cancerHallmarks.filter(hallmark => hallmark.suppress).length}
-                count2={otGene.cancerHallmarks.filter(hallmark => hallmark.promote).length}
+                count1={{
+                  label: "suppress",
+                  count: otGene.cancerHallmarks.filter(hallmark => hallmark.suppress).length
+                }}
+                count2={{
+                  label: "promote",
+                  count: otGene.cancerHallmarks.filter(hallmark => hallmark.promote).length
+                }}
+                dataTooltip={data => (
+                  <React.Fragment>
+                    <div>{data.label}</div>
+                    <div><strong>{data.count}</strong></div>
+                  </React.Fragment>
+                )}
               />
             </Col>
             <Col>

@@ -1,7 +1,14 @@
+import range from 'lodash.range';
 import React, {useState} from 'react';
 import {Pie} from '@vx/shape';
 import {Group} from '@vx/group';
+import {Tooltip} from 'reactstrap';
+
+import useId from "../useId";
 import {significantNodeColor as green, red} from '../../colors';
+
+import style from './significantCountPlot.module.scss';
+
 
 const margin = {
   top: 1,
@@ -65,15 +72,19 @@ export default function SignificantCountPlot({total, significant}) {
   )
 }
 
-export function BinaryCountPlot({count1, count2}) {
+export function BinaryCountPlot({count1, count2, dataTooltip}) {
+  const [tooltipsOpenState, setTooltipsOpenState] = useState([false, false]);
+
+  const id = useId();
+
   return (
     <div className='text-center'>
       <svg width={width} height={height}>
         <Group top={height / 2 - margin.top} left={width / 2}>
           <Pie
             data={[
-              {pos: 0, number: count1, color: red},
-              {pos: 1, number: count2, color: green},
+              {pos: 0, number: count1.count, color: red},
+              {pos: 1, number: count2.count, color: green},
             ]}
             pieValue={d => d.number}
             pieSort={d => d.pos}
@@ -85,6 +96,8 @@ export function BinaryCountPlot({count1, count2}) {
               return pie.arcs.map((arc, index) => (
                 <g key={index}>
                   <path
+                    className={style.path}
+                    id={`tooltip-binary-plot-${id}-${index}`}
                     d={pie.path(arc)}
                     fill={arc.data.color}
                   />
@@ -99,18 +112,49 @@ export function BinaryCountPlot({count1, count2}) {
           alignmentBaseline={'middle'}
           textAnchor={'middle'}
         >
-          {count1 + count2}
+          {count1.count + count2.count}
         </text>
       </svg>
+      <Tooltip
+        position='auto'
+        isOpen={tooltipsOpenState[0]}
+        target={`tooltip-binary-plot-${id}-0`}
+        toggle={() => setTooltipsOpenState([!tooltipsOpenState[0], tooltipsOpenState[1]])}
+      >
+        <div>
+          {dataTooltip(count1)}
+        </div>
+      </Tooltip>
+      <Tooltip
+        position='auto'
+        isOpen={tooltipsOpenState[1]}
+        target={`tooltip-binary-plot-${id}-1`}
+        toggle={() => setTooltipsOpenState([tooltipsOpenState[0], !tooltipsOpenState[1]])}
+      >
+        <div>
+          {dataTooltip(count2)}
+        </div>
+      </Tooltip>
     </div>
   )
 }
 
 export function DonutChart({segments, mainNumber}) {
-  const [selectedPhase, setSelectedPhase] = useState(null);
+  const defaultTooltipsState = range(0, segments.length).reduce((defaultTooltipsState, phase) => ({
+    ...defaultTooltipsState,
+    [phase]: false,
+  }), {});
+
+  const [tooltipsOpenState, setTooltipsOpenState] = useState(defaultTooltipsState);
+
+  const toggleTooltipForPhase = phase =>
+    setTooltipsOpenState({
+      ...tooltipsOpenState,
+      [phase]: !tooltipsOpenState[phase],
+    });
 
   return (
-    <div className='text-center position-relative'>
+    <div className='text-center'>
       <svg width={width} height={height}>
         <Group top={height / 2 - margin.top} left={width / 2}>
           <Pie
@@ -122,11 +166,10 @@ export function DonutChart({segments, mainNumber}) {
             padAngle={0}
           >
             {pie => pie.arcs.map((arc, index) => (
-              <g key={arc.data.label}>
+              <g key={arc.data.phase}>
                 <path
-                  onMouseLeave={() => setSelectedPhase(null)}
-                  onMouseEnter={() => setSelectedPhase(arc.data)}
-
+                  className={style.path}
+                  id={`tooltip-phase-${arc.data.phase}`}
                   d={pie.path(arc)}
                   fill={green}
                   fillOpacity={index * 0.25}
@@ -135,36 +178,34 @@ export function DonutChart({segments, mainNumber}) {
             ))}
           </Pie>
         </Group>
-        {selectedPhase ? (
-          <React.Fragment>
-            <text
-              x={radius}
-              y={radius - 8}
-              alignmentBaseline='middle'
-              textAnchor='middle'
-            >
-              {selectedPhase.label}
-            </text>
-            <text
-              x={radius}
-              y={radius + 8}
-              alignmentBaseline='middle'
-              textAnchor='middle'
-            >
-              ({selectedPhase.total})
-            </text>
-          </React.Fragment>
-        ) : (
-          <text
-            x={radius}
-            y={radius}
-            alignmentBaseline='middle'
-            textAnchor='middle'
-          >
-            {mainNumber}
-          </text>
-        )}
+        <text
+          x={radius}
+          y={radius}
+          alignmentBaseline='middle'
+          textAnchor='middle'
+        >
+          {mainNumber}
+        </text>
       </svg>
+      {range(0, segments.length).map(phase => {
+        const segment = segments[phase];
+        return (
+          <Tooltip
+            position='auto'
+            key={phase}
+            isOpen={tooltipsOpenState[phase]}
+            target={`tooltip-phase-${phase}`}
+            toggle={() => toggleTooltipForPhase(phase)}
+          >
+            <div>
+              {segment.label}
+            </div>
+            <div>
+              <strong>{segment.total}</strong> clinical trials
+            </div>
+          </Tooltip>
+        );
+      })}
     </div>
   );
 }
