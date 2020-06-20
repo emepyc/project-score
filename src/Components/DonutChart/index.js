@@ -92,12 +92,16 @@ function DonutChart({history}) {
     event.target.parentNode.classList.remove('faded');
   };
 
-  const handleMouseOut = () => d3
-    .select(containerRef.current)
-    .selectAll('path')
-    .each(function () {
-      this.parentNode.classList.remove('faded');
-    });
+  const handleMouseOut = () => {
+    const explanationElement = explanationMessageRef.current;
+    explanationElement.innerHTML = '';
+    d3
+      .select(containerRef.current)
+      .selectAll('path')
+      .each(function () {
+        this.parentNode.classList.remove('faded');
+      });
+  }
 
   const radius = (containerWidth - (margins.left + margins.right)) / 2;
 
