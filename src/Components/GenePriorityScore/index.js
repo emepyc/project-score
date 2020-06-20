@@ -1,4 +1,5 @@
 import React, {useState, useRef} from 'react';
+import {Text} from '@vx/text';
 import {withRouter} from 'react-router-dom';
 import {Button, Card, CardHeader, CardBody, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import * as d3 from 'd3';
@@ -154,7 +155,7 @@ function PriorityScoreForAnalyses({width, scores}) {
   const svgWidth = width - (xMargin * 2);
   const cellWidth = (svgWidth - xLabelWidth) / (numberOfScores + 0.5);
 
-  const levellabelYPosition = scores.length * (cellWidth + verticalMargin);
+  const levellabelYPosition = scores.length * (cellWidth + verticalMargin) - 10;
 
   const svgHeight = yLabelHeight + (scores.length * (verticalMargin + cellWidth)) + levelLabelHeight;
 
@@ -215,12 +216,14 @@ function PriorityScoreForAnalyses({width, scores}) {
           <LevelLabel
             posX={(cellWidth * 2) + blockMargin + (cellWidth * 5 / 2)}
             posY={levellabelYPosition}
-            label='Level 1'
+            label='Biomarkers and tumour prevalence'
+            width={cellWidth * 5}
           />
           <LevelLabel
             posX={(cellWidth * 7) + (blockMargin * 2) + (cellWidth * 7 / 2)}
             posY={levellabelYPosition}
-            label='Level 2'
+            label='Cell line fitness effect (avg for sensitive lines)'
+            width={cellWidth * 7}
           />
         </g>
       </svg>
@@ -229,16 +232,18 @@ function PriorityScoreForAnalyses({width, scores}) {
   )
 }
 
-function LevelLabel({posX, posY, label}) {
+function LevelLabel({posX, posY, label, width}) {
   return (
-    <text
+    <Text
       x={posX}
       y={posY}
-      alignmentBaseline='central'
+      width={width}
+      verticalAnchor='start'
       textAnchor='middle'
+      fontSize='0.9em'
     >
       {label}
-    </text>
+    </Text>
   );
 }
 
@@ -249,6 +254,7 @@ function Xlabels({cellWidth, blockMargin, onHelp}) {
       <Xlabel
         posX={cellWidth / 2}
         label='Total priority score'
+        onHelp={() => onHelp('Total priority score', priorityScoresHelp.totalPriorityScore)}
       />
       <Xlabel
         posX={cellWidth + (cellWidth / 2)}

@@ -1,6 +1,7 @@
 export const foldChangeHelp = 'Negative values indicate depletion of gene; gene averaged sgRNA representation at the beginning versus end of the experiment.';
 export const lossOfFitnessScoreHelp = 'Score < 0 is a statistically significant effect; values are scaled Bayes Factors calculated using BAGEL.';
 export const priorityScoresHelp = {
+  totalPriorityScore: 'Ranging from 0 to 100, the value nominates promising therapeutic targets based on (1) fitness effects obtained from CRISPR-Cas9 experimental evidence and (2) existence of a genetic biomarker associated with the target',
   classAmarker: 'Positive for a significant and large effect genomic marker of a differential fitness effect in cells (ANOVA test pvalue < 0.001, and FDR < 25% [5% for MSI] and both Glass Deltas [quantifying effect size] > 1)',
   classBmarker: 'Positive for an intermediate significance genomic marker of a differential fitness effect in cells (ANOVA test FDR < 30%, with at least one Glass Delta > 1)',
   classCmarker: 'Positive for a genomic marker of a differential fitness effect in cells (ANOVA test pvalue < 0.001, with at least one Glass Deltas > 1))',
