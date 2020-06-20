@@ -101,7 +101,7 @@ function DonutChart({history}) {
 
   const radius = (containerWidth - (margins.left + margins.right)) / 2;
 
-  const gotoTable = (data) => history.push(`/table?cancerType=${data.id}`);
+  const gotoTable = data => history.push(`/table?analysis=${data.id}`);
 
   return (
     <FetchData
