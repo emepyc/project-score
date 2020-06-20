@@ -4,7 +4,7 @@ import HomeSectionDescription from '../HomeSectionDescription';
 
 const HomeProjectDescription = () => (
   <React.Fragment>
-    <h2 className="display-4">About us</h2>
+    <h2 className='text-center display-4'>About us</h2>
     <Row>
       <Col xs={12} sm={6}>
         <HomeSectionDescription>
