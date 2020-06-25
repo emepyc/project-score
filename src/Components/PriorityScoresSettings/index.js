@@ -80,7 +80,13 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
           </Label>
           <div className="mx-2 flex-column">
             <Label for="priority-score-threshold-slider">
-              <span className="settings-header-section">Priority score threshold</span>
+              <span className="settings-header-section">
+                Priority score threshold
+              </span>
+              <Help
+                label='Priority score threshold'
+                definition={priorityScoresHelp.priorityScoreThreshold}
+              />
             </Label>
             <Slider
               id="priority-score-threshold-slider"
@@ -192,7 +198,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                 value={genomicMarkerStrength}
                 onChange={(event) => setGenomicMarkerStrength(event.target.value)}
               >
-                <option value={0}>0</option>
+                <option value={0}>No marker</option>
                 <option value={1}>1 (class A)</option>
                 <option value={2}>2 (class B)</option>
                 <option value={3}>3 (class C)</option>
@@ -223,7 +229,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                 value={foldSbf}
                 onChange={(event) => setFoldSbf(event.target.value)}
               >
-                <option value={0}>Not set</option>
+                <option value={0}>No min score</option>
                 <option value={1}>Fitness score &lt; -1</option>
                 <option value={2}>Fitness score &lt; -2</option>
                 <option value={3}>Fitness score &lt; -3</option>

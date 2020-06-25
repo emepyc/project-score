@@ -53,7 +53,7 @@ export const defaultSettings = {
 
   // Level 2: Cell type section
   foldSbf: 3,
-  mgkPercFdr: 10,
+  mgkPercFdr: 5,
   highlyExpr: true,
   depPathway: true,
   isMutated: true,

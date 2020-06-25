@@ -20,4 +20,5 @@ export const priorityScoresHelp = {
   mageck5fdr: 'Measure of cell line fitness effect  using MAGeCK',
   mutated: 'Value specifying if the gene is mutated in the cell line',
   notExpressed: 'Value specifying if the gene under consideration is not expressed at the basal level in the cell line (FPKM < 0.05)',
+  priorityScoreThreshold: '40 is recommended as a minimum threshold priority score',
 };
