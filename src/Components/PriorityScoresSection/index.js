@@ -1,5 +1,4 @@
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCog} from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import React, {useState, useEffect, useRef} from "react";
 import {withRouter, Link} from "react-router-dom";
@@ -12,7 +11,6 @@ import {
   Collapse,
   Label,
   Input,
-  Row,
   Tooltip as ReactStrapTooltip,
 } from 'reactstrap';
 import orderBy from "lodash.orderby";
@@ -65,7 +63,6 @@ export const defaultSettings = {
 };
 
 function PriorityScoresCard({analysis}) {
-  const [settingsIsOpen, setSettingsIsOpen] = useState(false);
   const [settings, setSettings] = useState(defaultSettings);
 
   return (
@@ -75,24 +72,15 @@ function PriorityScoresCard({analysis}) {
       </CardHeader>
       <CardBody>
         <div>
-          <Button
-            outline
-            color="secondary"
-            onClick={() => setSettingsIsOpen(!settingsIsOpen)}
-          >
-            <FontAwesomeIcon icon={faCog}>
-              Settings
-            </FontAwesomeIcon>
-          </Button>
-          <Collapse isOpen={settingsIsOpen}>
-            <div className='priorityScoresCard'>
-              <PriorityScoresSettings
-                defaultSettings={defaultSettings}
-                onSubmit={setSettings}
-              />
-            </div>
-          </Collapse>
-          <PriorityScores analysis={analysis} settings={settings}/>
+          <div>
+            <PriorityScoresSettings
+              defaultSettings={defaultSettings}
+              onSubmit={setSettings}
+            />
+          </div>
+          <div>
+            <PriorityScores analysis={analysis} settings={settings}/>
+          </div>
         </div>
       </CardBody>
     </Card>
@@ -168,16 +156,12 @@ export function PriorityScores({analysis, settings}) {
                   <span>Show gene names</span>
                 </Label>
               </div>
-              {/*<Row*/}
-              {/*  className='d-flex p-2 justify-content-center align-items-center'*/}
-              {/*>*/}
               <PriorityScoresPlot
                 plotWidth={containerWidth}
                 priorityScores={priorityScores.data}
                 byBucket={settings.tractability}
                 showLabels={showLabels}
               />
-              {/*</Row>*/}
             </div>
           );
         }}
