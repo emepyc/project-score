@@ -84,19 +84,20 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                 checked={tractability}
                 onChange={() => setTractability(!tractability)}
               />{' '}
-              <span className="settings-header-section">Tractability</span>
+              <span className="settings-header-section">Group target by tractability</span>
             </Label>
           </div>
 
           <div className="mt-4 mx-2 flex-column">
             <div className="text-lg-center">
-              <span className="settings-header-section">Priority scores:</span>
+              <span className="settings-header-section">Target priority score inputs, weights and features</span>
             </div>
-            <div className="ml-2">
+            <div className="ml-2 mt-2">
 
               <div className="d-flex flex-row flex-wrap">
                 <div ref={l1ScoreContainer} className="d-column mx-3">
                   <ScoreWeightSlider
+                    label='Level 1: Target'
                     width={l1ContainerWidth}
                     value={l1Weight}
                     defaultValue={defaultSettings.l1Weight}
@@ -194,6 +195,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                 </div>
                 <div ref={l2ScoreContainer} className="d-column mx-3">
                   <ScoreWeightSlider
+                    label='Level 2'
                     width={l2ContainerWidth}
                     value={100 - l1Weight}
                     defaultValue={100 - defaultSettings.l1Weight}
@@ -334,10 +336,10 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   );
 }
 
-function ScoreWeightSlider({width, value, defaultValue, onChange}) {
+function ScoreWeightSlider({label, width, value, defaultValue, onChange}) {
   return (
     <React.Fragment>
-      <span className="settings-subheader-section">Level 1: Target</span>
+      <span className="settings-subheader-section">{label}</span>
       <div className="mt-3 mb-5">
         <Label>
           Score contribution
