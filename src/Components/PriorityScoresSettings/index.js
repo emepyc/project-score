@@ -1,5 +1,5 @@
 import React, {useState, useRef} from 'react';
-import {Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Tooltip} from 'reactstrap';
+import {Button, Input, Label, Tooltip} from 'reactstrap';
 import isEqual from 'lodash.isequal';
 import isArray from 'lodash.isarray';
 
@@ -23,8 +23,6 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   const [isMutated, setIsMutated] = useState(defaultSettings.isMutated);
   const [depPathway, setDepPathway] = useState(defaultSettings.depPathway);
   const [threshold, setThreshold] = useState(defaultSettings.threshold);
-
-  const [priorityScoreThresholdHelpIsOpen, setPriorityScoreThresholdHelpIsOpen] = useState(false);
 
   const prevSettings = useRef(defaultSettings);
 
@@ -391,7 +389,7 @@ function Help({label, definition}) {
         placement='auto'
         isOpen={tooltipIsOpen}
         toggle={() => setTooltipIsOpen(false)}
-        innerClassName='helpTooltip'
+        innerClassName='project-score-tooltip'
       >
         <div style={{fontSize: '0.9em'}}>
           {fullDefinition}

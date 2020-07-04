@@ -1,14 +1,11 @@
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import classNames from "classnames";
 import React, {useState, useEffect, useRef} from "react";
 import {withRouter, Link} from "react-router-dom";
 import * as d3 from "d3";
 import {
-  Button,
   Card,
   CardBody,
   CardHeader,
-  Collapse,
   Label,
   Input,
   Tooltip as ReactStrapTooltip,
@@ -288,18 +285,21 @@ function PriorityScoresXlabel({label, description}) {
         {label}
         {description && (
           <React.Fragment>
-          <span
+          <sup
             className='helpAnchor'
             onMouseEnter={() => setTooltipOpen(true)}
-            onMouseLeave={() => setTooltipOpen(false)}
             id='tractability-bucket-x-label-help-icon'
           >
             ?
-          </span>
+          </sup>
             <ReactStrapTooltip
+              trigger='hover'
+              toggle={() => setTooltipOpen(false)}
               placement='bottom'
               isOpen={tooltipOpen}
               target='tractability-bucket-x-label-help-icon'
+              className='helpAnchor'
+              innerClassName='project-score-tooltip'
             >
               {description}
             </ReactStrapTooltip>

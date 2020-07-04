@@ -128,17 +128,19 @@ function FitnessPlotSection(props) {
             </div>
             <Tooltip
               target='lossOfFitnessScoreButton'
-              placement='right'
+              placement='bottom'
               isOpen={showLFSTooltip}
               toggle={toggleLFSTooltip}
+              innerClassName='project-score-tooltip'
             >
               {lossOfFitnessScoreHelp}
             </Tooltip>
             <Tooltip
               target='foldChangeScoreButton'
-              placement='right'
+              placement='top'
               isOpen={showFCTooltip}
               toggle={toggleFCTooltip}
+              innerClassName='project-score-tooltip'
             >
               {foldChangeHelp}
             </Tooltip>

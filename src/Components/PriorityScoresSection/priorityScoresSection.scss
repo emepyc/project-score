@@ -1,3 +1,5 @@
+@import '../../common';
+
 $bucket-group1-color: #91B8F2;
 $bucket-group2-color: #69D38B;
 $bucket-group3-color: #D07D80;
@@ -36,13 +38,11 @@ $bucket-group3-color: #D07D80;
   margin-top: 10px;
 
   .helpAnchor {
-    vertical-align: top;
-    font-size: 0.9em;
+    margin-top: 10px;
     margin-left: 2px;
     cursor: pointer;
   }
 }
-
 
 .expandLabel {
   pointer-events: none;

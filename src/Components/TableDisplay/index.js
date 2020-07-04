@@ -115,6 +115,7 @@ function TableDisplay(props) {
                 placement='top'
                 isOpen={geneCellTooltip === geneKey}
                 toggle={() => setGeneCellTooltip(null)}
+                innerClassName='project-score-tooltip'
               >
                 <div
                   style={{color: colorPanCancerGeneBg}}
@@ -129,6 +130,7 @@ function TableDisplay(props) {
               placement='top'
               isOpen={lofCellTooltip === lofKey}
               toggle={() => setLofCellTooltip(null)}
+              innerClassName='project-score-tooltip'
             >
               <React.Fragment>
                 {row.bf_scaled < 0 ? (
@@ -151,19 +153,19 @@ function TableDisplay(props) {
       })}
       <Tooltip
         target='lossOfFitnessScoreHelp'
-        placement='right'
+        placement='top'
         isOpen={showLFSTooltip}
         toggle={toggleLFSTooltip}
-        style={{textAlign: 'justify'}}
+        innerClassName='project-score-tooltip'
       >
         {lossOfFitnessScoreHelp}
       </Tooltip>
       <Tooltip
         target='foldChangeHelp'
-        placement='right'
+        placement='top'
         isOpen={showFCTooltip}
         toggle={toggleFCTooltip}
-        style={{textAlign: 'justify'}}
+        innerClassName='project-score-tooltip'
       >
         {foldChangeHelp}
       </Tooltip>
