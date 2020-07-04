@@ -110,12 +110,6 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
 
         </div>
 
-        {/*<div className="mt-4 mb-2 d-flex justify-content-center flex-row flex-wrap" style={{fontSize: '0.9em'}}>*/}
-        {/*  <div className="text-lg-center">*/}
-        {/*    <span className="settings-header-section">Target priority score inputs, weights and features</span>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
-
         <div className="d-flex justify-content-around flex-wrap">
           <div className='mx-5 flex-grow-1'>
             <ScoreWeightSlider
@@ -399,7 +393,7 @@ function Help({label, definition}) {
         toggle={() => setTooltipIsOpen(false)}
         innerClassName='helpTooltip'
       >
-        <React.Fragment>
+        <div style={{fontSize: '0.9em'}}>
           {fullDefinition}
           <div className='d-flex justify-content-end'>
             <Button
@@ -410,7 +404,7 @@ function Help({label, definition}) {
               Close
             </Button>
           </div>
-        </React.Fragment>
+        </div>
       </Tooltip>
     </React.Fragment>
   );
