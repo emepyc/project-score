@@ -27,7 +27,7 @@ function ModelInfoSummary(props) {
         const ploidy = modelInfo.ploidy ? modelInfo.ploidy.toFixed(3): 'N/A';
         const mutationsPerMb = modelInfo.mutationsPerMb ? modelInfo.mutationsPerMb.toFixed(3) : 'N/A';
         return (
-          <div className='mx-3 my-3'>
+          <div className='mx-3'>
             <Row>
               <Col xs={{size: 12}} lg={{size: 6}}>
                 <div>Tissue <span className={style.infoItem}>{modelInfo.tissue}</span></div>

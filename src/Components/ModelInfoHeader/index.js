@@ -1,5 +1,4 @@
 import React from 'react';
-import {Row, Col} from 'reactstrap';
 
 import PageHeader from '../PageHeader';
 
@@ -12,15 +11,11 @@ export default function ModelInfoHeader({name, symbol, features}) {
     </span>
   );
   return (
-    <Row>
-      <Col xs={{size: 12}} md={{size: 6}} lg={{size: 10}}>
-        <PageHeader
-          header={name}
-          entity='model'
-          subheaders={[linkToCellModelPassport]}
-          features={features}
-        />
-      </Col>
-    </Row>
+    <PageHeader
+      header={name}
+      entity='model'
+      subheader={linkToCellModelPassport}
+      features={features}
+    />
   );
 }

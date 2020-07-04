@@ -17,14 +17,13 @@ export default function GeneInfoHeader(props) {
     </span>
   );
 
-  const subheaders = geneName && geneName.name ? [geneName.name, externalLinks] : [externalLinks];
-
   return (
     <PageHeader
       {...props}
       header={symbol}
       entity='gene'
-      subheaders={subheaders}
+      subheader={geneName ? geneName.name : null}
+      externalLinks={externalLinks}
     />
   );
 }
