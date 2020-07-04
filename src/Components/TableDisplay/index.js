@@ -154,6 +154,7 @@ function TableDisplay(props) {
         placement='right'
         isOpen={showLFSTooltip}
         toggle={toggleLFSTooltip}
+        style={{textAlign: 'justify'}}
       >
         {lossOfFitnessScoreHelp}
       </Tooltip>
@@ -162,6 +163,7 @@ function TableDisplay(props) {
         placement='right'
         isOpen={showFCTooltip}
         toggle={toggleFCTooltip}
+        style={{textAlign: 'justify'}}
       >
         {foldChangeHelp}
       </Tooltip>

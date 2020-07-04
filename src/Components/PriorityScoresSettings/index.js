@@ -1,5 +1,5 @@
 import React, {useState, useRef} from 'react';
-import {Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import {Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Tooltip} from 'reactstrap';
 import isEqual from 'lodash.isequal';
 import isArray from 'lodash.isarray';
 
@@ -23,6 +23,8 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
   const [isMutated, setIsMutated] = useState(defaultSettings.isMutated);
   const [depPathway, setDepPathway] = useState(defaultSettings.depPathway);
   const [threshold, setThreshold] = useState(defaultSettings.threshold);
+
+  const [priorityScoreThresholdHelpIsOpen, setPriorityScoreThresholdHelpIsOpen] = useState(false);
 
   const prevSettings = useRef(defaultSettings);
 
@@ -68,19 +70,19 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
 
   return (
     <React.Fragment>
-      <div className="mb-5">
-        <div className="d-flex justify-content-end" style={{fontSize: '0.9em'}}>
-          <Label className="mr-4">
+      <div className='mb-5'>
+        <div className='d-flex justify-content-end' style={{fontSize: '0.9em'}}>
+          <Label className='mr-4'>
             <Input
               type='checkbox'
               checked={tractability}
               onChange={() => setTractability(!tractability)}
             />{' '}
-            <span className="settings-header-section">Group target by tractability</span>
+            <span className='settings-header-section'>Group target by tractability</span>
           </Label>
-          <div className="mx-2 flex-column">
-            <Label for="priority-score-threshold-slider">
-              <span className="settings-header-section">
+          <div className='mx-2 flex-column'>
+            <Label for='priority-score-threshold-slider'>
+              <span className='settings-header-section'>
                 Priority score threshold
               </span>
               <Help
@@ -89,7 +91,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
               />
             </Label>
             <Slider
-              id="priority-score-threshold-slider"
+              id='priority-score-threshold-slider'
               width={250}
               min={1}
               max={100}
@@ -115,7 +117,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
               defaultValue={defaultSettings.l1Weight}
               onChange={setL1Weight}
             />
-            <div className="mt-1">
+            <div className="mt-5">
               <Label>
                 <Input
                   type="checkbox"
@@ -123,11 +125,11 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   onChange={() => setHcg(!hcg)}
                 />
                 High confidence driver
-                <Help
-                  label='High confidence driver'
-                  definition={priorityScoresHelp.highConfidenceDriver}
-                />
               </Label>
+              <Help
+                label='High confidence driver'
+                definition={priorityScoresHelp.highConfidenceDriver}
+              />
             </div>
             <div className="mt-1">
               <Label>
@@ -147,11 +149,11 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   onChange={() => setMutatedInPrimaryTumors(!mutatedInPrimaryTumors)}
                 />
                 Mutated in primary tumours
-                <Help
-                  label='Mutatd in primary tumours'
-                  definition={priorityScoresHelp.mutatedInPrimaryTumors}
-                />
               </Label>
+              <Help
+                label='Mutated in primary tumours'
+                definition={priorityScoresHelp.mutatedInPrimaryTumors}
+              />
             </div>
             <div className="mt-1">
               <Label>
@@ -161,11 +163,11 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   onChange={() => setMutatedInPrimaryTumorsCosmic(!mutatedInPrimaryTumorsCosmic)}
                 />
                 COSMIC variant in primary tumours
-                <Help
-                  label='COSMIC variant in primary tumours'
-                  definition={priorityScoresHelp.cosmicVariantInPrimaryTumors}
-                />
               </Label>
+              <Help
+                label='COSMIC variant in primary tumours'
+                definition={priorityScoresHelp.cosmicVariantInPrimaryTumors}
+              />
             </div>
             <div className="mt-1">
               <Label>
@@ -175,24 +177,24 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   onChange={() => setWeakerMarker(!weakerMarker)}
                 />
                 Weaker marker
-                <Help
-                  label='Weaker marker'
-                  definition={priorityScoresHelp.weakerMarker}
-                />
               </Label>
+              <Help
+                label='Weaker marker'
+                definition={priorityScoresHelp.weakerMarker}
+              />
             </div>
             <div className="mt-1">
               <Label>
                 Min genomic marker strength
-                <Help
-                  label='Genomic marker class'
-                  definition={[
-                    {label: 'Class A marker', definition: priorityScoresHelp.classAmarker},
-                    {label: 'Class B marker', definition: priorityScoresHelp.classBmarker},
-                    {label: 'Class C marker', definition: priorityScoresHelp.classCmarker},
-                  ]}
-                />
               </Label>
+              <Help
+                label='Genomic marker class'
+                definition={[
+                  {label: 'Class A marker', definition: priorityScoresHelp.classAmarker},
+                  {label: 'Class B marker', definition: priorityScoresHelp.classBmarker},
+                  {label: 'Class C marker', definition: priorityScoresHelp.classCmarker},
+                ]}
+              />
               <Input
                 type="select"
                 value={genomicMarkerStrength}
@@ -212,7 +214,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
               defaultValue={100 - defaultSettings.l1Weight}
               onChange={newL1Weight => setL1Weight(100 - newL1Weight)}
             />
-            <div className="mt-1">
+            <div className="mt-5">
               <Label>
                 Min fitness score category
                 <Help
@@ -264,11 +266,11 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   onChange={() => setHighlyExpr(!highlyExpr)}
                 />
                 Highly expressed
-                <Help
-                  label='Highly expressed'
-                  definition={priorityScoresHelp.highlyExpressed}
-                />
               </Label>
+              <Help
+                label='Highly expressed'
+                definition={priorityScoresHelp.highlyExpressed}
+              />
             </div>
             <div className="mt-1">
               <Label>
@@ -278,11 +280,11 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   onChange={() => setDepPathway(!depPathway)}
                 />
                 Enriched pathway
-                <Help
-                  label='Enriched pathway'
-                  definition={priorityScoresHelp.enrichedPathway}
-                />
               </Label>
+              <Help
+                label='Enriched pathway'
+                definition={priorityScoresHelp.enrichedPathway}
+              />
             </div>
             <div className="mt-1">
               <Label>
@@ -292,11 +294,11 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   onChange={() => setIsMutated(!isMutated)}
                 />
                 Mutated
-                <Help
-                  label='Mutated'
-                  definition={priorityScoresHelp.mutated}
-                />
               </Label>
+              <Help
+                label='Mutated'
+                definition={priorityScoresHelp.mutated}
+              />
             </div>
           </div>
         </div>
@@ -352,11 +354,11 @@ function ScoreWeightSlider({label, width, value, defaultValue, onChange}) {
 }
 
 function Help({label, definition}) {
-  const [helpModalIsOpen, setHelpModalIsVisible] = useState(false);
+  const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
 
-  const helpModalToggle = () => setHelpModalIsVisible(!helpModalIsOpen);
+  const id = `${label.split(' ').join('-')}-help`;
 
-  const modalBody = isArray(definition) ? (
+  const fullDefinition = isArray(definition) ? (
     <div className='priorityScoreSettingsHelp'>
       {definition.map(nextDefinition => (
         <div className='item' key={nextDefinition.label}>
@@ -365,25 +367,44 @@ function Help({label, definition}) {
       ))}
     </div>
   ) : (
-    <div className='priorityScoreSettingsHelp'>
-      <span dangerouslySetInnerHTML={{__html: definition}}/>
-    </div>
+    <div
+      className='text-justify'
+      dangerouslySetInnerHTML={{__html: definition}}
+    />
   );
 
   return (
     <React.Fragment>
-      <span className='helpItem' onClick={helpModalToggle}>?</span>
-      <Modal isOpen={helpModalIsOpen} toggle={helpModalToggle}>
-        <ModalHeader>
-          {label}
-        </ModalHeader>
-        <ModalBody>
-          {modalBody}
-        </ModalBody>
-        <ModalFooter>
-          <Button onClick={helpModalToggle}>Ok</Button>
-        </ModalFooter>
-      </Modal>
+      <span>
+        <sup
+          id={id}
+          onClick={() => setTooltipIsOpen(true)}
+          style={{cursor: 'pointer'}}
+        >
+          ?
+        </sup>
+      </span>
+      <Tooltip
+        trigger='click mouseLeave'
+        target={id}
+        placement='auto'
+        isOpen={tooltipIsOpen}
+        toggle={() => setTooltipIsOpen(false)}
+        innerClassName='helpTooltip'
+      >
+        <React.Fragment>
+          {fullDefinition}
+          <div className='d-flex justify-content-end'>
+            <Button
+              color='link'
+              onClick={() => setTooltipIsOpen(false)}
+              style={{fontSize: '0.9em'}}
+            >
+              Close
+            </Button>
+          </div>
+        </React.Fragment>
+      </Tooltip>
     </React.Fragment>
   );
 }
