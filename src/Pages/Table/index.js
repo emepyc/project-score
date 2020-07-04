@@ -142,7 +142,7 @@ function _FitnessTable() {
   return (
     <Card>
       <CardHeader>
-        Fitness Table
+        Fitness score table
       </CardHeader>
       <CardBody>
         <Row>
