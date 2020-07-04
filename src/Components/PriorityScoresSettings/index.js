@@ -70,44 +70,51 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
 
   return (
     <React.Fragment>
-      <div className='mb-5'>
-        <div className='d-flex justify-content-end' style={{fontSize: '0.9em'}}>
-          <Label className='mr-4'>
-            <Input
-              type='checkbox'
-              checked={tractability}
-              onChange={() => setTractability(!tractability)}
-            />{' '}
-            <span className='settings-header-section'>Group target by tractability</span>
-          </Label>
-          <div className='mx-2 flex-column'>
-            <Label for='priority-score-threshold-slider'>
+      <div className='mb-5' style={{fontSize: '0.9em'}}>
+        <div className='d-flex justify-content-between flex-wrap flex-row-reverse'>
+          <div className='d-flex justify-content-end' style={{fontSize: '0.9em'}}>
+            <Label className='mr-4'>
+              <Input
+                type='checkbox'
+                checked={tractability}
+                onChange={() => setTractability(!tractability)}
+              />{' '}
+              <span className='settings-header-section'>Group target by tractability</span>
+            </Label>
+            <div className='mx-2 flex-column'>
+              <Label for='priority-score-threshold-slider'>
               <span className='settings-header-section'>
                 Priority score threshold
               </span>
-              <Help
-                label='Priority score threshold'
-                definition={priorityScoresHelp.priorityScoreThreshold}
+                <Help
+                  label='Priority score threshold'
+                  definition={priorityScoresHelp.priorityScoreThreshold}
+                />
+              </Label>
+              <Slider
+                id='priority-score-threshold-slider'
+                width={250}
+                min={1}
+                max={100}
+                defaultValue={defaultSettings.threshold}
+                step={1}
+                onChange={setThreshold}
+                value={threshold}
               />
-            </Label>
-            <Slider
-              id='priority-score-threshold-slider'
-              width={250}
-              min={1}
-              max={100}
-              defaultValue={defaultSettings.threshold}
-              step={1}
-              onChange={setThreshold}
-              value={threshold}
-            />
+            </div>
           </div>
+
+          <div className='d-flex flex-row flex-grow-1'>
+            <span className="flex-shrink-1 settings-header-section">Target priority score inputs, weights and features:</span>
+          </div>
+
         </div>
 
-        <div className="mt-4 mb-2 d-flex justify-content-center flex-row flex-wrap" style={{fontSize: '0.9em'}}>
-          <div className="text-lg-center">
-            <span className="settings-header-section">Target priority score inputs, weights and features</span>
-          </div>
-        </div>
+        {/*<div className="mt-4 mb-2 d-flex justify-content-center flex-row flex-wrap" style={{fontSize: '0.9em'}}>*/}
+        {/*  <div className="text-lg-center">*/}
+        {/*    <span className="settings-header-section">Target priority score inputs, weights and features</span>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
 
         <div className="d-flex justify-content-around flex-wrap">
           <div className='mx-5 flex-grow-1'>
