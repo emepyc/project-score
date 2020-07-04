@@ -33,6 +33,10 @@ export default function Documentation() {
         </div>
         <div className='section'>
           <h1>Project Score</h1>
+          <h5>
+            Target tractability assessment
+          </h5>
+
           <p className='paragraph'>
             Genetic screens are a powerful approach to investigate gene function and can be used to identify new
             candidate
