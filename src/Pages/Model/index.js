@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Row, Col, ButtonGroup, Tooltip} from 'reactstrap';
-import Table from '../../Components/Table';
+import Table from '../../Components/FitnessTable';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import ModelInfoSummary from '../../Components/ModelInfoSummary';
 import ModelInfoDetails from '../../Components/ModelInfoDetails';

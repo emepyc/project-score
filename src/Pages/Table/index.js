@@ -3,7 +3,7 @@ import {TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap';
 import {withRouter} from 'react-router-dom';
 import classNames from 'classnames';
 
-import TableComponent from '../../Components/Table';
+import FitnessTable from '../../Components/FitnessTable';
 import CancerTypeFilter from '../../Components/AnalysisFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import {Row, Col} from 'reactstrap';
@@ -71,7 +71,7 @@ function Table(props) {
           </Row>
           <Row className='my-3'>
             <Col>
-              <FitnessTable/>
+              <_FitnessTable/>
             </Col>
           </Row>
         </TabPane>
@@ -137,7 +137,7 @@ function FitnessFilters() {
   );
 }
 
-function FitnessTable() {
+function _FitnessTable() {
   const [highlight, onHighlight] = useState(null);
   return (
     <Card>
@@ -147,7 +147,7 @@ function FitnessTable() {
       <CardBody>
         <Row>
           <Col xs={{size: 12}}>
-            <TableComponent
+            <FitnessTable
               showSearchbox={true}
               highlight={highlight}
               onHighlight={onHighlight}

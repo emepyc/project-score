@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Table from '../../Components/Table';
+import Table from '../../Components/FitnessTable';
 import CancerTypeFilter from '../../Components/AnalysisFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import FitnessPlot from '../../Components/FitnessPlot';
