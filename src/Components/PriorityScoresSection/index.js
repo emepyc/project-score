@@ -259,7 +259,7 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
 
 function PriorityScoresBucketLegend() {
   return (
-    <React.Fragment>
+    <div className='d-flex justify-content-around mt-3'>
       <div className="bucketBoxLegend">
         <div className={classNames("element", "group1")}/>
         <span className="label">Group 1 bucket: <b>Approved or in clinical development</b></span>
@@ -272,7 +272,7 @@ function PriorityScoresBucketLegend() {
         <div className={classNames("element", "group3")}/>
         <span className="label">Group 3 bucket: <b>Weak or no supporting evidence</b></span>
       </div>
-    </React.Fragment>
+    </div>
   );
 }
 
