@@ -41,6 +41,9 @@ function GeneSummaryPlots(props) {
                 <Col>
                   <div className="text-center">Pan-cancer core fitness</div>
                 </Col>
+                <Col>
+                  <div className="text-center">Common essential</div>
+                </Col>
               </Row>
               <Row>
                 <Col>
@@ -58,6 +61,11 @@ function GeneSummaryPlots(props) {
                 <Col>
                   <HasAttribute
                     attribute={gene.isPanCancer}
+                  />
+                </Col>
+                <Col>
+                  <HasAttribute
+                    attribute={gene.isCommonEssential}
                   />
                 </Col>
               </Row>

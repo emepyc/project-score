@@ -20,6 +20,7 @@ export default function fetchSignificantModels({geneId}, ...args) {
         isTumourSuppressor: gene.tumour_suppressor,
         numberOfSignificantTissues: tissuesCounts.significant,
         numberOfTotalTissues: tissuesCounts.total,
+        isCommonEssential: gene.essentiality_profiles[0].common_essential === "CE",
       }
     });
 }
