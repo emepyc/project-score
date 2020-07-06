@@ -164,7 +164,8 @@ function DonutChart({history}) {
                               onClick={() => gotoTable(arc.data)}
                             />
                             <Label
-                              radius={radius}
+                              // To avoid overlap of the last 2 labels
+                              radius={arc.index === pie.arcs.length - 1 ? radius : (arc.index === pie.arcs.length - 3 ? radius - 14 : radius - 8)}
                               arc={arc}
                               x={centroidX}
                               y={centroidY}
@@ -175,15 +176,14 @@ function DonutChart({history}) {
                             </Label>
                           </g>
                         );
-                      })
+                      });
                     }}
                   </Pie>
                 </Group>
               </svg>
             </div>
-          )
-        }
-      }
+          );
+        }}
     </FetchData>
   );
 }
