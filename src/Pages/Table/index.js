@@ -58,7 +58,7 @@ function Table(props) {
             className={classNames('tabLabel', {active: activeTab === 'priorityScores'})}
             onClick={() => tabToggle('priorityScores')}
           >
-            Priority scores
+            Target priority scores
           </NavLink>
         </NavItem>
       </Nav>

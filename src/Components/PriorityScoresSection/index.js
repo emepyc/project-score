@@ -65,7 +65,7 @@ function PriorityScoresCard({analysis}) {
   return (
     <Card>
       <CardHeader>
-        Priority scores
+        Target priority scores
       </CardHeader>
       <CardBody>
         <div>
@@ -193,13 +193,16 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
 
   const priorityScoresDomain = d3.extent(priorityScores, priorityScore => priorityScore["score"]);
 
+  const height = 400;
   const xOffset = 50;
 
   if (!byBucket) {
     return (
-      <React.Fragment>
+      <div className='position-relative'>
+        {/*{yAxisLabel}*/}
         <PriorityScoreBucketPlot
           plotWidth={plotWidth - (xOffset * 2)}
+          height={height}
           xOffset={xOffset}
           isFirst={true}
           domain={priorityScoresDomain}
@@ -208,8 +211,13 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
           priorityScores={orderBy(priorityScores, ['score'], ['desc'])}
           showLabels={showLabels}
         />
+
+        <PriorityScoresYLabel
+          position={height / 2 - 35}
+        />
+
         <PriorityScoresXlabel plotWidth={plotWidth} label="Rank"/>
-      </React.Fragment>
+      </div>
     );
   }
 
@@ -231,10 +239,11 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
   };
 
   return (
-    <React.Fragment>
+    <div className='position-relative'>
       {bucketNumbers.map((bucketNumber, index) => (
         <PriorityScoreBucketPlot
           plotWidth={~~((plotWidth - (xOffset * 2)) / bucketNumbers.length)}
+          height={height}
           xOffset={xOffset}
           isFirst={index === 0}
           domain={priorityScoresDomain}
@@ -247,33 +256,132 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
           showLabels={showLabels}
         />
       ))}
+
+      <PriorityScoresYLabel
+        position={height / 2 - 35}
+      />
+
       <PriorityScoresXlabel
         plotWidth={plotWidth}
         label='Tractability bucket'
         description='To estimate the likelihood of a target to bind a small molecule or to be accessible to an antibody, we made use of a genome-wide target tractability assessment pipeline'
       />
       <PriorityScoresBucketLegend/>
-    </React.Fragment>
+    </div>
   );
 }
 
 function PriorityScoresBucketLegend() {
+  const [group1LegendTooltip, setGroup1LegendTooltip] = useState(false);
+  const [group2LegendTooltip, setGroup2LegendTooltip] = useState(false);
+  const [group3LegendTooltip, setGroup3LegendTooltip] = useState(false);
+
   return (
     <div className='d-flex justify-content-around mt-3'>
       <div className="bucketBoxLegend">
         <div className={classNames("element", "group1")}/>
         <span className="label">Group 1 bucket: <b>Approved or in clinical development</b></span>
+        <sup
+          className='helpAnchor'
+          onMouseEnter={() => setGroup1LegendTooltip(true)}
+          id='group-1-legend-tooltip'
+        >
+          ?
+        </sup>
       </div>
       <div className="bucketBoxLegend">
         <div className={classNames("element", "group2")}/>
         <span className="label">Group 2 bucket: <b>Supporting evidence</b></span>
+        <sup
+          className='helpAnchor'
+          onMouseEnter={() => setGroup2LegendTooltip(true)}
+          id='group-2-legend-tooltip'
+        >
+          ?
+        </sup>
       </div>
       <div className="bucketBoxLegend">
         <div className={classNames("element", "group3")}/>
         <span className="label">Group 3 bucket: <b>Weak or no supporting evidence</b></span>
+        <sup
+          className='helpAnchor'
+          onMouseEnter={() => setGroup3LegendTooltip(true)}
+          id='group-3-legend-tooltip'
+        >
+          ?
+        </sup>
       </div>
+      <ReactStrapTooltip
+        trigger='hover'
+        toggle={() => setGroup1LegendTooltip(false)}
+        placement='top'
+        isOpen={group1LegendTooltip}
+        target='group-1-legend-tooltip'
+        className='helpAnchor'
+        innerClassName='project-score-tooltip'
+      >
+        Contains targets of approved anticancer drugs or compounds in clinical or preclinical development
+      </ReactStrapTooltip>
+      <ReactStrapTooltip
+        trigger='hover'
+        toggle={() => setGroup2LegendTooltip(false)}
+        placement='top'
+        isOpen={group2LegendTooltip}
+        target='group-2-legend-tooltip'
+        className='helpAnchor'
+        innerClassName='project-score-tooltip'
+      >
+        Contains targets without drugs in clinical development, but have evidence to support target tractability
+      </ReactStrapTooltip>
+      <ReactStrapTooltip
+        trigger='hover'
+        toggle={() => setGroup3LegendTooltip(false)}
+        placement='top'
+        isOpen={group3LegendTooltip}
+        target='group-3-legend-tooltip'
+        className='helpAnchor'
+        innerClassName='project-score-tooltip'
+      >
+        Contains targets with weak or no supportive information on target tractability
+      </ReactStrapTooltip>
     </div>
   );
+}
+
+function PriorityScoresYLabel({position}) {
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  return (
+    <div className='position-absolute' style={{
+      // top: 'calc(50% - 50px)',
+      top: `${position}px`,
+      left: '-60px',
+      transform: 'rotate(-90deg)',
+    }}>
+      Target priority score
+      <sup
+        className='helpAnchor'
+        onMouseEnter={() => setTooltipOpen(true)}
+        id='target-priority-score-y-label-help-icon'
+      >
+        ?
+      </sup>
+      <ReactStrapTooltip
+        trigger='hover'
+        toggle={() => setTooltipOpen(false)}
+        placement='bottom'
+        isOpen={tooltipOpen}
+        target='target-priority-score-y-label-help-icon'
+        className='helpAnchor'
+        innerClassName='project-score-tooltip'
+      >
+        To nominate candidate therapeutic targets, we assign each gene a score that integrates CRISPR knockout gene
+        fitness effects with genomic biomarker and patient data (see also documentation). Scores are between 0 – 100
+        from lowest to highest priority and are calculated individually for each cancer type and considering all cancer
+        types.
+      </ReactStrapTooltip>
+    </div>
+  )
 }
 
 function PriorityScoresXlabel({label, description}) {
@@ -285,13 +393,13 @@ function PriorityScoresXlabel({label, description}) {
         {label}
         {description && (
           <React.Fragment>
-          <sup
-            className='helpAnchor'
-            onMouseEnter={() => setTooltipOpen(true)}
-            id='tractability-bucket-x-label-help-icon'
-          >
-            ?
-          </sup>
+            <sup
+              className='helpAnchor'
+              onMouseEnter={() => setTooltipOpen(true)}
+              id='tractability-bucket-x-label-help-icon'
+            >
+              ?
+            </sup>
             <ReactStrapTooltip
               trigger='hover'
               toggle={() => setTooltipOpen(false)}
@@ -325,6 +433,7 @@ function bucketGroupClassName(bucket) {
 function PriorityScoreBucketPlot(props) {
   const {
     plotWidth,
+    height,
     xOffset,
     isFirst,
     domain,
@@ -339,7 +448,7 @@ function PriorityScoreBucketPlot(props) {
   const [showExpandLabel, setShowExpandLabel] = useState(false);
   const [tooltip, setTooltip] = useState(null);
 
-  const height = 400;
+  // const height = 400;
   const plotHeight = 350;
 
   const yAxisRef = useRef(null);
@@ -370,15 +479,6 @@ function PriorityScoreBucketPlot(props) {
 
   const yAxisElement = isFirst ? (
     <React.Fragment>
-      <g transform={`translate(${xOffset - 35}, ${plotHeight / 2}) rotate(-90)`}>
-        <text
-          fill={textDefaultColor}
-          textAnchor="middle"
-          alignmentBaseline="middle"
-        >
-          Priority score
-        </text>
-      </g>
       <g
         transform={`translate(${xOffset}, 0)`}
         ref={yAxisRef}
@@ -452,7 +552,7 @@ function PriorityScoreBucketPlot(props) {
           />
           {priorityScores.map((priorityScore, index) => {
             const xPos = xScale(index);
-            const labelOffset = 5;
+            const labelOffset = 0;
             const labelAproxWidth = 8 * priorityScore.symbol.length;
             const labelAnchor = plotWidth < (xPos + labelAproxWidth) ? 'end' : 'start';
             const labelXposition = plotWidth < (xPos + labelAproxWidth) ? xPos - labelOffset : xPos + labelOffset
@@ -564,7 +664,7 @@ function PriorityScoreTooltip({x, y, priorityScore}) {
       height={0}
     >
       Gene: <b>{priorityScore.symbol}</b><br/>
-      Priority score: <b>{priorityScore.score.toFixed(2)}</b><br/>
+      Target priority score: <b>{priorityScore.score.toFixed(2)}</b><br/>
       Tractability bucket: <b>{priorityScore.bucket}</b><br/>
     </Tooltip>
   );

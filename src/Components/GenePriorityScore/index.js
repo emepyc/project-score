@@ -57,7 +57,7 @@ function GenePriorityScore(props) {
                 <React.Fragment>
                   <PriorityScoreForAnalyses width={containerWidth} scores={priorityScore}/>
                   <Modal isOpen={modalIsOpen} toggle={modalToggle}>
-                    <ModalHeader>Priority scores</ModalHeader>
+                    <ModalHeader>Target priority scores</ModalHeader>
                     <ModalBody>
                       <div className='priorityScoreHelp'>
                         <div className='section'>

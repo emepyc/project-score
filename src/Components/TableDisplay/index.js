@@ -120,7 +120,7 @@ function TableDisplay(props) {
                 <div
                   style={{color: colorPanCancerGeneBg}}
                 >
-                  {row.geneSymbol} is pan cancer gene
+                  core fitness gene
                 </div>
               </Tooltip>
             )}

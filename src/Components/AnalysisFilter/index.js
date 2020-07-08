@@ -39,7 +39,7 @@ function AnalysisFilter(props) {
             value={analysis || selectedAnalysis}
             options={analyses}
             onChange={onChange}
-            placeholder="Select cancer type"
+            placeholder="Select analysis or cancer type"
             isClearable
             getOptionValue={getOptionValue}
             getOptionLabel={getOptionLabel}
