@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap';
 import {withRouter} from 'react-router-dom';
 import classNames from 'classnames';
@@ -26,6 +26,10 @@ function Table(props) {
     })
     setActiveTab(newTab);
   }
+
+  useEffect(() => {
+    setActiveTab(urlParams.dataTab);
+  }, [urlParams]);
 
   const tabToggle = tabName => {
     if (activeTab !== tabName) {
