@@ -89,7 +89,7 @@ export default function Documentation() {
             The priority score consists of three components described here:
           </p>
 
-          <p className='paragraph'>
+          <div className='paragraph'>
             <ol className='paragraph'>
               <li>
                 <span className='strong'>Exclusion filter [defining genes with null priority score]</span> - Genes have a priority score of zero
@@ -131,7 +131,7 @@ export default function Documentation() {
                 70% of the total score by default.
               </li>
             </ol>
-          </p>
+          </div>
         </div>
 
         <div className='section'>
