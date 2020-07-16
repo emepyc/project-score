@@ -63,7 +63,7 @@ function Label({radius, arc, x, y, maxX, center, children}) {
 
 function DonutChart({history}) {
   const [containerWidth, setContainerWidth] = useState(500);
-  const containerHeight = 295 + margins.top;
+  // const containerHeight = 295 + margins.top;
 
   const explanationMessageRef = useRef(null);
   const containerRef = useRef(null);
@@ -135,7 +135,7 @@ function DonutChart({history}) {
               <svg
                 className='donutChart'
                 width={containerWidth}
-                height={containerHeight - margins.top}
+                height={300}
               >
                 <Group
                   top={radius + margins.top}
