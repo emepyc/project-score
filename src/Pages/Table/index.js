@@ -69,7 +69,10 @@ function Table(props) {
       <TabContent activeTab={activeTab}>
         <TabPane tabId='fitness'>
           <Row className='my-3'>
-            <Col xs={{size: 12}} lg={{size: 10, offset: 2}} xl={{size: 8, offset: 4}}>
+            <Col xs={{size: 12}} xl={{size: 4}} className='font-weight-bold mb-4'>
+              <span style={{fontSize: '1.1em'}}>Query gene fitness effects in each cell line</span>
+            </Col>
+            <Col xs={{size: 12}} xl={{size: 8}}>
               <FitnessFilters/>
             </Col>
           </Row>
@@ -82,7 +85,13 @@ function Table(props) {
 
         <TabPane tabId='priorityScores'>
           <Row className='my-3'>
-            <Col xs={{size: 12}} xl={{size: 4, offset: 8}}>
+            <Col xs={{size: 12}} xl={{size: 8}} className='font-weight-bold mb-4'>
+              <span style={{fontSize: '1.1em'}}>
+                Query target priority scores to nominate candidate targets and their tractability for drug development
+              </span>
+            </Col>
+
+            <Col xs={{size: 12}} xl={{size: 4}}>
               <PriorityScoresFilters/>
             </Col>
           </Row>
