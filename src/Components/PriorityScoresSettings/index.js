@@ -111,7 +111,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
         <div className="d-flex justify-content-around flex-wrap">
           <div className='mx-5 flex-grow-1'>
             <ScoreWeightSlider
-              label='Level 1: Target'
+              label='Level 1: Biomarker & tumour prevalence'
               value={l1Weight}
               defaultValue={defaultSettings.l1Weight}
               onChange={setL1Weight}
@@ -208,7 +208,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
           </div>
           <div className='mx-5 flex-grow-1'>
             <ScoreWeightSlider
-              label='Level 2'
+              label='Level 2: Cell lines fitness effect'
               value={100 - l1Weight}
               defaultValue={100 - defaultSettings.l1Weight}
               onChange={newL1Weight => setL1Weight(100 - newL1Weight)}
