@@ -50,7 +50,7 @@ function ModelInfoSummary(props) {
                       />
                     )
                   )}</div>
-                <div className="ml-2">without fitness data:
+                <div className="ml-2">not a fitness gene:
                   {driverGenesWithoutEssentialities.map(
                     driverGene => (
                       <CancerDriverGene
