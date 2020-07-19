@@ -10,7 +10,7 @@ const TrackedComponent = ({ visibilityClasses, visibilityStyles }) => (
   <div className="container">
     <div className="mt-5 mb-2 row">
       <div className="text-center col">
-        <h2 className="display-4">DepMap Programmes at Sanger</h2>
+        <h2 className="display-4 mb-4">DepMap Programmes at Sanger</h2>
         <p className="lead">
           Project Score is an integral part of the{' '}
           <a href="http://depmap.sanger.ac.uk">
