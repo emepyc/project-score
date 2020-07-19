@@ -54,7 +54,7 @@ function ScoreRangeFilter(props) {
           return (
             <React.Fragment>
               <div className='my-1'>
-                Score range:
+                Fitness score range:
               </div>
               <Range
                 width={width} // TODO: Hardcoded?
