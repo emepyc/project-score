@@ -27,7 +27,7 @@ function GenePriorityScore(props) {
     <div ref={container}>
       <Card>
         <CardHeader>
-          Priority Scores
+          Target Priority Score
           <span className="help" onClick={modalToggle}>?</span>
         </CardHeader>
         <CardBody>
@@ -72,7 +72,7 @@ function GenePriorityScore(props) {
                           />
                         </div>
 
-                        <div className='section'>
+                        <div className='section mt-5'>
                           <h6>Level 2: Cell lines fitness effect (averaged for sensitive cell lines)</h6>
                           <PriorityScoresHelpItem
                             label='Fitness score < -1'
