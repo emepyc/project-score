@@ -114,8 +114,8 @@ const Masthead = () => {
               <img
                 src={cancerDepMap}
                 alt="Cancer Dependency Map"
-                width="144px"
-                height="57px"
+                // width="164px"
+                height="67px"
                 className="d-inline-block align-top"
               />
             </a>
