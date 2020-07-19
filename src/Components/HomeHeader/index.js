@@ -1,6 +1,6 @@
 import React from 'react';
 
-import logo from './CRISPR_project_final_logo.svg';
+import logo from './LS1 colour.svg';
 import './homeHeader.scss';
 import 'animate.css';
 
@@ -9,7 +9,6 @@ const header = () => {
     <div className="bg-faded text-center mb-1">
       <div
         className="animated fadeInUp text-center"
-        style={{marginTop: '60px', marginBottom: '80px'}}
       >
         <img src={logo} style={{width: '80%'}} alt="Project Score" />
       </div>
