@@ -61,7 +61,7 @@ function ModelInfoSummary(props) {
                   )}</div>
               </Col>
               <Col xs={{size: 12}} lg={{size: 6}} className='border-left'>
-                <ModelDatasets datasets={modelInfo.datasets} modelId={modelInfo.modelId}/>
+                <ModelDatasets datasets={modelInfo.datasets} modelId={modelInfo.id}/>
               </Col>
             </Row>
           </div>
