@@ -75,7 +75,8 @@ export default function Documentation() {
             Nature. 2019</a>). All genes are assigned a target
             priority score between 0 – 100 from lowest to highest priority. Priority scores for a gene are
             calculated individually for each cancer type with at least 10 cell lines and considering all cancer types
-            together in a pan-cancer analysis.
+            together in a pan-cancer analysis. Users can use default priority score parameters or select the input
+            features, modify their weighting and adjust thresholds.
           </p>
 
           <p className='paragraph'>
