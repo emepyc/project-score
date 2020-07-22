@@ -1,4 +1,4 @@
-export const foldChangeHelp = 'Values indicate gene representation over the course of the experiment, measured by averaged sgRNA representation for each gene. Negative values=depletion of gene; Positive values=enrichment';
+export const foldChangeHelp = 'Fold change between average representation of targeting sgRNAs 14 days post-transfection versus plasmid library. Negative and positive values are gene depletion and enrichment, respectively.';
 export const lossOfFitnessScoreHelp = 'Score < 0 is a statistically significant effect; values are scaled Bayes Factors calculated using BAGEL.';
 export const priorityScoresHelp = {
   totalPriorityScore: 'Ranging from 0 to 100, the value nominates promising therapeutic targets based on (1) fitness effects obtained from CRISPR-Cas9 experimental evidence and (2) existence of a genetic biomarker associated with the target',
