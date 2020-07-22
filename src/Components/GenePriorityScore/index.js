@@ -35,7 +35,7 @@ function GenePriorityScore(props) {
     <div ref={container}>
       <Card>
         <CardHeader>
-          Target priority score
+          Target Priority Score
           <sup
             className='helpAnchor'
             onMouseEnter={() => setTargetPriorityScoreTooltip(true)}

@@ -68,7 +68,7 @@ function PriorityScoresCard({analysis}) {
     <React.Fragment>
       <Card>
         <CardHeader>
-          Target priority scores
+          Target Priority Scores
           <sup
             className='helpAnchor'
             onMouseEnter={() => setTargetPriorityScoreTooltip(true)}
