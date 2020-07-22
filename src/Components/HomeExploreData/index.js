@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Link} from 'react-router-dom';
-import targetLogo from './targetLogo.png';
+import targetLogo from './logoSymbol.svg';
 
 const HomeExploreData = () => (
   <React.Fragment>

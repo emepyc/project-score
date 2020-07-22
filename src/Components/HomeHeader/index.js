@@ -8,7 +8,7 @@ const header = () => {
   return (
     <div className="bg-faded text-center mb-1">
       <div
-        className="animated fadeInUp text-center"
+        className="animated fadeInUp text-center my-5"
       >
         <img src={logo} style={{width: '80%'}} alt="Project Score" />
       </div>
