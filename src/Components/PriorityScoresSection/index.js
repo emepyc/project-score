@@ -372,37 +372,14 @@ function PriorityScoresBucketLegend() {
 }
 
 function PriorityScoresYLabel({position}) {
-  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   return (
     <div className='position-absolute' style={{
-      // top: 'calc(50% - 50px)',
       top: `${position}px`,
       left: '-60px',
       transform: 'rotate(-90deg)',
     }}>
       Target priority score
-      <sup
-        className='helpAnchor'
-        onMouseEnter={() => setTooltipOpen(true)}
-        id='target-priority-score-y-label-help-icon'
-      >
-        ?
-      </sup>
-      <ReactStrapTooltip
-        trigger='hover'
-        toggle={() => setTooltipOpen(false)}
-        placement='bottom'
-        isOpen={tooltipOpen}
-        target='target-priority-score-y-label-help-icon'
-        className='helpAnchor'
-        innerClassName='project-score-tooltip'
-      >
-        To nominate candidate therapeutic targets, we assign each gene a score that integrates CRISPR knockout gene
-        fitness effects with genomic biomarker and patient data (see also documentation). Scores are between 0 – 100
-        from lowest to highest priority and are calculated individually for each cancer type and considering all cancer
-        types.
-      </ReactStrapTooltip>
     </div>
   )
 }
