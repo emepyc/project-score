@@ -465,15 +465,13 @@ export default function Documentation() {
 
           <div className='paragraph'>
             <div className='glossary-header'>Fitness Score</div>
-            <div className='glossary-description'>Quantitative measure of the reduction of cell viability elicited by a
-              gene inactivation, via CRISPR-Cas9
-              targeting. This is based on Bayes Factor value computed using BAGEL starting from CRISPRcleanR corrected
-              gene
-              depletion fold changes, and scaled to a 5% false discovery rate threshold (from classifying reference
-              essential/non-essential genes based on BF rankings)
+            <div className='glossary-description'>
+              A quantitative measure of the cell viability effect elicited by CRISPR-Cas9 mediated cell inactivation.
+              This is based on Bayes Factor values computed using BAGEL on CRISPRcleanR corrected gene depletion fold
+              changes. Values are scaled to a 5% false discovery rate threshold from classifying reference essential and
+              non-essential genes.
             </div>
           </div>
-
 
 
           <div className='paragraph'>
