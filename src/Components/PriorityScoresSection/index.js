@@ -20,6 +20,7 @@ import {textDefaultColor} from '../../colors';
 import PriorityScoresSettings from '../PriorityScoresSettings';
 import SvgIcon from '../SvgIcon';
 import Tooltip from '../Tooltip';
+import {priorityScoresHelp} from '../../definitions';
 
 import "./priorityScoresSection.scss";
 
@@ -61,26 +62,48 @@ export const defaultSettings = {
 
 function PriorityScoresCard({analysis}) {
   const [settings, setSettings] = useState(defaultSettings);
+  const [targetPriorityScoreTooltip, setTargetPriorityScoreTooltip] = useState(false);
 
   return (
-    <Card>
-      <CardHeader>
-        Target priority scores
-      </CardHeader>
-      <CardBody>
-        <div>
+    <React.Fragment>
+      <Card>
+        <CardHeader>
+          Target priority scores
+          <sup
+            className='helpAnchor'
+            onMouseEnter={() => setTargetPriorityScoreTooltip(true)}
+            id='target-priority-score-tooltip'
+          >
+            ?
+          </sup>
+        </CardHeader>
+        <CardBody>
           <div>
-            <PriorityScoresSettings
-              defaultSettings={defaultSettings}
-              onSubmit={setSettings}
-            />
+            <div>
+              <PriorityScoresSettings
+                defaultSettings={defaultSettings}
+                onSubmit={setSettings}
+              />
+            </div>
+            <div>
+              <PriorityScores analysis={analysis} settings={settings}/>
+            </div>
           </div>
-          <div>
-            <PriorityScores analysis={analysis} settings={settings}/>
-          </div>
-        </div>
-      </CardBody>
-    </Card>
+        </CardBody>
+      </Card>
+
+      <ReactStrapTooltip
+        trigger='hover'
+        toggle={() => setTargetPriorityScoreTooltip(false)}
+        placement='top'
+        isOpen={targetPriorityScoreTooltip}
+        target='target-priority-score-tooltip'
+        className='helpAnchor'
+        innerClassName='project-score-tooltip'
+      >
+        {priorityScoresHelp.targetPriorityScores}.
+      </ReactStrapTooltip>
+    </React.Fragment>
   );
 }
 
