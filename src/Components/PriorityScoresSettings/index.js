@@ -103,7 +103,9 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
           </div>
 
           <div className='d-flex flex-row flex-grow-1'>
-            <span className="flex-shrink-1 settings-header-section">Target priority score inputs, weights and features:</span>
+            <span className="flex-shrink-1 settings-header-section">
+              Adjust priority score inputs and weighting:
+            </span>
           </div>
 
         </div>
