@@ -15,6 +15,11 @@ export default function Documentation() {
               </NavLink>
             </NavItem>
             <NavItem>
+              <NavLink href='#target-tractability'>
+                Target tractability assessment
+              </NavLink>
+            </NavItem>
+            <NavItem>
               <NavLink href='#experimental'>
                 Experimental methods
               </NavLink>
@@ -138,7 +143,7 @@ export default function Documentation() {
 
 
         <div className='section'>
-          <h2>Target tractability assessment</h2>
+          <h2 id='target-tractability'>Target tractability assessment</h2>
           <p className='paragraph'>
             On the basis of current drug-development strategies, targets vary in their suitability for pharmaceutical
             intervention and this informs target selection. Using a target tractability assessment for the development
