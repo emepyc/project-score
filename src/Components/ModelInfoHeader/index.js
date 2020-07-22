@@ -4,10 +4,10 @@ import PageHeader from '../PageHeader';
 
 export default function ModelInfoHeader({name, symbol, features}) {
   const linkToCellModelPassport = (
-    <span>More information in the{' '}
+    <span>More genomic and functional information in the{' '}
       <a target='_blank' rel='noopener noreferrer' href={`https://cellmodelpassports.sanger.ac.uk/passports/${symbol}`}>
         Cell Model Passport
-      </a> site
+      </a> website
     </span>
   );
   return (

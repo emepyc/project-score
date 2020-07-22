@@ -123,7 +123,7 @@ function ModelDatasets({datasets, modelId}) {
 
   return (
     <Fragment>
-      <div style={{fontWeight: 'bold'}} className='mb-3'>Available datasets:</div>
+      <div style={{fontWeight: 'bold'}} className='mb-3'>Additional cell model datasets:</div>
 
       <div>
         {datasets.map(dataset => (
