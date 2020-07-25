@@ -16,7 +16,7 @@ import useUrlParams from '../useUrlParams';
 import {fetchPriorityScores} from '../../api';
 import FetchData from '../FetchData';
 import useWidth from '../useWidth';
-import {textDefaultColor} from '../../colors';
+import {significantNodeColor, textDefaultColor} from '../../colors';
 import PriorityScoresSettings from '../PriorityScoresSettings';
 import SvgIcon from '../SvgIcon';
 import Tooltip from '../Tooltip';
@@ -562,7 +562,7 @@ function PriorityScoreBucketPlot(props) {
                   cx={xPos}
                   cy={yScale(priorityScore["score"])}
                   r="3"
-                  fill="green"
+                  fill={significantNodeColor}
                   onMouseEnter={() => highlightPriorityScore(priorityScore, index)}
                   onMouseLeave={() => unHighlightPriorityScore()}
                 />

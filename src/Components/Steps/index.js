@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import findIndex from 'lodash.findindex';
 import {Tooltip} from 'reactstrap';
 
-import {significantNodeColor, insignificantNodeColor} from "../../colors";
+import {significantNodeColor, insignificantNodeColor, textDefaultColor} from "../../colors";
 import useId from '../useId';
 
 export default function Steps(props) {
@@ -81,6 +81,7 @@ export default function Steps(props) {
                 y={0}
                 textAnchor='start'
                 transform={`translate(0, -10), rotate(-45)`}
+                fill={textDefaultColor}
                 style={{
                   pointerEvents: 'none',
                 }}
