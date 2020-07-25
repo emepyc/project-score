@@ -4,6 +4,7 @@ import isEqual from 'lodash.isequal';
 import isArray from 'lodash.isarray';
 
 import {Slider} from '../RangeSlider';
+import Steps from '../Steps';
 import {priorityScoresHelp} from "../../definitions";
 
 import "./priorityScoresSettings.scss";
@@ -186,7 +187,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
             </div>
             <div className="mt-1">
               <Label>
-                Min genomic marker strength
+                Include genomic biomarkers classified as:
               </Label>
               <Help
                 label='Genomic marker class'
@@ -196,17 +197,29 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   {label: 'Class C marker', definition: priorityScoresHelp.classCmarker},
                 ]}
               />
-              <Input
-                type="select"
-                value={genomicMarkerStrength}
-                onChange={(event) => setGenomicMarkerStrength(event.target.value)}
-              >
-                <option value={0}>No marker</option>
-                <option value={1}>1 (class A)</option>
-                <option value={2}>2 (class B)</option>
-                <option value={3}>3 (class C)</option>
-              </Input>
+              {/*<Input*/}
+              {/*  type="select"*/}
+              {/*  value={genomicMarkerStrength}*/}
+              {/*  onChange={(event) => setGenomicMarkerStrength(event.target.value)}*/}
+              {/*>*/}
+              {/*  <option value={0}>No marker</option>*/}
+              {/*  <option value={1}>1 (class A)</option>*/}
+              {/*  <option value={2}>2 (class B)</option>*/}
+              {/*  <option value={3}>3 (class C)</option>*/}
+              {/*</Input>*/}
             </div>
+            <Steps
+              labels={['No marker', '1 (class A)', '2 (class B)', '3 (class C)']}
+              values={[0, 1, 2, 3]}
+              descriptions={[
+                null,
+                priorityScoresHelp.classAmarker,
+                priorityScoresHelp.classBmarker,
+                priorityScoresHelp.classCmarker,
+              ]}
+              selectedValue={genomicMarkerStrength}
+              onSelectStep={setGenomicMarkerStrength}
+            />
           </div>
           <div className='mx-5 flex-grow-1'>
             <ScoreWeightSlider
