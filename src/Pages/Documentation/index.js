@@ -454,7 +454,7 @@ export default function Documentation() {
             <div className='glossary-header'>Corrected Fold Change</div>
             <div className='glossary-description'>
               CRISPRcleanR corrected gene depletion fold change, computed between average representation of targeting
-              sgRNAs 14 days post-transfection versus plasmid library
+              sgRNAs 14 days post-transfection versus plasmid library.
             </div>
           </div>
 
@@ -485,7 +485,7 @@ export default function Documentation() {
             <div className='glossary-description'>
               A quantitative assessment of the potential of each gene as a candidate cancer therapeutic target. It
               is computed by an analytical framework that combines CRISPR knockout gene fitness effects with
-              biomarker and patient data to output a target priority score from 0 – 100 (highest to lowest).
+              biomarker and patient data to output a target priority score from 0 – 100 (lowest to highest).
             </div>
           </div>
 
