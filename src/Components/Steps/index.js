@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import findIndex from 'lodash.findindex';
 import {Tooltip} from 'reactstrap';
 
-import {significantNodeColor, insignificantNodeColor, textDefaultColor} from "../../colors";
+import {significantNodeColor, insignificantNodeColor, textDefaultColor, backgroundDefaultColor} from "../../colors";
 import useId from '../useId';
 
 export default function Steps(props) {
@@ -45,7 +45,7 @@ export default function Steps(props) {
                 <line
                   x2={0}
                   y1={0}
-                  x1={-stepSeparation + 5}
+                  x1={-stepSeparation + 9}
                   y2={0}
                   stroke={selectedSteps[pos] ? significantNodeColor : insignificantNodeColor}
                   style={{
@@ -53,6 +53,14 @@ export default function Steps(props) {
                   }}
                 />
               )}
+              <circle
+                cx={0}
+                cy={0}
+                r={8}
+                strokeWidth={2}
+                stroke={selectedSteps[pos] ? significantNodeColor : insignificantNodeColor}
+                fill={backgroundDefaultColor}
+              />
               <circle
                 cx={0}
                 cy={0}
@@ -80,7 +88,7 @@ export default function Steps(props) {
                 x={0}
                 y={0}
                 textAnchor='start'
-                transform={`translate(0, -10), rotate(-45)`}
+                transform={`translate(0, -12), rotate(-45)`}
                 fill={textDefaultColor}
                 style={{
                   pointerEvents: 'none',
