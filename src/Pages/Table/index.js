@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap';
 import {withRouter} from 'react-router-dom';
 import classNames from 'classnames';
 
-import TableComponent from '../../Components/Table';
+import FitnessTable from '../../Components/FitnessTable';
 import CancerTypeFilter from '../../Components/AnalysisFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import {Row, Col} from 'reactstrap';
@@ -26,6 +26,10 @@ function Table(props) {
     })
     setActiveTab(newTab);
   }
+
+  useEffect(() => {
+    setActiveTab(urlParams.dataTab);
+  }, [urlParams]);
 
   const tabToggle = tabName => {
     if (activeTab !== tabName) {
@@ -58,27 +62,36 @@ function Table(props) {
             className={classNames('tabLabel', {active: activeTab === 'priorityScores'})}
             onClick={() => tabToggle('priorityScores')}
           >
-            Priority scores
+            Target priority scores
           </NavLink>
         </NavItem>
       </Nav>
       <TabContent activeTab={activeTab}>
         <TabPane tabId='fitness'>
           <Row className='my-3'>
-            <Col xs={{size: 12}} lg={{size: 10, offset: 2}} xl={{size: 8, offset: 4}}>
+            <Col xs={{size: 12}} xl={{size: 4}} className='font-weight-bold mb-4'>
+              <span style={{fontSize: '1.1em'}}>Query gene fitness effects in each cell line</span>
+            </Col>
+            <Col xs={{size: 12}} xl={{size: 8}}>
               <FitnessFilters/>
             </Col>
           </Row>
           <Row className='my-3'>
             <Col>
-              <FitnessTable/>
+              <_FitnessTable/>
             </Col>
           </Row>
         </TabPane>
 
         <TabPane tabId='priorityScores'>
           <Row className='my-3'>
-            <Col xs={{size: 12}} xl={{size: 4, offset: 8}}>
+            <Col xs={{size: 12}} xl={{size: 8}} className='font-weight-bold mb-4'>
+              <span style={{fontSize: '1.1em'}}>
+                Query target priority scores to nominate candidate targets and their tractability for drug development
+              </span>
+            </Col>
+
+            <Col xs={{size: 12}} xl={{size: 4}}>
               <PriorityScoresFilters/>
             </Col>
           </Row>
@@ -137,17 +150,17 @@ function FitnessFilters() {
   );
 }
 
-function FitnessTable() {
+function _FitnessTable() {
   const [highlight, onHighlight] = useState(null);
   return (
     <Card>
       <CardHeader>
-        Fitness Table
+        Fitness Score Table
       </CardHeader>
       <CardBody>
         <Row>
           <Col xs={{size: 12}}>
-            <TableComponent
+            <FitnessTable
               showSearchbox={true}
               highlight={highlight}
               onHighlight={onHighlight}

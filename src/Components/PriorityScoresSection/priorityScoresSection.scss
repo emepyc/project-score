@@ -1,21 +1,48 @@
+@import '../../common.scss';
+
 $bucket-group1-color: #91B8F2;
 $bucket-group2-color: #69D38B;
 $bucket-group3-color: #D07D80;
 
-.bucketBox {
-  stroke: black;
-  stroke-width: 0.5px;
-  fill: white;
 
-  &.group1 {
-    fill: $bucket-group1-color;
+.bucketPlot {
+  display: inline-block;
+  position: relative;
+
+  .priorityScoreGeneLabel {
+    pointer-events: none;
   }
-  &.group2 {
-    fill: $bucket-group2-color;
+
+  .bucketBox {
+    stroke: black;
+    stroke-width: 0.5px;
+    fill: white;
+
+    &.group1 {
+      fill: $bucket-group1-color;
+    }
+
+    &.group2 {
+      fill: $bucket-group2-color;
+    }
+
+    &.group3 {
+      fill: $bucket-group3-color;
+    }
   }
-  &.group3 {
-    fill: $bucket-group3-color;
-  }
+}
+
+.xLabel {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+
+}
+
+.helpAnchor {
+  margin-top: 10px;
+  margin-left: 2px;
+  cursor: pointer;
 }
 
 .expandLabel {
@@ -25,6 +52,7 @@ $bucket-group3-color: #D07D80;
   -ms-transition: opacity 0.5s ease-in-out;
   -o-transition: opacity 0.5s ease-in-out;
   opacity: 0;
+
   &.show {
     opacity: 1;
   }
@@ -38,22 +66,27 @@ $bucket-group3-color: #D07D80;
 .bucketBoxLegend {
   margin-left: 15px;
   margin-right: 15px;
+
   .element {
     width: 15px;
     height: 15px;
     margin-right: 10px;
     display: inline-block;
     vertical-align: middle;
+
     &.group1 {
       background-color: $bucket-group1-color;
     }
+
     &.group2 {
       background-color: $bucket-group2-color;
     }
+
     &.group3 {
       background-color: $bucket-group3-color;
     }
   }
+
   .label {
     font-size: 0.9em;
     vertical-align: middle;

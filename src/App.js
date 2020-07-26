@@ -1,5 +1,6 @@
-import React from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import ReactGA from "react-ga";
+import {BrowserRouter as Router, Route, useLocation, Switch} from 'react-router-dom';
 
 import {backgroundDefaultColor, textDefaultColor} from "./colors";
 import Gene from './Pages/Gene';
@@ -11,35 +12,67 @@ import Footer from './Components/Footer';
 import Table from './Pages/Table';
 import Documentation from './Pages/Documentation';
 
-const App = (props) => (
-  <div>
-    <Router {...props}>
-      <div>
-        <Masthead/>
+const _App = (props) => {
 
-        <div className="container-fluid pt-2 pb-5"
-             style={{
-               backgroundColor: backgroundDefaultColor,
-               color: textDefaultColor,
-               fontSize:
-                 '0.9em',
-               fontWeight: 300,
-             }}
-        >
-          <main>
-            <Route exact path='/' component={Home}/>
-            <Route exact path='/downloads' component={Downloads}/>
-            <Route path='/table' component={Table}/>
-            <Route path='/gene/:geneId' component={Gene}/>
-            <Route path='/model/:modelId' component={Model}/>
-            <Route path='/documentation' component={Documentation}/>
-          </main>
+  // Add your tracking ID created from https://analytics.google.com/analytics/web/#home/
+  ReactGA.initialize("UA-173268107-1", {
+    debug: process.env.NODE_ENV === "development",
+    testMode: process.env.NODE_ENV === "test",
+    gaOptions: {
+      siteSpeedSampleRate: 100,
+    },
+  });
+
+  return (
+    <div>
+      <Router {...props}>
+        <div>
+          <Masthead/>
+
+          <div className="container-fluid pt-2 pb-5"
+               style={{
+                 backgroundColor: backgroundDefaultColor,
+                 color: textDefaultColor,
+                 fontSize: '0.9em',
+                 fontWeight: 300,
+               }}
+          >
+            <main>
+              <App/>
+            </main>
+          </div>
+          <Footer/>
         </div>
-        <Footer/>
-      </div>
 
-    </Router>
-  </div>
-);
+      </Router>
+    </div>
+  );
+}
 
-export default App;
+export default _App;
+
+function usePageViews() {
+    const location = useLocation();
+
+    useEffect(
+        () => {
+            ReactGA.pageview(location.pathname + location.search);
+        },
+        [location]
+    );
+}
+
+function App() {
+  usePageViews();
+
+  return (
+    <Switch>
+      <Route exact path='/' component={Home}/>
+      <Route exact path='/downloads' component={Downloads}/>
+      <Route path='/table' component={Table}/>
+      <Route path='/gene/:geneId' component={Gene}/>
+      <Route path='/model/:modelId' component={Model}/>
+      <Route path='/documentation' component={Documentation}/>
+    </Switch>
+  );
+}

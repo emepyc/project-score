@@ -15,6 +15,8 @@ function TableDisplay(props) {
 
   const [showLFSTooltip, toggleShowLFSTooltip] = useState(false);
   const [showFCTooltip, toggleShowFCTooltip] = useState(false);
+  const [lofCellTooltip, setLofCellTooltip] = useState(null);
+  const [geneCellTooltip, setGeneCellTooltip] = useState(null);
 
   const toggleLFSTooltip = () => toggleShowLFSTooltip(!showLFSTooltip);
   const toggleFCTooltip = () => toggleShowFCTooltip(!showFCTooltip);
@@ -47,17 +49,13 @@ function TableDisplay(props) {
           <th>
             Tissue
           </th>
-          <th>
-            <nobr>
-              Corrected log fold change<sup id='foldChangeHelp' style={{cursor: 'default'}}>?</sup>{' '}
-              <SortArrows {...props} field="fc_clean"/>
-            </nobr>
+          <th style={{whiteSpace: 'nowrap'}}>
+            Corrected log fold change<sup id='foldChangeHelp' style={{cursor: 'default'}}>?</sup>{' '}
+            <SortArrows {...props} field="fc_clean"/>
           </th>
-          <th>
-            <nobr>
-              Loss of fitness score<sup id='lossOfFitnessScoreHelp' style={{cursor: 'default'}}>?</sup>{' '}
-              <SortArrows {...props} field="bf_scaled"/>
-            </nobr>
+          <th style={{whiteSpace: 'nowrap'}}>
+            Loss of fitness score<sup id='lossOfFitnessScoreHelp' style={{cursor: 'default'}}>?</sup>{' '}
+            <SortArrows {...props} field="bf_scaled"/>
           </th>
         </tr>
         </thead>
@@ -74,7 +72,11 @@ function TableDisplay(props) {
               onMouseOver={() => mouseOver(row)}
               onMouseOut={mouseOut}
             >
-              <td style={{backgroundColor: row.isPanCancer ? colorPanCancerGeneBg : "white"}}>
+              <td
+                style={{backgroundColor: row.isPanCancer ? colorPanCancerGeneBg : "white"}}
+                id={`gene-${key}`}
+                onMouseEnter={() => setGeneCellTooltip(`gene-${key}`)}
+              >
                 <Link to={`/gene/${row.geneId}?${paramsForGeneLink}`}>{row.geneSymbol}</Link>
               </td>
               <td style={{whiteSpace: 'nowrap'}}>
@@ -86,7 +88,11 @@ function TableDisplay(props) {
               <td>
                 {row.fc_clean}
               </td>
-              <td style={{backgroundColor: scoreBackgroundColor}}>
+              <td
+                style={{backgroundColor: scoreBackgroundColor}}
+                id={`lof-${key}`}
+                onMouseEnter={() => setLofCellTooltip(`lof-${key}`)}
+              >
                 {row.bf_scaled}
               </td>
             </tr>
@@ -94,19 +100,72 @@ function TableDisplay(props) {
         })}
         </tbody>
       </Table>
+      {data.map(row => {
+        const key = getKeyForRow(row);
+        const lofKey = `lof-${key}`
+        const geneKey = `gene-${key}`;
+
+        return (
+          <React.Fragment
+            key={key}
+          >
+            {row.isPanCancer && (
+              <Tooltip
+                target={geneKey}
+                placement='top'
+                isOpen={geneCellTooltip === geneKey}
+                toggle={() => setGeneCellTooltip(null)}
+                innerClassName='project-score-tooltip'
+              >
+                <div
+                  style={{color: colorPanCancerGeneBg}}
+                >
+                  pan cancer core fitness gene
+                </div>
+              </Tooltip>
+            )}
+
+            <Tooltip
+              target={lofKey}
+              placement='top'
+              isOpen={lofCellTooltip === lofKey}
+              toggle={() => setLofCellTooltip(null)}
+              innerClassName='project-score-tooltip'
+            >
+              <React.Fragment>
+                {row.bf_scaled < 0 ? (
+                  <div
+                    style={{color: colorSignificantBg}}
+                  >
+                    Loss of fitness score &lt; 0
+                  </div>
+                ) : (
+                  <div
+                    style={{color: colorInsignificantBg}}
+                  >
+                    Loss of fitness score &gt; 0
+                  </div>
+                )}
+              </React.Fragment>
+            </Tooltip>
+          </React.Fragment>
+        )
+      })}
       <Tooltip
         target='lossOfFitnessScoreHelp'
-        placement='right'
+        placement='top'
         isOpen={showLFSTooltip}
         toggle={toggleLFSTooltip}
+        innerClassName='project-score-tooltip'
       >
         {lossOfFitnessScoreHelp}
       </Tooltip>
       <Tooltip
         target='foldChangeHelp'
-        placement='right'
+        placement='top'
         isOpen={showFCTooltip}
         toggle={toggleFCTooltip}
+        innerClassName='project-score-tooltip'
       >
         {foldChangeHelp}
       </Tooltip>

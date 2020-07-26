@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Table from '../../Components/Table';
+import Table from '../../Components/FitnessTable';
 import CancerTypeFilter from '../../Components/AnalysisFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import FitnessPlot from '../../Components/FitnessPlot';
@@ -124,17 +124,19 @@ function FitnessPlotSection(props) {
             </div>
             <Tooltip
               target='lossOfFitnessScoreButton'
-              placement='right'
+              placement='bottom'
               isOpen={showLFSTooltip}
               toggle={toggleLFSTooltip}
+              innerClassName='project-score-tooltip'
             >
               {lossOfFitnessScoreHelp}
             </Tooltip>
             <Tooltip
               target='foldChangeScoreButton'
-              placement='right'
+              placement='top'
               isOpen={showFCTooltip}
               toggle={toggleFCTooltip}
+              innerClassName='project-score-tooltip'
             >
               {foldChangeHelp}
             </Tooltip>

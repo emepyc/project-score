@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Container, Nav, NavItem, NavLink} from 'reactstrap';
+import {Container, Nav, NavItem, NavLink, Table} from 'reactstrap';
 
 import './documentation.scss';
 
@@ -12,6 +12,11 @@ export default function Documentation() {
             <NavItem>
               <NavLink href='#scores'>
                 Target priority scores
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink href='#target-tractability'>
+                Target tractability assessment
               </NavLink>
             </NavItem>
             <NavItem>
@@ -33,6 +38,7 @@ export default function Documentation() {
         </div>
         <div className='section'>
           <h1>Project Score</h1>
+
           <p className='paragraph'>
             Genetic screens are a powerful approach to investigate gene function and can be used to identify new
             candidate
@@ -48,7 +54,7 @@ export default function Documentation() {
           </p>
 
           <p>
-            The Project Score database enables scientist to explore these data using intuitive and interactive
+            The Project Score database enables scientists to explore these data using intuitive and interactive
             interfaces.
             Project Score is part of the <a target='_blank' rel='noopener noreferrer'
                                             href="https://depmap.sanger.ac.uk/">Cancer
@@ -74,7 +80,8 @@ export default function Documentation() {
             Nature. 2019</a>). All genes are assigned a target
             priority score between 0 – 100 from lowest to highest priority. Priority scores for a gene are
             calculated individually for each cancer type with at least 10 cell lines and considering all cancer types
-            together in a pan-cancer analysis.
+            together in a pan-cancer analysis. Users can use default priority score parameters or select the input
+            features, modify their weighting and adjust thresholds.
           </p>
 
           <p className='paragraph'>
@@ -85,10 +92,11 @@ export default function Documentation() {
             The priority score consists of three components described here:
           </p>
 
-          <p className='paragraph'>
+          <div className='paragraph'>
             <ol className='paragraph'>
               <li>
-                <span className='strong'>Exclusion filter [defining genes with null priority score]</span> - Genes have a priority score of zero
+                <span className='strong'>Exclusion filter [defining genes with null priority score]</span> - Genes have
+                a priority score of zero
                 (or <i>null</i>) if they:
                 <ul>
                   <li>were defined as <i>core fitness</i> (i.e. required for the fitness of the majority of cell
@@ -106,7 +114,9 @@ export default function Documentation() {
                 </ul>
               </li>
               <li className='paragraph'>
-                <span className='strong'>Biomarker &amp; tumour prevalence [30% of the priority score by default]</span> - This component of the
+                <span
+                  className='strong'>Biomarker &amp; tumour prevalence [30% of the priority score by default]</span> -
+                This component of the
                 priority score is based on evidence of a genetic biomarker associated with a target dependency. It
                 is proportional to biomarker strength and also accounts for genomic alterations of the target
                 occurring in patient tumours of the indicated cancer type at &gt;2% frequency. For the biomarker
@@ -117,7 +127,8 @@ export default function Documentation() {
                 score by default.
               </li>
               <li className='paragraph'>
-                <span className='strong'>Cell Lines Fitness effect [70% of the priority score by default]</span> - This component of the score is
+                <span className='strong'>Cell Lines Fitness effect [70% of the priority score by default]</span> - This
+                component of the score is
                 the average sum of multiple factors for cell lines in which the gene is a significant fitness gene (at
                 a 5% FDR), and is expressed at least at the basal level, and is not homozygously deleted. For each
                 cell line under consideration, these factors account for the gene knockout fitness effect (BAGEL
@@ -127,7 +138,135 @@ export default function Documentation() {
                 70% of the total score by default.
               </li>
             </ol>
+          </div>
+        </div>
+
+
+        <div className='section'>
+          <h2 id='target-tractability'>Target tractability assessment</h2>
+          <p className='paragraph'>
+            On the basis of current drug-development strategies, targets vary in their suitability for pharmaceutical
+            intervention and this informs target selection. Using a target tractability assessment for the development
+            of small molecules and antibodies, we assigned each gene to 1 of 10 tractability buckets, with 1 indicating
+            the highest tractability (<a target='_blank' rel='noopener noreferrer'
+                                         href='https://pubmed.ncbi.nlm.nih.gov/30108951/'>Brown et al., MedChemComm.
+            2018</a>).
           </p>
+
+          <p className='paragraph'>
+            Tractability group 1 (buckets 1–3) comprises targets of approved anticancer drugs or compounds in clinical
+            or preclinical development. Tractability group 2 (buckets 4–7) contains priority targets without drugs in
+            clinical development but with evidence that support target tractability. Lastly, group 3 (buckets 8–10)
+            includes priority targets that have weak or no support, or a lack of information that could inform
+            tractability. Target tractability is an evolving field and we suggest that you also visit the <a
+            target='_blank' rel='noopener noreferrer' href='https://www.targetvalidation.org'>Open Targets
+            platform</a> ‘target profile pages’ for information on individual targets.
+          </p>
+
+          <div className='paragraph'>
+            <Table>
+              <thead>
+              <tr>
+                <th>Bucket</th>
+                <th width='50%'>Small molecule tractability</th>
+                <th width='50%'>Antibody tractability</th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr>
+                <th scope='row'>1</th>
+                <td>
+                  Pharma portfolio (ChEMBL): targets with approved small molecule drugs (phase 4)
+                </td>
+                <td>
+                  ChEMBL: targets with approved mAB drugs (phase 4)
+                </td>
+              </tr>
+              <tr>
+                <th scope='row'>2</th>
+                <td>
+                  Pharma portfolio (ChEMBL): targets with small molecules in phase &gt;= 2
+                </td>
+                <td>
+                  ChEMBL: targets with mAB in phase &gt;= 2
+                </td>
+              </tr>
+              <tr>
+                <th scope='row'>3</th>
+                <td>
+                  Pharma portfolio (ChEMBL): lead op (or pre-clinical) targets with small molecule
+                </td>
+                <td>
+                  ChEMBL: pre-clinical targets with mAB
+                </td>
+              </tr>
+              <tr>
+                <th scope='row'>4</th>
+                <td>PBD: targets with crystal structures with ligands</td>
+                <td>HPA: targets in "Plasma membrane", high confidence</td>
+              </tr>
+              <tr>
+                <th scope='row'>5</th>
+                <td>
+                  DrugEBIlity: targets with Ensembl score &gt;= 0.7
+                </td>
+                <td>
+                  Uniprot loc: targets in "Cell membrane" or "Secreted", high confidence
+                </td>
+              </tr>
+              <tr>
+                <th scope='row'>6</th>
+                <td>
+                  DrugEBIlity: targets with 0 &lt; Ensembl score &lt; 0.7
+                </td>
+                <td>
+                  Uniprot loc: targets in "Cell membrane" or "Secreted", low or unknown confidence
+                </td>
+              </tr>
+              <tr>
+                <th scope='row'>7</th>
+                <td>
+                  ChEMBL: targets with ligands (PFI &lt;= 7, SMART hits &lt;=2, scaffold &gt;= 2
+                </td>
+                <td>
+                  SigP + TMHMM: targets with predicted signal peptide or trans-membrane regions and not destined to
+                  organelles
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">8</th>
+                <td>
+                  Targets with a predicted 'Rule of 5 druggable' domain (<a
+                  href="https://pubmed.ncbi.nlm.nih.gov/12209152/" target="_blank"
+                  rel="noopener noreferrer">Hopkins and Groom, Nat Rev Drug Discov. 2002)</a>
+                </td>
+                <td>
+                  Go CC: Targets with the parent term GO:0005576 (extracellular region) or GO:0031012 (extracellular
+                  matrix) or GO:0005886 (plasma membrane) or their children terms
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">9</th>
+                <td>
+                  SureChEMBL: targets with 'chemical' patents in the last 5 years
+                </td>
+                <td>
+                  SureChEMBL: targets with 'chemical' patents in the last 5 years
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">10</th>
+                <td>
+                  Remainder of genome
+                </td>
+                <td>
+                  Remainder of genome
+                </td>
+              </tr>
+              </tbody>
+            </Table>
+          </div>
         </div>
 
         <div className='section'>
@@ -135,7 +274,8 @@ export default function Documentation() {
 
           <p className='paragraph'>
             <span className='strong'>Citation</span>: For detailed information on Project Score methods please refer
-            to its <a target='_blank' href='https://www.nature.com/articles/s41586-019-1103-9' rel='noopener noreferrer'>publication</a>
+            to its <a target='_blank' href='https://www.nature.com/articles/s41586-019-1103-9'
+                      rel='noopener noreferrer'>publication</a>
           </p>
 
           <p className='paragraph'>
@@ -251,35 +391,6 @@ export default function Documentation() {
           </h2>
 
           <div className='paragraph'>
-            <div className='glossary-header'>Core Fitness Gene</div>
-
-            <div className='glossary-description'>
-              Genes which are required for the fitness of the majority of cell lines from a given cancer type or across
-              multiple cancer-types.
-            </div>
-          </div>
-
-
-          <div className='paragraph'>
-            <div className='glossary-header'>Fitness Score</div>
-            <div className='glossary-description'>Quantitative measure of the reduction of cell viability elicited by a
-              gene inactivation, via CRISPR-Cas9
-              targeting. This is based on Bayes Factor value computed using BAGEL starting from CRISPRcleanR corrected
-              gene
-              depletion fold changes, and scaled to a 5% false discovery rate threshold (from classifying reference
-              essential/non-essential genes based on BF rankings)
-            </div>
-          </div>
-
-          <div className='paragraph'>
-            <div className='glossary-header'>Corrected Fold Change</div>
-            <div className='glossary-description'>
-              CRISPRcleanR corrected gene depletion fold change, computed between average representation of targeting
-              sgRNAs 14 days post-transfection versus plasmid library
-            </div>
-          </div>
-
-          <div className='paragraph'>
             <div className='glossary-header'>BAGEL</div>
             <div className='glossary-description'>
               A supervised learning method for analysing gene knockout screens and inferring gene fitness effects,
@@ -288,39 +399,6 @@ export default function Documentation() {
               details can be
               found in the <a target='_blank' rel='noopener noreferrer'
                               href='https://www.ncbi.nlm.nih.gov/pubmed/27083490'>corresponding article</a>.
-            </div>
-          </div>
-
-
-          <div className='paragraph'>
-            <div className='glossary-header'>CRISPRcleanR</div>
-            <div className='glossary-description'>
-              An unsupervised method for identifying and correcting gene-independent responses to CRISPR-Cas9
-              targeting; based on segmentation of sgRNA fold change values across the genomes. Further details can be
-              found in the <a target='_blank' rel='noopener noreferrer'
-                              href='https://www.ncbi.nlm.nih.gov/pubmed/30103702'>corresponding article</a>.
-            </div>
-          </div>
-
-          <div className='paragraph'>
-            <div className='glossary-header'>Target Priority Score</div>
-            <div className='glossary-description'>
-              A quantitative assessment of the potential of each gene as a candidate cancer therapeutic target. It
-              is computed by an analytical framework that combines CRISPR knockout gene fitness effects with
-              biomarker and patient data to output a target priority score from 0 – 100 (highest to lowest).
-            </div>
-          </div>
-
-          <div className='paragraph'>
-            <div className='glossary-header'>Cell Model Passport</div>
-            <div className='glossary-description'>
-              The Cell Model Passport describes the cell models used within the Sanger <a target='_blank'
-                                                                                          rel='noopener noreferrer'
-                                                                                          href='https://depmap.sanger.ac.uk/'>Cancer
-              Dependency Map</a>. The site
-              brings together effective curation of cancer cell models with genomic and functional data sets to
-              facilitate
-              access and integration.
             </div>
           </div>
 
@@ -338,19 +416,92 @@ export default function Documentation() {
               testing, genetic screens and analytics (https://depmap.sanger.ac.uk/).
             </div>
           </div>
+
+          <div className='paragraph'>
+            <div className='glossary-header'>Cell Model Passport</div>
+            <div className='glossary-description'>
+              The Cell Model Passport describes the cell models used within the Sanger <a target='_blank'
+                                                                                          rel='noopener noreferrer'
+                                                                                          href='https://depmap.sanger.ac.uk/'>Cancer
+              Dependency Map</a>. The site
+              brings together effective curation of cancer cell models with genomic and functional data sets to
+              facilitate
+              access and integration.
+            </div>
+          </div>
+
+
+          <div className='paragraph'>
+            <div className="glossary-header">Common Fitness Gene</div>
+            <div className="glossary-description">
+              Genes which are commonly required for the fitness of cell lines but at a lower stringency threshold than
+              core fitness genes (<a href="https://pubmed.ncbi.nlm.nih.gov/31862961/" rel="noreferrer noopener"
+                                     target="_blank">Dempster J et al., Nature Comm. 2019</a>)
+            </div>
+          </div>
+
+
+          <div className='paragraph'>
+            <div className='glossary-header'>Core Fitness Gene</div>
+
+            <div className='glossary-description'>
+              Genes which are required for the fitness of the majority of cell lines from a given cancer type or across
+              multiple cancer-types.
+            </div>
+          </div>
+
+          <div className='paragraph'>
+            <div className='glossary-header'>Corrected Fold Change</div>
+            <div className='glossary-description'>
+              CRISPRcleanR corrected gene depletion fold change, computed between average representation of targeting
+              sgRNAs 14 days post-transfection versus plasmid library.
+            </div>
+          </div>
+
+          <div className='paragraph'>
+            <div className='glossary-header'>CRISPRcleanR</div>
+            <div className='glossary-description'>
+              An unsupervised method for identifying and correcting gene-independent responses to CRISPR-Cas9
+              targeting; based on segmentation of sgRNA fold change values across the genomes. Further details can be
+              found in the <a target='_blank' rel='noopener noreferrer'
+                              href='https://www.ncbi.nlm.nih.gov/pubmed/30103702'>corresponding article</a>.
+            </div>
+          </div>
+
+
+          <div className='paragraph'>
+            <div className='glossary-header'>Fitness Score</div>
+            <div className='glossary-description'>
+              A quantitative measure of the cell viability effect elicited by CRISPR-Cas9 mediated cell inactivation.
+              This is based on Bayes Factor values computed using BAGEL on CRISPRcleanR corrected gene depletion fold
+              changes. Values are scaled to a 5% false discovery rate threshold from classifying reference essential and
+              non-essential genes.
+            </div>
+          </div>
+
+
+          <div className='paragraph'>
+            <div className='glossary-header'>Target Priority Score</div>
+            <div className='glossary-description'>
+              A quantitative assessment of the potential of each gene as a candidate cancer therapeutic target. It
+              is computed by an analytical framework that combines CRISPR knockout gene fitness effects with
+              biomarker and patient data to output a target priority score from 0 – 100 (lowest to highest).
+            </div>
+          </div>
+
         </div>
 
         <div className='section'>
           <h2 id="usage">Data Usage Policy</h2>
           <p className='paragraph'>
             Users have a non-exclusive, non-transferable right to use data files for internal proprietary research and
-              educational purposes, including target, biomarker and drug discovery. Excluded from this licence are use
-              of the data (in whole or any significant part) for resale either alone or in combination with additional
-              data/product offerings, or for provision of commercial services. <br />
-              Please note: The data files are experimental and academic in nature and are not licensed or certified by
-              any regulatory body. Genome Research Limited provides access to data files on an “as is” basis and
-              excludes all warranties of any kind (express or implied). If you are interested in incorporating results
-              or software into a product, or have questions, please contact depmap@sanger.ac.uk.
+            educational purposes, including target, biomarker and drug discovery. Excluded from this licence are use
+            of the data (in whole or any significant part) for resale either alone or in combination with additional
+            data/product offerings, or for provision of commercial services. <br/>
+            Please note: The data files are experimental and academic in nature and are not licensed or certified by
+            any regulatory body. Genome Research Limited provides access to data files on an “as is” basis and
+            excludes all warranties of any kind (express or implied). If you are interested in incorporating results
+            or software into a product, or have questions, please contact depmap@sanger.ac.uk.
           </p>
         </div>
       </Container>

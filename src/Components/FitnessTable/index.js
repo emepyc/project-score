@@ -32,7 +32,7 @@ function parseData(raw) {
   });
 }
 
-function Table(props) {
+function FitnessTable(props) {
   const {showSearchbox} = props;
 
   const [urlParams] = useUrlParams(props);
@@ -142,14 +142,14 @@ function Table(props) {
 
       <Pagination>
         <PaginationItem disabled={isFirstPage}>
-          <PaginationLink href='#' onClick={goPrev}>
+          <PaginationLink onClick={goPrev}>
             Previous
           </PaginationLink>
         </PaginationItem>
         <small style={{padding: '0.75rem 0.25rem'}}>
         </small>
         <PaginationItem disabled={isLastPage}>
-          <PaginationLink href='#' onClick={goNext}>
+          <PaginationLink onClick={goNext}>
             Next
           </PaginationLink>
         </PaginationItem>
@@ -159,7 +159,7 @@ function Table(props) {
   )
 }
 
-export default withRouter(Table);
+export default withRouter(FitnessTable);
 
 function GeneSearchbox({onInputChange, deferTime=300}) {
   const [inputValue, setInputValue] = useState("");

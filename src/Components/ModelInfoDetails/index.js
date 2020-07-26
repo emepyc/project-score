@@ -27,7 +27,7 @@ function ModelInfoSummary(props) {
         const ploidy = modelInfo.ploidy ? modelInfo.ploidy.toFixed(3): 'N/A';
         const mutationsPerMb = modelInfo.mutationsPerMb ? modelInfo.mutationsPerMb.toFixed(3) : 'N/A';
         return (
-          <div className='mx-3 my-3'>
+          <div className='mx-3'>
             <Row>
               <Col xs={{size: 12}} lg={{size: 6}}>
                 <div>Tissue <span className={style.infoItem}>{modelInfo.tissue}</span></div>
@@ -50,7 +50,7 @@ function ModelInfoSummary(props) {
                       />
                     )
                   )}</div>
-                <div className="ml-2">without fitness data:
+                <div className="ml-2">not a fitness gene:
                   {driverGenesWithoutEssentialities.map(
                     driverGene => (
                       <CancerDriverGene
@@ -61,7 +61,7 @@ function ModelInfoSummary(props) {
                   )}</div>
               </Col>
               <Col xs={{size: 12}} lg={{size: 6}} className='border-left'>
-                <ModelDatasets datasets={modelInfo.datasets} modelId={modelInfo.modelId}/>
+                <ModelDatasets datasets={modelInfo.datasets} modelId={modelInfo.id}/>
               </Col>
             </Row>
           </div>
@@ -123,7 +123,7 @@ function ModelDatasets({datasets, modelId}) {
 
   return (
     <Fragment>
-      <div style={{fontWeight: 'bold'}} className='mb-3'>Available datasets:</div>
+      <div style={{fontWeight: 'bold'}} className='mb-3'>Additional cell model datasets:</div>
 
       <div>
         {datasets.map(dataset => (

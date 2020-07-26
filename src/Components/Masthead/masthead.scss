@@ -20,7 +20,6 @@
 }
 
 .navbar.bg-dark {
-  border-top: 5px solid #00a113;
   background: -webkit-gradient(
     linear,
     left top,
@@ -29,6 +28,7 @@
     color-stop(58%, #00a113),
     to(#00a113)
   );
+  padding: 0;
   background: -webkit-linear-gradient(
     left,
     #1a1110 0%,

@@ -23,9 +23,11 @@ function GeneOpenTargetsPlots(props) {
       deps={[urlParams.geneId]}
     >
       {geneInfo => {
+        console.log(geneInfo);
         const ensemblIdentifier = first(geneInfo.identifiers.filter(
           identifier => identifier.source.name === 'ensembl_gene_id',
         ));
+        console.log(ensemblIdentifier);
         return (
           <Card>
             <CardHeader>
@@ -65,59 +67,65 @@ function FetchOpenTargetsGene(props) {
       }}
       deps={[ensemblId]}
     >
-      {otGene => (
-        <React.Fragment>
-          <Row>
-            <Col>
-              <div className="text-center">{otGene.drugs.uniqueDrugs} Drugs</div>
-            </Col>
-            <Col>
-              <div className="text-center">Tractability</div>
-            </Col>
-            <Col>
-              <div className="text-center">Cancer Hallmarks</div>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <DonutChart
-                segments={otGene.drugs.clinicalTrialsPerPhase}
-                mainNumber={otGene.drugs.uniqueDrugs}
-              />
-            </Col>
-            <Col>
-              <BinaryCountPlot
-                count1={{
-                  label: "suppress",
-                  count: otGene.cancerHallmarks.filter(hallmark => hallmark.suppress).length
-                }}
-                count2={{
-                  label: "promote",
-                  count: otGene.cancerHallmarks.filter(hallmark => hallmark.promote).length
-                }}
-                dataTooltip={data => (
-                  <React.Fragment>
-                    <div>{data.label}</div>
-                    <div><strong>{data.count}</strong></div>
-                  </React.Fragment>
-                )}
-              />
-            </Col>
-            <Col>
-              <div
-                className="mt-3"
-              >
-                {otGene.tractability.map(tractabilityLabel => (
-                  <TractabilityCheck
-                    key={tractabilityLabel}
-                    label={tractabilityLabel}
-                  />
-                ))}
-              </div>
-            </Col>
-          </Row>
-        </React.Fragment>
-      )}
+      {otGene => {
+        console.log(otGene);
+        return (
+          <React.Fragment>
+            <Row>
+              <Col>
+                <div className="text-center">{otGene.drugs.uniqueDrugs} Drugs</div>
+              </Col>
+              <Col>
+                <div className="text-center">Tractability</div>
+              </Col>
+              <Col>
+                <div className="text-center">Cancer Hallmarks</div>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                {otGene.drugs.clinicalTrialsPerPhase.length ? (<DonutChart
+                  segments={otGene.drugs.clinicalTrialsPerPhase}
+                  mainNumber={otGene.drugs.uniqueDrugs}
+                />) : <div className='text-center font-weight-bold'>No data</div>}
+              </Col>
+              <Col>
+
+                {otGene.cancerHallmarks ? (<BinaryCountPlot
+                  count1={{
+                    label: "suppress",
+                    count: otGene.cancerHallmarks.filter(hallmark => hallmark.suppress).length
+                  }}
+                  count2={{
+                    label: "promote",
+                    count: otGene.cancerHallmarks.filter(hallmark => hallmark.promote).length
+                  }}
+                  dataTooltip={data => (
+                    <React.Fragment>
+                      <div>{data.label}</div>
+                      <div><strong>{data.count}</strong></div>
+                    </React.Fragment>
+                  )}
+                />) : (<div className='text-center font-weight-bold'>No data</div>)}
+
+              </Col>
+              <Col>
+                {otGene.tractability.length ? (<div
+                    className="mt-3"
+                  >
+                    {otGene.tractability.map(tractabilityLabel => (
+                      <TractabilityCheck
+                        key={tractabilityLabel}
+                        label={tractabilityLabel}
+                      />
+                    ))}
+                  </div>
+                ) : (<div className='text-center font-weight-bold'>No data</div>)}
+              </Col>
+            </Row>
+          </React.Fragment>
+        )
+      }}
     </FetchData>
   );
 }

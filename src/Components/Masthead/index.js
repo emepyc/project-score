@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {NavLink, Route} from 'react-router-dom';
 import {Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
-import cancerDepMap from './DependencyMapLogo.png';
+import cancerDepMap from './DependencyMapLogo.svg';
 import Searchbox from '../Searchbox';
 import sangerLogo from './SangerLogo.png';
 
@@ -86,37 +86,41 @@ const Masthead = () => {
 
   return (
     <nav className="navbar-expand-lg navbar-dark bg-dark navbar">
-      <div className="container">
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="http://www.sanger.ac.uk/"
-          className="navbar-brand"
-        >
-          <img
-            src={sangerLogo}
-            width="166"
-            height="57"
-            className="d-inline-block align-top"
-            alt=""
-          />
-        </a>
-        <span className='d-none d-md-inline-block'>
+      <div className="py-1 container">
+        <div className="my-auto">
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://depmap.sanger.ac.uk/"
-            className="ml-3 navbar-brand"
+            href="http://www.sanger.ac.uk/"
+            className="navbar-brand"
           >
             <img
-              src={cancerDepMap}
-              alt="Cancer Dependency Map"
-              width="201"
+              src={sangerLogo}
+              width="166"
               height="57"
               className="d-inline-block align-top"
+              alt=""
             />
           </a>
-        </span>
+        </div>
+        <div>
+          <span className='d-none d-md-inline-block'>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://depmap.sanger.ac.uk/"
+              className="ml-3 navbar-brand"
+            >
+              <img
+                src={cancerDepMap}
+                alt="Cancer Dependency Map"
+                // width="164px"
+                height="63px"
+                className="d-inline-block align-top"
+              />
+            </a>
+          </span>
+        </div>
         <div className='ml-md-1 my-auto d-none d-lg-block'>
           <NavigationExpanded/>
         </div>

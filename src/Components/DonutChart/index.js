@@ -63,7 +63,7 @@ function Label({radius, arc, x, y, maxX, center, children}) {
 
 function DonutChart({history}) {
   const [containerWidth, setContainerWidth] = useState(500);
-  const containerHeight = 295 + margins.top;
+  // const containerHeight = 295 + margins.top;
 
   const explanationMessageRef = useRef(null);
   const containerRef = useRef(null);
@@ -92,16 +92,20 @@ function DonutChart({history}) {
     event.target.parentNode.classList.remove('faded');
   };
 
-  const handleMouseOut = () => d3
-    .select(containerRef.current)
-    .selectAll('path')
-    .each(function () {
-      this.parentNode.classList.remove('faded');
-    });
+  const handleMouseOut = () => {
+    const explanationElement = explanationMessageRef.current;
+    explanationElement.innerHTML = '';
+    d3
+      .select(containerRef.current)
+      .selectAll('path')
+      .each(function () {
+        this.parentNode.classList.remove('faded');
+      });
+  }
 
   const radius = (containerWidth - (margins.left + margins.right)) / 2;
 
-  const gotoTable = (data) => history.push(`/table?cancerType=${data.id}`);
+  const gotoTable = data => history.push(`/table?analysis=${data.id}`);
 
   return (
     <FetchData
@@ -131,7 +135,7 @@ function DonutChart({history}) {
               <svg
                 className='donutChart'
                 width={containerWidth}
-                height={containerHeight - margins.top}
+                height={300}
               >
                 <Group
                   top={radius + margins.top}
@@ -160,7 +164,8 @@ function DonutChart({history}) {
                               onClick={() => gotoTable(arc.data)}
                             />
                             <Label
-                              radius={radius}
+                              // To avoid overlap of the last 2 labels
+                              radius={arc.index === pie.arcs.length - 1 ? radius : (arc.index === pie.arcs.length - 3 ? radius - 14 : radius - 8)}
                               arc={arc}
                               x={centroidX}
                               y={centroidY}
@@ -171,15 +176,14 @@ function DonutChart({history}) {
                             </Label>
                           </g>
                         );
-                      })
+                      });
                     }}
                   </Pie>
                 </Group>
               </svg>
             </div>
-          )
-        }
-      }
+          );
+        }}
     </FetchData>
   );
 }

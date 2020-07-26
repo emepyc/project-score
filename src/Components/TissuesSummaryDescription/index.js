@@ -20,7 +20,7 @@ function TissuesSummaryDescription() {
         const numberOfCellLines = tissues.reduce((acc, curr) => acc + ~~curr.counts, 0);
         return (
           <React.Fragment>
-            <div className="sectionDescription" style={{marginLeft: '5px'}}>
+            <div className="sectionDescription align-self-center" style={{marginLeft: '5px'}}>
               <img
                 height={'48px'}
                 width={'48px'}

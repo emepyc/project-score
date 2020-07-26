@@ -1,20 +1,26 @@
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCog} from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import React, {useState, useEffect, useRef} from "react";
 import {withRouter, Link} from "react-router-dom";
 import * as d3 from "d3";
-import {Button, Card, CardBody, CardHeader, Collapse, Label, Input, Row} from 'reactstrap';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Label,
+  Input,
+  Tooltip as ReactStrapTooltip,
+} from 'reactstrap';
 import orderBy from "lodash.orderby";
 
 import useUrlParams from '../useUrlParams';
 import {fetchPriorityScores} from '../../api';
 import FetchData from '../FetchData';
 import useWidth from '../useWidth';
-import {textDefaultColor} from '../../colors';
+import {significantNodeColor, textDefaultColor} from '../../colors';
 import PriorityScoresSettings from '../PriorityScoresSettings';
 import SvgIcon from '../SvgIcon';
 import Tooltip from '../Tooltip';
+import {priorityScoresHelp} from '../../definitions';
 
 import "./priorityScoresSection.scss";
 
@@ -45,7 +51,7 @@ export const defaultSettings = {
 
   // Level 2: Cell type section
   foldSbf: 3,
-  mgkPercFdr: 10,
+  mgkPercFdr: 5,
   highlyExpr: true,
   depPathway: true,
   isMutated: true,
@@ -55,37 +61,49 @@ export const defaultSettings = {
 };
 
 function PriorityScoresCard({analysis}) {
-  const [settingsIsOpen, setSettingsIsOpen] = useState(false);
   const [settings, setSettings] = useState(defaultSettings);
+  const [targetPriorityScoreTooltip, setTargetPriorityScoreTooltip] = useState(false);
 
   return (
-    <Card>
-      <CardHeader>
-        Priority scores
-      </CardHeader>
-      <CardBody>
-        <div>
-          <Button
-            outline
-            color="secondary"
-            onClick={() => setSettingsIsOpen(!settingsIsOpen)}
+    <React.Fragment>
+      <Card>
+        <CardHeader>
+          Target Priority Scores
+          <sup
+            className='helpAnchor'
+            onMouseEnter={() => setTargetPriorityScoreTooltip(true)}
+            id='target-priority-score-tooltip'
           >
-            <FontAwesomeIcon icon={faCog}>
-              Settings
-            </FontAwesomeIcon>
-          </Button>
-          <Collapse isOpen={settingsIsOpen}>
-            <div style={{width: "100%"}}>
+            ?
+          </sup>
+        </CardHeader>
+        <CardBody>
+          <div>
+            <div>
               <PriorityScoresSettings
                 defaultSettings={defaultSettings}
                 onSubmit={setSettings}
               />
             </div>
-          </Collapse>
-          <PriorityScores analysis={analysis} settings={settings}/>
-        </div>
-      </CardBody>
-    </Card>
+            <div>
+              <PriorityScores analysis={analysis} settings={settings}/>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
+
+      <ReactStrapTooltip
+        trigger='hover'
+        toggle={() => setTargetPriorityScoreTooltip(false)}
+        placement='top'
+        isOpen={targetPriorityScoreTooltip}
+        target='target-priority-score-tooltip'
+        className='helpAnchor'
+        innerClassName='project-score-tooltip'
+      >
+        {priorityScoresHelp.targetPriorityScores}.
+      </ReactStrapTooltip>
+    </React.Fragment>
   );
 }
 
@@ -158,16 +176,12 @@ export function PriorityScores({analysis, settings}) {
                   <span>Show gene names</span>
                 </Label>
               </div>
-              <Row
-                className='d-flex p-2 justify-content-center align-items-center'
-              >
-                <PriorityScoresPlot
-                  plotWidth={containerWidth}
-                  priorityScores={priorityScores.data}
-                  byBucket={settings.tractability}
-                  showLabels={showLabels}
-                />
-              </Row>
+              <PriorityScoresPlot
+                plotWidth={containerWidth}
+                priorityScores={priorityScores.data}
+                byBucket={settings.tractability}
+                showLabels={showLabels}
+              />
             </div>
           );
         }}
@@ -202,13 +216,16 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
 
   const priorityScoresDomain = d3.extent(priorityScores, priorityScore => priorityScore["score"]);
 
+  const height = 400;
   const xOffset = 50;
 
   if (!byBucket) {
     return (
-      <React.Fragment>
+      <div className='position-relative'>
+        {/*{yAxisLabel}*/}
         <PriorityScoreBucketPlot
           plotWidth={plotWidth - (xOffset * 2)}
+          height={height}
           xOffset={xOffset}
           isFirst={true}
           domain={priorityScoresDomain}
@@ -217,8 +234,13 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
           priorityScores={orderBy(priorityScores, ['score'], ['desc'])}
           showLabels={showLabels}
         />
-        <PriorityScoresXlabel plotWidth={plotWidth} label="Rank" xOffset={xOffset}/>
-      </React.Fragment>
+
+        <PriorityScoresYLabel
+          position={height / 2 - 35}
+        />
+
+        <PriorityScoresXlabel plotWidth={plotWidth} label="Rank"/>
+      </div>
     );
   }
 
@@ -240,10 +262,11 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
   };
 
   return (
-    <React.Fragment>
+    <div className='position-relative'>
       {bucketNumbers.map((bucketNumber, index) => (
         <PriorityScoreBucketPlot
           plotWidth={~~((plotWidth - (xOffset * 2)) / bucketNumbers.length)}
+          height={height}
           xOffset={xOffset}
           isFirst={index === 0}
           domain={priorityScoresDomain}
@@ -256,45 +279,143 @@ function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBuc
           showLabels={showLabels}
         />
       ))}
-      <PriorityScoresXlabel plotWidth={plotWidth} label="Tractability bucket" xOffset={xOffset}/>
+
+      <PriorityScoresYLabel
+        position={height / 2 - 35}
+      />
+
+      <PriorityScoresXlabel
+        plotWidth={plotWidth}
+        label='Tractability bucket'
+        description='To estimate the likelihood of a target to bind a small molecule or to be accessible to an antibody, we made use of a genome-wide target tractability assessment pipeline'
+      />
       <PriorityScoresBucketLegend/>
-    </React.Fragment>
+    </div>
   );
 }
 
 function PriorityScoresBucketLegend() {
+  const [group1LegendTooltip, setGroup1LegendTooltip] = useState(false);
+  const [group2LegendTooltip, setGroup2LegendTooltip] = useState(false);
+  const [group3LegendTooltip, setGroup3LegendTooltip] = useState(false);
+
   return (
-    <React.Fragment>
+    <div className='d-flex justify-content-around mt-3'>
       <div className="bucketBoxLegend">
         <div className={classNames("element", "group1")}/>
         <span className="label">Group 1 bucket: <b>Approved or in clinical development</b></span>
+        <sup
+          className='helpAnchor'
+          onMouseEnter={() => setGroup1LegendTooltip(true)}
+          id='group-1-legend-tooltip'
+        >
+          ?
+        </sup>
       </div>
       <div className="bucketBoxLegend">
         <div className={classNames("element", "group2")}/>
         <span className="label">Group 2 bucket: <b>Supporting evidence</b></span>
+        <sup
+          className='helpAnchor'
+          onMouseEnter={() => setGroup2LegendTooltip(true)}
+          id='group-2-legend-tooltip'
+        >
+          ?
+        </sup>
       </div>
       <div className="bucketBoxLegend">
         <div className={classNames("element", "group3")}/>
         <span className="label">Group 3 bucket: <b>Weak or no supporting evidence</b></span>
+        <sup
+          className='helpAnchor'
+          onMouseEnter={() => setGroup3LegendTooltip(true)}
+          id='group-3-legend-tooltip'
+        >
+          ?
+        </sup>
       </div>
-    </React.Fragment>
+      <ReactStrapTooltip
+        trigger='hover'
+        toggle={() => setGroup1LegendTooltip(false)}
+        placement='top'
+        isOpen={group1LegendTooltip}
+        target='group-1-legend-tooltip'
+        className='helpAnchor'
+        innerClassName='project-score-tooltip'
+      >
+        Contains targets of approved anticancer drugs or compounds in clinical or preclinical development
+      </ReactStrapTooltip>
+      <ReactStrapTooltip
+        trigger='hover'
+        toggle={() => setGroup2LegendTooltip(false)}
+        placement='top'
+        isOpen={group2LegendTooltip}
+        target='group-2-legend-tooltip'
+        className='helpAnchor'
+        innerClassName='project-score-tooltip'
+      >
+        Contains targets without drugs in clinical development, but have evidence to support target tractability
+      </ReactStrapTooltip>
+      <ReactStrapTooltip
+        trigger='hover'
+        toggle={() => setGroup3LegendTooltip(false)}
+        placement='top'
+        isOpen={group3LegendTooltip}
+        target='group-3-legend-tooltip'
+        className='helpAnchor'
+        innerClassName='project-score-tooltip'
+      >
+        Contains targets with weak or no supportive information on target tractability
+      </ReactStrapTooltip>
+    </div>
   );
 }
 
-function PriorityScoresXlabel({plotWidth, label}) {
+function PriorityScoresYLabel({position}) {
+
   return (
-    <svg width={plotWidth} height={50}>
-      <g transform={`translate(${plotWidth / 2}, 25)`}>
-        <text
-          textAnchor={"middle"}
-          alignmentBaseline={"middle"}
-          fill={textDefaultColor}
-        >
-          {label}
-        </text>
-      </g>
-    </svg>
+    <div className='position-absolute' style={{
+      top: `${position}px`,
+      left: '-60px',
+      transform: 'rotate(-90deg)',
+    }}>
+      Target priority score
+    </div>
   )
+}
+
+function PriorityScoresXlabel({label, description}) {
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  return (
+    <React.Fragment>
+      <div className='xLabel'>
+        {label}
+        {description && (
+          <React.Fragment>
+            <sup
+              className='helpAnchor'
+              onMouseEnter={() => setTooltipOpen(true)}
+              id='tractability-bucket-x-label-help-icon'
+            >
+              ?
+            </sup>
+            <ReactStrapTooltip
+              trigger='hover'
+              toggle={() => setTooltipOpen(false)}
+              placement='bottom'
+              isOpen={tooltipOpen}
+              target='tractability-bucket-x-label-help-icon'
+              className='helpAnchor'
+              innerClassName='project-score-tooltip'
+            >
+              {description}
+            </ReactStrapTooltip>
+          </React.Fragment>
+        )}
+      </div>
+    </React.Fragment>
+  );
 }
 
 function bucketGroupClassName(bucket) {
@@ -312,6 +433,7 @@ function bucketGroupClassName(bucket) {
 function PriorityScoreBucketPlot(props) {
   const {
     plotWidth,
+    height,
     xOffset,
     isFirst,
     domain,
@@ -326,7 +448,7 @@ function PriorityScoreBucketPlot(props) {
   const [showExpandLabel, setShowExpandLabel] = useState(false);
   const [tooltip, setTooltip] = useState(null);
 
-  const height = 400;
+  // const height = 400;
   const plotHeight = 350;
 
   const yAxisRef = useRef(null);
@@ -357,15 +479,6 @@ function PriorityScoreBucketPlot(props) {
 
   const yAxisElement = isFirst ? (
     <React.Fragment>
-      <g transform={`translate(${xOffset - 35}, ${plotHeight / 2}) rotate(-90)`}>
-        <text
-          fill={textDefaultColor}
-          textAnchor="middle"
-          alignmentBaseline="middle"
-        >
-          Priority score
-        </text>
-      </g>
       <g
         transform={`translate(${xOffset}, 0)`}
         ref={yAxisRef}
@@ -423,7 +536,7 @@ function PriorityScoreBucketPlot(props) {
 
 
   return (
-    <div style={{display: "inline-block", position: "relative"}}>
+    <div className='bucketPlot'>
       <svg
         width={isFirst ? (plotWidth + xOffset) : plotWidth}
         height={height}
@@ -439,7 +552,7 @@ function PriorityScoreBucketPlot(props) {
           />
           {priorityScores.map((priorityScore, index) => {
             const xPos = xScale(index);
-            const labelOffset = 5;
+            const labelOffset = 0;
             const labelAproxWidth = 8 * priorityScore.symbol.length;
             const labelAnchor = plotWidth < (xPos + labelAproxWidth) ? 'end' : 'start';
             const labelXposition = plotWidth < (xPos + labelAproxWidth) ? xPos - labelOffset : xPos + labelOffset
@@ -449,7 +562,7 @@ function PriorityScoreBucketPlot(props) {
                   cx={xPos}
                   cy={yScale(priorityScore["score"])}
                   r="3"
-                  fill="green"
+                  fill={significantNodeColor}
                   onMouseEnter={() => highlightPriorityScore(priorityScore, index)}
                   onMouseLeave={() => unHighlightPriorityScore()}
                 />
@@ -460,7 +573,7 @@ function PriorityScoreBucketPlot(props) {
                     textAnchor={labelAnchor}
                     alignmentBaseline='middle'
                     fontSize={10}
-                    style={{pointerEvents: 'none'}}
+                    className='priorityScoreGeneLabel'
                   >
                     {priorityScore.symbol}
                   </text>
@@ -551,7 +664,7 @@ function PriorityScoreTooltip({x, y, priorityScore}) {
       height={0}
     >
       Gene: <b>{priorityScore.symbol}</b><br/>
-      Priority score: <b>{priorityScore.score.toFixed(2)}</b><br/>
+      Target priority score: <b>{priorityScore.score.toFixed(2)}</b><br/>
       Tractability bucket: <b>{priorityScore.bucket}</b><br/>
     </Tooltip>
   );

@@ -1,6 +1,7 @@
-export const foldChangeHelp = 'Negative values indicate depletion of gene; gene averaged sgRNA representation at the beginning versus end of the experiment.';
+export const foldChangeHelp = 'Fold change between average representation of targeting sgRNAs 14 days post-transfection versus plasmid library. Negative and positive values are gene depletion and enrichment, respectively.';
 export const lossOfFitnessScoreHelp = 'Score < 0 is a statistically significant effect; values are scaled Bayes Factors calculated using BAGEL.';
 export const priorityScoresHelp = {
+  totalPriorityScore: 'Ranging from 0 to 100, the value nominates promising therapeutic targets based on (1) fitness effects obtained from CRISPR-Cas9 experimental evidence and (2) existence of a genetic biomarker associated with the target',
   classAmarker: 'Positive for a significant and large effect genomic marker of a differential fitness effect in cells (ANOVA test pvalue < 0.001, and FDR < 25% [5% for MSI] and both Glass Deltas [quantifying effect size] > 1)',
   classBmarker: 'Positive for an intermediate significance genomic marker of a differential fitness effect in cells (ANOVA test FDR < 30%, with at least one Glass Delta > 1)',
   classCmarker: 'Positive for a genomic marker of a differential fitness effect in cells (ANOVA test pvalue < 0.001, with at least one Glass Deltas > 1))',
@@ -19,4 +20,6 @@ export const priorityScoresHelp = {
   mageck5fdr: 'Measure of cell line fitness effect  using MAGeCK',
   mutated: 'Value specifying if the gene is mutated in the cell line',
   notExpressed: 'Value specifying if the gene under consideration is not expressed at the basal level in the cell line (FPKM < 0.05)',
+  priorityScoreThreshold: '40 is recommended as a minimum threshold priority score',
+  targetPriorityScores: 'Each gene is assigned a score between 0 – 100 (lowest to highest) that integrates gene fitness effects with genomic biomarker and patient data. Scores are calculated for each cancer type and considering all cancer types together in a pan-cancer analysis. Users can use default settings or select input features and group targets by tractability for drug development',
 };
