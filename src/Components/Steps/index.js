@@ -70,7 +70,7 @@ export default function Steps(props) {
                   cursor: onSelectStep !== undefined ? 'pointer' : 'default',
                   outline: 'none',
                 }}
-                onClick={() => onSelectStep(values[pos])}
+                onClick={() => onSelectStep && onSelectStep(values[pos])}
                 onMouseLeave={() => setTooltipOpen(null)}
                 id={`${uniqueId}-stepTooltip-${values[pos]}`}
               />
@@ -87,6 +87,7 @@ export default function Steps(props) {
               <text
                 x={0}
                 y={0}
+                fontSize='0.9em'
                 textAnchor='start'
                 transform={`translate(0, -12), rotate(-45)`}
                 fill={textDefaultColor}
