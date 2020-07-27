@@ -1,8 +1,6 @@
 import React from 'react';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faExternalLinkAlt} from '@fortawesome/free-solid-svg-icons'
 import first from 'lodash.first';
-import {Card, CardHeader, CardBody, Row, Col, NavLink} from 'reactstrap';
+import {Card, CardHeader, CardBody, Row, Col} from 'reactstrap';
 import {withRouter} from 'react-router-dom';
 import useUrlParams from '../useUrlParams';
 import FetchData from '../FetchData';
@@ -10,7 +8,6 @@ import {BinaryCountPlot, DonutChart} from '../SignificantCountPlot';
 import {fetchGeneInfo, fetchOtGeneInfo} from '../../api';
 import otLogo from '../GeneInfoHeader/OtLogo.png';
 import Steps from "../Steps";
-import {textDefaultColor} from "../../colors";
 
 function GeneOpenTargetsPlots(props) {
   const [urlParams] = useUrlParams(props);
@@ -30,16 +27,19 @@ function GeneOpenTargetsPlots(props) {
         return (
           <Card>
             <CardHeader className='d-flex justify-content-between'>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={`https://www.targetvalidation.org/target/${ensemblIdentifier.identifier}`}
-              >
-                <img alt='OpenTargets' src={otLogo} width={125}/>
-              </a>
-              <NavLink href={`https://www.targetvalidation.org/target/${ensemblIdentifier.identifier}`}>
-                <FontAwesomeIcon icon={faExternalLinkAlt}/>
-              </NavLink>
+              <div className='align-self-center'>
+                Target Profile
+              </div>
+              <div>
+                <span className='align-self-center mr-2'>Link to:</span>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`https://www.targetvalidation.org/target/${ensemblIdentifier.identifier}`}
+                >
+                  <img alt='OpenTargets' src={otLogo} width={100}/>
+                </a>
+              </div>
             </CardHeader>
             <CardBody>
               {(ensemblIdentifier ? (
@@ -76,7 +76,7 @@ function FetchOpenTargetsGene(props) {
               <div className="text-center">{otGene.drugs.uniqueDrugs} Drugs</div>
             </Col>
             <Col>
-              <div className="text-center">Cancer hallmarks</div>
+              <div className="text-center">COSMIC cancer hallmarks</div>
             </Col>
             <Col>
               <div className="text-center">Tractability</div>

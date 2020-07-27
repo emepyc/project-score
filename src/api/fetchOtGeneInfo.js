@@ -28,8 +28,8 @@ export default async function fetchOtGeneInfo({ensemblId}) {
   };
 }
 
-const tractabilityLabels = ['clinical precedence', 'predicted tractable', 'discovery precedence'];
-const tractabilityCategories = ['clinical', 'predicted', 'discovery']
+const tractabilityLabels = ['predicted tractable', 'discovery precedence', 'clinical precedence'];
+const tractabilityCategories = ['predicted', 'discovery', 'clinical'];
 
 function normaliseTractabilityInfo(activeTractabilityLabels) {
   const activeTractabilityDict = keyBy(activeTractabilityLabels, identity);
@@ -39,7 +39,7 @@ function normaliseTractabilityInfo(activeTractabilityLabels) {
 
   return {
     maxCategory: tractabilityCategories[maxCategoryIndex] || null,
-    labels: tractabilityLabels,
+    labels: tractabilityLabels.map(label => `small molecule: ${label}`),
     categories: tractabilityCategories,
   }
 }

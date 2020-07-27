@@ -197,16 +197,6 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   {label: 'Class C marker', definition: priorityScoresHelp.classCmarker},
                 ]}
               />
-              {/*<Input*/}
-              {/*  type="select"*/}
-              {/*  value={genomicMarkerStrength}*/}
-              {/*  onChange={(event) => setGenomicMarkerStrength(event.target.value)}*/}
-              {/*>*/}
-              {/*  <option value={0}>No marker</option>*/}
-              {/*  <option value={1}>1 (class A)</option>*/}
-              {/*  <option value={2}>2 (class B)</option>*/}
-              {/*  <option value={3}>3 (class C)</option>*/}
-              {/*</Input>*/}
             </div>
             <Steps
               labels={['No marker', '1 (class A)', '2 (class B)', '3 (class C)']}
@@ -228,7 +218,7 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
               defaultValue={100 - defaultSettings.l1Weight}
               onChange={newL1Weight => setL1Weight(100 - newL1Weight)}
             />
-            <div className="mt-5">
+            <div className="mt-1">
               <Label>
                 Min fitness score category
                 <Help
@@ -240,18 +230,20 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   ]}
                 />
               </Label>
-              <Input
-                type="select"
-                value={foldSbf}
-                onChange={(event) => setFoldSbf(event.target.value)}
-              >
-                <option value={0}>No min score</option>
-                <option value={1}>Fitness score &lt; -1</option>
-                <option value={2}>Fitness score &lt; -2</option>
-                <option value={3}>Fitness score &lt; -3</option>
-              </Input>
+              <Steps
+                labels={['No min score', 'Fitness score < -1', 'Fitness score < -2', 'Fitness score < -3']}
+                values={[0, 1, 2, 3]}
+                descriptions={[
+                  null,
+                  priorityScoresHelp.fitnessScoreFold1,
+                  priorityScoresHelp.fitnessScoreFold2,
+                  priorityScoresHelp.fitnessScoreFold3,
+                ]}
+                selectedValue={foldSbf}
+                onSelectStep={setFoldSbf}
+              />
             </div>
-            <div className="mt-1">
+            <div className="mt-3">
               <Label>
                 Max MAGeCK FDR %
                 <Help
@@ -262,15 +254,17 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
                   ]}
                 />
               </Label>
-              <Input
-                type="select"
-                value={mgkPercFdr}
-                onChange={(event) => setMgkPercFrd(event.target.value)}
-              >
-                <option value={10}>MAGeCK &lt; 10% FDR</option>
-                <option value={5}>MAGeCK &lt; 5% FDR</option>
-                <option value={0}>Not set</option>
-              </Input>
+              <Steps
+                labels={['MAGeCK < 10% FDR', 'MAGeCK < 5% FDR', 'Not set']}
+                values={[10, 5, 0]}
+                descriptions={[
+                  priorityScoresHelp.mageck10fdr,
+                  priorityScoresHelp.mageck5fdr,
+                  null,
+                ]}
+                selectedValue={mgkPercFdr}
+                onSelectStep={setMgkPercFrd}
+              />
             </div>
             <div className="mt-1">
               <Label>

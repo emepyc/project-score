@@ -3,7 +3,12 @@ import React, {useState} from 'react';
 import findIndex from 'lodash.findindex';
 import {Tooltip} from 'reactstrap';
 
-import {significantNodeColor, insignificantNodeColor, textDefaultColor, backgroundDefaultColor} from "../../colors";
+import {
+  significantNodeColor,
+  insignificantNodeColor,
+  textDefaultColor,
+  backgroundDefaultColor,
+} from "../../colors";
 import useId from '../useId';
 
 export default function Steps(props) {
@@ -25,9 +30,9 @@ export default function Steps(props) {
 
   const xPadding = 10;
   const maxLabelLength = d3.max(labels, label => label.length);
-  const plotWidth = xPadding + (labels.length * stepSeparation) + labels[labels.length - 1].length;
+  const plotWidth = xPadding + (labels.length * stepSeparation) + labels[labels.length - 1].length * 2;
   const textLengthFactor = 5;
-  const plotHeight = maxLabelLength * textLengthFactor + 20;
+  const plotHeight = maxLabelLength * textLengthFactor + 30;
 
   return (
     <React.Fragment>
@@ -35,11 +40,11 @@ export default function Steps(props) {
         width={plotWidth}
         height={plotHeight}
       >
-        <g transform={`translate(${xPadding}, 0)`}>
+        <g transform={`translate(${xPadding}, 10)`}>
           {labels.map((label, pos) => (
             <g
               key={label}
-              transform={`translate(${pos * stepSeparation + 5}, ${plotHeight - 10})`}
+              transform={`translate(${pos * stepSeparation + 5}, ${plotHeight - 20})`}
             >
               {pos > 0 && (
                 <line
