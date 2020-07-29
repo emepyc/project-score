@@ -172,7 +172,7 @@ export function DonutChart({segments, mainNumber}) {
                   id={`tooltip-phase-${arc.data.phase}`}
                   d={pie.path(arc)}
                   fill={green}
-                  fillOpacity={index * 0.25}
+                  fillOpacity={0.2 + index * 0.2}
                 />
               </g>
             ))}
@@ -187,8 +187,8 @@ export function DonutChart({segments, mainNumber}) {
           {mainNumber}
         </text>
       </svg>
-      {range(0, segments.length).map(phase => {
-        const segment = segments[phase];
+      {segments.map(segment => {
+        const phase = segment.phase;
         return (
           <Tooltip
             position='auto'

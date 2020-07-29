@@ -84,10 +84,12 @@ function FetchOpenTargetsGene(props) {
           </Row>
           <Row>
             <Col>
-              {otGene.drugs.clinicalTrialsPerPhase.length ? (<DonutChart
-                segments={otGene.drugs.clinicalTrialsPerPhase}
-                mainNumber={otGene.drugs.uniqueDrugs}
-              />) : <div className='text-center font-weight-bold'>No data</div>}
+              {otGene.drugs.clinicalTrialsPerPhase.length ? (
+                <DonutChart
+                  segments={otGene.drugs.clinicalTrialsPerPhase}
+                  mainNumber={otGene.drugs.uniqueDrugs}
+                />
+              ) : <div className='text-center font-weight-bold'>No data</div>}
             </Col>
 
             <Col>
