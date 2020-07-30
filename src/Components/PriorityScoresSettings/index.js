@@ -220,24 +220,24 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
             />
             <div className="mt-1">
               <Label>
-                Min fitness score category
+                Include min fitness score
                 <Help
                   label='Fitness score categories'
                   definition={[
-                    {label: 'Fitness score < -1', definition: priorityScoresHelp.fitnessScoreFold1},
-                    {label: 'Fitness score < -2', definition: priorityScoresHelp.fitnessScoreFold2},
                     {label: 'Fitness score < -3', definition: priorityScoresHelp.fitnessScoreFold3},
+                    {label: 'Fitness score < -2', definition: priorityScoresHelp.fitnessScoreFold2},
+                    {label: 'Fitness score < -1', definition: priorityScoresHelp.fitnessScoreFold1},
                   ]}
                 />
               </Label>
               <Steps
-                labels={['No min score', 'Fitness score < -1', 'Fitness score < -2', 'Fitness score < -3']}
-                values={[0, 1, 2, 3]}
+                labels={['No min score', 'Fitness score < -3', 'Fitness score < -2', 'Fitness score < -1']}
+                values={[0, 3, 2, 1]}
                 descriptions={[
                   null,
-                  priorityScoresHelp.fitnessScoreFold1,
-                  priorityScoresHelp.fitnessScoreFold2,
                   priorityScoresHelp.fitnessScoreFold3,
+                  priorityScoresHelp.fitnessScoreFold2,
+                  priorityScoresHelp.fitnessScoreFold1,
                 ]}
                 selectedValue={foldSbf}
                 onSelectStep={setFoldSbf}
@@ -245,22 +245,22 @@ export default function PriorityScoresSettings({defaultSettings, onSubmit}) {
             </div>
             <div className="mt-3">
               <Label>
-                Max MAGeCK FDR %
+                Include max MAGeCK FDR %
                 <Help
-                  label={'MAGeCK FDR percentage'}
+                  label='MAGeCK FDR percentage'
                   definition={[
-                    {label: 'MAGeCK < 10% FDR', definition: priorityScoresHelp.mageck10fdr},
                     {label: 'MAGeCK < 5% FDR', definition: priorityScoresHelp.mageck5fdr},
+                    {label: 'MAGeCK < 10% FDR', definition: priorityScoresHelp.mageck10fdr},
                   ]}
                 />
               </Label>
               <Steps
-                labels={['MAGeCK < 10% FDR', 'MAGeCK < 5% FDR', 'Not set']}
-                values={[10, 5, 0]}
+                labels={['Not set', 'MAGeCK < 5% FDR', 'MAGeCK < 10% FDR']}
+                values={[0, 5, 10]}
                 descriptions={[
-                  priorityScoresHelp.mageck10fdr,
-                  priorityScoresHelp.mageck5fdr,
                   null,
+                  priorityScoresHelp.mageck5fdr,
+                  priorityScoresHelp.mageck10fdr,
                 ]}
                 selectedValue={mgkPercFdr}
                 onSelectStep={setMgkPercFrd}
