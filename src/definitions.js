@@ -20,6 +20,6 @@ export const priorityScoresHelp = {
   mageck5fdr: 'Measure of cell line fitness effect  using MAGeCK',
   mutated: 'Value specifying if the gene is mutated in the cell line',
   notExpressed: 'Value specifying if the gene under consideration is not expressed at the basal level in the cell line (FPKM < 0.05)',
-  priorityScoreThreshold: '40 is recommended as a minimum threshold priority score',
+  priorityScoreThreshold: '40 is recommended as a minimum threshold for cancer-type specific priority scores, and 55 for pan-cancer priority scores',
   targetPriorityScores: 'Each gene is assigned a score between 0 – 100 (lowest to highest) that integrates gene fitness effects with genomic biomarker and patient data. Scores are calculated for each cancer type and considering all cancer types together in a pan-cancer analysis. Users can use default settings or select input features and group targets by tractability for drug development',
 };

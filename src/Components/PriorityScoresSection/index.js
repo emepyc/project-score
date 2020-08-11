@@ -50,8 +50,8 @@ export const defaultSettings = {
   genomicMarkerStrength: 3,
 
   // Level 2: Cell type section
-  foldSbf: 3,
-  mgkPercFdr: 5,
+  foldSbf: 1,
+  mgkPercFdr: 10,
   highlyExpr: true,
   depPathway: true,
   isMutated: true,
