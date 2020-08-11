@@ -106,6 +106,18 @@ class Downloads extends React.Component {
                 href="https://cog.sanger.ac.uk/cmp/download/broad_binaryDepScores_190724.tsv.zip">broad_binaryDepScores_190724.tsv.zip</a>
               </td>
             </tr>
+            <tr>
+              <td>Integrated cancer dependency dataset from <br/>Wellcome Sanger Institute (release 1) and Broad Institute
+                (19Q3)
+              </td>
+              <td><a
+                href="https://depmap.org/portal/download/">Available from depmap.org</a>
+              </td>
+              <td><a
+                href="https://cog.sanger.ac.uk/cmp/download/integrated_Sanger_Broad_essentiality_matrices_20200402.zip">integrated_Sanger_Broad_essentiality_matrices_20200402.zip</a>
+              </td>
+              <td>N/A</td>
+            </tr>
             </tbody>
           </Table>
           <Tooltip
