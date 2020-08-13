@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {NavLink, Route} from 'react-router-dom';
+import {withRouter} from 'react-router';
 import {Dropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
 import cancerDepMap from './DependencyMapLogo.svg';
 import Searchbox from '../Searchbox';
@@ -77,7 +78,7 @@ const NavigationContracted = () => {
   );
 };
 
-const Masthead = () => {
+const Masthead = (props) => {
   const menuStyle = {
     color: 'white',
     fontWeight: 'bold',
@@ -128,11 +129,11 @@ const Masthead = () => {
           <NavigationContracted/>
         </div>
         <div className="d-none d-lg-inline-block my-auto" style={{width: '250px'}}>
-          {window.location.pathname !== '/' && <Searchbox placeholder='Search...'/>}
+          {props.location.pathname !== '/' && <Searchbox placeholder='Search...'/>}
         </div>
       </div>
     </nav>
   );
 };
 
-export default Masthead;
+export default withRouter(Masthead);
