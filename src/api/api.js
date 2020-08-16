@@ -20,6 +20,8 @@ export async function get(endpoint, params = {}, signal) {
       'Content-Type': 'application/json',
     },
     signal,
+  }).catch(err => {
+    console.error(err);
   });
 
   return await result.json();
