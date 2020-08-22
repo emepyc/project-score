@@ -12,10 +12,12 @@ export default function Downloads() {
   const [rawTooltipOpen, setRawTooltipOpen] = useState(false);
   const [correctedTooltipOpen, setCorrectedTooltipOpen] = useState(false);
   const [scaledTooltipOpen, setScaledTooltipOpen] = useState(false);
+  const [priorityScoresTooltipOpen, setPriorityScoresTooltipOpen] = useState(false);
 
   const toggleRawTooltip = () => setRawTooltipOpen(!rawTooltipOpen);
   const toggleCorrectedTooltip = () => setCorrectedTooltipOpen(!correctedTooltipOpen);
   const toggleScaledTooltip = () => setScaledTooltipOpen(!scaledTooltipOpen);
+  const togglePriorityScoresTooltip = () => setPriorityScoresTooltipOpen(!priorityScoresTooltipOpen);
 
   return (
     <div
@@ -55,6 +57,12 @@ export default function Downloads() {
             </th>
             <th>
               Priority Scores File
+              <sup>
+                    <span className='tooltipAnchor' id='PriorityScoresFileTooltip'>
+                      ?
+                    </span>
+              </sup>
+
             </th>
           </tr>
           <tr>
@@ -155,6 +163,15 @@ export default function Downloads() {
           </tr>
           </tbody>
         </Table>
+        <Tooltip
+          placement='right'
+          isOpen={priorityScoresTooltipOpen}
+          target='PriorityScoresFileTooltip'
+          toggle={togglePriorityScoresTooltip}
+        >
+          Target priority scores are provided based on the default parameters used on the website and as previously described (Behan et al., Nature. 2019)
+        </Tooltip>
+
         <Tooltip
           placement='right'
           isOpen={rawTooltipOpen}
