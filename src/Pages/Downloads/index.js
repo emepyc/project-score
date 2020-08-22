@@ -46,24 +46,46 @@ export default function Downloads() {
       </Jumbotron>
 
       <div style={{paddingLeft: '30px', paddingRight: '30px'}}>
-        <div style={{maxWidth: '200px', minHeight: '25px'}}>
-          <FetchData
-            endpoint={fetchPriorityScores}
-            params={{}}
-            deps={[]}
-          >
-            {priorityScores => {
-              return (
-                <CSVLink
-                  filename='depmap-priority-scores.csv'
-                  data={extractPriorityScores(priorityScores)}
+        <h3>Priority Scores</h3>
+        <Table responsive>
+          <thead>
+          <tr>
+            <th>
+              Data release
+            </th>
+            <th>
+              Priority Scores File
+            </th>
+          </tr>
+          <tr>
+            <td>Current release</td>
+            <td>
+              <div style={{maxWidth: '200px', minHeight: '25px'}}>
+                <FetchData
+                  endpoint={fetchPriorityScores}
+                  params={{}}
+                  deps={[]}
                 >
-                  Download priority scores
-                </CSVLink>
-              );
-            }}
-          </FetchData>
-        </div>
+                  {priorityScores => {
+                    return (
+                      <CSVLink
+                        filename='depmap-priority-scores.csv'
+                        data={extractPriorityScores(priorityScores)}
+                      >
+                        depmap-priority-scores.csv
+                      </CSVLink>
+                    );
+                  }}
+                </FetchData>
+              </div>
+            </td>
+          </tr>
+          </thead>
+        </Table>
+
+        <h3>
+          Fitness Scores
+        </h3>
         <Table responsive>
           <thead>
           <tr>
