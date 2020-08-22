@@ -13,7 +13,7 @@ export default async function fetchPriorityScores(params, ...args) {
       };
       return await fetchPriorityScoresForAnalysis(analysisParams, ...args);
     })
-    return (await Promise.all(priorityScoresPromises))
+    return await Promise.all(priorityScoresPromises);
   }
 }
 

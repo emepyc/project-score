@@ -71,19 +71,17 @@ export default function Downloads() {
               <div style={{maxWidth: '200px', minHeight: '25px'}}>
                 <FetchData
                   endpoint={fetchPriorityScores}
-                  params={{}}
+                  params={{threshold: 0}}
                   deps={[]}
                 >
-                  {priorityScores => {
-                    return (
-                      <CSVLink
-                        filename='depmap-priority-scores.csv'
-                        data={extractPriorityScores(priorityScores)}
-                      >
-                        depmap-priority-scores.csv
-                      </CSVLink>
-                    );
-                  }}
+                  {priorityScores => (
+                    <CSVLink
+                      filename='depmap-priority-scores.csv'
+                      data={extractPriorityScores(priorityScores)}
+                    >
+                      depmap-priority-scores.csv
+                    </CSVLink>
+                  )}
                 </FetchData>
               </div>
             </td>
@@ -205,11 +203,11 @@ export default function Downloads() {
 
 function extractPriorityScores(priorityScoresByAnalysis) {
   return flatMap(priorityScoresByAnalysis, priorityScoresForAnalysis => priorityScoresForAnalysis.data.map(priorityScore => ({
-    bucket: priorityScore.bucket,
-    geneId: priorityScore.gene_id,
+    'tractability bucket': priorityScore.bucket,
+    'gene id': priorityScore.gene_id,
     score: priorityScore.score,
     symbol: priorityScore.symbol,
-    analysisId: priorityScoresForAnalysis.analysis.id,
-    analysisName: priorityScoresForAnalysis.analysis.name,
+    'analysis id': priorityScoresForAnalysis.analysis.id,
+    'analysis name': priorityScoresForAnalysis.analysis.name,
   })));
 }
