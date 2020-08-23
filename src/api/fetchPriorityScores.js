@@ -1,9 +1,16 @@
+import flatMap from 'lodash.flatmap';
+import orderBy from 'lodash.orderby';
+
 import {get} from './index';
 import analyses from "./fetchAnalyses";
 
 export default async function fetchPriorityScores(params, ...args) {
-  if (params.analysis !== undefined) {
-    return await fetchPriorityScoresForAnalysis(params, ...args);
+  if (Boolean(params.analysis)) {
+    const priorityScoresForAnalysis = await fetchPriorityScoresForAnalysis(params, ...args);
+    return {
+      ...priorityScoresForAnalysis,
+      data: addAnalysisToPriorityScores(priorityScoresForAnalysis),
+    }
   } else {
     const analysesResult = await analyses({}, ...args);
     const priorityScoresPromises = analysesResult.map(async analysis => {
@@ -13,7 +20,19 @@ export default async function fetchPriorityScores(params, ...args) {
       };
       return await fetchPriorityScoresForAnalysis(analysisParams, ...args);
     })
-    return await Promise.all(priorityScoresPromises);
+    const allPriorityScores = await Promise.all(priorityScoresPromises);
+    const allPriorityScoresData = flatMap(
+      allPriorityScores,
+        addAnalysisToPriorityScores,
+    );
+    return {
+      analysis: {
+        id: null,
+        name: 'Combined Analysis'
+      },
+      data: orderBy(allPriorityScoresData, ['score'], ['desc']),
+      weights: allPriorityScores[0].weights,
+    };
   }
 }
 
@@ -26,4 +45,11 @@ async function fetchPriorityScoresForAnalysis(params, ...args) {
   const endpoint = `priority_scores/${params.analysis}`;
 
   return await get(endpoint, searchParams, ...args);
+}
+
+function addAnalysisToPriorityScores(priorityScores) {
+  return priorityScores.data.map(priorityScore => ({
+    ...priorityScore,
+    analysis: priorityScores.analysis,
+  }));
 }

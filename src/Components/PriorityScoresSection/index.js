@@ -28,7 +28,7 @@ function PriorityScoresSection(props) {
   const [urlParams] = useUrlParams(props);
 
   return (
-    <PriorityScoresCard analysis={urlParams.analysis || 15}/>
+    <PriorityScoresCard analysis={urlParams.analysis}/>
   );
 }
 
@@ -166,7 +166,8 @@ export function PriorityScores({analysis, settings}) {
         {priorityScores => {
           return (
             <div className='my-3'>
-              <div className='d-flex justify-content-end'>
+              <div className='d-flex justify-content-between'>
+                <h5>Cancer type: {priorityScores.analysis.name}</h5>
                 <Label>
                   <Input
                     type='checkbox'
@@ -555,9 +556,12 @@ function PriorityScoreBucketPlot(props) {
             const labelOffset = 0;
             const labelAproxWidth = 8 * priorityScore.symbol.length;
             const labelAnchor = plotWidth < (xPos + labelAproxWidth) ? 'end' : 'start';
-            const labelXposition = plotWidth < (xPos + labelAproxWidth) ? xPos - labelOffset : xPos + labelOffset
+            const labelXposition = plotWidth < (xPos + labelAproxWidth) ? xPos - labelOffset : xPos + labelOffset;
             return (
-              <Link key={priorityScore["gene_id"]} to={`/gene/${priorityScore.gene_id}`}>
+              <Link
+                key={`${priorityScore["gene_id"]}-${priorityScore.analysis.id}`}
+                to={`/gene/${priorityScore.gene_id}`}
+              >
                 <circle
                   cx={xPos}
                   cy={yScale(priorityScore["score"])}
@@ -666,6 +670,7 @@ function PriorityScoreTooltip({x, y, priorityScore}) {
       Gene: <b>{priorityScore.symbol}</b><br/>
       Target priority score: <b>{priorityScore.score.toFixed(2)}</b><br/>
       Tractability bucket: <b>{priorityScore.bucket}</b><br/>
+      Cancer type: <b>{priorityScore.analysis.name}</b>
     </Tooltip>
   );
 }
