@@ -709,7 +709,7 @@ function PriorityScoresTable({priorityScores}) {
         {priorityScores.slice(firstItem, firstItem + pageSize).map(priorityScore => (
           <tr key={keyForPriorityScore(priorityScore)}>
             <td>
-              {priorityScore.symbol}
+              <Link to={`/gene/${priorityScore.gene_id}`}>{priorityScore.symbol}</Link>
             </td>
             <td>
               {priorityScore.gene_id}
