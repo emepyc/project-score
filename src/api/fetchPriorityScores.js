@@ -9,7 +9,7 @@ export default async function fetchPriorityScores(params, ...args) {
     const priorityScoresForAnalysis = await fetchPriorityScoresForAnalysis(params, ...args);
     return {
       ...priorityScoresForAnalysis,
-      data: addAnalysisToPriorityScores(priorityScoresForAnalysis),
+      data: formatToPriorityScores(priorityScoresForAnalysis),
     }
   } else {
     const analysesResult = await analyses({}, ...args);
@@ -23,7 +23,7 @@ export default async function fetchPriorityScores(params, ...args) {
     const allPriorityScores = await Promise.all(priorityScoresPromises);
     const allPriorityScoresData = flatMap(
       allPriorityScores,
-        addAnalysisToPriorityScores,
+        formatToPriorityScores,
     );
     return {
       analysis: {
@@ -47,7 +47,7 @@ async function fetchPriorityScoresForAnalysis(params, ...args) {
   return await get(endpoint, searchParams, ...args);
 }
 
-function addAnalysisToPriorityScores(priorityScores) {
+function formatToPriorityScores(priorityScores) {
   return priorityScores.data.map(priorityScore => ({
     ...priorityScore,
     analysis: priorityScores.analysis,

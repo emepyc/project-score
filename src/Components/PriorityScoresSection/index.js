@@ -8,6 +8,10 @@ import {
   CardHeader,
   Label,
   Input,
+  Table,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
   Tooltip as ReactStrapTooltip,
 } from 'reactstrap';
 import orderBy from "lodash.orderby";
@@ -183,6 +187,9 @@ export function PriorityScores({analysis, settings}) {
                 byBucket={settings.tractability}
                 showLabels={showLabels}
               />
+              <div className='mt-5'>
+                <PriorityScoresTable priorityScores={priorityScores.data}/>
+              </div>
             </div>
           );
         }}
@@ -373,7 +380,6 @@ function PriorityScoresBucketLegend() {
 }
 
 function PriorityScoresYLabel({position}) {
-
   return (
     <div className='position-absolute' style={{
       top: `${position}px`,
@@ -557,7 +563,7 @@ function PriorityScoreBucketPlot(props) {
             const labelXposition = plotWidth < (xPos + labelAproxWidth) ? xPos - labelOffset : xPos + labelOffset;
             return (
               <Link
-                key={`${priorityScore["gene_id"]}-${priorityScore.analysis.id}`}
+                key={keyForPriorityScore(priorityScore)}
                 to={`/gene/${priorityScore.gene_id}`}
               >
                 <circle
@@ -665,9 +671,86 @@ function PriorityScoreTooltip({x, y, priorityScore}) {
       height={0}
     >
       Gene: <b>{priorityScore.symbol}</b><br/>
-      Target priority score: <b>{priorityScore.score.toFixed(2)}</b><br/>
+      Target priority score: <b>{formatPriorityScore(priorityScore.score)}</b><br/>
       Tractability bucket: <b>{priorityScore.bucket}</b><br/>
       Cancer type: <b>{priorityScore.analysis.name}</b>
     </Tooltip>
   );
+}
+
+
+function PriorityScoresTable({priorityScores}) {
+  const totalHits = priorityScores.length;
+
+  const [pageSize] = useState(10);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const goPrev = () => setPageNumber(pageNumber - 1);
+  const goNext = () => setPageNumber(pageNumber + 1);
+
+  const isFirstPage = pageNumber === 1;
+  const isLastPage = pageNumber >= totalHits / pageSize;
+
+  const firstItem = pageNumber * pageSize;
+
+  return (
+    <div>
+      <Table>
+        <thead>
+        <tr>
+          <th>Target Name</th>
+          <th>Target Gene ID</th>
+          <th>Tractability Bucket</th>
+          <th>Analysis (pan cancer, cancer specific)</th>
+          <th>Target Priority Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        {priorityScores.slice(firstItem, firstItem + pageSize).map(priorityScore => (
+          <tr key={keyForPriorityScore(priorityScore)}>
+            <td>
+              {priorityScore.symbol}
+            </td>
+            <td>
+              {priorityScore.gene_id}
+            </td>
+            <td>
+              {priorityScore.bucket}
+            </td>
+            <td>
+              {priorityScore.analysis.name}
+            </td>
+            <td>
+              {formatPriorityScore(priorityScore.score)}
+            </td>
+          </tr>
+        ))}
+        </tbody>
+      </Table>
+      <Pagination>
+        <PaginationItem disabled={isFirstPage}>
+          <PaginationLink onClick={goPrev}>
+            Previous
+          </PaginationLink>
+        </PaginationItem>
+        <small style={{padding: '0.75rem 0.25rem'}}>
+        </small>
+        <PaginationItem disabled={isLastPage}>
+          <PaginationLink onClick={goNext}>
+            Next
+          </PaginationLink>
+        </PaginationItem>
+      </Pagination>
+      Page <b>{pageNumber}</b> of {1 + ~~(totalHits / pageSize)}
+    </div>
+  );
+}
+
+
+function keyForPriorityScore(priorityScore) {
+  return `${priorityScore["gene_id"]}-${priorityScore.analysis.id}`;
+}
+
+function formatPriorityScore(priorityScore) {
+  return priorityScore.toFixed(2);
 }
