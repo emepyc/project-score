@@ -510,8 +510,6 @@ function PriorityScoreBucketPlot(props) {
     </React.Fragment>
   );
 
-  const isCramped = plotWidth / priorityScores.length < 5;
-
   const mouseOverElement = () => {
     setShowExpandLabel(true);
   };
@@ -589,7 +587,6 @@ function PriorityScoreBucketPlot(props) {
         {xAxisOrBucketNumber}
         <ExpandElement
           bucket={bucket}
-          isCramped={isCramped}
           isExpanded={isExpanded}
           onExpand={onExpand}
           onShrink={onShrink}
@@ -603,7 +600,7 @@ function PriorityScoreBucketPlot(props) {
   );
 }
 
-function ExpandElement({bucket, isCramped, isExpanded, plotWidth, show, xOffset, onExpand, onShrink}) {
+function ExpandElement({bucket, isExpanded, plotWidth, show, xOffset, onExpand, onShrink}) {
   const classes = classNames({
     expandLabel: true,
     show,
@@ -613,7 +610,7 @@ function ExpandElement({bucket, isCramped, isExpanded, plotWidth, show, xOffset,
 
   const iconPosition = xOffset + (plotWidth / 2) - (iconWidth / 2);
 
-  if (bucket && isCramped && !isExpanded) {
+  if (bucket && !isExpanded) {
     return (
       <ExpandShrinkIcon
         iconElement={<SvgIcon icon="searchPlus" size={iconWidth} className={classes}/>}
