@@ -188,7 +188,9 @@ export function PriorityScores({analysis, settings}) {
                 showLabels={showLabels}
               />
               <div className='mt-5'>
-                <PriorityScoresTable priorityScores={priorityScores.data}/>
+                <PriorityScoresTable
+                  priorityScores={priorityScores.data}
+                />
               </div>
             </div>
           );
@@ -214,7 +216,14 @@ function distributeIntoBuckets(priorityScores) {
   }, {})
 }
 
-function PriorityScoresPlot({plotWidth, priorityScores: priorityScoresAll, byBucket, showLabels}) {
+function PriorityScoresPlot(props) {
+  const {
+    plotWidth,
+    priorityScores: priorityScoresAll,
+    byBucket,
+    showLabels,
+  } = props;
+
   const [isExpanded, setIsExpanded] = useState(false);
   const [priorityScores, setPriorityScores] = useState(priorityScoresAll);
 
@@ -683,13 +692,13 @@ function PriorityScoresTable({priorityScores}) {
   const totalHits = priorityScores.length;
 
   const [pageSize] = useState(10);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(0);
 
   const goPrev = () => setPageNumber(pageNumber - 1);
   const goNext = () => setPageNumber(pageNumber + 1);
 
-  const isFirstPage = pageNumber === 1;
-  const isLastPage = pageNumber >= totalHits / pageSize;
+  const isFirstPage = pageNumber === 0;
+  const isLastPage = pageNumber === ~~(totalHits / pageSize);
 
   const firstItem = pageNumber * pageSize;
 
@@ -707,7 +716,9 @@ function PriorityScoresTable({priorityScores}) {
         </thead>
         <tbody>
         {priorityScores.slice(firstItem, firstItem + pageSize).map(priorityScore => (
-          <tr key={keyForPriorityScore(priorityScore)}>
+          <tr
+            key={keyForPriorityScore(priorityScore)}
+          >
             <td>
               <Link to={`/gene/${priorityScore.gene_id}`}>{priorityScore.symbol}</Link>
             </td>
@@ -741,7 +752,7 @@ function PriorityScoresTable({priorityScores}) {
           </PaginationLink>
         </PaginationItem>
       </Pagination>
-      Page <b>{pageNumber}</b> of {1 + ~~(totalHits / pageSize)}
+      Page <b>{pageNumber + 1}</b> of {~~(totalHits / pageSize)}
     </div>
   );
 }
