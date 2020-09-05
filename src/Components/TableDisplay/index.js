@@ -86,10 +86,11 @@ function TableDisplay(props) {
               <td>
                 {row.tissue}
               </td>
-              <td>
+              <td className='text-center'>
                 {row.fc_clean}
               </td>
               <td
+                className='text-center'
                 style={{backgroundColor: scoreBackgroundColor}}
               >
                 {row.bf_scaled}
