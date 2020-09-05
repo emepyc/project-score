@@ -21,7 +21,7 @@ function TableDisplay(props) {
   const toggleLFSTooltip = () => toggleShowLFSTooltip(!showLFSTooltip);
   const toggleFCTooltip = () => toggleShowFCTooltip(!showFCTooltip);
 
-  const getKeyForRow = (row) => row ? `${row.geneId}-${row.modelName}` : null;
+  const getKeyForRow = (row) => row ? `${row.geneId}-${row.modelName.replace(/\./g, '-')}` : null;
 
   const [urlParams] = useUrlParams(props);
 
@@ -90,6 +90,7 @@ function TableDisplay(props) {
               </td>
               <td
                 style={{backgroundColor: scoreBackgroundColor}}
+                // id={`lof-${normaliseDomId(key)}`}
                 id={`lof-${key}`}
                 onMouseEnter={() => setLofCellTooltip(`lof-${key}`)}
               >
