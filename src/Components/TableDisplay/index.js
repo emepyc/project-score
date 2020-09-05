@@ -57,6 +57,7 @@ function TableDisplay(props) {
             Loss of fitness score<sup id='lossOfFitnessScoreHelp' style={{cursor: 'default'}}>?</sup>{' '}
             <SortArrows {...props} field="bf_scaled"/>
           </th>
+          <th style={{whiteSpace: 'nowrap'}}>Essential gene</th>
         </tr>
         </thead>
 
@@ -90,11 +91,16 @@ function TableDisplay(props) {
               </td>
               <td
                 style={{backgroundColor: scoreBackgroundColor}}
-                // id={`lof-${normaliseDomId(key)}`}
+              >
+                {row.bf_scaled}
+              </td>
+              <td
+                className='text-center'
+                style={{backgroundColor: scoreBackgroundColor}}
                 id={`lof-${key}`}
                 onMouseEnter={() => setLofCellTooltip(`lof-${key}`)}
               >
-                {row.bf_scaled}
+                {row.bf_scaled < 0 ? 'Yes' : 'No'}
               </td>
             </tr>
           )
