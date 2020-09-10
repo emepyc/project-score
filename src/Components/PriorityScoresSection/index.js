@@ -1,8 +1,11 @@
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faDownload} from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import React, {useState, useEffect, useRef} from "react";
 import {withRouter, Link} from "react-router-dom";
 import * as d3 from "d3";
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -20,13 +23,14 @@ import useUrlParams from '../useUrlParams';
 import {fetchPriorityScores} from '../../api';
 import FetchData from '../FetchData';
 import useWidth from '../useWidth';
-import {significantNodeColor, textDefaultColor} from '../../colors';
+import {colorInsignificantBg, colorSignificantBg, significantNodeColor, textDefaultColor} from '../../colors';
 import PriorityScoresSettings from '../PriorityScoresSettings';
 import SvgIcon from '../SvgIcon';
 import Tooltip from '../Tooltip';
 import {priorityScoresHelp} from '../../definitions';
 
 import "./priorityScoresSection.scss";
+import {CSVLink} from "react-csv";
 
 function PriorityScoresSection(props) {
   const [urlParams] = useUrlParams(props);
@@ -111,12 +115,8 @@ function PriorityScoresCard({analysis}) {
   );
 }
 
-export function PriorityScores({analysis, settings}) {
-  const [showLabels, setShowLabels] = useState(false);
-  const container = useRef(null);
-  const containerWidth = useWidth(container);
-
-  const fetchDataParams = {
+function formatPriorityScoresParams(analysis, settings) {
+  return {
     analysis,
     threshold: settings.threshold,
     weights: {
@@ -139,7 +139,15 @@ export function PriorityScores({analysis, settings}) {
       l1: settings.l1Weight,
       l2: 100 - settings.l1Weight,
     },
-  };
+  }
+}
+
+export function PriorityScores({analysis, settings}) {
+  const [showLabels, setShowLabels] = useState(false);
+  const container = useRef(null);
+  const containerWidth = useWidth(container);
+
+  const fetchDataParams = formatPriorityScoresParams(analysis, settings);
 
   const fetchDataDependencies = [
     analysis,
@@ -689,10 +697,15 @@ function PriorityScoreTooltip({x, y, priorityScore}) {
 
 
 function PriorityScoresTable({priorityScores}) {
-  const totalHits = priorityScores.length;
 
-  const [pageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(0);
+
+  const [query, setQuery] = useState('');
+
+  const filteredPriorityScores = priorityScores.filter(priorityScore => priorityScore.symbol.includes(query));
+
+  const totalHits = filteredPriorityScores.length;
 
   const goPrev = () => setPageNumber(pageNumber - 1);
   const goNext = () => setPageNumber(pageNumber + 1);
@@ -702,42 +715,73 @@ function PriorityScoresTable({priorityScores}) {
 
   const firstItem = pageNumber * pageSize;
 
+  const priorityScoresInPage = filteredPriorityScores.slice(firstItem, firstItem + pageSize);
   return (
     <div>
-      <Table>
-        <thead>
-        <tr>
-          <th>Target Name</th>
-          <th>Target Gene ID</th>
-          <th>Tractability Bucket</th>
-          <th>Analysis (pan cancer, cancer specific)</th>
-          <th>Target Priority Score</th>
-        </tr>
-        </thead>
-        <tbody>
-        {priorityScores.slice(firstItem, firstItem + pageSize).map(priorityScore => (
-          <tr
-            key={keyForPriorityScore(priorityScore)}
-          >
-            <td>
-              <Link to={`/gene/${priorityScore.gene_id}`}>{priorityScore.symbol}</Link>
-            </td>
-            <td>
-              {priorityScore.gene_id}
-            </td>
-            <td>
-              {priorityScore.bucket}
-            </td>
-            <td>
-              {priorityScore.analysis.name}
-            </td>
-            <td>
-              {formatPriorityScore(priorityScore.score)}
-            </td>
+      <div className='d-flex justify-content-between'>
+        <div>
+          <Input
+            type='text'
+            onChange={ev => setQuery(ev.target.value.toUpperCase())}
+            placeholder='Search for gene'
+          />
+        </div>
+        <div className='align-self-center'>
+          <CSVLink data={priorityScoresInPage} filename='depmap-priority-scores-table.csv'>
+            <Button
+              size='sm'
+              outline
+            >
+              <FontAwesomeIcon
+                icon={faDownload}
+                title='Download as CSV'
+                size='sm'
+              />
+            </Button>
+          </CSVLink>
+        </div>
+      </div>
+      <div className='my-2'>
+        <Table>
+          <thead>
+          <tr>
+            <th>Target gene symbol</th>
+            <th>Target gene ID</th>
+            <th className='text-center'>Tractability bucket</th>
+            <th>Analysis (pan cancer, cancer specific)</th>
+            <th className='text-center'>Target priority score</th>
           </tr>
-        ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+          {priorityScoresInPage.map(priorityScore => (
+            <tr
+              key={keyForPriorityScore(priorityScore)}
+            >
+              <td>
+                <Link to={`/gene/${priorityScore.gene_id}`}>{priorityScore.symbol}</Link>
+              </td>
+              <td>
+                {priorityScore.gene_id}
+              </td>
+              <td
+                className='text-center'
+              >
+                {priorityScore.bucket}
+              </td>
+              <td>
+                {priorityScore.analysis.name}
+              </td>
+              <td
+                className='text-center'
+                style={{backgroundColor: priorityScore.score >= 40 ? colorSignificantBg : colorInsignificantBg}}
+              >
+                {formatPriorityScore(priorityScore.score)}
+              </td>
+            </tr>
+          ))}
+          </tbody>
+        </Table>
+      </div>
       <Pagination>
         <PaginationItem disabled={isFirstPage}>
           <PaginationLink onClick={goPrev}>
@@ -752,7 +796,7 @@ function PriorityScoresTable({priorityScores}) {
           </PaginationLink>
         </PaginationItem>
       </Pagination>
-      Page <b>{pageNumber + 1}</b> of {~~(totalHits / pageSize)}
+      Page <b>{pageNumber + 1}</b> of {~~(totalHits / pageSize) + 1}
     </div>
   );
 }
@@ -764,4 +808,14 @@ function keyForPriorityScore(priorityScore) {
 
 function formatPriorityScore(priorityScore) {
   return priorityScore.toFixed(2);
+}
+
+function formatPriorityScoresTableData(data) {
+  return data.map(row => ({
+    'Target gene symbol': row.symbol,
+    'Target gene id': row.gene_id,
+    'Tractability bucket': row.bucket,
+    'analysis (pan cancer, cancer specific)': row.analysis.name,
+    'Target priority score': row.score,
+  }));
 }
