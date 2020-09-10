@@ -138,7 +138,7 @@ function PriorityScoreForAnalyses({width, scores}) {
       height={20}
       hideGuide={true}
     >
-      {tooltip.message}
+      <b>{tooltip.present}</b> out of <b>{tooltip.all}</b> cell lines present this feature
     </Tooltip>
   ) : null;
 
@@ -384,7 +384,8 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight, fo
         onMouseEnter={() => onHighlight({
           y: rowY + cellWidth / 2,
           x: (cellWidth * 8) + (blockMargin * 2),
-          message: `${scores.l2Scores.fold1Sbf.true} / ${scores.l2Scores.fold1Sbf.total}`
+          present: scores.l2Scores.fold1Sbf.true,
+          all: scores.l2Scores.fold1Sbf.total,
         })}
         onMouseLeave={() => onHighlight(null)}
       />
@@ -397,7 +398,8 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight, fo
         onMouseEnter={() => onHighlight({
           y: rowY + cellWidth / 2,
           x: (cellWidth * 9) + (blockMargin * 2),
-          message: `${scores.l2Scores.fold2Sbf.true} / ${scores.l2Scores.fold2Sbf.total}`
+          present: scores.l2Scores.fold2Sbf.true,
+          all: scores.l2Scores.fold2Sbf.total,
         })}
         onMouseLeave={() => onHighlight(null)}
       />
@@ -410,7 +412,8 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight, fo
         onMouseEnter={() => onHighlight({
           y: rowY + cellWidth / 2,
           x: (cellWidth * 10) + (blockMargin * 2),
-          message: `${scores.l2Scores.fold3Sbf.true} / ${scores.l2Scores.fold3Sbf.total}`
+          present: scores.l2Scores.fold3Sbf.true,
+          all: scores.l2Scores.fold3Sbf.total,
         })}
         onMouseLeave={() => onHighlight(null)}
       />
@@ -423,7 +426,8 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight, fo
         onMouseEnter={() => onHighlight({
           y: rowY + cellWidth / 2,
           x: (cellWidth * 11) + (blockMargin * 2),
-          message: `${scores.l2Scores.mgk5percFdr.true} / ${scores.l2Scores.mgk5percFdr.total}`
+          present: scores.l2Scores.mgk5percFdr.true,
+          all: scores.l2Scores.mgk5percFdr.total,
         })}
         onMouseLeave={() => onHighlight(null)}
       />
@@ -436,7 +440,8 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight, fo
         onMouseEnter={() => onHighlight({
           y: rowY + cellWidth / 2,
           x: (cellWidth * 12) + (blockMargin * 2),
-          message: `${scores.l2Scores.mgk10percFdr.true} / ${scores.l2Scores.mgk10percFdr.total}`
+          present: scores.l2Scores.mgk10percFdr.true,
+          all: scores.l2Scores.mgk10percFdr.total,
         })}
         onMouseLeave={() => onHighlight(null)}
       />
@@ -449,7 +454,8 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight, fo
         onMouseEnter={() => onHighlight({
           y: rowY + cellWidth / 2,
           x: (cellWidth * 13) + (blockMargin * 2),
-          message: `${scores.l2Scores.mut.true} / ${scores.l2Scores.mut.total}`
+          present: scores.l2Scores.mut.true,
+          all: scores.l2Scores.mut.total,
         })}
         onMouseLeave={() => onHighlight(null)}
       />
@@ -462,7 +468,8 @@ function PriorityScoreRow({scores, rowY, cellWidth, blockMargin, onHighlight, fo
         onMouseEnter={() => onHighlight({
           y: rowY + cellWidth / 2,
           x: (cellWidth * 14) + (blockMargin * 2),
-          message: `${scores.l2Scores.depPathway.true} / ${scores.l2Scores.depPathway.total}`
+          present: scores.l2Scores.depPathway.true,
+          all: scores.l2Scores.depPathway.total,
         })}
         onMouseLeave={() => onHighlight(null)}
       />

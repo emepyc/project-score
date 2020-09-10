@@ -28,6 +28,7 @@ import PriorityScoresSettings from '../PriorityScoresSettings';
 import SvgIcon from '../SvgIcon';
 import Tooltip from '../Tooltip';
 import {priorityScoresHelp} from '../../definitions';
+import CSVDownload from "../CsvDownload";
 
 import "./priorityScoresSection.scss";
 import {CSVLink} from "react-csv";
@@ -72,18 +73,38 @@ function PriorityScoresCard({analysis}) {
   const [settings, setSettings] = useState(defaultSettings);
   const [targetPriorityScoreTooltip, setTargetPriorityScoreTooltip] = useState(false);
 
+  const [dataToDownload, setDataToDownload] = useState(null);
+
+  const csvDownloaderElement = dataToDownload ? (
+    <div data={dataToDownload}>
+      Download
+    </div>
+  ) : null;
+
   return (
     <React.Fragment>
       <Card>
         <CardHeader>
-          Target Priority Scores
-          <sup
-            className='helpAnchor'
-            onMouseEnter={() => setTargetPriorityScoreTooltip(true)}
-            id='target-priority-score-tooltip'
-          >
-            ?
-          </sup>
+          <div className='d-flex justify-content-between'>
+            <div>
+              Target Priority Scores
+              <sup
+                className='helpAnchor'
+                onMouseEnter={() => setTargetPriorityScoreTooltip(true)}
+                id='target-priority-score-tooltip'
+              >
+                ?
+              </sup>
+            </div>
+            <div>
+              <CSVDownload
+                endpoint={fetchPriorityScores}
+                params={formatPriorityScoresParams(analysis, settings)}
+                dataFormatter={response => formatPriorityScoresTableData(response.data)}
+              />
+              {/*  {csvDownloaderElement}*/}
+            </div>
+          </div>
         </CardHeader>
         <CardBody>
           <div>
@@ -94,7 +115,11 @@ function PriorityScoresCard({analysis}) {
               />
             </div>
             <div>
-              <PriorityScores analysis={analysis} settings={settings}/>
+              <PriorityScores
+                analysis={analysis}
+                settings={settings}
+                onDataLoaded={setDataToDownload}
+              />
             </div>
           </div>
         </CardBody>
@@ -176,6 +201,7 @@ export function PriorityScores({analysis, settings}) {
         deps={fetchDataDependencies}
       >
         {priorityScores => {
+          // onDataLoaded(formatPriorityScoresTableData(priorityScores.data));
           return (
             <div className='my-3'>
               <div className='d-flex justify-content-between'>
