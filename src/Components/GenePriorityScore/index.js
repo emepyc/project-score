@@ -138,7 +138,7 @@ function PriorityScoreForAnalyses({width, scores}) {
       height={20}
       hideGuide={true}
     >
-      <b>{tooltip.present}</b> out of <b>{tooltip.all}</b> cell lines present this feature
+      <b>{tooltip.present}</b> out of <b>{tooltip.all}</b> cell line{tooltip.present === 1 ? '' : 's'} present{tooltip.present === 1 ? 's' : ''} this feature
     </Tooltip>
   ) : null;
 
