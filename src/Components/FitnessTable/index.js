@@ -16,6 +16,9 @@ import useFetchData from "../useFetchData";
 import Error from '../Error';
 
 import './customTable.scss';
+import {CSVLink} from "react-csv";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faDownload} from "@fortawesome/free-solid-svg-icons";
 
 function parseData(raw) {
   return raw.map(d => {
@@ -40,38 +43,39 @@ function FitnessTable(props) {
   const [data, setData] = useState([]);
   const [sort, setSort] = useState('fc_clean');
   const [sortDirection, setSortDirection] = useState(1);
-  const [pageSize] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [search, setSearch] = useState('');
   const [totalHits, setTotalHits] = useState(null);
 
+
   const params = {
-      geneId: urlParams.geneId,
-      modelId: urlParams.modelId,
-      excludePanCancerGenes: urlParams.excludePanCancerGenes,
-      sort,
-      sortDirection,
-      pageSize,
-      pageNumber,
-      search,
-      analysis: urlParams.analysis,
-      scoreMin: urlParams.scoreMin,
-      scoreMax: urlParams.scoreMax,
-    };
+    geneId: urlParams.geneId,
+    modelId: urlParams.modelId,
+    excludePanCancerGenes: urlParams.excludePanCancerGenes,
+    sort,
+    sortDirection,
+    pageSize: rowsPerPage,
+    pageNumber,
+    search,
+    analysis: urlParams.analysis,
+    scoreMin: urlParams.scoreMin,
+    scoreMax: urlParams.scoreMax,
+  };
 
   const deps = [
-      urlParams.geneId,
-      urlParams.modelId,
-      sort,
-      sortDirection,
-      pageSize,
-      pageNumber,
-      search,
-      urlParams.scoreMin,
-      urlParams.scoreMax,
-      urlParams.excludePanCancerGenes,
-      urlParams.analysis,
-    ];
+    urlParams.geneId,
+    urlParams.modelId,
+    sort,
+    sortDirection,
+    rowsPerPage,
+    pageNumber,
+    search,
+    urlParams.scoreMin,
+    urlParams.scoreMax,
+    urlParams.excludePanCancerGenes,
+    urlParams.analysis,
+  ];
 
   const [dataResponse, loading, error] = useFetchData(
     fetchCrisprData,
@@ -84,13 +88,13 @@ function FitnessTable(props) {
 
   useEffect(() => {
     if (dataResponse !== null) {
-        setData(parseData(dataResponse.data));
-        setTotalHits(dataResponse.count);
+      setData(parseData(dataResponse.data));
+      setTotalHits(dataResponse.count);
     }
   }, [dataResponse]);
 
   const isFirstPage = pageNumber === 1;
-  const isLastPage = pageNumber >= totalHits / pageSize;
+  const isLastPage = pageNumber >= totalHits / rowsPerPage;
 
   if (error !== null) {
     return (
@@ -100,30 +104,38 @@ function FitnessTable(props) {
   return (
     <div className='fitness-table'>
 
-      <div className='d-flex h-100'>
+      <div className='d-flex h-100 justify-content-between'>
 
         <div className='my-auto mr-auto p-1'>
           <div>
             Showing {' '}
-            <span className='font-weight-bold'>{pageSize * (pageNumber - 1) + 1}</span> - {' '}
-            <span className='font-weight-bold'>{pageSize * (pageNumber - 1) + pageSize}</span> out of {' '}
+            <span className='font-weight-bold'>{rowsPerPage * (pageNumber - 1) + 1}</span> - {' '}
+            <span className='font-weight-bold'>{rowsPerPage * (pageNumber - 1) + rowsPerPage}</span> out of {' '}
             <span className='font-weight-bold'>{totalHits}</span> fitness values
           </div>
         </div>
-
         {showSearchbox && (
-          <GeneSearchbox
-            onInputChange={(input) => setSearch(input.toUpperCase())}
-            deferTime={1000}
-          />
+          <div>
+            <GeneSearchbox
+              onInputChange={(input) => setSearch(input.toUpperCase())}
+              deferTime={1000}
+            />
+          </div>
         )}
-
+        <div className='align-self-center ml-2'>
+          <CSVLink data={data} filename='depmap-fitness-table.csv'>
+            <FontAwesomeIcon
+              icon={faDownload}
+              title='Download as CSV'
+              size='sm'
+            />
+          </CSVLink>
+        </div>
       </div>
 
       <Spinner
         loading={loading}
       >
-
         <TableDisplay
           {...props}
           data={data}
@@ -140,28 +152,45 @@ function FitnessTable(props) {
         />
       </Spinner>
 
-      <Pagination>
-        <PaginationItem disabled={isFirstPage}>
-          <PaginationLink onClick={goPrev}>
-            Previous
-          </PaginationLink>
-        </PaginationItem>
-        <small style={{padding: '0.75rem 0.25rem'}}>
-        </small>
-        <PaginationItem disabled={isLastPage}>
-          <PaginationLink onClick={goNext}>
-            Next
-          </PaginationLink>
-        </PaginationItem>
-      </Pagination>
-      Page <b>{pageNumber}</b> of {1 + ~~(totalHits / pageSize)}
+      <div className='d-flex justify-content-between'>
+        <div>
+          <Pagination>
+            <PaginationItem disabled={isFirstPage}>
+              <PaginationLink onClick={goPrev}>
+                Previous
+              </PaginationLink>
+            </PaginationItem>
+            <small style={{padding: '0.75rem 0.25rem'}}>
+            </small>
+            <PaginationItem disabled={isLastPage}>
+              <PaginationLink onClick={goNext}>
+                Next
+              </PaginationLink>
+            </PaginationItem>
+          </Pagination>
+          Page <b>{pageNumber}</b> of {1 + ~~(totalHits / rowsPerPage)}
+        </div>
+        <div>
+          Rows per page:{' '}
+          <Input
+            type='select'
+            defaultValue={rowsPerPage}
+            onChange={event => setRowsPerPage(+event.target.value)}
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </Input>
+        </div>
+      </div>
     </div>
   )
 }
 
 export default withRouter(FitnessTable);
 
-function GeneSearchbox({onInputChange, deferTime=300}) {
+function GeneSearchbox({onInputChange, deferTime = 300}) {
   const [inputValue, setInputValue] = useState("");
 
   const debounced = useRef(debounce((value) => onInputChange(value), deferTime));

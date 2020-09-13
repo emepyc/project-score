@@ -5,7 +5,6 @@ import React, {useState, useEffect, useRef} from "react";
 import {withRouter, Link} from "react-router-dom";
 import * as d3 from "d3";
 import {
-  Button,
   Card,
   CardBody,
   CardHeader,
@@ -73,14 +72,6 @@ function PriorityScoresCard({analysis}) {
   const [settings, setSettings] = useState(defaultSettings);
   const [targetPriorityScoreTooltip, setTargetPriorityScoreTooltip] = useState(false);
 
-  const [dataToDownload, setDataToDownload] = useState(null);
-
-  const csvDownloaderElement = dataToDownload ? (
-    <div data={dataToDownload}>
-      Download
-    </div>
-  ) : null;
-
   return (
     <React.Fragment>
       <Card>
@@ -96,14 +87,6 @@ function PriorityScoresCard({analysis}) {
                 ?
               </sup>
             </div>
-            <div>
-              <CSVDownload
-                endpoint={fetchPriorityScores}
-                params={formatPriorityScoresParams(analysis, settings)}
-                dataFormatter={response => formatPriorityScoresTableData(response.data)}
-              />
-              {/*  {csvDownloaderElement}*/}
-            </div>
           </div>
         </CardHeader>
         <CardBody>
@@ -118,7 +101,6 @@ function PriorityScoresCard({analysis}) {
               <PriorityScores
                 analysis={analysis}
                 settings={settings}
-                onDataLoaded={setDataToDownload}
               />
             </div>
           </div>
@@ -201,7 +183,6 @@ export function PriorityScores({analysis, settings}) {
         deps={fetchDataDependencies}
       >
         {priorityScores => {
-          // onDataLoaded(formatPriorityScoresTableData(priorityScores.data));
           return (
             <div className='my-3'>
               <div className='d-flex justify-content-between'>
@@ -742,6 +723,7 @@ function PriorityScoresTable({priorityScores}) {
   const firstItem = pageNumber * pageSize;
 
   const priorityScoresInPage = filteredPriorityScores.slice(firstItem, firstItem + pageSize);
+
   return (
     <div>
       <div className='d-flex justify-content-between'>
@@ -754,16 +736,11 @@ function PriorityScoresTable({priorityScores}) {
         </div>
         <div className='align-self-center'>
           <CSVLink data={priorityScoresInPage} filename='depmap-priority-scores-table.csv'>
-            <Button
+            <FontAwesomeIcon
+              icon={faDownload}
+              title='Download as CSV'
               size='sm'
-              outline
-            >
-              <FontAwesomeIcon
-                icon={faDownload}
-                title='Download as CSV'
-                size='sm'
-              />
-            </Button>
+            />
           </CSVLink>
         </div>
       </div>
@@ -808,21 +785,37 @@ function PriorityScoresTable({priorityScores}) {
           </tbody>
         </Table>
       </div>
-      <Pagination>
-        <PaginationItem disabled={isFirstPage}>
-          <PaginationLink onClick={goPrev}>
-            Previous
-          </PaginationLink>
-        </PaginationItem>
-        <small style={{padding: '0.75rem 0.25rem'}}>
-        </small>
-        <PaginationItem disabled={isLastPage}>
-          <PaginationLink onClick={goNext}>
-            Next
-          </PaginationLink>
-        </PaginationItem>
-      </Pagination>
-      Page <b>{pageNumber + 1}</b> of {~~(totalHits / pageSize) + 1}
+      <div className='d-flex justify-content-between'>
+        <div>
+          <Pagination>
+            <PaginationItem disabled={isFirstPage}>
+              <PaginationLink onClick={goPrev}>
+                Previous
+              </PaginationLink>
+            </PaginationItem>
+            <small style={{padding: '0.75rem 0.25rem'}}>
+            </small>
+            <PaginationItem disabled={isLastPage}>
+              <PaginationLink onClick={goNext}>
+                Next
+              </PaginationLink>
+            </PaginationItem>
+          </Pagination>
+          Page <b>{pageNumber + 1}</b> of {~~(totalHits / pageSize) + 1}
+        </div>
+        <div>
+          Rows per page:{' '}
+          <Input
+            type='select'
+            onChange={event => setPageSize(+event.target.value)}
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value={100}>100</option>
+          </Input>
+        </div>
+      </div>
     </div>
   );
 }
@@ -834,14 +827,4 @@ function keyForPriorityScore(priorityScore) {
 
 function formatPriorityScore(priorityScore) {
   return priorityScore.toFixed(2);
-}
-
-function formatPriorityScoresTableData(data) {
-  return data.map(row => ({
-    'Target gene symbol': row.symbol,
-    'Target gene id': row.gene_id,
-    'Tractability bucket': row.bucket,
-    'analysis (pan cancer, cancer specific)': row.analysis.name,
-    'Target priority score': row.score,
-  }));
 }
