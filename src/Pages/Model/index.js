@@ -153,7 +153,7 @@ function EssentialitiesTable({highlight, onHighlight}) {
         <Row>
           <Col xs={{size: 12}}>
             <Table
-              geneSearchable
+              showSearchbox
               highlight={highlight}
               onHighlight={onHighlight}
             />

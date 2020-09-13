@@ -36,7 +36,7 @@ function parseData(raw) {
 }
 
 function FitnessTable(props) {
-  const {geneSearchable} = props;
+  const {showSearchbox} = props;
 
   const [urlParams] = useUrlParams(props);
 
@@ -114,7 +114,7 @@ function FitnessTable(props) {
             <span className='font-weight-bold'>{totalHits}</span> fitness values
           </div>
         </div>
-        {geneSearchable && (
+        {showSearchbox && (
           <div>
             <GeneSearchbox
               onInputChange={(input) => setSearch(input.toUpperCase())}

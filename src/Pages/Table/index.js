@@ -161,7 +161,7 @@ function _FitnessTable() {
         <Row>
           <Col xs={{size: 12}}>
             <FitnessTable
-              geneSearchable
+              showSearchbox
               highlight={highlight}
               onHighlight={onHighlight}
             />
