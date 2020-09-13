@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Jumbotron, Table, Tooltip} from 'reactstrap';
-import flatMap from 'lodash.flatmap';
 import {CSVLink} from 'react-csv';
 
 import FetchData from "../../Components/FetchData";
@@ -167,7 +166,8 @@ export default function Downloads() {
           target='PriorityScoresFileTooltip'
           toggle={togglePriorityScoresTooltip}
         >
-          Target priority scores are provided based on the default parameters used on the website and as previously described (Behan et al., Nature. 2019)
+          Target priority scores are provided based on the default parameters used on the website and as previously
+          described (Behan et al., Nature. 2019)
         </Tooltip>
 
         <Tooltip
@@ -202,12 +202,12 @@ export default function Downloads() {
 }
 
 function extractPriorityScores(priorityScoresByAnalysis) {
-  return flatMap(priorityScoresByAnalysis, priorityScoresForAnalysis => priorityScoresForAnalysis.data.map(priorityScore => ({
+  return priorityScoresByAnalysis.data.map(priorityScore => ({
     'tractability bucket': priorityScore.bucket,
     'gene id': priorityScore.gene_id,
     score: priorityScore.score,
     symbol: priorityScore.symbol,
-    'analysis id': priorityScoresForAnalysis.analysis.id,
-    'analysis name': priorityScoresForAnalysis.analysis.name,
-  })));
+    'analysis id': priorityScoresByAnalysis.analysis.id,
+    'analysis name': priorityScoresByAnalysis.analysis.name,
+  }));
 }
