@@ -27,7 +27,6 @@ import PriorityScoresSettings from '../PriorityScoresSettings';
 import SvgIcon from '../SvgIcon';
 import Tooltip from '../Tooltip';
 import {priorityScoresHelp} from '../../definitions';
-import CSVDownload from "../CsvDownload";
 
 import "./priorityScoresSection.scss";
 import {CSVLink} from "react-csv";
