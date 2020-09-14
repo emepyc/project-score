@@ -139,6 +139,32 @@ export default function Documentation() {
               </li>
             </ol>
           </div>
+
+          <div className='paragraph'>
+            The default setting for calculation of the target priority score is weighted to assign additional importance
+            to unbiased experimental evidence based on the effect size and significance of the fitness effect of gene
+            knockout in individual cell lines derived from the CRISPR-Cas9 screening (70% of total score). The biomarker
+            and tumour prevalence component of the score (30% of total score) provides important information for
+            clinical development of targets but is subject to bias based on prior knowledge of somatically altered
+            cancer genes.
+          </div>
+          <div className='paragraph'>
+            Thus, the default settings strike a balance between opportunity for novel target discovery
+            through CRISPR screens while assigning additional significance to targets linked to clinical evidence based
+            on prior knowledge. In general, increasing the contribution of the biomarker and tumour prevalence component
+            of the score will prioritise targets known to be altered in human cancers (e.g. oncogene) and for which a
+            differential fitness effect can be linked to a genomic marker. Conversely, increasing the contribution of
+            the CRISPR-Cas9 fitness effect is more likely to return novel targets, including synthetic-lethal
+            interactions, for which the underpinning molecular mechanism is less likely to be well understood.
+          </div>
+
+          <div className='paragraph'>
+            We established a minimal target priority score threshold of 40 based on scores calculated for targets with
+            approved or preclinical cancer compounds (
+            <a target='_blank' rel='noopener noreferrer'
+               href='https://pubmed.ncbi.nlm.nih.gov/30971826/'>Behan et al.,
+              Nature. 2019</a>).
+          </div>
         </div>
 
 
