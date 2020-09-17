@@ -5,7 +5,7 @@ import {CSVLink} from 'react-csv';
 import FetchData from "../../Components/FetchData";
 
 import './downloads.scss';
-import fetchPriorityScores from "../../api/fetchPriorityScores";
+import fetchPriorityScores, {formatPriorityScore} from "../../api/fetchPriorityScores";
 
 export default function Downloads() {
   const [rawTooltipOpen, setRawTooltipOpen] = useState(false);
@@ -76,7 +76,7 @@ export default function Downloads() {
                   {priorityScores => (
                     <CSVLink
                       filename='depmap-priority-scores.csv'
-                      data={extractPriorityScores(priorityScores)}
+                      data={priorityScores.data.map(formatPriorityScore)}
                     >
                       depmap-priority-scores.csv
                     </CSVLink>
@@ -199,15 +199,4 @@ export default function Downloads() {
       </div>
     </div>
   );
-}
-
-function extractPriorityScores(priorityScoresByAnalysis) {
-  return priorityScoresByAnalysis.data.map(priorityScore => ({
-    'tractability bucket': priorityScore.bucket,
-    'gene id': priorityScore.gene_id,
-    score: priorityScore.score,
-    symbol: priorityScore.symbol,
-    'analysis id': priorityScoresByAnalysis.analysis.id,
-    'analysis name': priorityScoresByAnalysis.analysis.name,
-  }));
 }

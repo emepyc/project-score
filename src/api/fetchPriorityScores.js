@@ -25,6 +25,7 @@ export default async function fetchPriorityScores(params, ...args) {
       allPriorityScores,
         formatToPriorityScores,
     );
+
     return {
       analysis: {
         id: null,
@@ -52,4 +53,15 @@ function formatToPriorityScores(priorityScores) {
     ...priorityScore,
     analysis: priorityScores.analysis,
   }));
+}
+
+export function formatPriorityScore(priorityScore) {
+  return {
+    'tractability bucket': priorityScore.bucket,
+    'gene id': priorityScore.gene_id,
+    score: priorityScore.score,
+    symbol: priorityScore.symbol,
+    'analysis id': priorityScore.analysis.id,
+    'analysis name': priorityScore.analysis.name,
+  };
 }

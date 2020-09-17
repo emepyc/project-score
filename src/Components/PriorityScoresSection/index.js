@@ -19,7 +19,7 @@ import {
 import orderBy from "lodash.orderby";
 
 import useUrlParams from '../useUrlParams';
-import {fetchPriorityScores} from '../../api';
+import fetchPriorityScores, {formatPriorityScore} from "../../api/fetchPriorityScores";
 import FetchData from '../FetchData';
 import useWidth from '../useWidth';
 import {colorInsignificantBg, colorSignificantBg, significantNodeColor, textDefaultColor} from '../../colors';
@@ -694,7 +694,7 @@ function PriorityScoreTooltip({x, y, priorityScore}) {
       height={0}
     >
       Gene: <b>{priorityScore.symbol}</b><br/>
-      Target priority score: <b>{formatPriorityScore(priorityScore.score)}</b><br/>
+      Target priority score: <b>{formatPriorityScoreValue(priorityScore.score)}</b><br/>
       Tractability bucket: <b>{priorityScore.bucket}</b><br/>
       Cancer type: <b>{priorityScore.analysis.name}</b>
     </Tooltip>
@@ -721,7 +721,8 @@ function PriorityScoresTable({priorityScores}) {
 
   const firstItem = pageNumber * pageSize;
 
-  const priorityScoresInPage = filteredPriorityScores.slice(firstItem, firstItem + pageSize);
+  const priorityScoresInPage = filteredPriorityScores
+    .slice(firstItem, firstItem + pageSize);
 
   return (
     <div>
@@ -734,7 +735,7 @@ function PriorityScoresTable({priorityScores}) {
           />
         </div>
         <div className='align-self-center'>
-          <CSVLink data={priorityScoresInPage} filename='depmap-priority-scores-table.csv'>
+          <CSVLink data={priorityScoresInPage.map(formatPriorityScore)} filename='depmap-priority-scores-table.csv'>
             <FontAwesomeIcon
               icon={faDownload}
               title='Download as CSV'
@@ -777,7 +778,7 @@ function PriorityScoresTable({priorityScores}) {
                 className='text-center'
                 style={{backgroundColor: priorityScore.score >= 40 ? colorSignificantBg : colorInsignificantBg}}
               >
-                {formatPriorityScore(priorityScore.score)}
+                {formatPriorityScoreValue(priorityScore.score)}
               </td>
             </tr>
           ))}
@@ -824,6 +825,6 @@ function keyForPriorityScore(priorityScore) {
   return `${priorityScore["gene_id"]}-${priorityScore.analysis.id}`;
 }
 
-function formatPriorityScore(priorityScore) {
+function formatPriorityScoreValue(priorityScore) {
   return priorityScore.toFixed(2);
 }
