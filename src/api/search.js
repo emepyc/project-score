@@ -50,6 +50,8 @@ export default function search(query, allAnalyses) {
 }
 
 function getExtraOptionsForCancerType(cancerType, allAnalyses) {
+  const disabledMsg = 'no analysis available';
+
   if (allAnalyses) {
     const analysis = allAnalyses.find(analysis => analysis.name === cancerType.name);
     return analysis ? {
@@ -58,11 +60,11 @@ function getExtraOptionsForCancerType(cancerType, allAnalyses) {
       id: analysis.id,
     } : {
       label: cancerType.name,
-      status: "disabled",
+      status: disabledMsg,
     };
   }
   return {
     label: cancerType.name,
-    status: "disabled",
+    status: disabledMsg,
   };
 }
