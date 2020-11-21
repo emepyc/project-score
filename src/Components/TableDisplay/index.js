@@ -21,7 +21,7 @@ function TableDisplay(props) {
   const toggleLFSTooltip = () => toggleShowLFSTooltip(!showLFSTooltip);
   const toggleFCTooltip = () => toggleShowFCTooltip(!showFCTooltip);
 
-  const getKeyForRow = (row) => row ? `${row.geneId}-${row.modelName}` : null;
+  const getKeyForRow = (row) => row ? `${row.geneId}-${row.modelName.replace(/\./g, '-')}` : null;
 
   const [urlParams] = useUrlParams(props);
 
@@ -57,6 +57,7 @@ function TableDisplay(props) {
             Loss of fitness score<sup id='lossOfFitnessScoreHelp' style={{cursor: 'default'}}>?</sup>{' '}
             <SortArrows {...props} field="bf_scaled"/>
           </th>
+          <th style={{whiteSpace: 'nowrap'}}>Essential gene</th>
         </tr>
         </thead>
 
@@ -85,15 +86,22 @@ function TableDisplay(props) {
               <td>
                 {row.tissue}
               </td>
-              <td>
+              <td className='text-center'>
                 {row.fc_clean}
               </td>
               <td
+                className='text-center'
+                style={{backgroundColor: scoreBackgroundColor}}
+              >
+                {row.bf_scaled}
+              </td>
+              <td
+                className='text-center'
                 style={{backgroundColor: scoreBackgroundColor}}
                 id={`lof-${key}`}
                 onMouseEnter={() => setLofCellTooltip(`lof-${key}`)}
               >
-                {row.bf_scaled}
+                {row.bf_scaled < 0 ? 'Yes' : 'No'}
               </td>
             </tr>
           )

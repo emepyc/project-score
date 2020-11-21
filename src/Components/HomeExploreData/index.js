@@ -9,7 +9,7 @@ const HomeExploreData = () => (
     <div className='my-5 d-flex flex-row justify-content-center text-justify flex-wrap'>
       <div className='mx-4 flex-grow-1' style={{'flexBasis': 0}}>
         <img src={targetLogo} width={50} style={{float: 'left', margin: '0 10px'}}/>
-        <h5>Fitness scores</h5>
+        <h5>Fitness Scores</h5>
         <div>
           Investigate the effect on cell line viability elicited by CRISPR-Cas9 mediated gene activation.
         </div>
@@ -22,7 +22,7 @@ const HomeExploreData = () => (
 
       <div className='mx-4 flex-grow-1' style={{'flexBasis': 0}}>
         <img src={targetLogo} width={50} style={{float: 'left', margin: '0 10px'}}/>
-        <h5>Target priority scores</h5>
+        <h5>Target Priority Scores</h5>
         <div>
           Investigate candidate therapeutic target in different cancer types.
         </div>

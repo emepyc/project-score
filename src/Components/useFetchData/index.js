@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useCallback, useRef} from 'react';
 
 export default function useFetchData(fetchData, params={}, deps=[]) {
   const isCancelled = useRef(false);
@@ -39,4 +39,38 @@ export default function useFetchData(fetchData, params={}, deps=[]) {
   }, deps);
 
   return [data, loading, error];
+}
+
+export function useAsyncCallback (endpoint) {
+    const [error, setError] = useState();
+    const [processing, setProcessing] = useState(false);
+    const [data, setData] = useState();
+
+    const asyncCallback = useCallback(input => {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+
+        setProcessing(true);
+        setError(null);
+
+        endpoint(input, signal)
+            .then(data => {
+                setProcessing(false);
+                console.log('data loaded');
+                setData(data);
+            })
+            .catch(error => {
+                if (error.name !== "AbortError") {
+                    console.error(error);
+                    setProcessing(false);
+                    setError(error);
+                }
+            });
+
+        return () => {
+            abortController.abort();
+        };
+    }, [endpoint]);
+
+    return [asyncCallback, data, processing, error];
 }
