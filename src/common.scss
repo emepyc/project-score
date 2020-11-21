@@ -36,3 +36,31 @@ $text-default-color: #5A5F5F;
   font-size: 0.9em;
 }
 
+@mixin transform-origin($transform) {
+    -webkit-transform-origin: $transform;
+    -ms-transform-origin: $transform;
+    -o-transform-origin: $transform;
+    transform-origin: $transform;
+}
+
+@mixin transform($transform) {
+    -webkit-transform: $transform;
+    -moz-transform: $transform;
+    -ms-transform: $transform;
+    -o-transform: $transform;
+    transform: $transform;
+}
+
+@mixin border-top-right-radius($radius){
+    -webkit-border-top-right-radius: $radius;
+    -moz-border-top-right-radius: $radius;
+    -ms-border-top-right-radius: $radius;
+    border-top-right-radius: $radius;
+}
+
+@mixin border-top-left-radius($radius){
+    -webkit-border-top-left-radius: $radius;
+    -moz-border-top-left-radius: $radius;
+    -ms-border-top-left-radius: $radius;
+    border-top-left-radius: $radius;
+}

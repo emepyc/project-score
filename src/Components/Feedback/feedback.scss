@@ -1,0 +1,26 @@
+@import '../../common.scss';
+
+.feedback {
+  z-index:100000;
+  position:fixed;
+  top:50%;
+  left:100%;
+  @include transform-origin(left 30px);
+  @include transform(rotate(-90deg));
+  @include border-top-right-radius(5px);
+  @include border-top-left-radius(5px);
+  overflow:hidden;
+  cursor:pointer;
+  //background-color:$green-1;
+  min-height: 30px;
+
+  >a {
+    >div {
+      padding: 5px 12px 5px 12px;
+      background: $green-1;
+      color: $bg-light;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+}

@@ -11,6 +11,7 @@ import Masthead from './Components/Masthead';
 import Footer from './Components/Footer';
 import Table from './Pages/Table';
 import Documentation from './Pages/Documentation';
+import Feedback from './Components/Feedback';
 
 const _App = (props) => {
 
@@ -42,6 +43,7 @@ const _App = (props) => {
             </main>
           </div>
           <Footer/>
+          <Feedback/>
         </div>
 
       </Router>
@@ -52,14 +54,14 @@ const _App = (props) => {
 export default _App;
 
 function usePageViews() {
-    const location = useLocation();
+  const location = useLocation();
 
-    useEffect(
-        () => {
-            ReactGA.pageview(location.pathname + location.search);
-        },
-        [location]
-    );
+  useEffect(
+    () => {
+      ReactGA.pageview(location.pathname + location.search);
+    },
+    [location]
+  );
 }
 
 function App() {
