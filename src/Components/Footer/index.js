@@ -1,7 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
-import OtLogo from "./OtLogo.png";
+// import OtLogo from './OtLogo.png';
+import OtLogo from './CTI_OT_Primary_Logo_Wht.png';
 import './footer.scss';
 
 function Footer() {
