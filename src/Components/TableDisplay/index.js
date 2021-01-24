@@ -49,15 +49,15 @@ function TableDisplay(props) {
           <th>
             Tissue
           </th>
-          <th style={{whiteSpace: 'nowrap'}}>
+          <th>
             Corrected log fold change<sup id='foldChangeHelp' style={{cursor: 'default'}}>?</sup>{' '}
             <SortArrows {...props} field="fc_clean"/>
           </th>
-          <th style={{whiteSpace: 'nowrap'}}>
+          <th>
             Loss of fitness score<sup id='lossOfFitnessScoreHelp' style={{cursor: 'default'}}>?</sup>{' '}
             <SortArrows {...props} field="bf_scaled"/>
           </th>
-          <th style={{whiteSpace: 'nowrap'}}>Essential gene</th>
+          <th>Essential gene</th>
         </tr>
         </thead>
 
