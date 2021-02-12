@@ -36,6 +36,10 @@ export const tissueColor = {
   Skin: '#DEB2A6',
   'Soft Tissue': '#D474A1',
   Stomach: '#DDBB78',
+  // New ones... (not in publication)
+  Bladder: '#7F96FF',
+  Cervix: '#E56399',
+  Liver: '#A1AADF',
 };
 
 export const insignificantNodeColor = '#CCCCCC';
