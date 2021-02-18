@@ -40,6 +40,10 @@ export const tissueColor = {
   Bladder: '#7F96FF',
   Cervix: '#E56399',
   Liver: '#A1AADF',
+  Placenta: '#0EEAFF',
+  Thyroid: '#DEAAF0',
+  Uterus: '#FF822E',
+  Vulva: '#FFF176',
 };
 
 export const insignificantNodeColor = '#CCCCCC';
