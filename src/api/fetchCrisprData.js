@@ -53,7 +53,7 @@ function normaliseParams(params) {
     include: "gene,gene.essentiality_profiles,model,model.sample.tissue",
     filter: combinedFilters,
     sort: `${sortDirection === -1 ? '-' : ''}${sort}`,
-    'fields[crispr_ko]': 'bf_scaled,fc_clean,gene,model',
+    'fields[crispr_ko]': 'bf_scaled,fc_clean,source,gene,model',
     'fields[gene]': 'symbol,essentiality_profiles',
     'fields[essentiality_profile]': 'core_fitness_pancan',
     'fields[model]': 'sample,names',

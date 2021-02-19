@@ -5,10 +5,12 @@ import qs from 'query-string';
 import pickBy from 'lodash.pickby';
 import identity from 'lodash.identity';
 import useUrlParams, {sanitiseParams} from '../useUrlParams';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
-import {foldChangeHelp, lossOfFitnessScoreHelp} from "../../definitions";
-import {colorSignificantBg, colorInsignificantBg, colorPanCancerGeneBg} from "../../colors";
+import {foldChangeHelp, lossOfFitnessScoreHelp, fitnessScoreSourceHelp} from '../../definitions';
+import {colorSignificantBg, colorInsignificantBg, colorPanCancerGeneBg} from '../../colors';
+import broadLogo from './BroadInstituteLogo.png';
+import sangerLogo from './SangerInstituteLogo.png';
 
 function TableDisplay(props) {
   const data = props.data;
@@ -17,9 +19,11 @@ function TableDisplay(props) {
   const [showFCTooltip, toggleShowFCTooltip] = useState(false);
   const [lofCellTooltip, setLofCellTooltip] = useState(null);
   const [geneCellTooltip, setGeneCellTooltip] = useState(null);
+  const [showSourceTooltip, toggleShowSourceTooltip] = useState(false);
 
   const toggleLFSTooltip = () => toggleShowLFSTooltip(!showLFSTooltip);
   const toggleFCTooltip = () => toggleShowFCTooltip(!showFCTooltip);
+  const toggleSourceTooltip = () => toggleShowSourceTooltip(!showSourceTooltip)
 
   const getKeyForRow = (row) => row ? `${row.geneId}-${row.modelName.replace(/\./g, '-')}` : null;
 
@@ -40,6 +44,9 @@ function TableDisplay(props) {
       <Table>
         <thead>
         <tr>
+          <th>
+            Source<sup id='sourceHelp' style={{cursor: 'default'}}>?</sup>{' '}
+          </th>
           <th>
             Gene
           </th>
@@ -73,6 +80,9 @@ function TableDisplay(props) {
               onMouseOver={() => mouseOver(row)}
               onMouseOut={mouseOut}
             >
+              <td style={{width: '20px'}}>
+                <FitnessScoreSource source={row.source}/>
+              </td>
               <td
                 style={{backgroundColor: row.isPanCancer ? colorPanCancerGeneBg : "white"}}
                 id={`gene-${key}`}
@@ -177,11 +187,40 @@ function TableDisplay(props) {
       >
         {foldChangeHelp}
       </Tooltip>
+      <Tooltip
+        target='sourceHelp'
+        placement='top'
+        isOpen={showSourceTooltip}
+        toggle={toggleSourceTooltip}
+        innerClassName='project-score-tooltip'
+      >
+        {fitnessScoreSourceHelp}
+      </Tooltip>
     </Fragment>
   );
 }
 
 export default withRouter(TableDisplay);
+
+function FitnessScoreSource({source}) {
+  const tooltipCellElement = !source || source === 'Sanger' ? (
+    <img
+      src={sangerLogo}
+      height={30}
+    />
+  ) : (
+    <img
+      src={broadLogo}
+      height={20}
+    />
+  );
+
+  return (
+    <div>
+      {tooltipCellElement}
+    </div>
+  );
+}
 
 
 function SortArrows({onSortChange, field, sortDirection, sort}) {
