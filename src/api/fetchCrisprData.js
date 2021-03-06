@@ -53,7 +53,7 @@ function normaliseParams(params) {
     include: "gene,gene.essentiality_profiles,model,model.sample.tissue",
     filter: combinedFilters,
     sort: `${sortDirection === -1 ? '-' : ''}${sort}`,
-    'fields[crispr_ko]': 'bf_scaled,fc_clean,source,gene,model',
+    'fields[crispr_ko]': 'bf_scaled,fc_clean_qn,source,gene,model',
     'fields[gene]': 'symbol,essentiality_profiles',
     'fields[essentiality_profile]': 'core_fitness_pancan',
     'fields[model]': 'sample,names',
@@ -70,8 +70,14 @@ export default function fetchCrisprData(params, ...args) {
   return get(endpoint, paramsNormalised, ...args)
     .then(resp => deserialiser.deserialise(resp)
       .then(deserialisedData => ({
-        count: resp.meta.count,
-        data: deserialisedData,
-      }))
+          count: resp.meta.count,
+          data: deserialisedData.map(dataPoint => ({
+            // TODO: Possibly use "fc_clean_qn" downstream instead of mapping it to "fc_clean"
+            // Would be more performant
+            fc_clean: dataPoint.fc_clean_qn,
+            ...dataPoint,
+          })),
+        })
+      )
     );
 }
