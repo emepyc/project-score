@@ -137,13 +137,13 @@ export default function Downloads() {
           <tr>
             <td>Broad Institute 19Q2 cell lines<br/><small>processed through Project Score pipeline</small></td>
             <td><a
-              href="https://depmap.org/portal/download/">Available from depmap.org</a>
+              href='https://depmap.org/portal/download/'>Available from depmap.org</a>
             </td>
             <td><a
-              href="https://cog.sanger.ac.uk/cmp/download/broad_essentiality_matrices_190724.zip">broad_essentiality_matrices_190724.zip</a>
+              href='https://cog.sanger.ac.uk/cmp/download/broad_essentiality_matrices_190724.zip'>broad_essentiality_matrices_190724.zip</a>
             </td>
             <td><a
-              href="https://cog.sanger.ac.uk/cmp/download/broad_binaryDepScores_190724.tsv.zip">broad_binaryDepScores_190724.tsv.zip</a>
+              href='https://cog.sanger.ac.uk/cmp/download/broad_binaryDepScores_190724.tsv.zip'>broad_binaryDepScores_190724.tsv.zip</a>
             </td>
           </tr>
           <tr>
@@ -151,10 +151,22 @@ export default function Downloads() {
               (19Q3)
             </td>
             <td><a
-              href="https://depmap.org/portal/download/">Available from depmap.org</a>
+              href='https://depmap.org/portal/download/'>Available from depmap.org</a>
             </td>
             <td><a
-              href="https://cog.sanger.ac.uk/cmp/download/integrated_Sanger_Broad_essentiality_matrices_20200402.zip">integrated_Sanger_Broad_essentiality_matrices_20200402.zip</a>
+              href='https://cog.sanger.ac.uk/cmp/download/integrated_Sanger_Broad_essentiality_matrices_20200402.zip'>integrated_Sanger_Broad_essentiality_matrices_20200402.zip</a>
+            </td>
+            <td>N/A</td>
+          </tr>
+          <tr>
+            <td>Integrated cancer dependency dataset from <br/>Wellcome Sanger Institute (release 1) and Broad Institute (20Q2) from <a href='https://www.nature.com/articles/s41467-021-21898-7'>Pacini et al</a></td>
+            <td>
+              <a href='https://depmap.org/portal/download/'>Available from depmap.org</a>
+            </td>
+            <td>
+              <a href='https://cog.sanger.ac.uk/cmp/download/Project_score_combined_Sanger_v1_Broad_20Q2_20210311.zip'>
+                Project_score_combined_Sanger_v1_Broad_20Q2_20210311.zip
+              </a>
             </td>
             <td>N/A</td>
           </tr>
