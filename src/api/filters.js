@@ -70,13 +70,13 @@ export function expandSearchFilter(search) {
 
 export function expandScoreRangeFilter({scoreMin, scoreMax}) {
   const scoreMinFilter = {
-    name: 'fc_clean',
+    name: 'fc_clean_qn',
     op: 'ge',
     val: scoreMin,
   };
 
   const scoreMaxFilter = {
-    name: 'fc_clean',
+    name: 'fc_clean_qn',
     op: 'le',
     val: scoreMax,
   };

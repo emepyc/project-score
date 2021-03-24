@@ -44,7 +44,9 @@ function normaliseParams(params) {
     excludePanCancerGenes,
   ]);
 
-  const sort = params.sort || 'fc_clean';
+  const sort_raw = params.sort || 'fc_clean';
+  const sort = sort_raw === 'fc_clean' ? 'fc_clean_qn' : sort_raw;
+
   const sortDirection = params.sortDirection || 1;
 
   return {
@@ -63,7 +65,10 @@ function normaliseParams(params) {
 }
 
 export default function fetchCrisprData(params, ...args) {
-  const paramsNormalised = normaliseParams(params);
+  const paramsNormalised = {
+    'merged': true,
+    ...normaliseParams(params),
+  };
 
   const endpoint = datasetEntpoint(params.analysis);
 

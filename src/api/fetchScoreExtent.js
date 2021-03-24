@@ -29,17 +29,20 @@ function normaliseParams(params) {
     "page[number]": 1,
     "page[size]": 1,
     agg: {
-      fc_clean: ['min', 'max'],
+      fc_clean_qn: ['min', 'max'],
     },
     filter: filters,
   };
 }
 
 export default function fetchScoreExtent(params={}, ...args) {
-  const paramsNormalised = normaliseParams(params);
+  const paramsNormalised = {
+    'merged': true,
+    ...normaliseParams(params),
+  };
 
   const endpoint = datasetEntpoint(params.analysis);
 
   return get(endpoint, paramsNormalised, ...args)
-    .then(resp => resp.meta.agg.fc_clean);
+    .then(resp => resp.meta.agg.fc_clean_qn);
 }
