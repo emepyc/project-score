@@ -7,7 +7,7 @@ export default function Feedback() {
     <div
       className='feedback'
     >
-      <a target='_blank' href='mailto:depmap@sanger.ac.uk?Subject=Project Score feedback'>
+      <a target='_blank' rel='noreferrer noopener' href='mailto:depmap@sanger.ac.uk?Subject=Project Score feedback'>
         <div>
           Feedback
         </div>

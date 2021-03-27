@@ -2,7 +2,7 @@ import React from 'react';
 
 const homeSection = props => {
   const classNames = [
-    'py-5 container-fluid home-page-section',
+    'py-5 container-fluid',
     props.customClass || []
   ].join(' ');
 
