@@ -237,6 +237,7 @@ function FitnessTooltip(props) {
     tissue,
     fc_clean,
     bf_scaled,
+    source,
   } = nodeData;
 
   const yExtent = d3.extent(
@@ -271,7 +272,8 @@ function FitnessTooltip(props) {
       Gene: <b>{geneSymbol}</b><br/>
       Model: <b>{modelName}</b> ({tissue})<br/>
       Corrected fold change:<b>{fc_clean}</b><br/>
-      Loss of fitness score:<b><span style={{padding: '0.4em 0.2em', backgroundColor}}>{bf_scaled}</span></b>
+      Loss of fitness score:<b><span style={{padding: '0.4em 0.2em', backgroundColor}}>{bf_scaled}</span></b><br />
+      Source:<b>{source}</b>
     </Tooltip>
   );
 }
@@ -391,6 +393,7 @@ function FitnessCanvasPlot(props) {
         geneSymbol: closest.gene.symbol,
         tissue: closest.model.sample.tissue.name,
         index: closest.index,
+        source: closest.source,
       });
     }
   };
