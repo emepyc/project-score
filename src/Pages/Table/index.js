@@ -162,6 +162,7 @@ function _FitnessTable() {
           <Col xs={{size: 12}}>
             <FitnessTable
               showSearchbox
+              showSource={true}
               highlight={highlight}
               onHighlight={onHighlight}
             />

@@ -154,6 +154,7 @@ function EssentialitiesTable({highlight, onHighlight}) {
           <Col xs={{size: 12}}>
             <Table
               showSearchbox
+              showSource={false}
               highlight={highlight}
               onHighlight={onHighlight}
             />

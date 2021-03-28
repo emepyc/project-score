@@ -14,6 +14,7 @@ import sangerLogo from './SangerInstituteLogo.png';
 
 function TableDisplay(props) {
   const data = props.data;
+  const showSource = props.showSource;
 
   const [showLFSTooltip, toggleShowLFSTooltip] = useState(false);
   const [showFCTooltip, toggleShowFCTooltip] = useState(false);
@@ -44,9 +45,11 @@ function TableDisplay(props) {
       <Table>
         <thead>
         <tr>
-          <th>
-            Source<sup id='sourceHelp' style={{cursor: 'default'}}>?</sup>{' '}
-          </th>
+          {showSource && (
+            <th>
+              Source<sup id='sourceHelp' style={{cursor: 'default'}}>?</sup>{' '}
+            </th>
+          )}
           <th>
             Gene
           </th>
@@ -80,9 +83,11 @@ function TableDisplay(props) {
               onMouseOver={() => mouseOver(row)}
               onMouseOut={mouseOut}
             >
-              <td style={{width: '20px'}}>
-                <FitnessScoreSource source={row.source}/>
-              </td>
+              {showSource && (
+                <td style={{width: '20px'}}>
+                  <FitnessScoreSource source={row.source}/>
+                </td>
+              )}
               <td
                 style={{backgroundColor: row.isPanCancer ? colorPanCancerGeneBg : "white"}}
                 id={`gene-${key}`}
@@ -187,20 +192,26 @@ function TableDisplay(props) {
       >
         {foldChangeHelp}
       </Tooltip>
-      <Tooltip
-        target='sourceHelp'
-        placement='top'
-        isOpen={showSourceTooltip}
-        toggle={toggleSourceTooltip}
-        innerClassName='project-score-tooltip'
-      >
-        {fitnessScoreSourceHelp}
-      </Tooltip>
+      {showSource && (
+        <Tooltip
+          target='sourceHelp'
+          placement='top'
+          isOpen={showSourceTooltip}
+          toggle={toggleSourceTooltip}
+          innerClassName='project-score-tooltip'
+        >
+          {fitnessScoreSourceHelp}
+        </Tooltip>
+      )}
     </Fragment>
   );
 }
 
 export default withRouter(TableDisplay);
+export {
+  broadLogo,
+  sangerLogo,
+}
 
 function FitnessScoreSource({source}) {
   const tooltipCellElement = !source || source === 'Sanger' ? (

@@ -197,6 +197,7 @@ function FitnessTable({highlight, onHighlight}) {
           </CardHeader>
           <CardBody>
             <Table
+              showSource={true}
               highlight={highlight}
               onHighlight={onHighlight}
             />

@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {withRouter} from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
-import TableDisplay from '../TableDisplay';
+import TableDisplay, {broadLogo, sangerLogo} from '../TableDisplay';
 import useUrlParams from '../useUrlParams';
 import Spinner from '../Spinner';
 import {
@@ -102,11 +102,21 @@ function FitnessTable(props) {
       <Error message="Error loading data"/>)
   }
 
+  const topLevelSrcMsg = !props.showSource && data.length ? (
+    <div>
+      <img
+        src={data[0].source === 'Sanger' ? sangerLogo : broadLogo}
+        height={data[0].source === 'Sanger' ? 30 : 20}
+      /> fitness data
+    </div>
+  ) : null;
+
   return (
     <div className='fitness-table'>
 
-      <div className='d-flex h-100 justify-content-between'>
+      {topLevelSrcMsg}
 
+      <div className='d-flex h-100 justify-content-between'>
         <div className='my-auto mr-auto p-1'>
           <div>
             Showing {' '}
