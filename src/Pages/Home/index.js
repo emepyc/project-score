@@ -1,5 +1,4 @@
 import React from 'react';
-import {Container} from 'reactstrap';
 
 import HomeSection from '../../Components/HomeSection';
 import HomeHeader from '../../Components/HomeHeader';
@@ -9,34 +8,37 @@ import HomeProgrammeDescription from '../../Components/HomeProgrammeDescription'
 import Searchbox from '../../Components/Searchbox';
 import SearchExamples from '../../Components/SearchExamples';
 import HomeExploreData from '../../Components/HomeExploreData';
+import './home.scss';
 
 const Home = () => (
-  <Container>
+  <div>
+    <div className='backdrop container-fluid row col no-gutters'>
+      <HomeSection>
+        <HomeHeader className='text-center'/>
+        <div className='mt-5'>
+          <Searchbox/>
+        </div>
+        <SearchExamples/>
+      </HomeSection>
+    </div>
+
     <HomeSection>
-      <HomeHeader className='text-center' />
-      <div className='mt-5'>
-        <Searchbox />
-      </div>
-      <SearchExamples />
+      <HomeExploreData/>
     </HomeSection>
 
     <HomeSection>
-      <HomeExploreData />
+      <TissuesSummary/>
     </HomeSection>
 
     <HomeSection>
-      <TissuesSummary />
+      <HomeProjectDescription/>
     </HomeSection>
 
     <HomeSection>
-      <HomeProjectDescription />
+      <HomeProgrammeDescription/>
     </HomeSection>
 
-    <HomeSection>
-      <HomeProgrammeDescription />
-    </HomeSection>
-
-  </Container>
+  </div>
 );
 
 export default Home;
