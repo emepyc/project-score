@@ -9,7 +9,6 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faArrowUp, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import {foldChangeHelp, lossOfFitnessScoreHelp, fitnessScoreSourceHelp} from '../../definitions';
 import {colorSignificantBg, colorInsignificantBg, colorPanCancerGeneBg} from '../../colors';
-import broadLogo from './BroadInstituteLogo.png';
 import sangerLogo from './SangerInstituteLogo.png';
 
 function TableDisplay(props) {
@@ -209,7 +208,6 @@ function TableDisplay(props) {
 
 export default withRouter(TableDisplay);
 export {
-  broadLogo,
   sangerLogo,
 }
 
@@ -220,10 +218,9 @@ function FitnessScoreSource({source}) {
       height={30}
     />
   ) : (
-    <img
-      src={broadLogo}
-      height={20}
-    />
+    <div>
+      Broad
+    </div>
   );
 
   return (

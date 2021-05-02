@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {withRouter} from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
-import TableDisplay, {broadLogo, sangerLogo} from '../TableDisplay';
+import TableDisplay, {sangerLogo} from '../TableDisplay';
 import useUrlParams from '../useUrlParams';
 import Spinner from '../Spinner';
 import {
@@ -103,12 +103,16 @@ function FitnessTable(props) {
   }
 
   const topLevelSrcMsg = !props.showSource && data.length ? (
-    <div>
-      <img
-        src={data[0].source === 'Sanger' ? sangerLogo : broadLogo}
-        height={data[0].source === 'Sanger' ? 30 : 20}
-      /> fitness data
-    </div>
+    data[0].source === 'Sanger' ? (
+      <div>
+        <span style={{marginRight: '5px'}}>
+          <img
+            src={sangerLogo}
+            height={30}
+          />
+        </span>
+        fitness data
+      </div>) : (<div>Broad fitness data</div>)
   ) : null;
 
   return (
