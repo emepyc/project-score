@@ -102,23 +102,8 @@ function FitnessTable(props) {
       <Error message="Error loading data"/>)
   }
 
-  const topLevelSrcMsg = !props.showSource && data.length ? (
-    data[0].source === 'Sanger' ? (
-      <div>
-        <span style={{marginRight: '5px'}}>
-          <img
-            src={sangerLogo}
-            height={30}
-          />
-        </span>
-        fitness data
-      </div>) : (<div>Broad fitness data</div>)
-  ) : null;
-
   return (
     <div className='fitness-table'>
-
-      {topLevelSrcMsg}
 
       <div className='d-flex h-100 justify-content-between'>
         <div className='my-auto mr-auto p-1'>

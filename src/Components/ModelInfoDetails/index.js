@@ -3,14 +3,15 @@ import partition from 'lodash.partition';
 import React, {Fragment, useState} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Row, Col, Tooltip} from 'reactstrap';
-import {fetchModelDetails} from '../../api';
+import {fetchCrisprData, fetchModelDetails} from '../../api';
 import useUrlParams from '../useUrlParams';
 import ModelDatasetIcon from '../../modelDatasetIcons';
 import FetchData from "../FetchData";
+import {FitnessScoreSource} from "../TableDisplay";
 
 import style from './modelInfoDetails.module.scss';
 
-function ModelInfoSummary(props) {
+function ModelInfoDetails(props) {
   const [urlParams] = useUrlParams(props);
 
   return (
@@ -61,7 +62,18 @@ function ModelInfoSummary(props) {
                   )}</div>
               </Col>
               <Col xs={{size: 12}} lg={{size: 6}} className='border-left'>
-                <ModelDatasets datasets={modelInfo.datasets} modelId={modelInfo.id}/>
+                <Row>
+                  <Col>
+                  <ModelDatasets datasets={modelInfo.datasets} modelId={modelInfo.id}/>
+                  </Col>
+                </Row>
+                <Row className='mt-3'>
+                  <Col>
+                    <FitnessDataSource
+                      modelId={modelInfo.id}
+                    />
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </div>
@@ -71,7 +83,27 @@ function ModelInfoSummary(props) {
   );
 }
 
-export default withRouter(ModelInfoSummary);
+export default withRouter(ModelInfoDetails);
+
+function FitnessDataSource({modelId}) {
+  return (
+    <Fragment>
+      <div style={{fontWeight: 'bold'}} className='mb-3'>Fitness data source:</div>
+      <FetchData
+        endpoint={fetchCrisprData}
+        params={{
+          modelId,
+          pageSize: 1,
+        }}
+        deps={[modelId]}
+      >
+        {data => {
+          return (<FitnessScoreSource source={data.data[0].source}/>);
+        }}
+      </FetchData>
+    </Fragment>
+  );
+}
 
 function Analysis({analysis}) {
   const classes = classNames(style.infoItem, {

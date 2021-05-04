@@ -211,7 +211,7 @@ export {
   sangerLogo,
 }
 
-function FitnessScoreSource({source}) {
+export function FitnessScoreSource({source}) {
   const tooltipCellElement = !source || source === 'Sanger' ? (
     <img
       src={sangerLogo}
