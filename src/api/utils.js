@@ -10,4 +10,4 @@ export function fitnessIsSignificant(essentiality) {
   return essentiality.bf_scaled < 0;
 }
 
-export const totalModels = 325;
+export const totalModels = 811;

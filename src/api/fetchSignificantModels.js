@@ -1,6 +1,8 @@
-import {get} from "./api";
-import Deserialiser from "deserialise-jsonapi";
-import {totalModels} from "./utils";
+import Deserialiser from 'deserialise-jsonapi';
+import orderBy from 'lodash.orderby';
+
+import {get} from './api';
+import {totalModels} from './utils';
 
 const deserialiser = new Deserialiser();
 
@@ -13,14 +15,20 @@ export default function fetchSignificantModels({geneId}, ...args) {
   return get(`genes/${geneId}`, params, ...args)
     .then(resp => deserialiser.deserialise(resp))
     .then(gene => {
-      const tissuesCounts = getTissuesCounts(gene.essentiality_profiles[0]);
+      const essentiality_profile_sorted = orderBy(
+        gene.essentiality_profiles,
+          profile => profile.id,
+        'desc',
+      );
+      const essentiality_profile = essentiality_profile_sorted[0];
+      const tissuesCounts = getTissuesCounts(essentiality_profile);
       return {
-        numberOfSignificantModels: ~~(totalModels * gene.essentiality_profiles[0].vulnerable_pancan / 100),
-        isPanCancer: gene.essentiality_profiles[0].core_fitness_pancan,
+        numberOfSignificantModels: ~~(totalModels * essentiality_profile.vulnerable_pancan / 100),
+        isPanCancer: essentiality_profile.core_fitness_pancan,
         isTumourSuppressor: gene.tumour_suppressor,
         numberOfSignificantTissues: tissuesCounts.significant,
         numberOfTotalTissues: tissuesCounts.total,
-        isCommonEssential: gene.essentiality_profiles[0].common_essential === "CE",
+        isCommonEssential: essentiality_profile.common_essential === "CE",
       }
     });
 }

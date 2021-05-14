@@ -8,9 +8,15 @@ export function expandExcludePanCancerGenesFilter() {
       name: 'essentiality_profiles',
       op: 'any',
       val: {
-        name: 'core_fitness_pancan',
-        op: 'eq',
-        val: false,
+        and: [{
+          name: 'core_fitness_pancan',
+          op: 'eq',
+          val: false,
+        }, {
+          name: 'source',
+          op: 'eq',
+          val: 'Merged',
+        }]
       }
     }
   };

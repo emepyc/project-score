@@ -1,5 +1,7 @@
-import {get} from './index';
 import Deserialiser from 'deserialise-jsonapi';
+import orderBy from 'lodash.orderby';
+
+import {get} from './index';
 import {
   expandScoreRangeFilter,
   expandGeneFilter,
@@ -71,18 +73,28 @@ export default function fetchCrisprData(params, ...args) {
   };
 
   const endpoint = datasetEntpoint(params.analysis);
-
   return get(endpoint, paramsNormalised, ...args)
     .then(resp => deserialiser.deserialise(resp)
       .then(deserialisedData => ({
-          count: resp.meta.count,
-          data: deserialisedData.map(dataPoint => ({
-            // TODO: Possibly use "fc_clean_qn" downstream instead of mapping it to "fc_clean"
-            // Would be more performant
-            fc_clean: dataPoint.fc_clean_qn,
-            ...dataPoint,
-          })),
-        })
+            count: resp.meta.count,
+            data: deserialisedData.map(dataPoint => ({
+              // TODO: Possibly use "fc_clean_qn" downstream instead of mapping it to "fc_clean"
+              // Would be more performant
+              fc_clean: dataPoint.fc_clean_qn,
+              ...dataPoint,
+              gene: {
+                ...dataPoint.gene,
+                // There may be more than 1 fitness dataset
+                // we make sure the last one (the one with the highest id) is
+                // first
+                essentiality_profiles: orderBy(
+                  dataPoint.gene.essentiality_profiles,
+                  profile => profile.id,
+                  'desc',
+                ),
+              }
+            })),
+          })
       )
     );
 }
