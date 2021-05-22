@@ -15,7 +15,7 @@ import './donutChart.scss';
 const donutChartSideOffset = 150;
 
 const margins = {
-  top: 50,
+  top: 48,
   left: donutChartSideOffset,
   right: donutChartSideOffset,
   bottom: 0,
