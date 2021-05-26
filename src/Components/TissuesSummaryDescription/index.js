@@ -70,7 +70,7 @@ function TissuesSummaryDescription() {
                 }}
               />
               <span>
-                Last update: April 2019
+                Last update: June 2021
               </span>
             </div>
           </React.Fragment>
