@@ -31,7 +31,7 @@ function Label({radius, arc, x, y, maxX, center, children}) {
     return <span/>;
   }
 
-  const textToShow = children.length > 20 ? `${children.substring(0, 17)}...` : children;
+  const textToShow = children.length > 20 ? `${children.substring(0, 18)}&#8230` : children;
 
   const labelX = xHorizontal < 0 ? xHorizontal - 3 : xHorizontal + 3;
 
@@ -54,9 +54,8 @@ function Label({radius, arc, x, y, maxX, center, children}) {
         fontSize="0.9em"
         alignmentBaseline="middle"
         textAnchor={xDiagonal < 0 ? 'end' : 'start'}
-      >
-        {textToShow}
-      </text>
+        dangerouslySetInnerHTML={{__html:textToShow}}
+      />
     </React.Fragment>
   );
 }
