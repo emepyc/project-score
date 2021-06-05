@@ -42,7 +42,7 @@ function Filters() {
   return (
     <Card>
       <CardHeader>
-        Filters
+        Fitness Filters
       </CardHeader>
       <CardBody>
         <Row>

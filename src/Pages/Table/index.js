@@ -129,7 +129,7 @@ function FitnessFilters() {
   return (
     <Card>
       <CardHeader>
-        Filters
+        Fitness Filters
       </CardHeader>
       <CardBody>
         <div className='h-100'>
