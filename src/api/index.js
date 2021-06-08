@@ -3,6 +3,7 @@ import fetchTissues from './fetchTissues';
 import fetchAnalyses from './fetchAnalyses';
 import search from './search';
 import {id2name, name2id, fitnessIsSignificant, totalModels} from "./utils";
+import fetchCancerTypes from "./fetchCancerTypes";
 import fetchCrisprData from './fetchCrisprData';
 import fetchScoreExtent from './fetchScoreExtent';
 import fetchGeneInfo from './fetchGeneInfo';
@@ -15,6 +16,7 @@ import fetchOtGeneInfo from "./fetchOtGeneInfo";
 
 export {
   get,
+  fetchCancerTypes,
   fetchTissues,
   fetchAnalyses,
   fetchCrisprData,

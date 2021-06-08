@@ -4,7 +4,7 @@ import {withRouter} from 'react-router-dom';
 import classNames from 'classnames';
 
 import FitnessTable from '../../Components/FitnessTable';
-import CancerTypeFilter from '../../Components/AnalysisFilter';
+import CancerTypeFilter from '../../Components/CancerTypeFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import {Row, Col} from 'reactstrap';
 import {Card, CardHeader, CardBody} from 'reactstrap';

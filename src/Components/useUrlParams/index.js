@@ -36,7 +36,8 @@ function useUrlParams(props) {
     scoreMin,
     scoreMax,
     dataTab=defaultDataTab,
-    excludePanCancerGenes=defaultExcludePanCancerGenes
+    excludePanCancerGenes=defaultExcludePanCancerGenes,
+    cancerType,
   } = qs.parse(props.location.search);
   const {geneId, modelId} = props.match.params;
 
@@ -48,6 +49,7 @@ function useUrlParams(props) {
     geneId,
     modelId,
     excludePanCancerGenes,
+    cancerType,
   };
 
   const setUrlParams = (newParams) =>
