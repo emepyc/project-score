@@ -5,6 +5,7 @@ import classNames from 'classnames';
 
 import FitnessTable from '../../Components/FitnessTable';
 import CancerTypeFilter from '../../Components/CancerTypeFilter';
+import AnalysisFilter from "../../Components/AnalysisFilter";
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import {Row, Col} from 'reactstrap';
 import {Card, CardHeader, CardBody} from 'reactstrap';
@@ -117,7 +118,7 @@ function PriorityScoresFilters() {
       <CardBody>
         <Row>
           <Col>
-            <CancerTypeFilter/>
+            <AnalysisFilter/>
           </Col>
         </Row>
       </CardBody>

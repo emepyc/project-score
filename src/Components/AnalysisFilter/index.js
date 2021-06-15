@@ -7,5 +7,6 @@ export default function AnalysisFilter() {
   return (<GenericFilterSelect
     itemType='analysis'
     endpoint={fetchAnalyses}
+    itemLabel={'analysis'}
   />);
 }

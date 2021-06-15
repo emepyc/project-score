@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {withRouter} from 'react-router-dom';
 import debounce from 'lodash.debounce';
 import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
-import TableDisplay, {sangerLogo} from '../TableDisplay';
+import TableDisplay from '../TableDisplay';
 import useUrlParams from '../useUrlParams';
 import Spinner from '../Spinner';
 import {
@@ -59,7 +59,7 @@ function FitnessTable(props) {
     pageSize: rowsPerPage,
     pageNumber,
     search,
-    analysis: urlParams.analysis,
+    cancerType: urlParams.cancerType,
     scoreMin: urlParams.scoreMin,
     scoreMax: urlParams.scoreMax,
   };
@@ -75,7 +75,7 @@ function FitnessTable(props) {
     urlParams.scoreMin,
     urlParams.scoreMax,
     urlParams.excludePanCancerGenes,
-    urlParams.analysis,
+    urlParams.cancerType,
   ];
 
   const [dataResponse, loading, error] = useFetchData(

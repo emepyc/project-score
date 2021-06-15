@@ -7,5 +7,6 @@ export default function CancerTypeFilter() {
   return (<GenericFilterSelect
     itemType={'cancerType'}
     endpoint={fetchCancerTypes}
+    itemLabel={'cancer type'}
   />);
 }

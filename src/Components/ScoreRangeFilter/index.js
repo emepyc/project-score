@@ -15,7 +15,7 @@ function ScoreRangeFilter(props) {
   const width = useWidth(containerRef);
 
   const params = {
-    analysis: urlParams.analysis,
+    cancerType: urlParams.cancerType,
     geneId: urlParams.geneId,
     modelId: urlParams.modelId,
     excludePanCancerGenes: urlParams.excludePanCancerGenes,
@@ -39,7 +39,7 @@ function ScoreRangeFilter(props) {
         endpoint={fetchScoreExtent}
         params={params}
         deps={[
-          urlParams.analysis,
+          urlParams.cancerType,
           urlParams.geneId,
           urlParams.modelId,
           urlParams.excludePanCancerGenes,

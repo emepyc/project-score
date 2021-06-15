@@ -109,9 +109,9 @@ export function combineFilters(filters) {
   return filters.filter(identity);
 }
 
-export function datasetEntpoint(analysis) {
-  const analysisEndpoint = analysis ?
-    `analyses/${analysis}` :
+export function datasetEntpoint(cancerType) {
+  const analysisEndpoint = cancerType ?
+    `cancer_types/${cancerType}` :
     '';
   return `${analysisEndpoint}/datasets/crispr_ko`;
 }

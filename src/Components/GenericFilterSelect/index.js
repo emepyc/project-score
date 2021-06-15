@@ -6,7 +6,7 @@ import useUrlParams from "../useUrlParams";
 import FetchData from "../FetchData";
 
 function GenericFilterSelect(props) {
-  const {itemType, endpoint} = props;
+  const {itemType, endpoint, itemLabel} = props;
   const [selectedItem, setSelectedItem] = useState(null);
   const [urlParams, setUrlParams] = useUrlParams(props);
 
@@ -41,7 +41,7 @@ function GenericFilterSelect(props) {
             value={defaultItem || selectedItem}
             options={items}
             onChange={onChange}
-            placeholder={`Select wow ${itemType}`} // This could be different!
+            placeholder={`Select ${itemLabel}`} // This could be different!
             isClearable
             getOptionValue={getOptionValue}
             getOptionLabel={getOptionLabel}

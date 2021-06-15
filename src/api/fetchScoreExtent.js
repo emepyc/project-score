@@ -41,7 +41,7 @@ export default function fetchScoreExtent(params={}, ...args) {
     ...normaliseParams(params),
   };
 
-  const endpoint = datasetEntpoint(params.analysis);
+  const endpoint = datasetEntpoint(params.cancerType);
 
   return get(endpoint, paramsNormalised, ...args)
     .then(resp => resp.meta.agg.fc_clean_qn);
