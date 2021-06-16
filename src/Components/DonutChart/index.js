@@ -104,7 +104,7 @@ function DonutChart({history}) {
 
   const radius = (containerWidth - (margins.left + margins.right)) / 2;
 
-  const gotoTable = data => history.push(`/table?analysis=${data.id}`);
+  const gotoTable = data => history.push(`/table?analysis=${data.id}&dataTab=priorityScores`);
 
   return (
     <FetchData

@@ -7,6 +7,7 @@ import {get} from './index';
 const params = {
   include: 'sample.cancer_type',
   'fields[cancer_type]': 'name',
+  'page[size]': 0,
 }
 
 const deserialiser = new Deserialiser();
