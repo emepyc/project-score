@@ -7,7 +7,7 @@ import {Range} from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import {fetchCrisprData} from '../../api';
 import {
-  tissueColor,
+  cancerTypeColorDict,
   insignificantNodeColor,
   significantNodeColor,
   colorInsignificantBg,
@@ -234,7 +234,7 @@ function FitnessTooltip(props) {
   const {
     geneSymbol,
     modelName,
-    tissue,
+    cancer_type,
     fc_clean,
     bf_scaled,
     source,
@@ -270,7 +270,7 @@ function FitnessTooltip(props) {
       height={height}
     >
       Gene: <b>{geneSymbol}</b><br/>
-      Model: <b>{modelName}</b> ({tissue})<br/>
+      Model: <b>{modelName}</b> ({cancer_type})<br/>
       Corrected fold change:<b>{fc_clean}</b><br/>
       Loss of fitness score:<b><span style={{padding: '0.4em 0.2em', backgroundColor}}>{bf_scaled}</span></b><br />
       Source:<b>{source}</b>
@@ -288,7 +288,7 @@ function FitnessCanvasPlot(props) {
     significantField,
     xDomain,
     onHighlight,
-    highlightTissue,
+    highlightCancerType,
     marginLeft,
     marginTop,
     xAxisLabel,
@@ -333,12 +333,12 @@ function FitnessCanvasPlot(props) {
     ctx.save();
 
     data.forEach(dataPoint => {
-      if (highlightTissue && dataPoint.model.sample.tissue.name !== highlightTissue) {
+      if (highlightCancerType && dataPoint.model.sample.cancer_type.name !== highlightCancerType) {
         return;
       }
 
-      const dataPointColor = colorBy === 'tissue' ?
-        tissueColor[dataPoint.model.sample.tissue.name] : (
+      const dataPointColor = colorBy === 'cancerType' ?
+        cancerTypeColorDict[dataPoint.model.sample.cancer_type.name] : (
           dataPoint[significantField] < 0 ? significantNodeColor : insignificantNodeColor
         );
 
@@ -367,7 +367,7 @@ function FitnessCanvasPlot(props) {
     data,
     attributeToPlot,
     xDomain,
-    highlightTissue,
+    highlightCancerType,
     colorBy,
     width,
     height,
@@ -391,6 +391,7 @@ function FitnessCanvasPlot(props) {
         bf_scaled: closest.bf_scaled,
         fc_clean: closest.fc_clean,
         geneSymbol: closest.gene.symbol,
+        cancer_type: closest.model.sample.cancer_type.name,
         tissue: closest.model.sample.tissue.name,
         index: closest.index,
         source: closest.source,

@@ -4,7 +4,7 @@ import CancerTypeFilter from '../../Components/CancerTypeFilter';
 import ScoreRangeFilter from '../../Components/ScoreRangeFilter';
 import FitnessPlot from '../../Components/FitnessPlot';
 import GeneInfoSummary from '../../Components/GeneInfoSummary';
-import TissueHighlight from '../../Components/TissueHighlight';
+import CancerTypeHighlight from '../../Components/CancerTypeHighlight';
 import {ButtonGroup, Row, Col, Card, CardHeader, CardBody, Tooltip} from 'reactstrap';
 import Button from '../../Components/Button';
 import GeneSummaryPlots from '../../Components/GeneSummaryPlots';
@@ -82,7 +82,7 @@ function FitnessSection() {
 function FitnessPlotSection(props) {
   const [colorBy, setColorBy] = useState("significance");
   const [attributeToPlot, setAttributeToPlot] = useState("bf_scaled");
-  const [highlightTissue, setHighlightTissue] = useState(null);
+  const [highlightCancerType, setHighlightCancerType] = useState(null);
   const [showLFSTooltip, toggleLFSShowTooltip] = useState(null);
   const [showFCTooltip, toggleFCShowTooltip] = useState(null);
 
@@ -144,7 +144,7 @@ function FitnessPlotSection(props) {
               colorBy={colorBy}
               attributeToPlot={attributeToPlot}
               xAxisLabel="Cell lines"
-              highlightTissue={highlightTissue}
+              highlightCancerType={highlightCancerType}
               {...props}
             />
             <Row>
@@ -164,18 +164,18 @@ function FitnessPlotSection(props) {
                       Colour by significance
                     </Button>
                     <Button
-                      active={colorBy === "tissue"}
-                      outline={colorBy !== "tissue"}
-                      onClick={() => setColorBy("tissue")}
+                      active={colorBy === "cancerType"}
+                      outline={colorBy !== "cancerType"}
+                      onClick={() => setColorBy("cancerType")}
                     >
-                      Color by tissue
+                      Color by cancer type
                     </Button>
                   </ButtonGroup>
                 </div>
-                {colorBy === "tissue" && (
-                  <TissueHighlight
+                {colorBy === "cancerType" && (
+                  <CancerTypeHighlight
                     blocks={4}
-                    onSelectTissue={setHighlightTissue}
+                    onSelectCancerType={setHighlightCancerType}
                   />
                 )}
               </Col>
