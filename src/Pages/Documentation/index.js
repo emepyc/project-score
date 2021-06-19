@@ -315,20 +315,27 @@ export default function Documentation() {
           <p className='paragraph'>
             <span className='strong'>Cancer Cell Models</span>: Cell models used in Project Score are part of the <a
             target='_blank' rel='noopener noreferrer' href='https://www.ncbi.nlm.nih.gov/pubmed/30260411'>Cell Model
-            Passports</a> collection of highly genomically-annotated cell lines, broadly represent the molecular
+            Passports</a> database collection of highly genomically-annotated cell lines, broadly representing the
+            molecular
             features of
-            patient tumours, and include common cancers (lung, colon, breast) and cancers of particular unmet clinical
-            need (lung and pancreas).
+            patient tumours.
           </p>
 
           <p>
-            All cell models are mycoplasma free and are genetically verified and cross referenced using STR and SNP
+            All cell models screened at <a target='_blank' rel='noreferrer noopener'
+                                           href='https://www.sanger.ac.uk'>Sanger</a> are mycoplasma free and are
+            genetically verified and cross referenced using STR and SNP
             profiling.
           </p>
 
 
           <p className='paragraph'>
-            <span className='strong'>Genome-scale CRISPR screens</span>: The CRISPR library used for screens
+            <span className='strong'>Genome-scale CRISPR screens</span>: For detailed information on screening methods
+            for data generated at the <a target='_blank' rel='noreferrer noopener' href='https://www.sanger.ac.uk'>Sanger
+            Institute</a> refer to <a target='_blank' rel='noopener noreferrer'
+                                      href='https://pubmed.ncbi.nlm.nih.gov/30971826/'>Behan et al.,
+            Nature. 2019</a>. The CRISPR library used for screens performed at <a
+            href='https://www.sanger.ac.uk'>Sanger</a>
             (<a target='_blank' rel='noopener noreferrer' href='https://www.ncbi.nlm.nih.gov/pubmed/27760321'>Tzelepis
             et al, 2016</a> is available from
             <a target='_blank' rel='noopener noreferrer'
@@ -360,32 +367,56 @@ export default function Documentation() {
           </ul>
 
           <p>
-            Further rigorous quality control assessment of the data are also completed (described in detail in
-            accompanying
-            manuscript). Only data satisfying all quality control measures are included in this webportal.
+            CRISPR-Cas9 knockout screening data generated at the <a target='_blank' rel='noreferrer noopener'
+                                                                    href='https://www.broadinstitute.org/'>Broad
+            Institute</a> and analysed as part of Project Score were downloaded from the <a target='_blank'
+                                                                                            rel='noreferrer noopener'
+                                                                                            href='https://depmap.org/portal/'>Broad
+            Institute Cancer Dependency Map portal</a>. Raw read counts were processed using the Project Score pipeline.
+          </p>
+          <p>
+            Each of the datasets are checked individually for quality control and only those passing thresholds as
+            described in <a target='_blank' rel='noopener noreferrer'
+                            href='https://pubmed.ncbi.nlm.nih.gov/30971826/'>Behan et al</a> were included
           </p>
 
           <p className='paragraph'>
-            <span className='strong'>Defining fitness genes</span>: Gene independent responses (e.g. copy number) to
-            CRISPR-Cas9 are corrected
-            using <a target='_blank' rel='noopener noreferrer'
-                     href='https://www.ncbi.nlm.nih.gov/pubmed/30103702'>CRISPRcleanR</a>.
-            Loss of fitness scores are generated from corrected FCs through an in-house R implementation of the <a
-            target='_blank' rel='noopener noreferrer' href='https://www.ncbi.nlm.nih.gov/pubmed/27083490'>BAGEL
-            method</a> to call significantly depleted genes (code publicly available at <a target='_blank'
-                                                                                           rel='noopener noreferrer'
-                                                                                           href='https://github.com/francescojm/BAGELR'>https://github.com/francescojm/BAGELR</a>).
-            Our BAGEL implementation computes gene-level Bayesian factors (BFs) by calculating the average of the sgRNAs
-            on a targeted-gene basis,
-            instead of summing them. Additionally, it uses reference sets of predefined essential and non-essential
-            genes <a target='_blank' rel='noopener noreferrer' href='https://www.ncbi.nlm.nih.gov/pubmed/27397505'>further
-            curated to exclude high-confidence cancer driver genes</a>.
-            A statistical significance threshold for gene-level BFs is determined for each cell line.
-            Each gene is assigned a scaled BF computed by subtracting the BF at the 5% FDR threshold
-            (obtained from classifying reference essential/non-essential genes based on BF rankings)
-            defined for each cell line from the original BF. For consistency of visualisation, all scaled BF values are
-            multiplied by -1 resulting in significantly depleted values
-            having a loss of fitness score &lt; 0.
+            <span className='strong'>Corrected fold change</span>: Gene independent responses (e.g. copy number) to
+            CRISPR-Cas9 were corrected using CRISPRcleanR.
+
+            <p>
+              Independent datasets generated at Sanger and Broad showed batch effects due to differences in library
+              design and assay length (<a target='_blank' rel='noopener noreferrer'
+                                          href='https://pubmed.ncbi.nlm.nih.gov/31862961/'>Dempster et al. Nat.Commun
+              2019</a>). To allow combined analysis of these two datasets they were batch
+              corrected to account for these technical differences (<a target='_blank' rel='noopener noreferrer'
+                                                                       href='https://pubmed.ncbi.nlm.nih.gov/33712601/'>Pacini
+              et al. Nat Commun 2021</a>). Batch correction was calculated
+              using <a target='_blank' rel='noreferrer noopener'
+                       href='https://rdrr.io/bioc/sva/man/ComBat.html'>ComBat</a> using a set of overlapping cell lines
+              screened at both institutes. Where overlapping cell
+              lines were present the data from Sanger were preferentially selected for inclusion in the final combined
+              datasets. The batch corrected data was then quantile normalised to adjust for differences in screen
+              quality. Finally the first principal component is removed from the data that associates with differences
+              in media.
+            </p>
+          </p>
+
+          <p className='paragraph'>
+            <span className='strong'>Defining fitness genes</span>: Loss of fitness scores are generated from corrected
+            FCs for both individual Sanger and Broad datasets and the combined CRISPR-Cas9 dataset using BAGEL2 (<a
+            target='_blank' rel='noreferrer noopener' href='https://pubmed.ncbi.nlm.nih.gov/33407829/'>Kim et al. Genome
+            Med 2021</a>) to call significantly depleted genes. The gene-level Bayesian factors (BFs) are calculated as
+            the average of the sgRNAs on a targeted-gene basis. As input to BAGEL2 we used reference sets of predefined
+            essential and non-essential genes further curated to exclude high-confidence cancer driver genes. A
+            statistical significance threshold for gene-level BFs is determined for each cell line. Each gene is
+            assigned a scaled BF computed by subtracting the BF at the 5% FDR threshold (obtained from classifying
+            reference essential/non-essential genes based on BF rankings) defined for each cell line from the original
+            BF. For consistency of visualisation, all scaled BF values are multiplied by -1 resulting in significantly
+            depleted values having a loss of fitness score &lt; 0. Archived Project Score v1 data was processed using an
+            implementation of BAGEL in R as described (<a target='_blank' rel='noopener noreferrer'
+                                                          href='https://pubmed.ncbi.nlm.nih.gov/30971826/'>Behan F, et
+            al. Nature. 2019</a>).
           </p>
 
           <div className='paragraph'>
@@ -399,8 +430,8 @@ export default function Documentation() {
 
             <p className='indented'>
               <span className='outlined'>Corrected fold change</span>: Copy-number-bias corrected gene depletion fold
-              change, computed between
-              average representation of targeting sgRNAs 14 days post-transfection versus plasmid library
+              change, computed between average representation of targeting sgRNAs post-transfection at the end of the
+              experiment versus plasmid library.
             </p>
           </div>
 
