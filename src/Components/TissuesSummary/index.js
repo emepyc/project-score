@@ -5,7 +5,6 @@ import HomeSectionDescription from '../HomeSectionDescription';
 import FadeIn from '../FadeInAfterVisible';
 import DonutChart from '../DonutChart';
 import TissuesSummaryDescription from '../TissuesSummaryDescription';
-// import {PriorityScores, defaultSettings} from "../PriorityScoresSection";
 
 function TissuesSummary() {
   return (

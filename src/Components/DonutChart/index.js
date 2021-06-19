@@ -61,7 +61,8 @@ function Label({radius, arc, x, y, maxX, center, children}) {
 }
 
 function DonutChart({history}) {
-  const [containerWidth, setContainerWidth] = useState(500);
+  const defaultWidth = 680;
+  const [containerWidth, setContainerWidth] = useState(defaultWidth);
   // const containerHeight = 295 + margins.top;
 
   const explanationMessageRef = useRef(null);
@@ -71,7 +72,7 @@ function DonutChart({history}) {
 
   useEffect(() => {
     if (containerRef.current) {
-      setContainerWidth(containerRef.current.offsetWidth);
+      setContainerWidth(defaultWidth);
     }
   }, [containerIsReady]);
 
@@ -118,8 +119,8 @@ function DonutChart({history}) {
                 id="explanation"
                 className="my-auto"
                 style={{
-                  top: `${radius + radius * 0.30}px`,
-                  left: `${radius + donutChartSideOffset - radius * 1.5 / 2}px`,
+                  top: `${radius + radius * 0.2}px`,
+                  left: `${radius + donutChartSideOffset - radius * 0.6}px`,
                   borderRadius: `${radius * 1.5 / 2}`,
                   width: `${radius * 1.5}px`
                 }}
@@ -130,7 +131,7 @@ function DonutChart({history}) {
               <svg
                 className='donutChart'
                 width={containerWidth}
-                height={300}
+                height={500}
               >
                 <Group
                   top={radius + margins.top}
@@ -140,7 +141,7 @@ function DonutChart({history}) {
                     data={cancerTypes}
                     pieValue={d => d.count}
                     outerRadius={radius}
-                    innerRadius={radius - 20}
+                    innerRadius={radius - 40}
                     cornerRadius={0}
                     padAngle={0}
                   >
