@@ -5,10 +5,10 @@ import {Pie, Line} from '@vx/shape'
 import {Point} from '@vx/point';
 import {withRouter} from 'react-router-dom';
 
-import {fetchAnalyses} from '../../api';
+import {fetchCancerTypes} from '../../api';
 import FetchData from "../FetchData";
 
-import {cancerTypeColor} from '../../colors';
+import {cancerTypeColorDict as cancerTypeColor} from '../../colors';
 
 import './donutChart.scss';
 
@@ -38,12 +38,12 @@ function Label({radius, arc, x, y, maxX, center, children}) {
   return (
     <React.Fragment>
       <Line
-        stroke={cancerTypeColor[arc.data.id]}
+        stroke={cancerTypeColor[arc.data.name]}
         from={new Point({x: x, y: y})}
         to={new Point({x: xDiagonal, y: yDiagonal})}
       />
       <Line
-        stroke={cancerTypeColor[arc.data.id]}
+        stroke={cancerTypeColor[arc.data.name]}
         from={new Point({x: xDiagonal, y: yDiagonal})}
         to={new Point({x: xHorizontal, y: yDiagonal})}
       />
@@ -104,18 +104,14 @@ function DonutChart({history}) {
 
   const radius = (containerWidth - (margins.left + margins.right)) / 2;
 
-  const gotoTable = data => history.push(`/table?analysis=${data.id}&dataTab=priorityScores`);
+  const gotoTable = data => history.push(`/table?cancerType=${data.id}`);
 
   return (
     <FetchData
-      endpoint={fetchAnalyses}
+      endpoint={fetchCancerTypes}
     >
       {
-        cancerTypesRespose => {
-          const cancerTypes = cancerTypesRespose.filter(
-            cancerType => cancerType.id !== 15,
-          );
-
+        cancerTypes => {
           return (
             <div ref={containerRef} style={{position: 'relative'}} className='d-flex justify-content-center'>
               <div
@@ -150,10 +146,10 @@ function DonutChart({history}) {
                   >
                     {pie => {
                       return pie.arcs.map((arc, i) => {
-                        const color = cancerTypeColor[arc.data.id];
+                        const color = cancerTypeColor[arc.data.name];
                         const [centroidX, centroidY] = pie.path.centroid(arc);
                         return (
-                          <g key={`cancerType-${arc.data.id}-${i}`}>
+                          <g key={`cancerType-${arc.data.name}-${i}`}>
                             <path
                               style={{cursor: 'pointer'}}
                               d={pie.path(arc)}

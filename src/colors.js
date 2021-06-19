@@ -1,3 +1,35 @@
+export const cancerTypeColorDict = {
+  'Acute Myeloid Leukemia': '#79F361',
+  'B-Cell Non-Hodgkin\'s Lymphoma': '#7F96FF',
+  'B-Lymphoblastic Leukemia': '#DEAAF0',
+  'Bladder Carcinoma': '#A1AADF',
+  'Breast Carcinoma': '#F190F2',
+  'Burkitt\'s Lymphoma': '#0EEAFF',
+  'Cervical Carcinoma': '#E56399',
+  'Chronic Myelogenous Leukemia': '#FFF176',
+  'Colorectal Carcinoma': '#FD8E4E',
+  'Endometrial Carcinoma': '#9C8595',
+  'Ewing\'s Sarcoma': '#FF822E',
+  'Gastric Carcinoma': '#F5D349',
+  'Glioblastoma': '#D474A1',
+  'Head and Neck Carcinoma': '#65CC51',
+  'Hepatocellular Carcinoma': '#DDBB78',
+  'Kidney Carcinoma': '#988D67',
+  'Melanoma': '#DEB2A6',
+  'Mesothelioma': '#69D38B',
+  'Neuroblastoma': '#E2A536',
+  'Non-Small Cell Lung Carcinoma': '#9C8595',
+  'Osteosarcoma': '#ADC888',
+  'Ovarian Carcinoma': '#6BD6CE',
+  'Pancreatic Carcinoma': '#F84498',
+  'Plasma Cell Myeloma': '#91B8F2',
+  'Prostate Carcinoma': '#ADC888',
+  'Rhabdomyosarcoma': '#C6B843',
+  'Small Cell Lung Carcinoma': '#988D67',
+  'Squamous Cell Lung Carcinoma': '#91B8F2',
+  'T-Cell Non-Hodgkin\'s Lymphoma': '#5AA9CD',
+};
+
 export const cancerTypeColor = {
   1: '#69D38B', // Bone
   2: '#F190F2', // Breast Carcinoma

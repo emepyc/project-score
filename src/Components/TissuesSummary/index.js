@@ -14,7 +14,7 @@ function TissuesSummary() {
       <Row style={{marginTop: '50px'}}>
         <Col
           md={{size: 12}}
-          lg={{size: 6}}
+          lg={{size: 8}}
           className='my-auto justify-content-center d-none d-md-block'
         >
           <FadeIn action='fadeInLeft'>
@@ -24,7 +24,7 @@ function TissuesSummary() {
 
         <Col
           md={{size: 12}}
-          lg={{size: 6}}
+          lg={{size: 4}}
           className='my-auto'
         >
           <FadeIn action='fadeInRight'>

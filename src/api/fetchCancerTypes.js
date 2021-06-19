@@ -1,30 +1,21 @@
-import Deserialiser from 'deserialise-jsonapi';
-import uniqBy from 'lodash.uniqby';
 import orderBy from 'lodash.orderby';
 
 import {get} from './index';
 
-const params = {
-  include: 'sample.cancer_type',
-  'fields[cancer_type]': 'name',
-  'page[size]': 0,
+function cancerTypesResponseToCancerTypes(cancerTypesResponse) {
+  return {
+    name: cancerTypesResponse.attributes.name,
+    id: cancerTypesResponse.id,
+    count: cancerTypesResponse.relationships.models.data.length,
+  }
 }
 
-const deserialiser = new Deserialiser();
-
-function uniqueCancerTypes(allModels) {
-  const cancerTypes = allModels.map(model => ({
-    id: model.sample.cancer_type.id,
-    name: model.sample.cancer_type.name,
-  }));
-  return orderBy(
-    uniqBy(cancerTypes, cancerType => cancerType.id),
-    cancerType => cancerType.name,
-  );
-}
-
-export default function cancerTypes(_, ...args) {
-  return get('models', params, ...args)
-    .then(resp => deserialiser.deserialise(resp))
-    .then(resp => uniqueCancerTypes(resp));
+export default function cancerTypes(params, ...args) {
+  return get('cancer_types', params, ...args)
+    .then(resp => orderBy(
+      resp.data
+        .map(cancerTypesResponseToCancerTypes)
+        .filter(cancerType => cancerType.id !== 15),
+      cancerType => cancerType.name,
+    ));
 }
