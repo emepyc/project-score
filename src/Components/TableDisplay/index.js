@@ -59,6 +59,9 @@ function TableDisplay(props) {
             Tissue
           </th>
           <th>
+            Cancer type
+          </th>
+          <th>
             Corrected log fold change<sup id='foldChangeHelp' style={{cursor: 'default'}}>?</sup>{' '}
             <SortArrows {...props} field="fc_clean"/>
           </th>
@@ -99,6 +102,9 @@ function TableDisplay(props) {
               </td>
               <td>
                 {row.tissue}
+              </td>
+              <td>
+                {row.cancerType}
               </td>
               <td className='text-center'>
                 {row.fc_clean}

@@ -26,6 +26,7 @@ function parseData(raw) {
       geneSymbol: d.gene.symbol,
       modelName: d.model.names[0],
       tissue: d.model.sample.tissue.name,
+      cancerType: d.model.sample.cancer_type.name,
       fc_clean: d.fc_clean,
       bf_scaled: d.bf_scaled,
       modelId: d.model.id,
