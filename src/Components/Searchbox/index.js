@@ -8,7 +8,7 @@ import {search} from '../../api';
 import {insignificantNodeColor} from "../../colors";
 import Error from '../Error';
 import FetchData from "../FetchData";
-import analyses from "../../api/fetchAnalyses";
+import {fetchCancerTypes} from "../../api";
 
 const groupStyles = {
   display: 'flex',
@@ -63,7 +63,7 @@ const LoadingMessage = (props) => {
   );
 };
 
-const _loadSuggestions = (inputValue, callback, allAnalyses) => search(inputValue, allAnalyses)
+const _loadSuggestions = (inputValue, callback, allCancerTypes) => search(inputValue, allCancerTypes)
   .then(callback)
   .catch(() => {
     callback([{
@@ -90,7 +90,7 @@ function Searchbox({placeholder = "Search for a gene, cell line or cancer type",
     } else if (value.type === 'models') {
       history.push(`/model/${value.id}?scoreMax=0`);
     } else {
-      history.push(`/table?analysis=${value.id}`);
+      history.push(`/table?cancerType=${value.id}`);
     }
   };
 
@@ -138,14 +138,14 @@ function Searchbox({placeholder = "Search for a gene, cell line or cancer type",
 
   return (
     <FetchData
-      endpoint={analyses}
+      endpoint={fetchCancerTypes}
       params={{}}
       deps={[]}
     >
-      {allAnalyses => (
+      {allCancerTypes => (
         <AsyncSelect
           value={inputValue}
-          loadOptions={(query, callback) => loadSuggestions(query, callback, allAnalyses)}
+          loadOptions={(query, callback) => loadSuggestions(query, callback, allCancerTypes)}
           placeholder={placeholder}
           onChange={onChange}
           isClearable
