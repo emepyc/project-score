@@ -29,7 +29,7 @@ export default async function fetchPriorityScores(params, ...args) {
     return {
       analysis: {
         id: null,
-        name: 'Combined Analysis'
+        name: 'Combined lists'
       },
       data: orderBy(allPriorityScoresData, ['score'], ['desc']),
       weights: allPriorityScores[0].weights,

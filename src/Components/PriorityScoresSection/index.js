@@ -185,7 +185,7 @@ export function PriorityScores({analysis, settings}) {
           return (
             <div className='my-3'>
               <div className='d-flex justify-content-between'>
-                <h5>Cancer type: {priorityScores.analysis.name}</h5>
+                <h5>Priority list: {priorityScores.analysis.name}</h5>
                 <Label>
                   <Input
                     type='checkbox'
@@ -696,7 +696,7 @@ function PriorityScoreTooltip({x, y, priorityScore}) {
       Gene: <b>{priorityScore.symbol}</b><br/>
       Target priority score: <b>{formatPriorityScoreValue(priorityScore.score)}</b><br/>
       Tractability bucket: <b>{priorityScore.bucket}</b><br/>
-      Cancer type: <b>{priorityScore.analysis.name}</b>
+      Analysis: <b>{priorityScore.analysis.name}</b>
     </Tooltip>
   );
 }
@@ -751,7 +751,7 @@ function PriorityScoresTable({priorityScores}) {
             <th>Target gene symbol</th>
             <th>Target gene ID</th>
             <th className='text-center'>Tractability bucket</th>
-            <th>Analysis (pan cancer, cancer specific)</th>
+            <th>Priority list (pan cancer, cancer specific)</th>
             <th className='text-center'>Target priority score</th>
           </tr>
           </thead>
