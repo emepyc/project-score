@@ -24,6 +24,22 @@ const _App = (props) => {
     },
   });
 
+  if (process.env.REACT_APP_SITE_DOWN === "1") {
+    return (
+      <div className='m-2'>
+        <p>
+          The Project Score website is experiencing technical difficulties.
+        </p>
+        <p>
+          We are trying to solve them as soon as possible.
+        </p>
+        <p>
+          Sorry for the inconvenience.
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <Router {...props}>
