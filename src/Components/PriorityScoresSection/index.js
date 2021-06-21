@@ -696,7 +696,7 @@ function PriorityScoreTooltip({x, y, priorityScore}) {
       Gene: <b>{priorityScore.symbol}</b><br/>
       Target priority score: <b>{formatPriorityScoreValue(priorityScore.score)}</b><br/>
       Tractability bucket: <b>{priorityScore.bucket}</b><br/>
-      Analysis: <b>{priorityScore.analysis.name}</b>
+      Priority list: <b>{priorityScore.analysis.name}</b>
     </Tooltip>
   );
 }
