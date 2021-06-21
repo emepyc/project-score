@@ -27,7 +27,7 @@ function Label({radius, arc, x, y, maxX, center, children}) {
   const yDiagonal = (radius + 20) * Math.sin(midAngle - Math.PI / 2);
   const xHorizontal = xDiagonal < 0 ? xDiagonal - 10 : xDiagonal + 10;
 
-  if (arc.endAngle - arc.startAngle < 0.1) {
+  if (arc.endAngle - arc.startAngle < 0.07) {
     return <span/>;
   }
 
@@ -161,7 +161,8 @@ function DonutChart({history}) {
                             />
                             <Label
                               // To avoid overlap of the last 2 labels
-                              radius={arc.index === pie.arcs.length - 1 ? radius : (arc.index === pie.arcs.length - 3 ? radius - 14 : radius - 8)}
+                              // radius={arc.index === pie.arcs.length - 1 ? radius : (arc.index === pie.arcs.length - 3 ? radius - 14 : radius - 8)}
+                              radius={radius}
                               arc={arc}
                               x={centroidX}
                               y={centroidY}
