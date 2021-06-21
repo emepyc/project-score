@@ -33,6 +33,9 @@ function Footer() {
             <div className='footer-item'>Documentation</div>
           </NavLink>
           <div className='footer-item'>Version 2.1</div>
+          <NavLink to='/changelog' style={linkStyle} activeStyle={linkStyle}>
+            <div className='footer-item'>Change log</div>
+          </NavLink>
         </Col>
         <Col xs={12} lg={3}>
           <div className='footer-header'>

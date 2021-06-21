@@ -11,6 +11,7 @@ import Masthead from './Components/Masthead';
 import Footer from './Components/Footer';
 import Table from './Pages/Table';
 import Documentation from './Pages/Documentation';
+import Changelog from './Pages/Changelog';
 import Feedback from './Components/Feedback';
 
 const _App = (props) => {
@@ -91,6 +92,7 @@ function App() {
       <Route path='/gene/:geneId' component={Gene}/>
       <Route path='/model/:modelId' component={Model}/>
       <Route path='/documentation' component={Documentation}/>
+      <Route path='/changelog' component={Changelog}/>
     </Switch>
   );
 }
