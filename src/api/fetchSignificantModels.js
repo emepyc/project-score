@@ -3,6 +3,7 @@ import orderBy from 'lodash.orderby';
 
 import {get} from './api';
 import {totalModels} from './utils';
+import fetchCrisprDepletion from "./fetchCrisprDepletion";
 
 const deserialiser = new Deserialiser();
 
@@ -12,7 +13,8 @@ const params = {
 };
 
 export default function fetchSignificantModels({geneId}, ...args) {
-  return get(`genes/${geneId}`, params, ...args)
+  const crisprDepletionPromise = fetchCrisprDepletion(geneId);
+  const significantModelsPromise = get(`genes/${geneId}`, params, ...args)
     .then(resp => deserialiser.deserialise(resp))
     .then(gene => {
       const essentiality_profile_sorted = orderBy(
@@ -20,27 +22,20 @@ export default function fetchSignificantModels({geneId}, ...args) {
           profile => profile.id,
         'desc',
       );
-      const essentiality_profile = essentiality_profile_sorted[0];
-      const tissuesCounts = getTissuesCounts(essentiality_profile);
+      const essentialityProfile = essentiality_profile_sorted[0];
       return {
-        numberOfSignificantModels: ~~(totalModels * essentiality_profile.vulnerable_pancan / 100),
-        isPanCancer: essentiality_profile.core_fitness_pancan,
+        numberOfSignificantModels: ~~(totalModels * essentialityProfile.vulnerable_pancan / 100),
+        isPanCancer: essentialityProfile.core_fitness_pancan,
         isTumourSuppressor: gene.tumour_suppressor,
-        numberOfSignificantTissues: tissuesCounts.significant,
-        numberOfTotalTissues: tissuesCounts.total,
-        isCommonEssential: essentiality_profile.common_essential === "CE",
+        isCommonEssential: essentialityProfile.common_essential === "CE",
       }
     });
-}
-
-
-function getTissuesCounts(attributes) {
-  const allTissues = Object.keys(attributes).filter(
-    attribute => attribute.indexOf('adm_status_') > -1
-  );
-  const significantTissues = allTissues.filter(tissue => attributes[tissue] !== null);
-  return {
-    total: allTissues.length,
-    significant: significantTissues.length,
-  }
+  return Promise.all([crisprDepletionPromise, significantModelsPromise])
+    .then(([crisprDepletion, significantModels]) => {
+      return {
+        ...significantModels,
+        numberOfSignificantTissues: crisprDepletion.significant,
+        numberOfTotalTissues: crisprDepletion.total,
+      }
+    });
 }
