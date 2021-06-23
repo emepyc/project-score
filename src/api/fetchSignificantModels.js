@@ -27,7 +27,7 @@ export default function fetchSignificantModels({geneId}, ...args) {
         numberOfSignificantModels: ~~(totalModels * essentialityProfile.vulnerable_pancan / 100),
         isPanCancer: essentialityProfile.core_fitness_pancan,
         isTumourSuppressor: gene.tumour_suppressor,
-        isCommonEssential: essentialityProfile.common_essential === "CE",
+        isCommonEssential: essentialityProfile.common_essential === "true",
       }
     });
   return Promise.all([crisprDepletionPromise, significantModelsPromise])
