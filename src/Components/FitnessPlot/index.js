@@ -80,6 +80,9 @@ function FitnessPlot(props) {
       >
         {data => {
           const sortedData = sortData(data.data);
+          if (sortedData.length === 0) {
+            return (<div>No fitness data matching your filters</div>)
+          }
           return (
             <div>
               <FitnessBrush
@@ -234,7 +237,7 @@ function FitnessTooltip(props) {
   const {
     geneSymbol,
     modelName,
-    cancer_type,
+    cancerType,
     fc_clean,
     bf_scaled,
     source,
@@ -270,7 +273,7 @@ function FitnessTooltip(props) {
       height={height}
     >
       Gene: <b>{geneSymbol}</b><br/>
-      Model: <b>{modelName}</b> ({cancer_type})<br/>
+      Model: <b>{modelName}</b> ({cancerType})<br/>
       Corrected fold change:<b>{fc_clean}</b><br/>
       Loss of fitness score:<b><span style={{padding: '0.4em 0.2em', backgroundColor}}>{bf_scaled}</span></b><br />
       Source:<b>{source}</b>
@@ -391,7 +394,7 @@ function FitnessCanvasPlot(props) {
         bf_scaled: closest.bf_scaled,
         fc_clean: closest.fc_clean,
         geneSymbol: closest.gene.symbol,
-        cancer_type: closest.model.sample.cancer_type.name,
+        cancerType: closest.model.sample.cancer_type.name,
         tissue: closest.model.sample.tissue.name,
         index: closest.index,
         source: closest.source,
