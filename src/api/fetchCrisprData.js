@@ -76,9 +76,7 @@ export default function fetchCrisprData(params, ...args) {
   const endpoint = datasetEntpoint(params.cancerType);
   return get(endpoint, paramsNormalised, ...args)
     .then(resp => deserialiser.deserialise(resp)
-      .then(deserialisedDataRaw => {
-        const deserialisedData = deserialisedDataRaw.filter(dataPoint => dataPoint.fc_clean_qn !== null);
-        return {
+      .then(deserialisedData => ({
           count: resp.meta.count,
             data: deserialisedData.map(dataPoint => ({
           // TODO: Possibly use "fc_clean_qn" downstream instead of mapping it to "fc_clean"
@@ -97,7 +95,6 @@ export default function fetchCrisprData(params, ...args) {
             ),
           }
         })),
-        }
-      })
+        })),
     );
 }

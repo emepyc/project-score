@@ -107,13 +107,13 @@ function TableDisplay(props) {
                 {row.cancerType}
               </td>
               <td className='text-center'>
-                {row.fc_clean}
+                {row.fc_clean || 'NA'}
               </td>
               <td
                 className='text-center'
                 style={{backgroundColor: scoreBackgroundColor}}
               >
-                {row.bf_scaled}
+                {row.bf_scaled || 'NA'}
               </td>
               <td
                 className='text-center'

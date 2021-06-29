@@ -79,7 +79,8 @@ function FitnessPlot(props) {
         deps={deps}
       >
         {data => {
-          const sortedData = sortData(data.data);
+          const filteredData = data.data.filter(dataPoint => dataPoint.fc_clean_qn !== null);
+          const sortedData = sortData(filteredData);
           if (sortedData.length === 0) {
             return (<div>No fitness data matching your filters</div>)
           }
@@ -260,6 +261,9 @@ function FitnessTooltip(props) {
       fc_clean :
       bf_scaled;
 
+  if (fitnessValue === null) {
+    return null;
+  }
   const x = xScale(index);
   const y = yScale(fitnessValue);
 
@@ -274,8 +278,8 @@ function FitnessTooltip(props) {
     >
       Gene: <b>{geneSymbol}</b><br/>
       Model: <b>{modelName}</b> ({cancerType})<br/>
-      Corrected fold change:<b>{fc_clean}</b><br/>
-      Loss of fitness score:<b><span style={{padding: '0.4em 0.2em', backgroundColor}}>{bf_scaled}</span></b><br />
+      Corrected fold change:<b>{fc_clean || 'NA'}</b><br/>
+      Loss of fitness score:<b><span style={{padding: '0.4em 0.2em', backgroundColor}}>{bf_scaled || 'NA'}</span></b><br />
       Source:<b>{source}</b>
     </Tooltip>
   );
