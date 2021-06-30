@@ -79,7 +79,7 @@ function FitnessPlot(props) {
         deps={deps}
       >
         {data => {
-          const filteredData = data.data.filter(dataPoint => dataPoint.fc_clean_qn !== null);
+          const filteredData = data.data.filter(dataPoint => dataPoint[props.attributeToPlot] !== null);
           const sortedData = sortData(filteredData);
           if (sortedData.length === 0) {
             return (<div>No fitness data matching your filters</div>)
