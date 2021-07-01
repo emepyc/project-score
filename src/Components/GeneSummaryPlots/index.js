@@ -1,7 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 import useUrlParams from '../useUrlParams';
-import {fetchSignificantModels, totalModels} from '../../api';
+import {fetchSignificantModels} from '../../api';
 import SignificantCountPlot from '../SignificantCountPlot';
 import {Card, CardHeader, CardBody} from 'reactstrap';
 import {Col, Row} from "reactstrap";
@@ -48,7 +48,7 @@ function GeneSummaryPlots(props) {
               <Row>
                 <Col>
                   <SignificantCountPlot
-                    total={totalModels}
+                    total={gene.totalModels}
                     significant={gene.numberOfSignificantModels}
                   />
                 </Col>
