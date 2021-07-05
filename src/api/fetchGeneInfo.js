@@ -9,7 +9,7 @@ const params = {
 
 function processResponse(geneInfo) {
   return {
-    identifiers: geneInfo.identifiers,
+    identifiers: geneInfo.identifiers.filter(identifier => identifier.current),
     names: geneInfo.names,
     symbol: geneInfo.symbol,
     isTumourSuppressor: geneInfo.tumour_suppressor,
