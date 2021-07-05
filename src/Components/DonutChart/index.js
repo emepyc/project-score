@@ -63,7 +63,6 @@ function Label({radius, arc, x, y, maxX, center, children}) {
 function DonutChart({history}) {
   const defaultWidth = 680;
   const [containerWidth, setContainerWidth] = useState(defaultWidth);
-  // const containerHeight = 295 + margins.top;
 
   const explanationMessageRef = useRef(null);
   const containerRef = useRef(null);
@@ -147,6 +146,7 @@ function DonutChart({history}) {
                   >
                     {pie => {
                       return pie.arcs.map((arc, i) => {
+                        console.log(arc);
                         const color = cancerTypeColor[arc.data.name];
                         const [centroidX, centroidY] = pie.path.centroid(arc);
                         return (
@@ -161,8 +161,8 @@ function DonutChart({history}) {
                             />
                             <Label
                               // To avoid overlap of the last 2 labels
-                              // radius={arc.index === pie.arcs.length - 1 ? radius : (arc.index === pie.arcs.length - 3 ? radius - 14 : radius - 8)}
-                              radius={radius}
+                              radius={arc.data.name === 'Gastric Carcinoma' ? radius + 10 : arc.data.name === 'B-Cell Non-Hodgkin\'s Lymphoma' ? radius + 5 : arc.data.name === 'Rhabdomyosarcoma' ? radius + 12 : radius}
+                              // radius={radius}
                               arc={arc}
                               x={centroidX}
                               y={centroidY}
