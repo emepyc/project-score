@@ -36,7 +36,7 @@ function GeneOpenTargetsPlots(props) {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`https://www.targetvalidation.org/target/${ensemblIdentifier.identifier}`}
+                  href={`https://platform.opentargets.org/target/${ensemblIdentifier.identifier}`}
                 >
                   <img alt='OpenTargets' src={otLogo} width={100}/>
                 </a>

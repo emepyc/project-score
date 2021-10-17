@@ -192,7 +192,7 @@ export default function Documentation() {
           clinical development but with evidence that support target tractability. Lastly, group 3 (buckets 8–10)
           includes priority targets that have weak or no support, or a lack of information that could inform
           tractability. Target tractability is an evolving field and we suggest that you also visit the <a
-          target='_blank' rel='noopener noreferrer' href='https://www.targetvalidation.org'>Open Targets
+          target='_blank' rel='noopener noreferrer' href='https://platform.opentargets.org'>Open Targets
           platform</a> ‘target profile pages’ for information on individual targets.
         </p>
 

@@ -52,7 +52,7 @@ function ExternalLinks({identifiers}) {
         {ensemblId && (
           <LogoExternalLink
             resource={<img alt='OpenTargets' src={OtLogo} width={125}/>}
-            link={`https://www.targetvalidation.org/target/${ensemblId}`}
+            link={`https://platform.opentargets.org/target/${ensemblId}`}
           />
         )}
         {uniprotId && (
