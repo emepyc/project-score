@@ -1,5 +1,6 @@
 import React from 'react';
 import first from 'lodash.first';
+import uniqBy from 'lodash.uniqby';
 import {Card, CardHeader, CardBody, Row, Col} from 'reactstrap';
 import {withRouter} from 'react-router-dom';
 import useUrlParams from '../useUrlParams';
@@ -78,9 +79,9 @@ function FetchOpenTargetsGene(props) {
             <Col>
               <div className="text-center">COSMIC cancer hallmarks</div>
             </Col>
-            <Col>
-              <div className="text-center">Tractability</div>
-            </Col>
+            {/*<Col>*/}
+            {/*  <div className="text-center">Tractability</div>*/}
+            {/*</Col>*/}
           </Row>
           <Row>
             <Col>
@@ -93,32 +94,45 @@ function FetchOpenTargetsGene(props) {
             </Col>
 
             <Col>
-              {otGene.cancerHallmarks ? (<BinaryCountPlot
-                count1={{
-                  label: "suppress",
-                  count: otGene.cancerHallmarks.filter(hallmark => hallmark.suppress).length
-                }}
-                count2={{
-                  label: "promote",
-                  count: otGene.cancerHallmarks.filter(hallmark => hallmark.promote).length
-                }}
-                dataTooltip={data => (
-                  <React.Fragment>
-                    <div>{data.label}</div>
-                    <div><strong>{data.count}</strong></div>
-                  </React.Fragment>
-                )}
-              />) : (<div className='text-center font-weight-bold'>No data</div>)}
+              {otGene.cancerHallmarks ? (
+                <React.Fragment>
+                  <BinaryCountPlot
+                    count1={{
+                      label: "suppress",
+                      count: uniqBy(
+                        otGene.cancerHallmarks.hallmarks.filter(hallmark => hallmark.impact === 'suppress'),
+                        h => h.label,
+                      ).length,
+                    }}
+                    count2={{
+                      label: "promote",
+                      count: uniqBy(
+                        otGene.cancerHallmarks.hallmarks.filter(hallmark => hallmark.impact === 'promotes'),
+                        h => h.label,
+                      ).length
+                    }}
+                    dataTooltip={data => (
+                      <React.Fragment>
+                        <div>{data.label}</div>
+                        <div><strong>{data.count}</strong></div>
+                      </React.Fragment>
+                    )}
+                  />
+                  <div className='text-center'>
+                    role: {otGene.cancerHallmarks.roleInCancer}
+                  </div>
+                </React.Fragment>
+              ) : (<div className='text-center font-weight-bold'>No data</div>)}
 
             </Col>
-            <Col className='text-center mt-3'>
-              <Steps
-                labels={otGene.tractability.categories}
-                values={otGene.tractability.categories}
-                descriptions={otGene.tractability.labels}
-                selectedValue={otGene.tractability.maxCategory}
-              />
-            </Col>
+            {/*<Col className='text-center mt-3'>*/}
+            {/*  <Steps*/}
+            {/*    labels={otGene.tractability.categories}*/}
+            {/*    values={otGene.tractability.categories}*/}
+            {/*    descriptions={otGene.tractability.labels}*/}
+            {/*    selectedValue={otGene.tractability.maxCategory}*/}
+            {/*  />*/}
+            {/*</Col>*/}
           </Row>
         </React.Fragment>
       )}

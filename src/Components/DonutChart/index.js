@@ -146,7 +146,6 @@ function DonutChart({history}) {
                   >
                     {pie => {
                       return pie.arcs.map((arc, i) => {
-                        console.log(arc);
                         const color = cancerTypeColor[arc.data.name];
                         const [centroidX, centroidY] = pie.path.centroid(arc);
                         return (
@@ -180,7 +179,8 @@ function DonutChart({history}) {
               </svg>
             </div>
           );
-        }}
+        }
+      }
     </FetchData>
   );
 }
